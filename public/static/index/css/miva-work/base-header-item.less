@@ -1,0 +1,161 @@
+// 头部
+header {
+    .miva-width-bao(@min: 1900px);
+    .miva-position(@p: fixed, @t: 0, @z: 748943649);
+    height: 120px;
+    background: @miva-header-color;
+    a:hover {
+        color: #fff;
+    }
+    // 顶部盒子
+    .header-box {
+        .miva-flex(@content: space-between, @wrap: nowrap);
+        width: @miva-page-width;
+        height: 100%;
+        margin: auto;
+        .logo-box {
+            height: 120px;
+            line-height: 120px;
+            overflow: hidden;
+            .logo {
+                width: 100%;
+            }
+        }
+        // 顶部导航
+        .top-nav-box {
+            width: 60%;
+            ul {
+                .miva-flex(@content: space-between, @wrap: nowrap);
+                li {
+                    float: left;
+                    height: 100%;
+                    line-height: 120px;
+                    font-size: 16px;
+                    font-weight: bold;
+                    padding: 0 15px;
+                }
+                .active {
+                    background: rgb(48, 48, 48);
+                    color: @miva-header-color;
+                    >* {
+                        color: @miva-header-color;
+                    }
+                }
+                .search {
+                    .miva-position();
+                    i {
+                        .miva-position( @p: absolute, @z: @miva-max-z, @t: 0, @r: 10%);
+                        font-size: 25px;
+                        font-weight: normal;
+                    }
+                    input {
+                        background: @miva-header-color;
+                        width: 233px;
+                        height: 30px;
+                        border: 1px solid;
+                        border-radius: 30px;
+                        padding: 8px 10px;
+                    }
+                }
+            }
+        }
+        .top-right-box {
+            .miva-flex(@content: space-around, @align-items: center);
+            width: 23%;
+            font-size: 16px;
+            font-weight: bold;
+            // 消息盒子
+            i {
+                margin-right: 10px;
+                font-size: 23px;
+                vertical-align: middle;
+            }
+            .msg-box {
+                .miva-flex(@content: space-between, @wrap: nowrap);
+                >a {
+                    margin-right: 15px;
+                    .miva-position();
+                    .tip {
+                        .miva-position(@p: absolute, @t: 0px, @l: 15px);
+                        display: inline-block;
+                        background: red;
+                        width: 10px;
+                        height: 10px;
+                        border-radius: 50%;
+                    }
+                }
+            }
+            // 登录盒子
+            .login-after {
+                .miva-position();
+                a:hover {
+                    color: #000;
+                }
+                .user-pic-box {
+                    display: inline-block;
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 50%;
+                    overflow: hidden;
+                }
+                // 用户信息弹出框
+                .user-info-tan {
+                    .miva-position( @p: absolute, @z: @miva-max-z, @r: 0);
+                    background: #fff;
+                    width: 260px;
+                    border: 1px solid #ddd;
+                    text-align: center;
+                    font-size: 14px;
+                    font-weight: normal;
+                    padding: 10px 15px;
+                    padding-bottom: 50px;
+                    display: none;
+                    >* {
+                        margin: 5px 0;
+                    }
+                    .user-pic-tan {
+                        width: 80px;
+                        height: 80px;
+                        border-radius: 50%;
+                        overflow: hidden;
+                        margin: auto;
+                    }
+                    .miva-progress {
+                        width: 60%;
+                        display: inline-block;
+                    }
+                    .user-money {
+                        .miva-flex(@content: space-between, @wrap: nowrap);
+                        width: 90%;
+                        margin: auto;
+                    }
+                    table {
+                        margin: auto;
+                        width: 100%;
+                        td>a>div {
+                            font-size: 30px;
+                        }
+                        .table-center {
+                            border-color: #aaa;
+                            border-style: solid;
+                            border-width: 0 1px;
+                        }
+                    }
+                    .go-out-tan {
+                        text-align: right;
+                        background: rgb(242, 242, 242);
+                        width: 100%;
+                        height: 40px;
+                        margin: 0;
+                        line-height: 40px;
+                        padding-right: 10px;
+                        .miva-position(@p: absolute, @b: 0, @l: 0)
+                    }
+                }
+                &:hover .user-info-tan {
+                    display: block;
+                }
+            }
+        }
+    }
+}

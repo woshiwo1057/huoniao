@@ -1,0 +1,34 @@
+{include file="public/header"}
+{include file="public/sidebar"}
+<body>
+<article class="page-container">
+	<form class="form form-horizontal" id="form-article-add" action="" method="post">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>消息标题：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="要写正经的标题！！！"  name="title">
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">消息内容：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<textarea name="content" class="textarea"  placeholder="说点什么...最少输入10个字符" ></textarea>
+				
+			</div>
+		</div>
+		
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+				<button  class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 提交</button>
+			</div>
+		</div>
+	</form>
+</article>
+
+<!--_footer 作为公共模版分离出去  http://localhost/huoniao/public/index.php/admin/examine/details/id/5.html-->
+
+<!--/请在上方写此页面业务相关的脚本-->
+{include file="public/footer"}
+</body>
+</html>

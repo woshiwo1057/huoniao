@@ -1,0 +1,193 @@
+{include file="public/header"}
+
+<link rel="stylesheet" type="text/css" href="__INDEX__css/cropper.min.css">
+<script type="text/javascript" src="__INDEX__js/cropper.min.js"></script>
+
+	<body class="u-body">
+		<!-- 引入头部 -->
+		<div class="main u-main">
+{include file="public/nav"}
+			<div class="user-info-box u-page-body">
+				<div class="u-title">
+					<span>相册管理</span>
+				</div>
+
+
+		        <!-- 我的相册 -->
+		        <div class="miva-album-box">
+		          <!-- 顶部的提示&&上传按钮 -->
+		        	<div class="tip-btn-box">
+            			<div class="tip">温馨提示: 最多可上传8张照片,如需修改请删除后再次上传</div>
+            			<label data-item="upbtn" for="photo" class="btn">上传照片</label>
+         			</div>
+				   	<input id="photo" type="file" style="display:none" name="image">
+          <!-- 相册主体内容...  竟然是空的? -->
+          			
+
+						
+
+          			<style type="text/css">
+						.album-body {
+							width: 100%;
+							margin-top: 50px;
+						}
+						
+						.album-body li {
+							position: relative;
+							width: 25%;
+							float: left;
+							text-align: center;
+							padding: 10px;
+						}
+						
+						.album-body li:hover .miva-delete {
+							display: block;
+						}
+						
+						.album-body li img {
+							width: 100%;
+						}
+						
+						.miva-delete {
+							position: absolute;
+							top: 10px;
+							right: 10px;
+							display: block;
+							width: 40px;
+							height: 40px;
+							line-height: 40px;
+							text-align: center;
+							font-size: 20px;
+							background: rgba(0, 0, 0, .5);
+							color: #fff;
+							display: none;
+						}
+					</style>
+					<!-- 相册主体内容...  竟然是空的? -->
+					<ul class="album-body">
+					{foreach name="album_data" item="v"}
+						<li><img src="{$v.img_url}" ><span class="miva-delete layui-icon layui-icon-delete"   attr_id="{$v.id}" ></span></li>			
+				    {/foreach}
+					</ul>
+					
+					<script type="text/javascript">
+						$(function() {
+							$('.miva-delete').on('click', function(){
+
+								var a = confirm("删除前请确认")
+								if (a != true){
+									return false
+								}
+								var id = $(this).attr('attr_id')
+								//var id = $('[name = "img"]').attr('attr_id')
+							
+								$.post("{:url('User/album_delete')}",{id:id},function(data){
+										if(data.code == 1){
+											layui.use('layer',function(){
+											layer.msg(data.msg)})
+											window.location.reload()
+										}else if(data.code == 2){
+											layui.use('layer',function(){
+											layer.msg(data.msg)})
+										}else{
+											layui.use('layer',function(){
+											layer.msg('失败，未知错误')})
+										}
+
+								},'json')
+							})
+						})
+					</script>
+
+        		</div>
+			</div>
+		
+			<script type="text/javascript">
+			$(function() {
+				var files = $("#photo");
+				var btn = $('[data-item=upbtn]');
+				// var img = $('[data-item=img]');
+				var reader = new FileReader();
+				var fileBuffer;
+				var alertHTML = '<img id="newMiva" src="layui/css/modules/layer/default/icon-ext.png"/>';
+
+				// 图片预览
+				files.on('change', function() {
+					reader.readAsDataURL(files.prop('files')[0]);
+					reader.onload = function(e) {
+						// 获取file里的内容
+						fileBuffer = e.target.result;
+						layui.use('layer',function(){
+							layer.open({
+							type: 1,
+							title: false,
+							content: alertHTML,
+							scrollbar: false,
+							btn: ['确认'],
+							area: ['100%', '100%'],
+							success: function(layero, index) {
+								var imgbox = layero.find("#newMiva");
+								imgbox.attr('src', fileBuffer);
+								imgbox.cropper({
+									aspectRatio: 1 / 1,
+									dragMode: 'move', // 设置为  ‘move’: 只可以移动模式
+									dragCrop: false, // 设置为禁止移除当前的剪裁框，并通过拖动来新建一个剪裁框区域。
+									toggleDragModeOnDblclick: false, // 禁止双击切换模式
+								});
+							},
+							yes: function(index, layero) {
+								var imgbox = layero.find("#newMiva");
+								var cas = imgbox.cropper('getCroppedCanvas');
+								var base64url = cas.toDataURL('image/jpeg');
+
+								//var url = "{:url('user/album_add')}"; // 上传图片的接口地址
+								var option = base64url; //上传图片的内容
+
+								var photoBox = $('.album-body');
+								var photoItem = ` <img src="${base64url}" alt="" style="width:220px ;height:220px;"/>`;
+
+								photoBox.append(photoItem);
+
+								
+								 $.post("{:url('User/album_add')}",{option:option},function(data){
+								 			if(data.code == 0){
+								 				layui.use('layer',function(){
+												layer.msg(data.msg)})
+								 			}else if(data.code == 2){
+												layui.use('layer',function(){
+												layer.msg(data.msg)})
+								 			}else if(data.code == 3){
+								 				layui.use('layer',function(){
+												layer.msg(data.msg)})
+								 			}else if(data.code == 4){
+								 				layui.use('layer',function(){
+												layer.msg(data.msg)})
+								 			}else{
+								 				layui.use('layer',function(){
+												layer.msg('未知错误')})
+								 			}
+
+								 },'json')
+
+								// img.attr('src', base64url);
+								layer.closeAll();
+							}
+							})
+						})	
+
+					};
+					// 重置input[type=file];
+					files.val('');
+				});
+
+			});
+		</script>
+			
+		</div>
+
+		<!-- 引入页脚 -->
+{include file="public/footer"}
+	</body>
+
+
+</html>

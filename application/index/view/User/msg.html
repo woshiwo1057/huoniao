@@ -1,0 +1,38 @@
+{include file="public/header"}
+
+	<body class="u-body">
+		<!-- 引入头部 -->
+		<div class="main u-main">
+{include file="public/nav"}
+			<div class="user-info-box u-page-body">
+				<div class="u-title">
+					<span>我的消息</span>
+				</div>
+
+        <!-- 我的 消息 -->
+        <div class="miva-message-box">
+          <!-- 一条 -->
+          {foreach name="msg_data" item="v"}
+          <div class="miva-message-one">
+            <img src="__IMG__logo.jpg" alt="">
+            <div class="msg-info">
+              <div class="">{$v.title}</div>
+              <p>{$v.content}</p>
+            </div>
+            <div class="time">
+              {:date('Y-m-d H:i:s',$v.time)}
+            </div>
+          </div>
+          {/foreach}
+          <!-- end -->
+    
+        </div>
+			</div>
+		</div>
+{include file="public/footer"}
+		<!-- 引入页脚 -->
+
+	</body>
+
+
+</html>

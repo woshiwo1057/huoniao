@@ -1,0 +1,59 @@
+@charset "UTF-8";
+/**
+ * [content description]
+ * power by KujoMiva
+ * 2018-07-13
+ */
+// 按钮
+.miva-btn(@color:red, @b-r:.1rem){
+  border:.1rem solid @color;
+  border-radius: @b-r;
+  color: @color;
+}
+ // 全体页面宽度保险
+ .miva-width-bao(@width:100%, @min:0, @max:0) {
+   .if-max(@max) when (@max > 0){
+     max-width: @max;
+   };
+   .if-max(@max);
+   .if-min(@min) when (@min > 0){
+     min-width: @min;
+   };
+   .if-min(@min);
+   width: @width;
+ }
+
+// flex盒子函数
+.miva-flex(@content:initial, @wrap:initial, @align-items: initial) {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: @content;
+      -ms-flex-pack: @content;
+          justify-content: @content;
+  -ms-flex-wrap: @wrap;
+      flex-wrap: @wrap;
+  -webkit-box-align:  @align-items;
+      -ms-flex-align:  @align-items;
+          align-items:  @align-items;
+}
+// position定位函数
+.miva-position(@p:relative, @z:initial, @t:initial, @r:initial, @b:initial, @l:initial) {
+  position: @p;
+  z-index: @z;
+  top: @t;
+  right: @r;
+  bottom: @b;
+  left: @l;
+}
+// 重置placeholder样式
+.miva-placeholder(@color:initial, @font-size:initial) {
+  .miva-input-reset() {
+    color: @color;
+    font-size: @font-size;
+  }
+  input::-webkit-input-placeholder, textarea::-webkit-input-placeholder { .miva-input-reset }
+  input:-moz-placeholder, textarea:-moz-placeholder { .miva-input-reset }
+  input::-moz-placeholder, textarea::-moz-placeholder { .miva-input-reset }
+  input:-ms-input-placeholder, textarea:-ms-input-placeholder { .miva-input-reset }
+}

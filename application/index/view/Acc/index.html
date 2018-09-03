@@ -1,0 +1,243 @@
+{include file="public/header"}
+{include file="public/sidebar"}
+
+<style>
+	.icon-active > img {
+		-webkit-transform: translateY(-61px);
+		transform: translateY(-61px);
+	}
+	.icon-active > img:hover {
+		-webkit-transform: translateY(0px);
+		transform: translateY(0px);
+	}
+	.txt-active > .miva-txt {
+		color: #f5b105
+	}
+	a > * {
+		cursor: pointer;
+	}
+</style>
+	<body>
+		<!-- 引入头部 -->
+		<div class="main">
+			<!-- 选择分类 -->
+			<div class="miva-acc-tab-box">
+				<table>
+					<tr>
+						<td class="miva-acc-title">游戏类型</td>
+						<td>
+							<!-- 一条 -->
+							{foreach name="game_data" item="v"}
+							<a>
+								<div class="miva-iocn-box" project="1"  project_id="{$v.id}" dawdawdawd>
+									{if condition="$v.game_logo_img == ''"}
+									<img src="__IMG__default.jpg" alt="1">
+								{else /}
+									<img src="{$v.game_logo_img}" alt="">
+								{/if}
+								</div>
+								<span>{$v.name}</span>
+							</a>
+							{/foreach}
+							
+							<!-- end -->
+
+						</td>
+					</tr>
+
+					<tr>
+						<td class="miva-acc-title">娱乐项目</td>
+						<td>
+							<!-- 一条 -->
+							{foreach name="joy_data" item="v"}
+							<a>
+								<div class="miva-iocn-box"  project="2"  project_id="{$v.id}">
+								{if condition="$v.joy_logo_img == ''"}
+									<img src="__IMG__default.jpg" alt="">
+								{else /}
+									<img src="{$v.joy_logo_img}" alt="">
+								{/if}
+								</div>
+								<span>{$v.name}</span>
+							</a>
+							{/foreach}
+							<!-- end -->
+
+						</td>
+					</tr>
+					<tr>
+						<td class="miva-acc-title">选择等级</td>
+						<td data-item="lv" class="graed">
+							<a porjectLv="0" class="miva-txt-box txt-active">
+								<div class="miva-txt" alt="1">不限</div>
+							</a>
+							
+						</td>
+					</tr>
+					<tr>
+						<td class="miva-acc-title">陪玩性别</td>
+						<td>
+							<a sex="0" class="miva-txt-box txt-active">
+								<div class="miva-txt">不限</div>
+							</a>
+							<a sex="1" class="miva-txt-box">
+								<div class="miva-txt">火鸟一哥</div>
+							</a>
+							<a sex="2" class="miva-txt-box">
+								<div class="miva-txt">火鸟一姐</div>
+							</a>
+						</td>
+					</tr>
+				</table>
+			</div>
+	
+			<!-- 筛选 -->
+			<div class="miva-screen-box">
+				<div class="miva-screen-btn-admin">
+					<i class="layui-icon layui-icon-align-right"></i> 综合筛选
+				</div>
+				<div class="miva-screen-btn">人气</div>
+				<div class="miva-screen-btn">价格</div>
+				<div class="miva-screen-btn">评价</div>
+				<div class="miva-screen-btn">线下</div>
+			</div>
+
+			<!-- 陪玩列表 -->
+			<div class="">
+				<div class="miva-screen-list">
+					<!-- 一条 -->
+					{foreach name="acc_data" item="v"}
+					<a href="{:url('Index/user',['id' => $v.uid])}" class="miva-star-items">
+						<div class="miva-star-pic">
+							{if condition="$v.head_img == ''"}
+								<img src="__IMG__default.jpg" />
+							{else /}
+								<img src="{$v.head_img}" />
+							{/if}
+						</div>
+						<table class="miva-star-info">
+							<tr>
+								<td>
+									<img src="__IMG__ico.gif" alt="图标">
+									<span class="star-name">{$v.nickname}</span>
+								</td>
+								<td class="miva-star-info-right">
+									<span class="tab tab-win">王者</span>
+									<span class="tab tab-shen">声优</span>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<img src="__IMG__火.png" alt="图标">
+									<span>{$v.hot}</span>
+								</td>
+								<td class="miva-star-info-right">
+									<span class="star-price">￥{$v.pice}/小时</span>
+								</td>
+							</tr>
+						</table>
+					</a>
+					{/foreach}
+
+					
+
+					<!-- end -->
+				</div>
+			</div>
+
+		</div>
+
+		<!-- 引入侧边栏 -->
+		<!-- 引入页脚 -->
+		{include file="public/footer"}
+	</body>
+
+</html>
+
+
+<script>
+		
+
+	$(function(){
+
+		var project = 1;
+		var projectId = 1;
+		var porjectLv = 0;
+		var sex = 0;
+
+		$('.miva-acc-tab-box').on('click', '.miva-iocn-box', function() {			
+			$('.miva-acc-tab-box').find('.miva-iocn-box').removeClass('icon-active')
+			$(this).addClass('icon-active');
+			projectId = $(this).attr('project_id');
+			project = $(this).attr('project');
+
+			//post请求  携带参数访问控制器    通过参数查询出数据并 return json($data)回来  
+			$.post("{:url('Acc/garde_ajax')}",{project:project,project_id:projectId},function(res){
+				//组装数据
+				var str = '<a porjectLv="0" class="miva-txt-box txt-active"><div class="miva-txt" alt="1">不限</div></a>';
+				//循环组装所有
+				for(a of res){
+					str += `<a porjectLv="${a.id}" class="miva-txt-box"><div class="miva-txt" alt="1">${a.type_name}</div></a>`;
+				}
+				//替换文本
+				$('[data-item="lv"]').html(str);
+
+			},'json');
+
+			
+		});
+		$('.miva-acc-tab-box').on('click', '.miva-txt-box', function() {
+			$(this).addClass('txt-active').siblings().removeClass('txt-active');
+			if ($(this).attr('porjectLv')) porjectLv = $(this).attr('porjectLv');
+			if ($(this).attr('sex')) sex = $(this).attr('sex');
+		});
+	
+		$('.miva-acc-tab-box').on('click','a',function(){
+			// console.log('项目类型'+project)
+			// console.log('游戏'+projectId)
+			// console.log('等级'+porjectLv)
+			// console.log('性别'+sex)		
+
+// $.post("{:url('Acc/screen')}",{project:project,project_id:projectId,sex:sex}, 'json').then(function(res){
+// 	console.log(res)
+// })
+			//筛选
+			$.post("{:url('Acc/screen')}",{project:project,project_id:projectId,sex:sex},function(res){
+console.log(res)
+				var str = ''
+					for(a of res){
+						str += `<a href="" class="miva-star-items">
+									<div class="miva-star-pic">
+											<img src="${a.head_img || '__IMG__default.jpg'}" />
+									</div>
+									<table class="miva-star-info">
+										<tr>
+											<td>
+												<img src="__IMG__ico.gif" alt="图标">
+												<span class="star-name">${a.nickname}</span>
+											</td>
+											<td class="miva-star-info-right">
+												<span class="tab tab-win">王者</span>
+												<span class="tab tab-shen">声优</span>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<img src="__IMG__火.png" alt="图标">
+												<span>${a.hot}</span>
+											</td>
+											<td class="miva-star-info-right">
+												<span class="star-price">￥${a.pice}/小时</span>
+											</td>
+										</tr>
+									</table>
+								</a>`;
+					}
+$('.miva-screen-list').html(str)
+			},'json')
+
+		});
+
+	})
+	
+	</script>

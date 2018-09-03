@@ -1,0 +1,42 @@
+/**
+ * 定义一些变量
+ */
+
+ // 页面整体宽度
+ @miva-page-width: 1420px;
+ // 头部背景颜色
+ @miva-header-color: #FBC94C;
+ // 全局红色
+ @miva-color-red: #FC6D69;
+ // z-index绝对置顶
+ @miva-max-z: 748943649;
+ // 三个个排行榜的颜色
+ @rank-one-color: #FC6D69;
+ @rank-two-color: #A978E6;
+ @rank-three-color: #FCD676;
+
+// 直接封装样式组件
+#miva-package {
+  /**
+   * @name [左边框标题样式]
+   * @param [@padding] 标题盒子的内边距
+   * @param [@border] 标题盒子的边框
+   * @parma [@box-border] 标题盒子的方向
+   * @param [@child] 装标题文字的元素
+   * @param [@color] 左边框的颜色
+   * @param [@c-padding] 左边框距与文字的距离
+   * @param [@font-size] 标题字体的大小
+   */
+  .miva-title(@padding: 20px,@box-border:-bottom, @border: 1px solid #ccc, @child:span, @color: red, @c-padding:0 20px, @font-size:20px) {
+    padding: @padding;
+    border@{box-border}:@border;
+    @{child} {
+      border-left: 3px solid @color;
+      padding: @c-padding;
+      font-size: @font-size;
+    }
+  }
+
+
+  // end
+}

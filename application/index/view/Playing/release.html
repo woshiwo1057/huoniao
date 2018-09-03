@@ -1,0 +1,347 @@
+{include file="public/header"}
+{include file="public/sidebar"}
+	<body>
+		<!-- 引入头部 -->
+<style>
+	.service-items > span,
+	.release-title > span {
+		cursor: pointer;
+	}
+</style>
+		<div class="main miva-release-box ">
+			<div class="release-title">
+				<span>服务项目</span>
+			</div>
+			
+			<div class="service-items">
+				<span class="active">游戏项目</span>
+				{foreach name="game_data" item="v"}
+				<span  data-item="name" game_id="{$v.id}" class="game">{$v.name}</span>		
+				{/foreach}
+<hr/>
+
+				<span class="active">娱乐项目</span>
+				{foreach name="joy_data" item="v"}
+				<span data-item="name"  joy_id="{$v.id}" class="joy" class="joy">{$v.name}</span>	
+				{/foreach}
+			</div>
+		
+			
+			<div class="release-title">
+				<span>选择段位</span>
+			</div>
+			<div data-item="list" class="service-items">
+				<span class="active" data-item="garde">不限</span>
+				
+			</div>
+			<script>
+				$(document).ready(function() {
+					$(".service-items").on('click', 'span', function(){
+						$(this).addClass('active').siblings().removeClass('active');
+						if ($(this).attr('game_id')) {
+							var game_id = $(this).attr('game_id');
+							
+						}else if ($(this).attr('joy_id')){
+							var joy_id = $(this).attr('joy_id');
+							
+						};
+						
+						$.post("{:url('Playing/garde_ajax')}",{game_id:game_id,joy_id:joy_id},function(res){
+							var str = '<span class="active">不限</span>';
+							for(a of res) {
+								str += `<span class=""  data-item="garde">${a.type_name}</span>`;
+							}
+							$('[data-item=list]').html(str);
+						},'json');
+
+					});
+				});
+			</script>
+
+			<div class="release-title">
+				<span>下单时长</span>
+			</div>
+			<div class="">
+				<div class="time-box" style=" float:right;">
+				
+					<!-- <label for="">日期 :</label><input type="text" name="" value=""> -->
+					<label style="visibility:hidden" for="">时间 :<input type="text" name="" value="" style="visibility:hidden"></label>
+				
+					<span>小时:</span>
+					<div class="box" >
+						<span>+</span>
+						<input type="text" value="1" name="hour">
+						<span>-</span>
+					</div>
+				</div>
+
+				<div class="contact-box">
+					<div>
+						<img src="" alt="图标">
+						手机
+					</div>
+					<input type="text" name="phone">
+					<span style="color:red">(必填)</span>
+
+					<div>
+						<img src="" alt="图标">
+						QQ
+					</div>
+					<input type="text" name="penguin">
+					<span>(选填)</span>
+
+					<div>
+						<img src="" alt="图标">
+						微信
+					</div>
+					<input type="text" name="wechat">
+					<span style="color:red">(必填)</span>
+				</div>
+
+			</div>
+			<div class="release-title">
+				<span>陪玩方式</span>
+			</div>
+			<div class="miva-method">
+				<span class="active" mode="1" data-item="mode">线上</span>
+				<span  mode="2" data-item="mode">线下</span>
+				<sub>备注:线上线下可同时选择</sub>
+			</div>
+			<div class="release-title">
+				<span>我想对你说</span>
+			</div>
+			<div class="miva-textarea">
+				<textarea name="content" rows="8" cols="80" placeholder="对陪玩师说点什么吧......比如：游戏所在区服、阵营；想找一个又红又专的社会主义接班人；来一个会嘤嘤嘤的女装大佬等等..."></textarea>
+			</div>
+			<div class="release-title">
+				<span>照片</span>
+			</div>
+			<div class="photo-box">
+				<label for="one">
+					<img src="http://127.0.0.1:8020/%E7%81%AB%E9%B8%9F%E7%94%B5%E7%AB%9EPC/img/binner.png" alt="">
+				</label>
+				<label for="two">
+					<img src="http://127.0.0.1:8020/%E7%81%AB%E9%B8%9F%E7%94%B5%E7%AB%9EPC/img/binner.png" alt="">
+				</label>
+				<label for="three">
+					<img src="http://127.0.0.1:8020/%E7%81%AB%E9%B8%9F%E7%94%B5%E7%AB%9EPC/img/binner.png" alt="">
+				</label>
+				<input style="display:none" id="one" type="file" name="" value="">
+				<input style="display:none" id="two" type="file" name="" value="">
+				<input style="display:none" id="three" type="file" name="" value="">
+			</div>
+
+			<!--
+			<div class="release-title">
+				<span>报名截止日期</span>
+			</div>
+			<div class="baoming">
+				<span>日期: <input type="text"></span>
+				<span>时间: <input type="text"></span>
+			</div>
+			-->
+			<div class="release-title">
+				<span>赏金</span>
+			</div>
+			<div class="shangjin">
+				<input type="text" placeholder="输入赏金"  name="money">
+			</div>
+			<div class="release-title">
+				<span>支付方式</span>
+			</div>
+			<style>
+				.pay-methods > span {
+					cursor:pointer;
+				}
+				.pay-act {
+					position: relative;
+					border-color: #FBC94C !important;
+				}
+				.pay-act::after {
+					content: '√';
+					position: absolute;
+					right: 2px;
+					bottom: 1px;
+					font-weight: bold;
+					color: #fff;
+				}
+				.pay-act::before {
+					content: '';
+					position: absolute;
+					right: 0;
+					bottom: 0;
+					display: block;
+					border:15px solid;
+					border-color: transparent #FBC94C #FBC94C transparent
+				}
+			</style>
+			<div class="pay-methods">
+				<span class="pay-act" type="0">余额支付</span>
+				<span type="2">微信支付</span>
+				
+			</div>
+			<div class="submit xiaoshou">
+				<span id="submit">确认发布</span>
+				<img src=""  style="height:200px;width:200px;margin-left:400px;" alt="选择微信支付时打开微信扫描二维码支付" class="zhifu">
+			</div>
+		</div>
+
+		<!-- 引入侧边栏 -->
+		<!-- 引入页脚 -->
+		{include file="public/footer"}
+	</body>
+</html>
+<script>
+	$(function(){
+		//获取base64
+		var base64box = [];
+		$('.photo-box').on('change', 'input', function() {
+			var _this = this;
+			var $this = $(this);
+			var fileBuffer;
+			var reader = new FileReader();
+			var thisID = $(this).prop('id');
+
+			reader.readAsDataURL($this.prop('files')[0]);
+			reader.onload = function(e) {
+				fileBuffer = e.target.result;
+				// 显示
+				$('.photo-box').find('label[for='+thisID+'] > img').prop('src', fileBuffer);
+				base64box.push(fileBuffer);
+			}
+
+		})
+		$('body').on('selectstart', function() { // 禁止选中
+	        return false;
+	    });
+		$('.pay-methods').on('click', 'span', function() {
+			var _this = this;
+			var $this = $(this);
+
+			$this.addClass('pay-act').siblings().removeClass('pay-act');
+		})
+		//获取到陪玩方式
+			var method = 1;
+			$('.miva-method').on('click','span',function(){
+					
+					if ($(this).attr('class')) {
+						$(this).removeClass('active');
+						method -= parseInt($(this).attr('mode'));
+					}
+					else {
+						$(this).addClass('active');
+						method += parseInt($(this).attr('mode'));
+					}
+				})
+
+		$('#submit').click(function(){
+			//获取到游戏
+			var name = $('[data-item="name"].active').html()
+			if(!name){
+
+				layui.use('layer',function(){
+				layer.msg('请选择服务项目')
+				})
+				return false
+			}
+
+			//获取到等级
+			var garde = $('[data-item="garde"].active').html() 
+			if(!garde){
+				var garde = '不限'				
+			}
+
+			//获取到手机，qq，微信号，下单时长
+			var phone = $("[name = 'phone']").val();
+			if(phone == ''){
+				layui.use('layer',function(){
+				layer.msg('请填写手机号')
+				})
+				return false
+			}
+			var penguin = $("[name = 'penguin']").val();
+			var wechat = $("[name = 'wechat']").val();
+			if(wechat == ''){
+				layui.use('layer',function(){
+				layer.msg('请填写微信号')
+				})
+				return false
+			}
+			var hour = $("[name ='hour']").val();
+			var reg = /^\d\d?$/;
+			//console.log(reg.test(hour));  在控制台显示效果
+			if(!reg.test(hour))
+			{
+				layui.use('layer',function(){
+				layer.msg('请填写整数小时')
+				})
+				return false
+			}
+			
+			// var mode = $("[data-item='mode'].active").attr('mode')
+
+			//alert(method)
+			if(method == 0){
+				layui.use('layer',function(){
+				layer.msg('请选择服务类型（线上/线下）')
+				})
+				return false
+			}
+
+			//获取到  我想对你说文本  
+			var content = $('[name = "content"]').val()
+			//获取到赏金
+			var rea = /^\+?[1-9][0-9]*$/;
+			var money = $('[name = "money"]').val()
+			if(!rea.test(money)){
+				layui.use('layer',function(){
+				layer.msg('请填写整数赏金')
+				});
+				return false
+				
+			}
+			if(money<=0){
+				layui.use('layer',function(){
+				layer.msg('请认真填写赏金')
+				});
+				return false
+			}
+
+			//获取到支付方式
+			var type = $('.pay-act').attr('type')
+			$.post("{:url('Playing/release_add')}",{project:name,grade:garde,phone:phone,qq:penguin,wechat:wechat,times:hour,method:method,content:content,base64box:base64box,money:money,type:type},function(data){
+						if(data.code == 1){
+	                        layui.use('layer',function(){
+	                        layer.msg(data.msg)})
+	                    }else if(data.code == 2){
+	                        layui.use('layer',function(){
+	                        layer.msg(data.msg)});
+	                       var url = window.location.href="{:url('Playing/index')}";
+	                       window.setTimeout(url,2000);
+	                    }else if(data.code == 3){
+	                        layui.use('layer',function(){
+	                        layer.msg(data.msg)})
+	                    }else if(data.code == 4){
+	                        var str = 'https://www.baifubao.com/o2o/0/qrcode?size=10&text='
+	                        str += data.msg
+	                        $('.zhifu').attr('src',str) 
+	                    }else if(data.code == 5){
+	                        layui.use('layer',function(){
+	                        layer.msg(data.msg)})
+	                    }else if(data.code == 6){
+	                        layui.use('layer',function(){
+	                        layer.msg(data.msg)})
+	                    }else if(data.code == 7){
+	                        layui.use('layer',function(){
+	                        layer.msg(data.msg)})
+	                    }else{
+	                      	layui.use('layer',function(){
+	                        layer.msg('未知错误')})
+	                    }
+
+
+			},'json')
+
+		})
+	})
+</script>

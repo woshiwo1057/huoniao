@@ -1,0 +1,59 @@
+{include file="public/header"}
+{include file="public/sidebar"}
+<body>
+
+	<form  action="#"  method="post">
+
+		<div class="row cl">												
+			<label class="form-label col-xs-4 col-sm-2" ><span class="c-red"  style="margin-left:200px;">*</span>游戏名：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$name.name}"  name="name"  disabled="" >
+			</div>
+
+
+
+			<div class="row cl" style="margin-left:210px;">
+				<label class="form-label col-xs-4 col-sm-2"><span class="c-red" ></span>游戏级别分类：</label>
+				<div class="formControls col-xs-8 col-sm-9">
+					<input type="text" class="input-text" value="" placeholder="等级分类。" name="type_name[]" style="width:300px;">
+					<a data-item="delete" class="delete">删除</a>
+				</div>
+
+			</div>
+			<a href="javascript:;" style="margin-left:450px;" class="add">增加</a>
+			<div class="row cl">
+				<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+					<button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i>提交</button>
+				</div>
+			</div>
+		</div>
+		
+	
+	</form>
+
+</body>
+{include file="public/footer"}
+<script>
+	$(function(){
+		$('.add').click(function(){
+			var str =""
+			str += '<div class="row cl" style="margin-left:210px;">'
+			str += '<label class="form-label col-xs-4 col-sm-2"><span class="c-red"></span>游戏级别分类：</label>'
+			str += '<div class="formControls col-xs-8 col-sm-9">'
+			str += '<input type="text" class="input-text" value="" placeholder="游戏全名。" name="type_name[]" style="width:300px;">'
+			str += '<a  data-item="delete" class="delete">删除</a>'
+			str += '</div></div>'
+
+			$(this).before(str); //在元素前追加
+
+			$('[data-item=delete]').on('click', function(){
+				$(this).parent().parent().remove(); //找到最终的父级元素  然后删除
+			})
+		})
+
+		
+	})
+</script>
+
+</body>
+</html>

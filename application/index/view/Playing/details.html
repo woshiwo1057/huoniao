@@ -1,0 +1,224 @@
+{include file="public/header" }
+{include file="public/sidebar"}
+
+	<body>
+		<!-- 引入头部 -->
+		<!-- 版头图 -->
+		<div class="miva-top-pic-box">
+			<img src="__IMG__binner.png" alt="">
+		</div>
+		<div class="main main-no-top">
+			<!-- 发布悬赏 -->
+			<div class="miva-reward-btn-box">
+				<div class="miva-reward-btn xiaoshou" bounty_id="{$playing_data.id}">立即报名</div>
+			</div>
+			<script>
+			$(function(){
+				$('.miva-reward-btn').click(function(){
+					var bounty_id = $(this).attr('bounty_id') //订单ID
+				
+					$.post("{:url('Playing/entered')}",{bounty_id:bounty_id},function(data){
+								if(data.code == 1){
+									layui.use('layer',function(){
+                        			layer.msg(data.msg)})
+								}else if(data.code == 2){
+									layui.use('layer',function(){
+                        			layer.msg(data.msg)})
+								}else if(data.code == 3){
+									layui.use('layer',function(){
+                        			layer.msg(data.msg)})
+								}else if(data.code == 4){
+									layui.use('layer',function(){
+                        			layer.msg(data.msg)})
+								}else if(data.code == 5){
+									layui.use('layer',function(){
+                        			layer.msg(data.msg)})
+								}else{
+									layui.use('layer',function(){
+                        			layer.msg('未知错误')})
+								}
+					},'json')
+				})
+			})
+			</script>
+			<!--一条-->
+			<div class="miva-one-reward-box">
+				<!-- 上 -->
+				<div class="miva-top-box">
+
+					<div class="miva-user-info-box">
+						<div class="miva-reward-user-box">
+							<!-- 用户头像 -->
+							<div class="miva-reward-user-pic">
+								{if condition="$playing_data.head_img == ''"}
+								<img src="" alt="暂无头像">
+								{else /}
+								<img src="{$playing_data.head_img}" alt="">
+								{/if}
+							</div>
+							<!-- 等级标签 -->
+							<span class="tip-box">
+								{switch name="$playing_data.level"}
+									{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+									{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+									{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+									{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+									{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+									{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+									{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+									{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+									{default /}
+								{/switch}
+							</span>
+						</div>
+						<div class="miva-user-info">
+							<div class="user">
+								<span class="user-name">{$playing_data.nickname}</span>
+								<!--
+								<span class="user-vip">
+									<img src="images/png/biao3.png" alt="">
+									<img src="images/png/biao3.png" alt="">
+									<img src="images/png/biao3.png" alt="">
+								</span>
+								-->
+							</div>
+							<div class="time">
+								发布时间：{:date('Y-m-d H:i:s',$playing_data.time)}
+							</div>
+						</div>
+					</div>
+
+					<div class="miva-inline-box">
+						<span class="miva-inline-icon miva-inline-icon-act layui-icon layui-icon-add-circle-fine"></span>
+						{switch name="$playing_data.method"}
+							{case value="1"}<span class="miva-inline-txt">线上</span>{/case}
+							{case value="2"}<span class="miva-inline-txt">线下</span>{/case}
+							{case value="3"}<span class="miva-inline-txt">线上/线下</span>{/case}
+						{/switch}
+					</div>
+
+					<div class="miva-price">
+						悬赏 ￥<span>{$playing_data.money}</span>
+					</div>
+
+					<div class="miva-add-like xiaoshou" onclick="alert('正在完善中...')">关注</div>
+				</div>
+				<!-- 悬赏列表每一条中间的盒子 -->
+				<div class="miva-middle-box">
+					<div class="miva-txt-box">
+						{$playing_data.content}
+					</div>
+					<div class="miva-img-box">
+						{foreach name="$playing_data.images" item="vo"}
+							<div class="miva-img">
+								<img src="{$vo}" alt="">
+							</div>
+						{/foreach}
+					</div>
+					<div class="miva-middle-btn-box">
+					<!--
+						<div class="miva-get-box">
+							<div class="user-pic-box">
+								<img src="https://img1.daofengdj.com/uploads/avatar/000/11/06/110675_avatar_big.jpg" />
+							</div>
+							<div class="miva-get-txt">
+								火鸟一姐小萝莉拿到赏金~~~
+								<img src="images/biao3.gif" alt="勋" />
+							</div>
+						</div>
+					-->
+					</div>
+				</div>
+				<!-- 下 -->
+				<div class="miva-bottom-box">
+					<table class="miva-bottom-tab">
+						<tr>
+							<td><i class="layui-icon layui-icon-praise"></i>要求：{$playing_data.grade}</td>
+							<td><i class="layui-icon layui-icon-reply-fill"></i>评论</td>
+							<td><i class="layui-icon layui-icon-note"></i>{$playing_data.project}</td>
+							<td><i class="layui-icon layui-icon-user"></i>已有  {$num}  位火鸟同志报名</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<!--end-->
+
+			<!-- 陪玩师报名动态 -->
+			<div class="miva-dynamic-box">
+				<!-- 左边  -->
+				<div class="left-box">
+					<!-- 一个头像 -->
+					{foreach name="acc_data" item="v"}
+					<img src="{$v.head_img}" alt="{$v.user_id}">
+					{/foreach}
+					<!-- 省略号 -->
+					<i class="miva-icon-reward layui-icon layio-icon"></i>
+					<span>陪玩师报名动态</span>
+				</div>
+				<!-- 右边 -->
+				<?php if($_SESSION['user']['user_info']['uid'] == $playing_data['user_id']){ ?>
+				<div class="miva-btn">
+					<a href="{:url('Playing/choice',['id' => $playing_data.id])}">选择陪玩师</a>
+				</div>
+				<?php  }?>
+			</div>
+			<!-- 互动区 -->
+			<div class="hudong">
+				<div class="title-hudong">
+					<span>互动区</span>
+				</div>
+				<!-- 互动列表 -->
+				<div class="hudong-list">
+					<!-- 一条 -->
+					<div class="hudong-one-box">
+						<img src="https://img1.daofengdj.com/uploads/avatar/000/11/06/110675_avatar_big.jpg" alt="">
+						<!-- 用户信息 -->
+						<div class="user-info">
+							<div class="user-name">
+								九条米法<img src="images/biao1.gif" alt="等级标签">
+							</div>
+							<div class="user-msg">
+								每天来者报个到!
+							</div>
+							<div class="time">
+								2018-07-28 10:24:13
+							</div>
+						</div>
+						<!-- 右边 -->
+						<div class="right-hudong">
+							<div class="star-box">
+								<img src="./img/ico_13.png" alt="星星">
+								<img src="./img/ico_13.png" alt="星星">
+								<img src="./img/ico_13.png" alt="星星">
+								<img src="./img/ico_13.png" alt="星星">
+								<img src="./img/ico_13.png" alt="星星">
+							</div>
+							<div class="bottom">
+								<span><img src="images/png/icon-good.png" alt="点赞">0</span>
+								<span><img src="images/png/icon-comm.png" alt="评论">0</span>
+							</div>
+						</div>
+
+					</div>
+					<!-- end -->
+					
+					
+					
+					
+					
+					
+
+				</div>
+				<div class="miva-more">
+					更多互动...
+				</div>
+			</div>
+
+		</div>
+
+		<!-- 引入侧边栏 -->
+		<!-- 引入页脚 -->
+		{include file="public/footer"}
+	</body>
+
+</html>

@@ -1,0 +1,78 @@
+﻿{include file="public/header"}
+{include file="public/sidebar"}
+<!--/_menu 作为公共模版分离出去-->
+
+<section class="Hui-article-box">
+	<div class="Hui-article">
+		<article class="cl pd-20">
+			
+			<div class="cl pd-5 bg-1 bk-gray mt-20">
+				<span class="l">
+				<a href="javascript:;" onclick="alert('禁止操作，请单个删除')" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
+				<a class="btn btn-primary radius" data-title="添加资讯" href="{:url('Msg/add')}"><i class="Hui-iconfont">&#xe600;</i> 添加消息</a>
+				</span>
+				<!--<span class="r">共有数据：<strong>54</strong> 条</span>-->
+			</div>
+			<div class="mt-20">
+				<table class="table table-border table-bordered table-bg table-hover table-sort">
+					<thead>
+						<tr class="text-c">
+							
+
+							<th width="10">ID</th>
+							<th width="20">发布者</th>
+							<th width="30">消息标题</th>							
+							<th width="180">发布内容</th>
+							<th width="30">发布时间</th>							
+							<th width="10">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+					{foreach name="msg_data" item="v"}
+						<tr class="text-c">
+							<td>{$v.id}</td>
+							<td>{$v.admin_name}</td>
+							<td class="text-l">{$v.title}</td>							
+							<td>{$v.content}</td>
+							<td>{:date('Y-m-d H:i:s',$v.time)}</td>
+																					
+							<td >
+								<a style="text-decoration:none" data-item=delete class="ml-5 delete" href="{:url('Msg/delete',['id'=>$v.id])}" title="删除">
+									<i class="Hui-iconfont">&#xe6e2;</i>
+								</a>
+							</td>
+						</tr>
+					{/foreach}
+						
+					</tbody>				
+						<script>
+						$(function(){
+							$('.delete').click(function(){
+								var a = confirm("删除前请确认")
+								if (a != true){
+									return false
+								}
+							})
+						})
+						</script>
+				</table>
+			</div>
+		</article>
+	</div>
+</section>
+
+
+{include file="public/footer"}
+
+
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="lib/laypage/1.2/laypage.js"></script>
+
+
+
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

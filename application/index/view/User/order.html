@@ -1,0 +1,333 @@
+{include file="public/header"}
+
+	<body class="u-body">
+		<!-- 引入头部 -->
+		<div class="main u-main">
+{include file="public/nav"}
+			<div class="user-info-box u-page-body">
+				<div class="u-title">
+					<span>我的订单</span>
+				</div>
+        <!-- 我的订单列表 -->
+        <div class="miva-order-page">
+          <!-- 筛选 -->
+          <div class="miva-search-box">
+          <!--
+            <span class="active"><i class="miva-icon layui-icon layui-icon-align-right"></i>全部</span>
+            <span>待付款</span>
+            <span>进行中</span>
+            <span>已完成</span>
+            -->
+          </div>
+          <!-- 排序? -->
+          <div class="pai">
+            <span>订单信息</span>
+            <span>单价</span>
+            <span>时间</span>
+            <span>金额</span>
+            <span>订单状态</span>
+            <span>操作</span>
+          </div>
+  
+        {foreach name="order_data" item="v"}
+          <!-- 订单主体 一条 -->
+          <div class="miva-order-body">
+            <!-- 订单标题 -->
+            <div class="miva-order-title">
+              <!-- 左 -->
+              <div class="left">
+                <span class="order-num">{$v.number}</span>
+                <span>联系约玩</span>
+              </div>
+              <!-- 右 -->
+              <div class="right">{:date('Y-m-d H:i:s',$v.time)}</div>
+            </div>
+            <!-- 订单信息 -->
+            <div class="miva-order-info">
+              <img src="{$v.head_img}" alt="" class="user-pic">
+              <div class="user-info">
+                <div>陪玩师昵称:{$v.nickname}</div>
+                <div>服务:{$v.service}</div>
+              </div>
+              <div></div>
+              <div>时长:{$v.length_time}小时</div>
+              <div><i class="layui-icon layui-icon-rmb miva-rmb"></i>{$v.price}</div>
+              {if condition="$v['status'] == 0"}
+              <div class="out xiaoshou" order_id="{$v.id}" type="2">取消订单</div>             
+              {/if}
+              {if condition="$v['status'] == 3"}
+               <span class="out xiaoshou" order_id="{$v.id}" type="3">确认完成</span>
+              {/if}
+              <div class="jindu">订单进度<br><i class="layui-icon layui-icon-triangle-d"></i></div>
+            </div>
+            <!-- 訂單進度 -->
+
+            <div class="miva-order-load">
+
+              <div class="dingdan">訂單進度</div>
+              <div class="liucheng">
+              {switch name="$v.status"}
+                {case value="0"}
+                  <ul>
+                    <li class="success">
+                      <div>提交訂單</div>
+                      <div class="yuan">1</div>
+                    </li>
+                    <li  class="active">
+                      <div>付款成功</div>
+                      <div class="yuan">2</div>
+                    </li>
+                    <li class="">
+                      <div>等待接单</div>
+                      <div class="yuan">3</div>
+                    </li>
+                    <li class="">
+                      <div>订单进行中</div>
+                      <div class="yuan">4</div>
+                    </li>
+                    <li class="">
+                      <div>确认完成</div>
+                      <div class="yuan">5</div>
+                    </li>
+                    <li class="">
+                      <div>评价</div>
+                      <div class="yuan">6</div>
+                    </li>
+                  </ul>
+                {/case}
+                {case value="1"}
+                  <ul>
+                    <li class="success">
+                      <div>提交訂單</div>
+                      <div class="yuan">1</div>
+                    </li>
+                    <li  class="success">
+                      <div>付款成功</div>
+                      <div class="yuan">2</div>
+                    </li>
+                    <li class="active">
+                      <div>等待接单</div>
+                      <div class="yuan">3</div>
+                    </li>
+                    <li class="">
+                      <div>订单进行中</div>
+                      <div class="yuan">4</div>
+                    </li>
+                    <li class="">
+                      <div>确认完成</div>
+                      <div class="yuan">5</div>
+                    </li>
+                    <li class="">
+                      <div>评价</div>
+                      <div class="yuan">6</div>
+                    </li>
+                  </ul>
+                {/case}
+                {case value="2"}
+                  <ul>
+                    <li class="success">
+                      <div>提交訂單</div>
+                      <div class="yuan">1</div>
+                    </li>
+                    <li  class="success">
+                      <div>付款成功</div>
+                      <div class="yuan">2</div>
+                    </li>
+                    <li class="success">
+                      <div>等待接单</div>
+                      <div class="yuan">3</div>
+                    </li>
+                    <li class="active">
+                      <div>订单进行中</div>
+                      <div class="yuan">4</div>
+                    </li>
+                    <li class="">
+                      <div>确认完成</div>
+                      <div class="yuan">5</div>
+                    </li>
+                    <li class="">
+                      <div>评价</div>
+                      <div class="yuan">6</div>
+                    </li>
+                  </ul>
+                {/case}
+                {case value="3"}
+                  <ul>
+                    <li class="success">
+                      <div>提交訂單</div>
+                      <div class="yuan">1</div>
+                    </li>
+                    <li  class="success">
+                      <div>付款成功</div>
+                      <div class="yuan">2</div>
+                    </li>
+                    <li class="success">
+                      <div>等待接单</div>
+                      <div class="yuan">3</div>
+                    </li>
+                    <li class="success">
+                      <div>订单进行中</div>
+                      <div class="yuan">4</div>
+                    </li>
+                    <li class="active">
+                      <div>确认完成</div>
+                      <div class="yuan">5</div>
+                    </li>
+                    <li class="">
+                      <div>评价</div>
+                      <div class="yuan">6</div>
+                    </li>
+                  </ul>
+                {/case}
+                {case value="4"}
+                  <ul>
+                    <li class="success">
+                      <div>提交訂單</div>
+                      <div class="yuan">1</div>
+                    </li>
+                    <li  class="success">
+                      <div>付款成功</div>
+                      <div class="yuan">2</div>
+                    </li>
+                    <li class="success">
+                      <div>等待接单</div>
+                      <div class="yuan">3</div>
+                    </li>
+                    <li class="success">
+                      <div>订单进行中</div>
+                      <div class="yuan">4</div>
+                    </li>
+                    <li class="success">
+                      <div>确认完成</div>
+                      <div class="yuan">5</div>
+                    </li>
+                    <li class="active">
+                      <div>评价</div>
+                      <div class="yuan">6</div>
+                    </li>
+                  </ul>
+                {/case}
+                {case value="5"}
+                  <ul>
+                    <li class="success">
+                      <div>提交訂單</div>
+                      <div class="yuan">1</div>
+                    </li>
+                    <li  class="success">
+                      <div>付款成功</div>
+                      <div class="yuan">2</div>
+                    </li>
+                    <li class="success">
+                      <div>等待接单</div>
+                      <div class="yuan">3</div>
+                    </li>
+                    <li class="success">
+                      <div>订单进行中</div>
+                      <div class="yuan">4</div>
+                    </li>
+                    <li class="success">
+                      <div>确认完成</div>
+                      <div class="yuan">5</div>
+                    </li>
+                    <li class="success">
+                      <div>评价</div>
+                      <div class="yuan">6</div>
+                    </li>
+                  </ul>
+                {/case}
+                {case value="6"}
+                  <ul>
+                    <li class="success">
+                      <div>提交訂單</div>
+                      <div class="yuan">1</div>
+                    </li>
+                    <li  class="active">
+                      <div>付款成功</div>
+                      <div class="yuan">2</div>
+                    </li>
+                    <li class="">
+                      <div>等待接单</div>
+                      <div class="yuan">3</div>
+                    </li>
+                    <li class="">
+                      <div>订单进行中</div>
+                      <div class="yuan">4</div>
+                    </li>
+                    <li class="">
+                      <div>确认完成</div>
+                      <div class="yuan">5</div>
+                    </li>
+                    <li class="">
+                      <div>评价</div>
+                      <div class="yuan">6</div>
+                    </li>
+                  </ul>
+                {/case}
+              {/switch}
+              </div>
+            </div>
+          </div>
+          {/foreach}
+					<!-- 一条end -->
+
+
+					<div class="loading-more">查看更多订单...</div>
+        </div>
+				<!-- end -->
+			</div>
+
+		</div>
+  
+		<!-- 引入页脚 -->
+{include file="public/footer"}
+<script>
+  $(function(){
+    //取消订单
+    $('.out').click(function(){
+        var a = confirm("操作前请确认")
+        if(a != true){
+        return false
+        }
+        var type = $(this).attr('type')
+        var order_id = $(this).attr('order_id')    
+        //未完  待续
+        $.post("{:url('User/order_ajax')}",{type:type,order_id:order_id},function(data){
+                          if(data.code == 1){
+                            layui.use('layer',function(){
+                            layer.msg(data.msg)});
+                            window.location.reload()
+                          }else if(data.code == 2){
+                            layui.use('layer',function(){
+                            layer.msg(data.msg)})
+                          }else if(data.code == 3){
+                            layui.use('layer',function(){
+                            layer.msg(data.msg)});
+                            window.location.reload()
+                          }else if(data.msg == 4){
+                            layui.use('layer',function(){
+                            layer.msg(data.msg)})
+                          }else if(data.code == 5){
+                            layui.use('layer',function(){
+                            layer.msg(data.msg)});
+                            window.location.reload()
+                          }else if(data.code == 6){
+                            layui.use('layer',function(){
+                            layer.msg(data.msg)})
+                          }else if(data.code == 7){
+                            layui.use('layer',function(){
+                            layer.msg(data.msg)})
+                          }else{
+                            layui.use('layer',function(){
+                            layer.msg('未知错误')})
+                          }
+                },'json')
+             
+
+    })
+  })
+</script>
+	</body>
+
+
+
+</html>

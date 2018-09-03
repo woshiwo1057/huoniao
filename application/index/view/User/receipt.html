@@ -1,0 +1,127 @@
+{include file="public/header"}
+
+	<body class="u-body">
+		<!-- 引入头部 -->
+		<div class="main u-main">
+{include file="public/nav"}
+			<div class="user-info-box u-page-body">
+				<div class="u-title">
+					<span>我的接单</span>
+				</div>
+
+        <!-- 我的接单 -->
+        <div class="miva-receipt-box">
+          <!-- 筛选 -->
+          <div class="miva-search-box">
+          <!--
+            <div class="left">
+              <input type="text" name="" value="" placeholder="昵称">
+              <i class="miva-search-icon layui-icon layui-icon-search"></i>
+            </div>
+            <span class="active"><i class="miva-icon layui-icon layui-icon-align-right"></i>全部</span>
+            <span>进行中</span>
+            <span>已完成</span>
+            -->
+          </div>
+          <!-- 排序? -->
+          <div class="pai">
+            <span>訂單信息</span>
+            <span>单价</span>
+            <span>时间</span>
+            <span>服务项目</span>
+            <span>订单状态</span>
+            <span>操作</span>
+          </div>
+          <!-- end -->
+          <!-- 如果没数据 -->
+          <div class="if-black">
+            <img src="" alt="">
+            <div class="if-have">
+
+         
+           {foreach name="order_data" item="v"}
+              <div class="pai">
+                <span>{$v.number}</span>
+                <span>{$v.price}</span>
+                <span>{$v.length_time}</span>
+                <span>{$v.service}</span>
+
+                {switch name="$v.status"}
+                  {case value="0"}
+                    <span>等待用户付款</span>
+                    <span>无操作</span>
+                  {/case}
+                  
+                  {case value="1"}
+                    <span>是否接单</span>
+                    <span  class="xiaoshou click" order_id="{$v.id}"  type="1">接单</span>
+                  {/case}
+                  
+                  {case value="2"}
+                    <span>订单进行中</span>
+                    <span class="xiaoshou click" order_id="{$v.id}" type="2">取消订单</span>
+                  {/case}
+                  
+                  {case value="3"}
+                    <span>等待用户点击订单完成</span>
+                    <span>无操作</span>
+                  {/case}
+                  {case value="4"}
+                    <span>订单以完成，待用户评级</span>
+                    <span>无操作</span>
+                  {/case}
+                  {case value="5"}
+                    <span>用户已评价</span>
+                    <span>无操作</span>
+                  {/case}
+                {/switch}
+
+              </div>
+            {/foreach}
+         </div>
+          </div>
+        </div>
+
+			</div>
+
+		</div>
+          
+          <script>
+          $(function(){
+              $('.click').click(function(){
+                var a = confirm("操作前请确认")
+                if (a != true){
+                  return false
+                }
+                var type = $(this).attr('type')
+                var order_id = $(this).attr('order_id')
+                $.post("{:url('User/order_ajax')}",{type:type,order_id:order_id},function(data){
+                          if(data.code == 1){
+                            layui.use('layer',function(){
+                            layer.msg(data.msg)});
+                            window.location.reload()
+                          }else if(data.code == 2){
+                            layui.use('layer',function(){
+                            layer.msg(data.msg)})
+                          }else if(data.code == 3){
+                            layui.use('layer',function(){
+                            layer.msg(data.msg)});
+                            window.location.reload()
+                          }else if(data.msg == 4){
+                            layui.use('layer',function(){
+                            layer.msg(data.msg)})
+                          }else{
+                            layui.use('layer',function(){
+                            layer.msg('未知错误')})
+                          }
+                },'json')
+              })
+
+          })
+          </script>
+		<!-- 引入页脚 -->
+{include file="public/footer"}
+	</body>
+
+
+</html>

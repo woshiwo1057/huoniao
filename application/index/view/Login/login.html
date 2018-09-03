@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<link rel="stylesheet" type="text/css" href="__INDEX__css/common.css" />
+		<link rel="stylesheet" type="text/css" href="__INDEX__layui/css/layui.css" />
+		<link rel="stylesheet" type="text/css" href="__INDEX__layui/css/modules/code.css" />
+		<link rel="stylesheet" type="text/css" href="__INDEX__layui/css/modules/laydate/default/laydate.css" />
+		<link rel="stylesheet" type="text/css" href="__INDEX__layui/css/modules/layer/default/layer.css" />
+
+		
+		<script src="__INDEX__js/jquery-3.3.1.js" type="text/javascript" charset="utf-8"></script>
+		<script src="__INDEX__layui/layui.js" type="text/javascript" charset="utf-8"></script>
+		<!--<script src="js/mivaJoin.js" charset="utf-8"></script>-->
+		<title>登录</title>
+		
+	</head>
+
+	<body style="min-width: 100%;background: #FBC94C ;">
+		<div class="login-main">
+			<div class="login-box-miva">
+				<div class="login-title">
+					<span class="active">登录</span> |
+					<span class="">注册</span>
+				</div>
+
+
+				<form class="login-form" action="{:url('Login/login')}" method="post">
+					<input type="text" name="account" value="" placeholder="手机号/邮箱" />
+					<input type="password" name="password" value="" placeholder="密码" />
+					<input type="submit" value="登录" />
+					<label for="remember-me"><input type="checkbox" name="" id="remember-me" value="" />下次自动登录</label>
+					<span class="re-pwd">忘记密码</span>
+				</form>
+
+				<form class="reg-form" action="{:url('Login/register')}" method="post">
+					<div class="phone-box">
+						<span class="">+86</span>
+						<input type="text" name="phone" value="" placeholder="手机号" />
+					</div>
+					<div class="yanzheng">
+						<input type="text" name="code" value="" placeholder="验证码" />
+						<button class="button">发送验证码</button>
+					</div>
+					<div>
+						<input type="password" data-item=pwd name="password" id="" value="" placeholder="6-20位字母/数字/符号至少两种" />
+						<span class=""></span>
+					</div>
+					<label for="agreement"><input type="checkbox" name="" id="agreement" checked="true" value="" />我已阅读 <a href="">《用户协议》</a></label>
+					<br/>
+					<input type="submit" class="register" value="注册" />
+				</form>
+
+
+
+				<div class="other-login">
+					<div class="other-title">社交帐号登录</div>
+					<div class="other-box">
+						<a href=""><img src="" alt="QQ" /></a>
+						<a href=""><img src="" alt="WX" /></a>
+						<a href=""><img src="" alt="WB" /></a>
+					</div>
+				</div>
+			</div>
+			<script type="text/javascript">
+				$(document).ready(function() {
+					var login = $('.login-form');
+					var reg = $('.reg-form');
+					$('.login-title').on('click', 'span', function() {
+						$(this).addClass('active').siblings().removeClass('active');
+						if($(this).html() == "注册") {
+							login.hide();
+							reg.show();
+						} else {
+							reg.hide();
+							login.show();
+						}
+					});
+				});
+			</script>
+		</div>
+	</body>
+
+</html>

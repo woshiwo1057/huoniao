@@ -1,0 +1,39 @@
+<!--_menu 作为公共模版分离出去-->
+<aside class="Hui-aside">
+	
+	<div class="menu_dropdown bk_2">
+
+		{foreach name="menu_data" item="v" key="k"}
+			{if condition="in_array($v.id,$_SESSION['power']['admin_info'])"}
+			<dl id="menu">
+				<dt><i class="Hui-iconfont">&#xe616;</i> {$v.name}<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+				<dd>
+					<ul>
+					{foreach name="$v['erji']"  item="vo"  key="ke"}
+						{if condition="in_array($vo.id,$_SESSION['power']['admin_info'])"}
+						<li><a href="{:url($vo.controller.'/'.$vo.action)}" >{$vo.name}</a></li>
+						{/if}
+					{/foreach}
+					</ul>
+				</dd>
+			</dl>
+			{/if}
+		{/foreach}
+		
+
+	</div>	
+	
+</aside>
+<div class="dislpayArrow hidden-xs"><a class="pngfix" href="javascript:void(0);" onClick="displaynavbar(this)"></a></div>
+<!--/_menu 作为公共模版分离出去-->
+<!--
+<section class="Hui-article-box">
+	<nav class="breadcrumb">
+		<i class="Hui-iconfont">&#xe67f;</i>菜单管理
+		<span class="c-gray en">&gt;</span>菜单列表
+		
+		<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" >
+			<i class="Hui-iconfont">&#xe68f;</i>
+		</a>
+	</nav>
+-->

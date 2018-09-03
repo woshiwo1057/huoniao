@@ -1,0 +1,2585 @@
+  @charset "UTF-8";
+  // 引入我的库
+  @import (reference) './miva-work/miva-less-lib';
+  // 引入变量
+  @import (reference) './miva-work/base';
+  // 全局样式重置
+  @import "./miva-work/reset";
+  //引入头部样式
+  @import "./miva-work/base-header-item";
+  //引入侧边栏样式
+  @import "./miva-work/base-aside-item";
+  // 重置placeholder样式
+  .miva-placeholder(@color: #706C65, @font-size: 14px);
+  // 主体宽度模版
+  .main-modules() {
+      .miva-width-bao(@width: @miva-page-width);
+      min-height: 500px;
+      margin: auto;
+      margin-top: 120px;
+      &::before {
+          content: '';
+          display: table;
+      }
+  }
+  
+  // 对小图标的定义
+  .miva-icon {
+      margin: 0 10px;
+      vertical-align: middle;
+  }
+  
+  body {
+      .miva-width-bao(@min: 1900px);
+      font-size: 1.4rem;
+      // color: #999;
+  }
+  
+  div:focus {
+      outline: none;
+  }
+  
+  // *:not(a):not(input) {
+  //     cursor: default;
+  // }
+  footer {
+      .miva-width-bao(@min: 1900px);
+      background: #1B1B1B;
+      width: 100%;
+      height: 240px;
+      .footer-box {
+          .miva-flex(@content: space-between, @align-items: center);
+          width: @miva-page-width;
+          margin: auto;
+          height: 100%;
+          .footer-left-box {
+              .miva-flex(@align-items: center);
+              a {
+                  color: #fff;
+                  text-align: center;
+                  margin-right: 20px;
+              }
+              .footer-logo-box {
+                  width: 100px;
+                  height: 100px;
+              }
+          }
+          .footer-right-box {
+              .miva-flex(@align-items: center);
+              >* {
+                  margin-left: 40px;
+              }
+              div {
+                  margin-left: 80px;
+              }
+          }
+      }
+  }
+  
+  // 轮播binner
+  .miva-index-swiper {
+      .miva-width-bao(@max: 1920px, @min: 1900px);
+      height: 520px;
+      margin-top: 120px;
+      .swiper-slide {
+          background: #ddd;
+          * {
+              height: 100%;
+          }
+      }
+      .swiper-pagination {
+          span {
+              width: 15px;
+              height: 15px;
+          }
+      }
+      .swiper-pagination-bullet {
+          background: #fff !important;
+          opacity: 1;
+      }
+      .swiper-pagination-bullet-active {
+          background: #000 !important;
+      }
+  }
+  
+  // 主体
+  .main {
+      .main-modules();
+      .miva-floor-box {
+          .miva-title {
+              margin: 40px 0;
+              font-size: 28px;
+              .miva-moer {
+                  font-size: 16px;
+                  vertical-align: middle;
+                  border: 2px solid;
+                  padding: 3px 10px;
+                  border-radius: 10px;
+                  color: #999;
+                  float: right;
+              }
+              .miva-title-icon {
+                  display: inline-block;
+                  height: 50px;
+                  width: 50px;
+                  img {
+                      width: 100%;
+                      //        height: 100%;
+                  }
+              }
+          }
+      }
+  }
+  
+  .main-no-top {
+      margin-top: 0 !important;
+  }
+  
+  // 一楼
+  .miva-service-box {
+      width: 100%;
+      .miva-flex(@content: space-between);
+      .miva-service-items {
+          .miva-flex(@content: space-around, @align-items: center);
+          .miva-position();
+          width: 23%;
+          height: 190px;
+          border-radius: 10px;
+          overflow: hidden;
+          img {
+              height: 100%;
+              width: 100%;
+              filter: blur(3px);
+              transition: all .5s;
+          }
+          .miva-service-mu {
+              .miva-position(@p: absolute, @z: 99);
+              height: 100%;
+              width: 100%;
+              background: #007DDB;
+              opacity: .5;
+              transition: all .5s;
+          }
+          .miva-service-txt {
+              .miva-position(@p: absolute, @z: 100);
+              font-size: 35px;
+              font-weight: bold;
+              color: #fff;
+              text-shadow: 1px 1px 1px #000;
+              transition: all .5s;
+          }
+          &:hover img {
+              filter: blur(0);
+              transition: all .5s;
+          }
+          &:hover .miva-service-mu {
+              transform: translateX(100%);
+              transition: all .5s;
+          }
+          &:hover .miva-service-txt {
+              transform: translateX(-200%);
+              transition: all .5s;
+          }
+      }
+  }
+  
+  // 二楼
+  .miva-star-box {
+      .miva-flex(@content: space-between, @wrap: wrap);
+  }
+  
+  .miva-star-items {
+      display: inline-block;
+      border: 1px solid #F4F4F4;
+      border-radius: 10px;
+      box-shadow: 0px 5px 5px #F4F4F4;
+      overflow: hidden;
+      width: 340px;
+      height: 390px;
+      margin-bottom: 20px;
+      &:hover {
+          box-shadow: 0px 3px 5px #f1cb60;
+      }
+      &:hover .miva-star-pic>img {
+          transform: scale(1.1);
+          transition: all .5s;
+      }
+      .miva-star-pic {
+          width: 100%;
+          height: 260px;
+          overflow: hidden;
+          img {
+              width: 100%;
+          }
+      }
+      .miva-star-info {
+          width: 100%;
+          height: 390px - 260px;
+          td {
+              padding: 0 10px;
+          }
+          img {
+              width: 30px;
+              height: 30px;
+              vertical-align: bottom;
+          }
+          .star-name {
+              font-size: 20px;
+              display: inline-block;
+              width: 150px;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              vertical-align: bottom;
+          }
+          .tab {
+              border: 1px solid;
+              color: #fff;
+              padding: 1px 3px;
+          }
+          .tab-win {
+              background: #ECD1FD;
+          }
+          .tab-shen {
+              background: #ffe66f;
+          }
+          .star-price {
+              color: #FB8B87;
+              font-size: 20px;
+          }
+          .miva-star-info-right {
+              text-align: right;
+          }
+      }
+  }
+  
+  // 三楼
+  .miva-new-box {
+      height: 330px;
+      padding: (330px - 280px)/2;
+      background: #F5F5F5;
+      position: relative;
+      .miva-new-swiper {
+          width: 1200px;
+          height: 100%;
+          .swiper-slide {
+              background: #fff;
+              border-radius: 10px;
+              width: 220px;
+              height: 280px;
+              text-align: center;
+              .new-pic-box {
+                  width: 160px;
+                  height: 160px;
+                  overflow: hidden;
+                  border-radius: 50%;
+                  margin: auto;
+                  margin-top: 20px;
+                  margin-bottom: 10px;
+                  img {
+                      width: 100%;
+                  }
+              }
+              .new-name {
+                  font-size: 18px;
+              }
+              .new-tab-box {
+                  .miva-flex(@content: space-between);
+                  width: 80%;
+                  margin: auto;
+                  div {
+                      border-radius: 3px;
+                      padding: 1px 3px;
+                      color: #fff;
+                  }
+                  .new-age {
+                      background: #FB8B87;
+                  }
+                  .new-path {
+                      background: #F3C38D;
+                  }
+              }
+          }
+      }
+  }
+  
+  // 四楼---排行榜
+  .miva-rank-box {
+      // 排行榜标签页命名空间
+      .tab-rank(@color: #FD8A8C) {
+          .miva-flex;
+          border: 1px solid @color;
+          width: 180px;
+          margin: auto;
+          text-align: center;
+          border-radius: 30px;
+          height: 30px;
+          line-height: 30px;
+          span {
+              display: inline-block;
+              width: 50%;
+              font-size: 16px;
+          }
+          .active {
+              background: @color;
+              color: #fff;
+              border-radius: 30px;
+          }
+      }
+      // 前三名的命名空间
+      .top-three(@color: initial) {
+          //  头像框命名空间
+          .pic-box(@t: initial, @l: initial) {
+              position: relative;
+              .pic {
+                  border-radius: 50%;
+                  border: 1px solid;
+                  position: absolute;
+                  top: @t;
+                  left: @l;
+                  width: 64px;
+                  z-index: -999;
+              }
+          }
+          .miva-flex(@content: space-around, @wrap: wrap);
+          width: 100%;
+          margin-top: 30px;
+          >div {
+              .pic-box(@t: 5px, @l: 88px);
+              width: 50%;
+              text-align: center;
+          }
+          // 第一名
+          .the-first {
+              .pic-box(@t: 10px, @l: 109px);
+              width: 60%;
+          }
+          // 用户名字
+          .u-name {
+              margin: 10px;
+              // 等级标签
+              img {
+                  margin-left: 5px;
+              }
+              // 用户分数
+              .score-box {
+                  color: @color;
+              }
+          }
+      }
+      .miva-flex(@content: space-between);
+      min-height: 888px;
+      margin-bottom: 80px;
+      .miva-rank-items {
+          display: inline-block;
+          box-shadow: 0 1px 5px #ddd;
+          border-radius: 200px 200px 0 0;
+          min-height: 100%;
+          width: 460px;
+          .miva-rank-title {
+              .miva-position(@t: -8px);
+              .miva-rank-txt {
+                  .miva-position(@p: absolute, @t: 15px);
+                  text-align: center;
+                  width: 100%;
+                  color: #fff;
+                  font-size: 20px;
+              }
+          }
+          //        后几名的排行
+          .rank-last {
+              li {
+                  .miva-flex(@content: space-around, @align-items: center);
+                  border-top: 1px dashed #ddd;
+                  border-width: 1px 0;
+                  padding: 10px 0;
+                  &:first-child {
+                      border: 0;
+                  }
+                  >span {
+                      border: 1px solid;
+                      display: inline-block;
+                      border-radius: 50%;
+                      width: 25px;
+                      height: 25px;
+                      background: @miva-header-color;
+                      color: #fff;
+                      text-align: center;
+                  }
+                  //                用户头像
+                  >img {
+                      width: 72px;
+                      height: 72px;
+                      border-radius: 50%;
+                  }
+                  .user-info {
+                      .miva-flex(@wrap: wrap, @content: space-around);
+                      width: 30%;
+                      .u-name {
+                          width: 100%;
+                          text-align: center;
+                          padding: 10px 0;
+                      }
+                  }
+                  .score-box {
+                      span {
+                          color: @rank-one-color;
+                      }
+                  }
+              }
+          }
+      }
+      //  调用标签页
+      .miva-rank-items:nth-child(1) {
+          .top-three {
+              .top-three(@color: @rank-one-color);
+          }
+          .miva-rank-title>.tab-rank {
+              .tab-rank;
+          }
+      }
+      .miva-rank-items:nth-child(2) {
+          .top-three {
+              .top-three(@color: @rank-two-color);
+          }
+          .miva-rank-title>.tab-rank {
+              .tab-rank (@color: @rank-two-color);
+          }
+      }
+      .miva-rank-items:nth-child(3) {
+          .top-three {
+              .top-three(@color: @rank-three-color);
+          }
+          .miva-rank-title>.tab-rank {
+              .tab-rank (@color: @rank-three-color);
+          }
+      }
+  }
+  
+  // 陪玩页面
+  .miva-acc-tab-box {
+      width: 100%;
+      min-height: 100px;
+      margin: 20px 0;
+      table {
+          width: 100%;
+          .miva-acc-title {
+              width: 280px;
+              text-align: center;
+              height: 150px;
+              font-size: 25px;
+              background: #F6F4F5;
+          }
+          tr:not(:last-child) {
+              border-bottom: 1px solid #ddd;
+          }
+          a {
+              .miva-position;
+              width: 120px;
+              height: 100px;
+              float: left;
+              margin: 10px 20px;
+              text-align: center;
+              font-size: 16px;
+              .miva-iocn-box {
+                  width: 80%;
+                  height: 80%;
+                  overflow: hidden;
+                  margin: auto;
+                  img {
+                      width: 100%;
+                  }
+              }
+              .miva-txt {
+                  .miva-position(@t: 50%);
+                  transform: translateY(-50%);
+              }
+          }
+      }
+  }
+  
+  .miva-screen-box {
+      border: 1px solid @miva-header-color;
+      display: flex;
+      padding: 5px;
+      * {
+          cursor: default;
+      }
+      .miva-screen-btn {
+          border: 1px solid;
+          border-radius: 3px;
+          margin: 0 20px;
+          padding: 0 10px;
+          line-height: 30px;
+          color: darken(@miva-header-color, 10%);
+      }
+      .miva-screen-btn-admin {
+          background: darken(@miva-header-color, 15%);
+          border-radius: 3px;
+          color: #fff;
+          padding: 3px 5px;
+      }
+  }
+  
+  .miva-screen-list {
+      margin: 20px 0;
+      overflow: hidden;
+      width: 1444px;
+      .miva-star-items {
+          .miva-position;
+          margin-right: 17px;
+          .miva-star-tip {
+              .miva-position(@p: absolute, @t: 10px, @r: 10px);
+              background: darken(#E9DCCE, 5%);
+              color: #fff;
+              padding: 1px 3px;
+              border-radius: 3px;
+              border: 1px solid darken(#E9DCCE, 20%);
+          }
+      }
+  }
+  
+  // 悬赏页面
+  .miva-top-pic-box {
+      margin-top: 120px;
+      height: 330px;
+      overflow: hidden;
+      background: #ddd;
+      img {
+          width: 100%;
+      }
+  }
+  
+  //悬赏页面的悬赏按钮
+  .miva-reward-btn-box {
+      border-bottom: 5px solid #F9F9F9;
+      padding: 40px 0;
+      margin-bottom: 40px;
+      .miva-reward-btn {
+          display: inline-block;
+          background: @miva-header-color;
+          font-size: 25px;
+          padding: 5px 10px;
+          border-radius: 5px;
+          color: #fff;
+      }
+  }
+  
+  //悬赏页面每一条内容
+  .miva-one-reward-box {
+      border-bottom: 1px solid #F9F9F9;
+      border-width: 5px 0;
+      height: 580px;
+      margin-bottom: 20px;
+      .miva-top-box {
+          .miva-flex(@content: space-between, @align-items: center);
+          font-size: 22px;
+          .miva-user-info-box {
+              .miva-flex(@align-items: center);
+              width: 480px;
+              line-height: 40px;
+              .miva-reward-user-box {
+                  .miva-position(@p: relative);
+                  width: 120px;
+                  height: 120px;
+                  margin-right: 30px;
+                  .miva-reward-user-pic {
+                      border-radius: 50%;
+                      overflow: hidden;
+                      img {
+                          width: 100%;
+                      }
+                  }
+                  .tip-box {
+                      .miva-position(@p: absolute, @b: -10px, @l: 24%);
+                      display: inline-block;
+                      //                    border: 1px solid;
+                      width: 65px;
+                      //                    height: 20px;
+                      img {
+                          width: 100%;
+                          height: 100%;
+                      }
+                  }
+              }
+              // 用户信息
+              .miva-user-info {
+                  .time {
+                      color: #999;
+                      font-size: 16px;
+                  }
+                  .user-name {
+                      display: inline-block;
+                      max-width: 200px;
+                      white-space: nowrap;
+                      overflow: hidden;
+                      text-overflow: ellipsis;
+                  }
+                  .user-vip {
+                      img {
+                          vertical-align: top;
+                          position: relative;
+                          top: 10px;
+                          //                        border: 1px solid;
+                          //                        width: 30px;
+                          //                        height: 30px;
+                      }
+                  }
+              }
+          }
+          // 在线状态
+          .miva-inline-box {
+              .miva-inline-icon {
+                  color: #fff;
+                  font-size: 20px;
+                  background: #ddd;
+                  border-radius: 50%;
+                  vertical-align: middle;
+              }
+              .miva-inline-icon-act {
+                  background: #A8F1C5;
+              }
+          }
+          // 悬赏
+          .miva-price {
+              color: @miva-color-red;
+          }
+          // 关注
+          .miva-add-like {
+              background: @miva-header-color;
+              border-radius: 10px;
+              color: #fff;
+              padding: 3px 20px;
+          }
+      }
+      // 悬赏列表每一条中间的盒子
+      .miva-middle-box {
+          margin-top: 20px;
+          .miva-txt-box {
+              padding: 10px;
+          }
+          .miva-img-box {
+              height: 255px;
+              width: 700px;
+              margin-left: 100px;
+              .miva-flex();
+              .miva-img {
+                  overflow: hidden;
+                  border-radius: 10px;
+                  width: 220px;
+                  height: 250px;
+                  margin-right: 30px;
+                  position: relative;
+                  img {
+                      height: 100%;
+                      max-width: initial;
+                      .miva-position(@p: absolute, @l: 50%);
+                      transform: translateX(-50%);
+                  }
+              }
+          }
+          .miva-middle-btn-box {
+              .miva-flex(@content: space-between);
+              .miva-get-box {
+                  .miva-flex(@align-items: center);
+                  .user-pic-box {
+                      width: 40px;
+                      height: 40px;
+                      overflow: hidden;
+                      border-radius: 50%;
+                      img {
+                          width: 100%;
+                      }
+                  }
+                  .miva-get-txt {
+                      color: @miva-color-red;
+                      margin: 0 20px;
+                  }
+              }
+              .miva-bottom-right {
+                  background: @miva-header-color;
+                  border-radius: 10px;
+                  color: #fff;
+                  padding: 3px 20px;
+                  font-size: 20px;
+              }
+          }
+      }
+      .miva-bottom-box {
+          border: solid #f1f1f1;
+          border-width: 3px 0;
+          margin: 20px 0;
+          .miva-bottom-tab {
+              text-align: center;
+              width: 100%;
+              td {
+                  border: solid #f1f1f1;
+                  border-width: 0 3px;
+                  padding: 10px;
+                  width: 25%;
+                  color: #999;
+                  font-size: 16px;
+                  i {
+                      margin-right: 10px;
+                      vertical-align: middle;
+                  }
+              }
+              td:first-child {
+                  color: @miva-color-red;
+              }
+              td:last-child,
+              td:first-child {
+                  border: 0;
+              }
+          }
+      }
+  }
+  
+  // 悬赏陪玩详情
+  .miva-dynamic-box {
+      .miva-flex(@content: space-between);
+      border-bottom: 1px solid #ccc;
+      margin-bottom: 20px;
+      padding: 20px 0;
+      .left-box {
+          img {
+              width: 4rem;
+              height: 4rem;
+              border-radius: 50%;
+              margin-right: 2rem;
+          }
+          span {
+              color: #999;
+          }
+      }
+      .miva-btn {
+          background: @miva-header-color;
+          border-radius: 10px;
+          color: #fff;
+          width: 160px;
+          height: 40px;
+          text-align: center;
+          line-height: 40px;
+          font-size: 2rem;
+      }
+  }
+  
+  //互动区
+  .hudong {
+      margin-bottom: 50px;
+      .title-hudong {
+          #miva-package>.miva-title(@color: @miva-header-color);
+      }
+      .hudong-one-box {
+          .miva-flex(@align-items: center, @content: space-between);
+          border-bottom: 3px solid #ddd;
+          padding: 20px 0;
+          font-size: 16px;
+          &:first-child {
+              border-top: 3px solid #ddd;
+          }
+          >img {
+              width: 80px;
+              height: 80px;
+              border-radius: 50%;
+              margin: 0 20px;
+          }
+          .user-info {
+              width: 60%;
+              .user-name {
+                  img {
+                      margin-left: 10px;
+                  }
+              }
+              .user-msg {
+                  margin: 10px 0;
+                  color: #666;
+              }
+              .time {
+                  color: #999;
+                  font-size: 12px;
+              }
+          }
+          .right-hudong {
+              width: 30%;
+              text-align: right;
+              .star-box {
+                  margin-bottom: 30px;
+              }
+              .bottom {
+                  img {
+                      margin: 0 10px;
+                  }
+              }
+          }
+      }
+      .miva-more {
+          display: block;
+          color: @miva-header-color;
+          font-size: 30px;
+          text-align: center;
+          margin-top: 20px;
+      }
+  }
+  
+  //发布悬赏
+  .miva-release-box {
+      //  共用标题
+      .release-title {
+          #miva-package>.miva-title(@border: '', @color: @miva-header-color, @padding: 20px 0);
+      }
+      >div:not(.release-title) {
+          border: 1px solid #f1f1f1;
+          border-radius: 5px;
+          padding: 10px;
+      }
+      .service-items {
+          span {
+              display: inline-block;
+              background: #f1f1f1;
+              padding: 10px 30px;
+              border-radius: 20px;
+              font-size: 18px;
+              margin: 10px;
+              &.active {
+                  background: @miva-header-color;
+                  color: #fff;
+              }
+          }
+      }
+      .service-items-fang {
+          .service-items;
+          span {
+              border-radius: 5px;
+          }
+      }
+      .time-box {
+          .miva-flex(@align-items: center);
+          .box {
+              margin-left: 10px;
+              color: #999;
+              span {
+                  border: 1px solid;
+                  display: inline-block;
+                  width: 20px;
+                  height: 20px;
+                  border-radius: 50%;
+                  line-height: 16px;
+                  font-size: 20px;
+                  text-align: center;
+                  vertical-align: middle;
+              }
+              input {
+                  width: 50px;
+                  text-align: center;
+                  border: 0;
+                  border-bottom: 2px solid #999;
+              }
+          }
+          >input {
+              width: 140px;
+              height: 40px;
+              margin: 20px;
+              background: #F3F3F3;
+              border: 0;
+              border-radius: 5px;
+              padding-left: 5px;
+          }
+      }
+      .contact-box {
+          .miva-flex;
+          img {
+              margin: 0 5px;
+          }
+          div {
+              &::after {
+                  content: ":";
+                  margin-right: 3px;
+              }
+          }
+          span {
+              margin: 0 20px;
+          }
+          input {
+              border: 1px solid #f3f3f3;
+          }
+      }
+      // 陪玩方式
+      .miva-method {
+          .service-items;
+          span {
+              border-radius: 5px;
+              &.active {
+                  background: @miva-header-color;
+              }
+          }
+      }
+      .miva-textarea {
+          padding: 20px !important;
+          textarea {
+              padding: 10px;
+              border: 0;
+              resize: none;
+              width: 100%;
+              height: 200px;
+              border-radius: 5px;
+              background: rgba(243, 243, 243, 1);
+          }
+      }
+      .photo-box {
+          padding: 20px !important;
+          label {
+              display: inline-block;
+              width: 170px;
+              height: 170px;
+              background: #E3E3E3;
+              overflow: hidden;
+              margin-right: 30px;
+              position: relative;
+              img {
+                  position: absolute;
+                  left: 50%;
+                  transform: translate(-50%);
+                  max-width: initial;
+                  height: 100%;
+              }
+          }
+      }
+      .baoming {
+          input {
+              width: 140px;
+              height: 40px;
+              margin: 20px;
+              background: #F3F3F3;
+              border: 0;
+              border-radius: 5px;
+              padding-left: 5px;
+          }
+      }
+      .shangjin {
+          input {
+              width: 300px;
+              height: 40px;
+              margin: 20px;
+              background: #F3F3F3;
+              border: 0;
+              border-radius: 5px;
+              padding-left: 5px;
+          }
+      }
+      .pay-methods {
+          padding: 30px 20px !important;
+          span {
+              display: inline-block;
+              border: 1px solid #F3F3F3;
+              padding: 10px 30px;
+              margin-right: 20px;
+          }
+      }
+      .submit {
+          border: 0 !important;
+          padding: 50px !important;
+          text-align: center;
+          span {
+              background: @miva-header-color;
+              display: inline-block;
+              padding: 10px 30px;
+              color: #fff;
+              font-size: 25px;
+              border-radius: 5px;
+          }
+      }
+  }
+  
+  //下单
+  .miva-pay-order-box {
+      >div {
+          padding: 10px;
+          margin: 50px 0;
+          border: 1px solid #f3f3f3;
+          table {
+              margin: 30px auto;
+              width: 98%;
+              text-align: center;
+              border-radius: 10px;
+              overflow: hidden;
+              tr:first-child {
+                  background: #F3F3F3;
+                  td {
+                      padding: 5px 0;
+                  }
+              }
+              tr:nth-child(2) {
+                  td {
+                      padding: 20px 0;
+                      color: #999;
+                      .box {
+                          margin-left: 10px;
+                          color: #999;
+                          span {
+                              border: 1px solid;
+                              display: inline-block;
+                              width: 20px;
+                              height: 20px;
+                              border-radius: 50%;
+                              line-height: 16px;
+                              font-size: 20px;
+                              text-align: center;
+                              vertical-align: middle;
+                          }
+                          input {
+                              width: 50px;
+                              text-align: center;
+                              border: 0;
+                              border-bottom: 2px solid #999;
+                          }
+                      }
+                  }
+              }
+              textarea {
+                  width: 100%;
+                  border: 1px solid #f3f3f3;
+                  padding: 10px;
+                  resize: none;
+              }
+              .user-pic {
+                  width: 60px;
+                  height: 60px;
+                  border-radius: 50%;
+              }
+          }
+          //        基本信息
+          .contact-box {
+              .miva-flex;
+              img {
+                  margin: 0 5px;
+              }
+              div {
+                  &::after {
+                      content: ":";
+                      margin-right: 3px;
+                  }
+              }
+              span {
+                  margin: 0 20px;
+              }
+              input {
+                  border: 1px solid #f3f3f3;
+              }
+          }
+          .pay-methods {
+              padding: 30px 20px !important;
+              span {
+                  display: inline-block;
+                  border: 1px solid #F3F3F3;
+                  padding: 10px 30px;
+                  margin-right: 20px;
+              }
+          }
+      }
+      .payment {
+          text-align: right;
+          .top {
+              font-size: 16px;
+              //            font-weight: bold;
+              span {
+                  color: @miva-color-red;
+                  font-size: 20px;
+              }
+          }
+          .btm {
+              sub {
+                  color: @miva-color-red;
+              }
+              span {
+                  display: inline-block;
+                  background: @miva-color-red;
+                  color: #fff;
+                  padding: 10px 30px;
+                  border-radius: 5px;
+                  margin: 20px;
+                  margin-right: 0;
+              }
+          }
+      }
+  }
+  
+  //充值页面 选中
+  .miva-check-box () {
+      .check {
+          border: 2px solid #ddd;
+          padding: 5px 15px;
+          display: inline-block;
+          overflow: hidden;
+          margin-right: 30px;
+      }
+      .active {
+          border-color: @miva-color-red;
+          position: relative;
+          &::before {
+              .miva-position(@p: absolute, @b: -14px, @r: -2px);
+              content: '✔';
+              color: #fff;
+              display: inline-block;
+              background: @miva-color-red;
+              width: 16px;
+              height: 38px;
+              transform: rotate(50deg);
+          }
+      }
+  }
+  
+  //給下面一個公用陰影
+  .miva-box-shadow() {
+      box-shadow: 1px 1px 3px #ccc;
+  }
+  
+  //充值盒子
+  .miva-recharge-box {
+      .miva-box-shadow;
+      border: 1px solid #ddd;
+      margin: 50px 0;
+      .miva-header {
+          padding: 30px;
+          font-size: 25px;
+          border-bottom: 1px solid #ddd;
+      }
+      .miva-recharge {
+          margin: 30px 0;
+          width: 100%;
+          font-size: 20px;
+          td {
+              padding: 10px 0;
+              .miva-check-box();
+              .miva-write {
+                  .miva-flex(@align-items: center, @content: space-around);
+                  .miva-placeholder(@font-size: 20px, @color: #aaa);
+                  border: 1px solid #ccc;
+                  width: 300px;
+                  height: 60px;
+                  margin-top: 20px;
+                  * {
+                      text-align: center;
+                      font-size: 20px;
+                      display: inline-block;
+                      width: 50%;
+                      border: 0;
+                  }
+              }
+              .miva-write-btn {
+                  background: @miva-color-red;
+                  color: #fff;
+                  display: inline-block;
+                  padding: 10px 20px;
+                  margin: 20px 0;
+              }
+              .miva-tip {
+                  font-size: 14px;
+              }
+          }
+          .should-pay {
+              color: @miva-color-red;
+          }
+          tr>td:first-child {
+              text-align: center;
+              width: 200px;
+          }
+      }
+  }
+  
+  .miva-recharg-info {
+      .miva-box-shadow;
+      margin: 20px 0;
+      table {
+          width: 100%;
+          text-align: center;
+          td {
+              border: 1px dashed #ccc;
+              border-width: 1px 0;
+              padding: 10px;
+          }
+          td:not(:first-child) {
+              text-align: left;
+          }
+          tr:first-child td,
+          tr:last-child td {
+              border: 0
+          }
+          .miva-sum td:not(:first-child) {
+              color: @miva-color-red;
+          }
+      }
+  }
+  
+  .miva-grade-info {
+      margin-bottom: 50px;
+      .miva-grade-box {
+          .miva-flex(@content: space-between);
+          text-align: center;
+          .miva-item {
+              width: 200px;
+              height: 220px;
+              line-height: 30px;
+              .miva-icon-box {
+                  height: 120px;
+                  overflow: hidden;
+                  img {
+                      max-width: initial;
+                      height: 100%;
+                  }
+              }
+              .miva-lv-name {
+                  font-size: 18px;
+              }
+              .miva-lv-info {
+                  font-size: 16px;
+                  color: #999;
+              }
+              .miva-lv-option {
+                  font-size: 12px;
+                  background: lighten(@miva-color-red, 25%);
+                  display: inline-block;
+                  color: darken(@miva-color-red, 10%);
+                  padding: 0 5px;
+              }
+          }
+      }
+  }
+  
+  // 陪玩入驻
+  .miva-join-page {
+      margin-bottom: 50px;
+      .miva-join-us {
+          border: 1px solid #ddd;
+          padding: 20px;
+          margin-top: 30px;
+          span {
+              color: @miva-color-red;
+          }
+      }
+      .miva-join-title {
+          border-left: 5px solid @miva-header-color;
+          padding-left: 20px;
+          margin: 20px 0;
+      }
+      .miva-box {
+          border: 1px solid #ddd;
+          padding: 20px;
+      }
+      .miva-basic-table {
+          width: 100%;
+          font-size: 16px;
+          .up-pic {
+              width: 280px;
+              img {
+                  background: #ddd;
+                  width: 180px;
+                  height: 180px;
+                  border-radius: 10px;
+              }
+              .up-pic-btn {
+                  background: @miva-color-red;
+                  color: #fff;
+                  margin: 20px;
+                  width: 130px;
+                  height: 40px;
+                  text-align: center;
+                  line-height: 40px;
+                  border-radius: 5px;
+              }
+          }
+          .up-title {
+              width: 100px;
+              text-align: right;
+              padding-right: 20px;
+          }
+          .up-sex-box {}
+          .up-bottom {
+              padding: 20px 0;
+          }
+          .tip {
+              font-size: 14px;
+          }
+      }
+      // 单选按钮
+      .radio {
+          display: inline-block;
+          padding: 10px;
+          margin-left: 50px;
+          .miva-position();
+          &::before {
+              content: '';
+              display: inline-block;
+              background: #ddd;
+              width: 20px;
+              height: 20px;
+              border-radius: 50%;
+              position: absolute;
+              left: -20px;
+              top: 10px;
+          }
+      }
+      .active-radio {
+          &::before {
+              content: '✔';
+              background: @miva-color-red;
+              text-align: center;
+              color: #fff;
+          }
+      }
+      // end
+      // 按钮
+      .miva-btn {
+          display: inline-block;
+          padding: 8px 18px;
+          border-radius: 3px;
+          white-space: nowrap;
+          text-align: center;
+          font-size: 14px;
+          border: none;
+          background: #ddd;
+          color: #000;
+          margin-right: 20px;
+          cursor: default;
+      }
+      .miva-btn-act {
+          background: @miva-color-red;
+          color: #fff;
+      }
+      // 输入框
+      .miva-input {
+          border: 0;
+          background: #f1f1f1;
+          height: 30px;
+          border-radius: 5px;
+          width: 220px;
+      }
+      .path-input {
+          width: 660px;
+          margin-bottom: 10px;
+      }
+      // 开通游戏
+      .layui-form-item {
+          width: 200px !important;
+          .layui-form-select dl dd.layui-this {
+              background: @miva-header-color;
+          }
+      }
+      .miva-selected-box {
+          background-color: #f1f1f1;
+          border-radius: 5px;
+          width: 70%;
+          min-height: 100px;
+          padding: 20px;
+          .miva-position();
+          span {
+              display: inline-block;
+              margin: 10px 20px;
+          }
+          &::before {
+              content: "";
+              display: inline-block;
+              border: 10px solid;
+              border-color: transparent transparent #f1f1f1 transparent;
+              .miva-position(@p: absolute, @t: -20px);
+          }
+      }
+      // 认证资料照
+      .miva-data-box {
+          position: relative;
+          .miva-flex(@align-items: center);
+          .miva-up-data-pic {
+              margin-top: 45px;
+              width: 390px;
+              height: 255px;
+              border-radius: 5px;
+              background: #f1f1f1;
+          }
+          .up-data-tip {
+              text-align: center;
+              width: 390px;
+              height: 255px;
+              position: absolute;
+              top: 20px;
+              span {
+                  display: inline-block;
+                  position: relative;
+                  top: 65%;
+                  transform: translateY(-50%);
+              }
+          }
+          .mia-up-btn {
+              margin-top: 10px;
+              background: @miva-color-red;
+              color: #fff;
+          }
+          .miva-li {
+              margin: 0 50px;
+          }
+          img {
+              width: 390px;
+              height: 255px;
+              border: 1px solid red;
+              margin-bottom: 20px;
+              border-radius: 5px;
+          }
+      }
+      // 说明
+      .miva-info-box {
+          .txt-box {
+              width: 100%;
+              height: 165px;
+              resize: none;
+              background: #f1f1f1;
+              border: 0;
+              padding: 20px;
+              border-radius: 5px;
+          }
+      }
+      // 语音介绍
+      .miva-audio-box {
+          .miva-flex(@align-items: center);
+          .audio-box-f {
+              text-align: center;
+              .audio-box {
+                  // background: #f1f1f1;
+                  display: inline-block;
+                  padding: 10px 20px;
+                  .audio-btn {
+                      border: 2px dotted #aaa;
+                      display: inline-block;
+                      border-radius: 30px;
+                      padding: 5px 20px;
+                  }
+              }
+              audio {
+                  display: block;
+              }
+          }
+          .tip {
+              margin-left: 30px;
+              span {
+                  color: @miva-color-red;
+                  margin-left: 20px;
+              }
+          }
+      }
+      .check-box {
+          margin: 20px 0;
+          color: #aaa;
+          a {
+              margin-left: 20px;
+              color: #aaa;
+          }
+      }
+  }
+  
+  //个人中心部分
+  .u-body {
+      background: #f3f3f3;
+  }
+  
+  .u-main {
+      margin-top: 140px;
+      margin-bottom: 20px;
+      .miva-flex(@content: space-between);
+      >div {
+          background: #fff;
+      }
+  }
+  
+  //个人中心侧边栏部分
+  .centerNav {
+      width: 370px;
+      text-align: center;
+      border-radius: 5px;
+      padding: 50px 0;
+      ul {
+          li {
+              padding: 25px 0;
+              border-bottom: 1px dashed #ccc;
+              font-size: 20px;
+          }
+      }
+      .active {
+          background: @miva-header-color;
+          color: #fff;
+          >* {
+              color: #fff;
+          }
+      }
+  }
+  
+  //个人中心通用
+  .u-page-body {
+      width: 100%;
+      margin-left: 20px;
+      .u-title {
+          #miva-package>.miva-title(@color: @miva-header-color);
+      }
+  }
+  
+  //个人资料部分
+  .u-data-set-box {
+      padding: 50px 0;
+      .u-up-pic {
+          .miva-flex(@align-items: center);
+          width: 555px;
+          margin: auto;
+          border-bottom: 1px solid #DDD;
+          padding: 0 0 30px 0;
+          .pic-box {
+              width: 160px;
+              height: 160px;
+              border-radius: 50%;
+              overflow: hidden;
+              margin-right: 30px;
+              img {
+                  background: @miva-header-color;
+                  width: 100%;
+                  height: 100%;
+              }
+          }
+          .up-btn {
+              border: 1px solid @miva-header-color;
+              border-radius: 10px;
+              display: inline-block;
+              padding: 5px 20px;
+              color: @miva-header-color;
+              font-size: 18px;
+              margin-bottom: 20px;
+          }
+      }
+      .radio {
+          .miva-join-page>.radio;
+      }
+      .active {
+          .miva-join-page .active-radio;
+          &::before {
+              background: @miva-header-color;
+          }
+      }
+      .set-user-box {
+          font-size: 16px;
+          tr {
+              .sex-radio {
+                  text-align: left;
+              }
+              td {
+                  text-align: right;
+                  padding: 10px 0;
+                  input {
+                      border: 0;
+                      background: #f3f3f3;
+                      width: 260px;
+                      height: 40px;
+                      margin-left: 20px;
+                      padding-left: 10px;
+                      border-radius: 5px;
+                  }
+                  .submit {
+                      display: inline-block;
+                      background: @miva-header-color;
+                      width: 80%;
+                      text-align: center;
+                      padding: 10px;
+                      color: #fff;
+                      border-radius: 15px;
+                  }
+              }
+          }
+      }
+  }
+  
+  //实名认证
+  .u-title-true {
+      span::after {
+          content: '(*星号为必填内容)';
+          color: red;
+          font-size: 14px;
+          margin-left: 10px;
+      }
+  }
+  
+  .u-true-set-box {
+      table {
+          tr {
+              td {
+                  padding: 10px 0;
+                  padding-left: 10px;
+                  input {
+                      border: 0;
+                      background: #f3f3f3;
+                      border-radius: 5px;
+                      width: 380px;
+                      height: 40px;
+                      padding-left: 10px;
+                  }
+                  .img-box {
+                      border: 1px solid #aaa;
+                      border-radius: 5px;
+                      width: 380px;
+                      height: 180px;
+                  }
+                  .phone-input {
+                      width: 200px;
+                  }
+                  .miva-btn {
+                      background: @miva-header-color;
+                      color: #fff;
+                      padding: 10px 20px;
+                      border-radius: 5px;
+                      margin-left: 65px;
+                  }
+              }
+              td:first-child {
+                  text-align: right;
+                  vertical-align: top;
+                  position: relative;
+                  top: 5px;
+              }
+              td:first-child::before {
+                  content: '*';
+                  color: @miva-color-red;
+                  vertical-align: middle;
+              }
+              td:first-child::after {
+                  content: ':';
+                  margin-left: 3px;
+              }
+              .tip {
+                  color: red;
+                  margin: 10px;
+              }
+          }
+      }
+  }
+  
+  //我的关注
+  .follow-list-box {
+      padding: 20px;
+      ul:first-child {
+          overflow: hidden;
+          li {
+              float: left;
+              padding: 10px;
+              background: #F3F3F3;
+              .miva-flex(@align-items: center);
+              width: 288px;
+              margin: 20px;
+              border-radius: 5px;
+          }
+      }
+      //  左侧
+      .follow-pic {
+          border-right: 2px solid #BEBDBD;
+          width: 110px;
+          height: 110px;
+          padding: 15px;
+          margin-right: 15px;
+          img {
+              border-radius: 50%;
+          }
+      }
+      //  右侧
+      .follow-info {
+          div {
+              font-size: 20px;
+              width: 150px;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              overflow: hidden;
+          }
+          .socre {
+              font-size: 14px;
+              margin: 8px 0;
+          }
+          span {
+              background-color: @miva-header-color;
+              color: #fff;
+              padding: 3px;
+              border-radius: 3px;
+          }
+      }
+      //  分页器
+      .page-cut-box {
+          .miva-flex(@content: space-around);
+          margin-top: 30px;
+          .page-cut {
+              .miva-flex(@align-items: center);
+              ul {
+                  margin: 0 5px;
+                  li {
+                      float: left;
+                      width: 30px;
+                      height: 30px;
+                      line-height: 30px;
+                      text-align: center;
+                      color: #fff;
+                      background: @miva-header-color;
+                      border-radius: 5px;
+                      margin: 0 5px;
+                  }
+              }
+          }
+      }
+  }
+  
+  //筛选和排序共用
+  .miva-search-common() {
+      //  筛选
+      .miva-search-box {
+          margin: 20px 0;
+          text-align: right;
+          span {
+              display: inline-block;
+              width: 120px;
+              height: 40px;
+              line-height: 40px;
+              border: 1px solid @miva-header-color;
+              text-align: center;
+              border-radius: 5px;
+              margin: 10px;
+          }
+          .active {
+              background: @miva-header-color;
+              color: #fff;
+          }
+      }
+      //  排序
+      .pai {
+          border: 2px solid darken(@miva-header-color, 0);
+          border-width: 2px 0;
+          padding: 15px 0;
+          .miva-flex(@content: space-between);
+          span {
+              border-left: 2px solid @miva-header-color ;
+              padding: 0 20px;
+              width: 16%;
+              text-align: center;
+              font-size: 18px;
+              &:first-child {
+                  border: 0;
+              }
+          }
+      }
+  }
+  
+  //我的订单
+  .miva-order-page {
+      //  筛选
+      .miva-search-box {
+          .miva-search-common>.miva-search-box;
+      }
+      //  排序
+      .pai {
+          .miva-search-common>.pai;
+      }
+      //  订单主体
+      .miva-order-body {
+          width: 90%;
+          margin: 20px auto;
+          border-radius: 5px;
+          overflow: hidden;
+          box-shadow: 0 0 5px #ccc;
+          //      订单标题
+          .miva-order-title {
+              padding: 10px;
+              .miva-flex(@align-items: center, @content: space-between);
+              background: @miva-header-color;
+              color: #fff;
+              .left {
+                  .order-num::before {
+                      content: "订单编号 :";
+                      border-left: 2px solid;
+                      padding: 0 10px;
+                  }
+                  .order-num {
+                      margin-right: 10px;
+                  }
+              }
+          }
+          //      订单内容
+          .miva-order-info {
+              .miva-flex(@align-items: center;
+              @content: space-between);
+              border-bottom: 1px solid #ccc;
+              width: 98%;
+              margin: auto;
+              padding: 20px 0;
+              .user-pic {
+                  width: 80px;
+                  height: 80px;
+                  border-radius: 50%;
+                  background: #dfdfdf;
+              }
+              .jindu {
+                  text-align: center;
+                  color: @miva-header-color;
+              }
+              .miva-rmb {
+                  background: @miva-header-color;
+                  border-radius: 50%;
+                  color: #fff;
+                  border: 1px solid @miva-header-color;
+                  margin-right: 5px;
+              }
+          }
+          //      订单流程
+          .miva-order-load {
+              .miva-flex(@content: space-around);
+              margin-top: 20px;
+              .dingdan::before {
+                  content: '●';
+                  display: inline-block;
+                  color: @miva-header-color;
+                  padding-right: 10px;
+              }
+              .liucheng {
+                  ul {
+                      li {
+                          float: left;
+                          margin: 0 20px;
+                          text-align: center;
+                          .yuan {
+                              box-sizing: content-box;
+                              width: 40px;
+                              height: 40px;
+                              line-height: 40px;
+                              margin: auto;
+                              margin-top: 20px;
+                              color: #f3f3f3;
+                              border-color: #f3f3f3 !important;
+                              font-size: 18px;
+                              font-weight: bold;
+                              border: 5px solid;
+                              border-radius: 50%;
+                              position: relative;
+                              z-index: 10;
+                              background: #fff;
+                          }
+                          &:not(:last-child)::after {
+                              content: '';
+                              display: inline-block;
+                              width: 60px;
+                              height: 10px;
+                              position: relative;
+                              border: 1px solid #f3f3f3;
+                              right: -53px;
+                              top: -35px;
+                          }
+                      }
+                      //已经完成的样式
+                      .success {
+                          .yuan {
+                              background: #fff;
+                              line-height: 100px;
+                              overflow: hidden;
+                              position: relative;
+                              &::after {
+                                  content: '√';
+                                  display: inline-block;
+                                  width: 100%;
+                                  height: 100%;
+                                  line-height: 40px;
+                                  position: absolute;
+                                  top: 0;
+                                  left: 0;
+                                  color: @miva-header-color;
+                                  font-size: 25px;
+                              }
+                          }
+                          &::after {
+                              background: @miva-header-color;
+                              border-color: @miva-header-color !important;
+                          }
+                      }
+                      //正在进行的样式
+                      .active {
+                          .yuan {
+                              background: @miva-header-color;
+                              color: #fff;
+                          }
+                      }
+                  }
+              }
+          }
+      }
+      //    加載更多訂單
+      .loading-more {
+          display: block;
+          color: @miva-header-color;
+          font-size: 25px;
+          text-align: center;
+          margin-bottom: 30px;
+      }
+  }
+  
+  //相册管理
+  .miva-album-box {
+      padding: 20px;
+      .tip-btn-box {
+          .miva-flex(@content: space-between);
+          .tip {
+              color: #aaa;
+          }
+          .btn {
+              background: @miva-header-color;
+              color: #fff;
+              padding: 5px 20px;
+              border-radius: 5px;
+          }
+      }
+  }
+  
+  //我的账户
+  .miva-account-box {
+      .account-top {
+          .miva-flex(@align-items: center);
+          padding: 0 20px;
+          div {
+              margin-right: 100px;
+              span {
+                  font-size: 20px;
+                  color: @miva-color-red;
+                  margin-left: 20px;
+              }
+              .blue {
+                  color: dodgerblue;
+              }
+          }
+      }
+      //  俩按钮
+      .account-top-btn {
+          padding: 0 20px;
+          margin: 30px 0;
+          span {
+              border: 1px solid @miva-header-color;
+              padding: 5px 20px;
+              color: @miva-header-color;
+              border-radius: 5px;
+              font-size: 18px;
+              margin-right: 20px;
+          }
+      }
+      //  标签页
+      .account-tab {
+          padding: 10px 0;
+          border-top: 1px solid #ddd;
+          span {
+              padding: 0 20px;
+              font-size: 16px;
+              &:first-child {
+                  border-right: 1px solid #ccc !important;
+              }
+              &.active {
+                  color: @miva-header-color;
+              }
+          }
+      }
+      //  .筛选
+      .miva-search-box {
+          .miva-search-common>.miva-search-box;
+          input {
+              width: 120px;
+              height: 40px;
+              border: 1px solid @miva-header-color;
+              border-radius: 5px;
+              margin: 10px;
+              display: inline-block;
+              vertical-align: top;
+          }
+          .left {
+              float: left;
+          }
+      }
+      //  排序
+      .pai {
+          .miva-search-common>.pai;
+      }
+  }
+  
+  //没数据的时候
+  .if-black {
+      text-align: center;
+      margin: 50px;
+      font-size: 18px;
+      color: #ccc;
+  }
+  
+  //我的交易
+  .miva-my-py {
+      .my-py-top {
+          .miva-flex(@content: space-between);
+          padding: 30px;
+          font-size: 18px;
+          .left {
+              span {
+                  border: 1px solid @miva-header-color;
+                  color: @miva-header-color;
+                  padding: 5px 20px;
+                  margin-left: 20px;
+                  border-radius: 5px;
+                  &.active {
+                      background: @miva-header-color;
+                      color: #fff;
+                  }
+              }
+          }
+          .right {
+              span {
+                  color: @miva-color-red;
+                  font-size: 20px;
+                  margin-left: 10px;
+              }
+          }
+      }
+      .pai {
+          .miva-search-common>.pai;
+          span {
+              margin: auto;
+              width: 25%;
+          }
+      }
+  }
+  
+  //我的礼物
+  .miva-gift-box {
+      .pai {
+          .miva-search-common>.pai;
+      }
+  }
+  
+  //我的接单
+  .miva-receipt-box {
+      .miva-search-box {
+          .miva-search-common>.miva-search-box;
+          .left {
+              position: relative;
+              float: left;
+              margin: 10px;
+              input {
+                  border: 1px solid #ccc;
+                  width: 300px;
+                  height: 40px;
+                  border-radius: 30px;
+                  padding-left: 10px;
+              }
+              .miva-search-icon {
+                  position: absolute;
+                  right: 10px;
+                  top: 0;
+                  font-size: 30px;
+                  color: #ccc;
+              }
+          }
+      }
+      .pai {
+          .miva-search-common>.pai;
+      }
+  }
+  
+  //我的消息
+  .miva-message-box {
+      .miva-message-one {
+          border-bottom: 3px solid #f1f1f1;
+          .miva-flex(@content: space-between, @align-items: center);
+          padding: 30px;
+          img {
+              width: 80px;
+              height: 80px;
+              border-radius: 50%;
+          }
+          .msg-info {
+              width: 70%;
+              div {
+                  font-size: 18px;
+                  margin: 10px 0;
+              }
+          }
+          .time {
+              width: 15%;
+              color: #ccc;
+          }
+      }
+  }
+  
+  //我的赠礼
+  .miva-my-send {
+      .my-send-tab {
+          padding: 0 20px;
+          margin-bottom: 20px;
+          span {
+              display: inline-block;
+              padding: 20px 0;
+              margin: 0 20px;
+              font-size: 18px;
+              &.active {
+                  border-bottom: 3px solid @miva-header-color;
+                  color: @miva-header-color;
+              }
+          }
+      }
+      .pai {
+          .miva-search-common>.pai;
+          span {
+              width: 25%;
+          }
+      }
+  }
+  
+  //陪玩师详情
+  .peiwan-info {
+      //  上面的用户信息
+      .top-user-info {
+          .miva-flex(@content: space-between, @align-items: center);
+          //      border: 1px solid;
+          background: #fff;
+          padding: 20px 30px;
+          border-radius: 200px;
+          margin: 40px 0;
+          //      头像
+          .pic-box {
+              //          border: 1px solid;
+              position: relative;
+              img {
+                  border-radius: 50%;
+                  background: @miva-header-color;
+                  width: 148px;
+                  height: 148px;
+              }
+              span {
+                  display: inline-block;
+                  background: #A9F9C3;
+                  color: #fff;
+                  padding: 3px 20px;
+                  border-radius: 5px;
+                  position: absolute;
+                  bottom: 0;
+                  left: 50%;
+                  transform: translate(-50%);
+              }
+          }
+          //      用户信息
+          .user-info {
+              line-height: 40px;
+              width: 20%;
+              span {
+                  display: inline-block;
+                  max-width: 180px;
+                  overflow: hidden;
+                  vertical-align: middle;
+                  white-space: nowrap;
+              }
+              .user-id {
+                  i {
+                      margin-right: 5px;
+                      color: @miva-color-red;
+                  }
+                  span {
+                      margin-right: 10px;
+                  }
+              }
+              .tab {
+                  //              text-align: right;
+                  span {
+                      background: @miva-color-red;
+                      display: inline-block;
+                      padding: 0 5px;
+                      line-height: 1.5;
+                      color: #fff;
+                      border-radius: 5px;
+                  }
+              }
+          }
+          //      礼物消息
+          .gift-msg {
+              //            border: 1px solid;
+              width: 50%;
+              .msg-box {
+                  //                border: 1px solid red;
+                  overflow: hidden;
+                  .msg {
+                      position: relative;
+                      margin: 10px;
+                      padding: 10px;
+                      display: inline-block;
+                      background: #F9FBF0;
+                      border-radius: 5px;
+                      .time {
+                          border-right: 2px solid;
+                          padding-right: 5px;
+                          margin-right: 5px;
+                      }
+                      .body {
+                          span {
+                              color: @miva-color-red;
+                              margin: 0 5px;
+                          }
+                      }
+                  }
+              }
+              img {
+                  height: 20px;
+                  max-width: initial;
+              }
+          }
+          //          关注按钮
+          .follw-box {
+              .follow-btn {
+                  border: 3px solid @miva-header-color;
+                  border-radius: 30px;
+                  width: 180px;
+                  height: 40px;
+                  span {
+                      font-size: 20px;
+                      background: @miva-header-color;
+                      display: inline-block;
+                      border-radius: 30px;
+                      width: 60%;
+                      height: 100%;
+                      line-height: 30px;
+                      text-align: center;
+                      color: #fff;
+                      margin-right: 20px;
+                  }
+              }
+              .btm {
+                  .miva-flex(@wrap: wrap, @content: space-around);
+                  margin-top: 10px;
+              }
+          }
+      }
+      //    下方的盒子
+      .bottom-box {
+          .miva-flex(@content: space-between);
+          >div {
+              margin-bottom: 50px;
+          }
+          .left-box {
+              width: 450px;
+              .photo-show-box {
+                  background: #fff;
+                  .photo-box {
+                      width: 100%;
+                      height: 450px;
+                      position: relative;
+                      overflow: hidden;
+                      img {
+                          position: relative;
+                          height: 100%;
+                          width: 100%;
+                          left: 50%;
+                          transform: translateX(-50%);
+                      }
+                  }
+                  .photo-select {
+                      padding: 30px 0;
+                      .miva-flex(@align-items: center, @content: space-around);
+                      >span {
+                          display: block;
+                          width: 20px;
+                          height: 50px;
+                          margin: 2px;
+                          background: url("../images/png/right.png") no-repeat 50%;    
+                      }
+                      .jt-left {
+                          transform: rotateY(180deg);
+                      }
+                      .middle-box {
+                          width: 100%;
+                          white-space: nowrap;
+                          overflow: hidden;
+                          img {
+                              margin-right: 10px;
+                              width: 70px;
+                              height: 70px;
+                          }
+                      }
+                  }
+              }
+              .gift-box {
+                  margin: 15px 0;
+                  background: #fff;
+                  padding-bottom: 50px;
+                  .tab {
+                      .miva-flex();
+                      padding: 10px 0;
+                      span {
+                          display: block;
+                          width: 50%;
+                          text-align: center;
+                          font-size: 20px;
+                          &:first-child {
+                              border-right: 2px solid @miva-header-color;
+                          }
+                          &.active {
+                              color: @miva-header-color;
+                          }
+                      }
+                  }
+                  .box {
+                      .miva-flex(@content: space-between, @wrap: wrap);
+                      img {
+                          margin: 10px;
+                          width: 65px;
+                          height: 65px;
+                      }
+                  }
+              }
+              .user-info-box {
+                  background: #fff;
+                  padding: 10px;
+                  margin-top: 40px;
+                  .title-box {
+                      text-align: center;
+                      font-size: 25px;
+                      position: relative;
+                      margin-bottom: 40px;
+                      img {
+                          position: absolute;
+                          top: -40px;
+                          left: 0;
+                      }
+                  }
+                  .user-info {
+                      .one {
+                          padding: 20px;
+                          span {
+                              color: #999;
+                          }
+                      }
+                  }
+              }
+          }
+          .right-box {
+              width: 950px;
+              .gift-box {
+                  position: relative;
+                  background: #fff;
+                  height: 333px;
+                  overflow: hidden;
+                  border-radius: 20px;
+                  padding: 0 30px;
+                  &::before,
+                  &::after {
+                      content: '';
+                      position: absolute;
+                      top: 50%;
+                      display: inline-block;
+                      background: #f3f3f3;
+                      height: 100%;
+                      width: 50px;
+                      border-radius: 50%;
+                  }
+                  &::before {
+                      left: 0;
+                      transform: translate(-60%, -50%);
+                  }
+                  &::after {
+                      right: 0;
+                      transform: translate(60%, -50%);
+                  }
+                  .top-box-gift,
+                  .bottom-box-gift {
+                      .miva-flex(@align-items: center, @content: space-around);
+                      height: 50%;
+                      text-align: center;
+                      div {
+                      }
+                  }
+                  .top-box-gift {
+                      div:first-child img {
+                          width: 95px;
+                          display: block;
+                      }
+                      div:not(:first-child) {
+                          span {
+                              font-size: 16px;
+                          }
+                          //                        心
+                          div>img {
+                              width: 20px;
+                          }
+                      }
+                      .user-pic {
+                          display: block;
+                          border: 3px solid transparent;
+                          background: #f3f3f3;
+                          height: 64px;
+                          width: 64px;
+                          border-radius: 50%;
+                      }
+                      .one {
+                          border-color: #FBCA4D;
+                      }
+                      .tow {
+                          border-color: #FBAB4D;
+                      }
+                      .three {
+                          border-color: #DCDCDC;
+                      }
+                      .have-corwm {
+                          width: 30px;
+                          height: 30px;
+                          transform: rotateZ(-45deg);
+                          position: absolute;
+                          top: -13px;
+                          left: -13px;
+                      }
+                      div {
+                          position: relative;
+                      }
+                  }
+                  .bottom-box-gift {
+                      border-top: 2px dashed #f3f3f3;
+                      position: relative;
+                      .title-bottom-gift {
+                          position: absolute;
+                          left: 20px;
+                          top: 40px;
+                          color: @miva-header-color;
+                          display: inline-block;
+                          font-size: 20px;
+                          width: 50px;
+                      }
+                      div {
+                          &:first-child img {
+                              height: 100%;
+                          }
+                      }
+                      div:not(:first-child) {
+                          & span {
+                              background: @miva-header-color;
+                              display: inline-block;
+                              color: #fff;
+                              border-radius: 30px;
+                              width: 65px;
+                          }
+                          & img {
+                              display: block;
+                              width: 80px;
+                              height: 80px;
+                          }
+                      }
+                  }
+              }
+          }
+          //     bottom-end
+          .game-info-box {
+              background: #fff;
+              margin: 20px 0;
+              .tab-title {
+                  background: #FBEECE;
+                  font-size: 18px;
+                  span {
+                      display: inline-block;
+                      padding: 15px 30px;
+                      color: #999;
+                      &.active {
+                          color: @miva-header-color;
+                          border-bottom: 2px solid;
+                      }
+                  }
+              }
+              .order-info {
+                  .miva-flex(@content: space-between, @align-items: flex-end);
+                  padding: 20px;
+                  >img {
+                      background: #FBEECE;
+                      width: 200px;
+                      height: 200px;
+                  }
+                  .info-box {
+                      width: 60%;
+                      height: 200px;
+                      .money {
+                          font-size: 20px;
+                          color: #999;
+                          span {
+                              color: @miva-color-red;
+                              font-size: 23px;
+                          }
+                      }
+                      .tip-box {
+                          margin: 15px 0;
+                          span {
+                              font-size: 16px;
+                              display: inline-block;
+                              background: @miva-header-color;
+                              border-radius: 30px;
+                              padding: 0 5px;
+                              color: #fff;
+                          }
+                      }
+                      .max-time {
+                          color: #999;
+                          font-size: 16px;
+                          margin: 15px 0;
+                      }
+                      .audio-box {
+                          border: 1px solid;
+                          background: @miva-header-color;
+                          color: #fff;
+                          display: inline-block;
+                          border-radius: 30px;
+                          padding: 5px 10px;
+                          font-size: 16px;
+                          span {
+                              margin: 0 10px;
+                          }
+                      }
+                  }
+                  .submit-btn {
+                      display: block;
+                      border: 1px solid;
+                      background: @miva-color-red;
+                      color: #fff;
+                      height: 50px;
+                      padding: 10px 30px;
+                      font-size: 20px;
+                  }
+              }
+              .about-user {
+                  p {
+                      padding: 20px;
+                      padding-top: 0;
+                      font-size: 16px;
+                      color: #999;
+                  }
+              }
+          }
+          .user-eval {
+              background: #fff;
+              padding: 20px;
+              .title-user {
+                  padding-left: 0 ;
+              }
+              .page-cut {
+                  .miva-flex;
+                  padding: 30px 0;
+                  * {
+                      background: #f3f3f3;
+                      padding: 5px 10px;
+                      margin: 10px;
+                      border-radius: 5px ;
+                  }
+                  .active {
+                      background: @miva-header-color;
+                      color: #fff;
+                  }
+              }
+          }
+      }
+      .title-user {
+          padding: 20px;
+          font-size: 25px;
+          span {
+              display: inline-block;
+              border-left: 3px solid;
+              line-height: 1;
+              padding-left: 10px;
+              color: @miva-header-color;
+          }
+      }
+  }

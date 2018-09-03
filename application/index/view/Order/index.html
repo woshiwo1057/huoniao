@@ -1,0 +1,214 @@
+{include file="public/header"}
+{include file="public/sidebar"}
+	<body>
+		<!-- 引入头部 -->
+
+		<div class="main miva-pay-order-box ">
+      <div class="order-info">
+        <span>订单信息</span>
+        <table>
+          <tr>
+            <td>陪玩</td>
+            <td>昵称</td>
+            <td>服务技能</td>
+            <td>单位 (元/小时)</td>
+            <td>购买数量</td>
+            <td>总价</td>
+          </tr>
+          <tr>
+            <td><img class="user-pic" src="{$acc_data.head_img}" alt=""></td>
+            <td>{$acc_data.nickname}</td>
+            <td>{$acc_data.name}</td>
+            <td>￥{$acc_data.pice}</td>
+            <td>
+              <div class="box buy-time-box">
+    						<span style="cursor:pointer">-</span>
+    						<input type="text" value="1" class="length_time" readonly="true">
+    						<span style="cursor:pointer">+</span>
+    					</div>
+            </td>
+            <td  data-price=total style="color:red; width:104px ">￥{$acc_data.pice}</td>
+          </tr>
+          <tr>
+            <td colspan="6">
+              <textarea name="name" rows="8" cols="80" placeholder="备注说明,注意事项....."></textarea>
+            </td>
+          </tr>
+        </table>
+        <!-- 基本信息 -->
+        <div class="contact-box">
+					<div>
+						<img src="" alt="图标">
+						手机
+					</div>
+					<input type="text" name="phone">
+					<span style="color:red">(必填)</span>
+
+					<div>
+						<img src="" alt="图标">
+						QQ
+					</div>
+					<input type="text" name="qq">
+          <span style="color:red">(必填)</span>
+					
+
+					<div>
+						<img src="" alt="图标">
+						微信
+					</div>
+					<input type="text" name="wechat">
+					<span>(选填)</span>
+				</div>
+      </div>
+
+<style>
+  .pay-methods > span {
+    cursor:pointer;
+  }
+  .pay-act {
+    position: relative;
+    border-color: #FBC94C !important;
+  }
+  .pay-act::after {
+    content: '√';
+    position: absolute;
+    right: 2px;
+    bottom: 1px;
+    font-weight: bold;
+    color: #fff;
+  }
+  .pay-act::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: block;
+    border:15px solid;
+    border-color: transparent #FBC94C #FBC94C transparent
+  }
+</style>
+      <!-- 支付方式 -->
+      <div class="pay-method-box pay-methods">
+        <span>支付方式</span>
+        <div class="pay-methods">
+  				<span class="xiaoshou pay-act" payment="1"><img src="" alt="">余额支付</span>
+  				<span class="xiaoshou" payment="2"><img src="" alt="">微信支付</span>
+  			
+          <img src=""  style="height:200px;width:200px;margin-left:400px;" alt="打开微信扫描二维码支付" class="zhifu">
+  			</div>
+      </div>
+      
+      <!-- 确认支付 -->
+      <div class="payment">
+        <div class="top">
+          实付金额: <span data-price=paytotal>￥{$acc_data.pice}</span>
+        </div>
+        <div class="btm">
+          <sub><i class="miva-icon layui-icon layui-icon-about"></i>温馨提示:提交订单后,待支付的订单有3分钟的付款时间,逾期自动取消订单</sub>
+          <span class="xiaoshou submit">提交订单</span>
+        </div>
+      </div>
+
+		</div>
+      
+		<!-- 引入侧边栏 -->
+		<!-- 引入页脚 -->
+    {include file="public/footer"}
+    <script>
+    $(function(){
+      var buyTime = 1;
+      var price = {$acc_data.pice};
+      var paynum;
+
+      $('body').on('selectstart', function() { // 禁止选中
+        return false;
+      });
+      $('.buy-time-box').on('click', 'span', function() {
+        
+        if ($(this).html() == '-' && buyTime > 1) {
+          buyTime = buyTime - 1;
+        }else if($(this).html() == '+') {
+          buyTime = buyTime + 1;
+        }
+        $('.length_time').val(buyTime);
+
+
+        paynum = price * buyTime;
+        $('[data-price=total]').html('￥' + paynum);
+        $('[data-price=paytotal]').html('￥' + paynum);
+      });
+
+      $('.pay-methods').on('click', 'span', function() {
+       $(this).addClass('pay-act').siblings().removeClass('pay-act');
+      });
+
+      $('.submit').click(function(){
+            var acc_id = '{$acc_data.uid}'
+            var service = '{$acc_data.name}'
+            var length_time = $('.length_time').val()
+            if(length_time<1){
+              layui.use('layer',function(){
+              layer.msg('时间最少1小时')})
+              return false
+            }
+            var explain = $('[name="name"]').val()
+            var phone = $('[name="phone"]').val()
+            if(phone == ''){
+              layui.use('layer',function(){
+              layer.msg('请填写手机号')})
+              return false
+            }
+            var qq = $('[name="qq"]').val()
+            if(qq == ''){
+              layui.use('layer',function(){
+              layer.msg('请填写QQ号')})
+              return false
+            }
+            var wechat = $('[name="wechat"]').val()
+
+            var money = '{$acc_data.pice}'
+
+            //获取到支付方式 （这里只存在微信支付，所以是单一的东西）
+            var type = 2
+            
+            $.post("{:url('Order/confirm_order')}",{acc_id:acc_id,service:service,length_time:length_time,explain:explain,phone:phone,qq:qq,wechat:wechat,money:money,type:type},function(data){
+                      if(data.code == 1){
+                        layui.use('layer',function(){
+                        layer.msg(data.msg)})
+                      }else if(data.code == 2){
+                        layui.use('layer',function(){
+                        layer.msg(data.msg)})
+                      }else if(data.code == 3){
+                        layui.use('layer',function(){
+                        layer.msg(data.msg)})
+                      }else if(data.code == 4){
+                        layui.use('layer',function(){
+                        layer.msg(data.msg)})
+                        window.location.href="{:url('User/order')}"
+                      }else if(data.code == 5){
+                        layui.use('layer',function(){
+                        layer.msg(data.msg)})
+                      }else if(data.code == 6){
+                        var str = 'https://www.baifubao.com/o2o/0/qrcode?size=10&text='
+                        str += data.msg
+                        $('.zhifu').attr('src',str)
+                      }else if(data.code == 7){
+                        layui.use('layer',function(){
+                        layer.msg(data.msg)})
+                      }else if(data.code == 8){
+                        layui.use('layer',function(){
+                        layer.msg(data.msg)})
+                      }else if(data.code == 9){
+                        layui.use('layer',function(){
+                        layer.msg(data.msg)})
+                      }
+
+                  
+
+            },'json')
+      })
+    })
+    </script>
+	</body>
+
+</html>

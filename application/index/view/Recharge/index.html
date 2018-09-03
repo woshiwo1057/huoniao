@@ -1,0 +1,302 @@
+{include file="public/header"}
+{include file="public/sidebar"}
+	<body>
+		<!-- 引入头部 -->
+		<div data-item='{//$status.code}' class="main">
+			<!--充值窗口-->
+			<div class="miva-recharge-box">
+				<div class="miva-header">
+					<a data-go=zhanghu>账户充值</a>
+					|
+					<a data-go=zuanshi>钻石充值</a>
+				</div>
+				<!-- 账户充值 -->
+				<table id='zhanghu' class="miva-recharge">
+					<tr>
+						<td valign=top>账户余额:</td>
+						<td>{$user_data.cash}元</td>
+					</tr>
+					<tr>
+						<td valign=top>充值金额:</td>
+						<td>
+							<div class="miva-check-box">
+								<span class="check active">请选择充值额度</span>
+								<span class="check" data-val="50">50元</span>
+								<span class="check" data-val="100">100元</span>
+								<span class="check" data-val="500">500元</span>
+								<span class="check" data-val="1000">1000元</span>
+								<span class="check" data-val="1500">1500元</span>
+								<span class="check" data-val="2000">2000元</span>
+							</div>
+							<!-- 输入金额 
+							<div class="miva-write">
+								<label for="mivaNum">输入金额</label>|
+								<input id="mivaNum" type="text" placeholder="请输入">
+							</div>-->
+						</td>
+					</tr>
+					<tr>
+						<td valign=top>充值方式:</td>
+						<td>
+							<div>
+								
+								<span class="check active" type="2">
+									<img src="" alt="">
+									微信</span>
+							</div>
+							<div class="miva-write-btn" recharge="1">立即支付</div>
+							<img src=""  style="height:200px;width:200px;margin-left:400px;" alt="打开微信扫描二维码进行支付" class="zhifu">
+							<div class="miva-tip">备注: 充值可用于消费,不能提现</div>
+						</td>
+					</tr>
+				</table>
+				<!-- 钻石充值 -->
+				<table id='zuanshi' class="miva-recharge">
+					<tr>
+						<td valign=top>账户余额:</td>
+						<td>{$user_data.currency} 钻石</td>
+					</tr>
+					<tr>
+						<td valign=top>充值金额:</td>
+						<td>
+							<div class="miva-check-box">
+								<span class="check active">请选择充值额度</span>
+								<span class="check" data-val="5">50钻石</span>
+								<span class="check" data-val="10">100钻石</span>
+								<span class="check" data-val="50">500钻石</span>
+								<span class="check" data-val="100">1000钻石</span>
+								<span class="check" data-val="150">1500钻石</span>
+								<span class="check" data-val="200">2000钻石</span>
+							</div>
+							<!-- 输入金额 
+							<div class="miva-write">
+								<label for="mivaNum">输入金额</label>|
+								<input id="mivaNum" type="text" placeholder="请输入">
+							</div>-->
+						</td>
+					</tr>
+					<tr>
+						<td>应付金额:</td>
+						<td class="should-pay">5.00元</td>
+					</tr>
+					<tr>
+						<td valign=top>充值方式:</td>
+						<td>
+							<div class="geiqian">
+								
+								<span class="check active"  type="2" >
+									<img src="" alt="">
+									微信</span>
+								<span class="check"   type="0">
+									<img src="" alt=""  type="3">
+									账户余额({$user_data.cash})</span>
+							</div>
+
+							<div class="miva-write-btn" recharge="2">立即支付</div> 
+							<img src=""  style="height:200px;width:200px;margin-left:400px;" alt="打开微信扫描二维码进行支付" class="zhifu">
+							<div class="miva-tip">备注: 充值可用于消费,不能提现</div>
+						</td>
+					</tr>
+
+				</table>
+
+			</div>
+
+			<!--充值介绍-->
+			<div class="miva-recharg-info">
+				<table>
+					<tr>
+						<td>单次充值金额( 元 )</td>
+						<td>100元</td>
+						<td>500元</td>
+						<td>1000元</td>
+						<td>1500元</td>
+						<td>2000元</td>
+						<td>2500元</td>
+						<td>3000元</td>
+						<td>3500元</td>
+					</tr>
+					<tr>
+						<td>获得VIP等级</td>
+						<td><img src="__IMG__icon1-3.gif"/></td>
+						<td><img src="__IMG__icon1-4.gif"/></td>
+						<td><img src="__IMG__icon1-5.gif"/></td>
+						<td><img src="__IMG__icon-6.gif"/></td>
+						<td><img src="__IMG__icon1-7.gif"/></td>
+						<td><img src="__IMG__icon1-8_01.gif"/></td>
+						<td><img src="__IMG__icon1-9.gif"/></td>
+						<td><img src="__IMG__icon1-10.gif"/></td>
+					</tr>
+					<tr class="miva-sum">
+						<td>累计消费( 元 )</td>
+						<td>&gt;100</td>
+						<td>&gt;500</td>
+						<td>&gt;1000</td>
+						<td>&gt;1500</td>
+						<td>&gt;2000</td>
+						<td>&gt;2500</td>
+						<td>&gt;3000</td>
+						<td>&gt;3500</td>
+					</tr>
+					<tr>
+						<td>温馨提示</td>
+						<td colspan="8">单次充值可获得临时等级15天,累计消费可获得永久等级</td>
+					</tr>
+				</table>
+			</div>
+			<!--等级特权介绍-->
+			<div class="miva-grade-info miva-floor-box">
+				<div class="miva-title">
+					<span class="miva-title-icon">
+						<img src="__IMG__title (4).gif" alt="">
+					</span> 等级特权
+				</div>
+				<div class="miva-grade-box">
+					<div class="miva-item">
+						<div class="miva-icon-box">
+							<img src="__IMG__79202b1f81bd17053bfdc9652ecbdae4.png" alt="">
+						</div>
+						<div class="miva-lv-name">勋章展示</div>
+						<div class="miva-lv-info">光彩夺目,彰显身份</div>
+						<div class="miva-lv-option">骑士开启</div>
+					</div>
+					<div class="miva-item">
+						<div class="miva-icon-box">
+							<img src="__IMG__ea5cd4eeed76a59fac1f8184acc2c695.png" alt="">
+						</div>
+						<div class="miva-lv-name">积分抽奖</div>
+						<div class="miva-lv-info">积分抽大奖,不容错过</div>
+						<div class="miva-lv-option">男爵开启</div>
+					</div>
+					<div class="miva-item">
+						<div class="miva-icon-box">
+							<img src="__IMG__a8d15a5590d806267911d045e51f7b60.png" alt="">
+						</div>
+						<div class="miva-lv-name">专属头像</div>
+						<div class="miva-lv-info">至上荣耀,与众不同</div>
+						<div class="miva-lv-option">子爵开启</div>
+					</div>
+					<div class="miva-item">
+						<div class="miva-icon-box">
+							<img src="__IMG__178d1297c46b3b8b5f98a73e93b0d1b8.png" alt="">
+						</div>
+						<div class="miva-lv-name">贡献隐身榜</div>
+						<div class="miva-lv-info">光彩夺目,彰显身份</div>
+						<div class="miva-lv-option">骑士开启</div>
+					</div>
+					<div class="miva-item">
+						<div class="miva-icon-box">
+							<img src="__IMG__41e40f08e37d2e962e03d565fc781e07.png" alt="">
+						</div>
+						<div class="miva-lv-name">更多特权</div>
+						<div class="miva-lv-info">光彩夺目,彰显身份</div>
+						<div class="miva-lv-option">骑士开启</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- 引入侧边栏 -->
+		<!-- 引入页脚 -->
+{include file="public/footer"}
+		<script type="text/javascript">		
+
+			$(document).ready(function(){
+				$('[data-go=zhanghu]').css('color','#FC6D69');
+				$('#zuanshi').hide();
+				$('[data-go=zhanghu]').on('click',function(){
+					$(this).css('color','#FC6D69').siblings().css('color','#000');
+					$('#zhanghu').show();
+					$('#zuanshi').hide();
+				});
+				$('[data-go=zuanshi]').on('click',function(){
+					$(this).css('color','#FC6D69').siblings().css('color','#000');
+					$('#zuanshi').show();
+					$('#zhanghu').hide();
+				});
+				
+				$('.check').on('click', function(e){
+					$(this).addClass('active').siblings().removeClass('active');
+					var nMoney = $(this).attr('data-val');
+					if(nMoney) 
+						$('.should-pay').html(nMoney+'元');
+				})
+
+			});
+
+		</script>
+		<script type="text/javascript">
+			$(function(){
+			
+
+				var price = null;
+				$('.miva-check-box > .check').on('click',function(){
+					var pice = $(this).attr('data-val')
+					if(Number.isInteger(pice/50)||5||10){					
+						price = pice;
+					}else{
+						price = null;
+						return false
+					}
+					
+					//alert(price)
+					
+				});
+
+				
+					$('.miva-write-btn').on('click',function(){
+
+						var a = confirm("确认要充值吗？")
+						if (a != true){
+							return false
+						}
+
+						if(!price){													
+							layui.use('layer',function(){
+							layer.msg('参数错误')})
+							return false
+						}
+						//充值的钱数就是  price
+						var type = $('.geiqian').find('.active').attr('type')  //0：余额支付  2：微信支付
+						if(type == 0){
+
+							if(price>{$user_data.cash}){
+								layui.use('layer',function(){
+								layer.msg('余额不足')})
+								return false
+							}
+						}
+						var recharge = $(this).attr('recharge')   //1:余额充值   2:钻石充值
+						$.post("{:url('Recharge/recharge')}",{price:price,type:type,recharge:recharge},function(data){
+								if(data.code == 1){
+									layui.use('layer',function(){
+									layer.msg(data.msg)})
+								}else if(data.code == 2){
+			                        var str = 'https://www.baifubao.com/o2o/0/qrcode?size=10&text='
+			                        str += data.msg
+			                        $('.zhifu').attr('src',str)
+			                    }else if(data.code == 3){
+			                    	layui.use('layer',function(){
+									layer.msg(data.msg)})
+			                    }else if(data.code == 4){
+			                    	layui.use('layer',function(){
+									layer.msg(data.msg)})
+			                    }else if(data.code == 5){
+			                    	layui.use('layer',function(){
+									layer.msg(data.msg)})
+									window.location.reload()
+			                    }else if(data.code == 6){
+			                    	layui.use('layer',function(){
+									layer.msg(data.msg)})
+			                    }
+
+						},'json')
+						
+
+					})
+				
+			})
+		</script>
+	</body>
+
+</html>

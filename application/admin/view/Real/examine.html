@@ -1,0 +1,120 @@
+{include file="public/header"}
+<link href="__ADMIN__lib/webuploader/0.1.5/webuploader.css" rel="stylesheet" type="text/css" />
+{include file="public/sidebar"}
+
+<body>
+	<div class="page-container">
+	
+	
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"  style="margin-left:180px;"><span class="c-red">*</span>陪玩师真实姓名：</label>
+			<div class="formControls col-xs-8 col-sm-9" style="margin-left:180px;">
+				<input type="text" class="input-text" value="{$real_data.name}"  name="name">
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"  style="margin-left:180px;"><span class="c-red">*</span>陪玩师身份证号：</label>
+			<div class="formControls col-xs-8 col-sm-9"  style="margin-left:180px;">
+				<input type="text" class="input-text" value="{$real_data.card_num}"  name="name">
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"  style="margin-left:180px;"><span class="c-red">*</span>陪玩师支付宝账户</label>
+			<div class="formControls col-xs-8 col-sm-9"  style="margin-left:180px;">
+				<input type="text" class="input-text" value="{$real_data.zfb}"  name="name">
+			</div>
+		</div>	
+		
+		<label class="form-label col-xs-4 col-sm-2"  style="margin-left:180px;"><span class="c-red">*</span>身份证正面</label>：
+		<div class="row cl"  style="margin-left:200px;"  style="margin-left:180px;">
+
+			<img style="width:200px" id="pic-one" src="{$real_data.front_img}" alt="">
+			
+		</div>
+
+		<label class="form-label col-xs-4 col-sm-2"  style="margin-left:180px;"><span class="c-red">*</span>身份证反面</label>：
+		<div class="row cl"  style="margin-left:200px;"  style="margin-left:180px;">
+
+			<img style="width:200px" id="pic-one" src="{$real_data.back_img}" alt="">
+			
+		</div>
+	</div>
+
+				<a href="{:url('real/handle',['id' => $real_data['id'],'user_id' => $real_data['user_id']])}"  style="margin-left:800px;"  class="ok">同意申请认证</a>
+
+				<script>
+						$(function(){
+							$('.ok').click(function(){
+								var a = confirm("真的要同意吗？")
+								if (a != true){
+									return false
+								}
+							})
+						})
+						</script>
+<!--_footer 作为公共模版分离出去-->
+{include file="public/footer"}
+<!--/_footer /作为公共模版分离出去-->
+
+<script>/*
+	$(function(){
+		$('.add').click(function(){
+			var str =""
+			str += '<div class="row cl">'
+			str += '<label class="form-label col-xs-4 col-sm-2"><span class="c-red"></span>游戏级别分类：</label>'
+			str += '<div class="formControls col-xs-8 col-sm-9">'
+			str += '<input type="text" class="input-text" value="" placeholder="游戏全名。" name="name" style="width:300px;">'
+			str += '<a  data-item="delete" class="delete">删除</a>'
+			str += '</div></div>'
+
+			$(this).before(str); //在元素前追加
+
+			$('[data-item=delete]').on('click', function(){
+				$(this).parent().parent().remove(); //找到最终的父级元素  然后删除
+			})
+		})
+
+		
+	})*/
+</script>
+<!--请在下方写此页面业务相关的脚本-->
+<script>
+	$('#miva').on('change',function(){
+		var file = document.querySelector('#miva').files[0];
+
+		var newfile = new FileReader();
+		newfile.readAsDataURL(file,"UTF-8");
+
+		newfile.onload = function () {
+			$('#pic-one').attr('src',newfile.result);
+		}
+	})
+/*
+	$('#mivb').on('change',function(){
+		var file = document.querySelector('#mivb').files[0];
+
+		var newfile = new FileReader();
+		newfile.readAsDataURL(file,"UTF-8");
+
+		newfile.onload = function () {
+			$('#pic-tow').attr('src',newfile.result);
+		}
+	})
+
+	$('#mivc').on('change',function(){
+		var file = document.querySelector('#mivc').files[0];
+
+		var newfile = new FileReader();
+		newfile.readAsDataURL(file,"UTF-8");
+
+		newfile.onload = function () {
+			$('#pic-three').attr('src',newfile.result);
+		}
+	})
+	*/
+</script>
+
+</body>
+</html>

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="__INDEX__layui/css/layui.css" />
+    <link rel="stylesheet" type="text/css" href="__INDEX__layui/css/modules/code.css" />
+    <link rel="stylesheet" type="text/css" href="__INDEX__layui/css/modules/laydate/default/laydate.css" />
+    <link rel="stylesheet" type="text/css" href="__INDEX__layui/css/modules/layer/default/layer.css" />
+    <link rel="stylesheet" type="text/css" href="__INDEX__css/swiper-4.3.3.min.css" />
+    <link rel="stylesheet" type="text/css" href="__INDEX__css/common.css" /> 
+
+    <script src="__INDEX__js/swiper-4.3.3.min.js" async type="text/javascript" charset="utf-8"></script>
+    <script src="__INDEX__js/jquery-3.3.1.js" type="text/javascript" charset="utf-8"></script>
+    <script src="__INDEX__layui/layui.js" type="text/javascript" charset="utf-8"></script>
+
+    
+
+
+  </head>
+<header>
+  <div class="header-box">
+    <!-- logo -->
+    <a href="{:url('Index/index')}" class="logo-box">
+      <img src="__IMG__logo (2).gif" alt="logo">
+    </a>
+    <!-- 顶部导航 -->
+    <nav class="top-nav-box">
+      <ul>
+        {foreach name="menus_index"  item="v"}       
+        <li  {if condition="strtolower(C) == $v['controller']"}class="active"{/if} >
+         <!-- <a href="/huoniao/public/index.php/index/{$v.controller}/{$v.action}">{$v.name}</a>-->
+         <a href="{:url($v['controller'].'/'.$v['action'])}">{$v.name}</a>
+        </li>
+        {/foreach}
+        
+      </ul>
+    </nav>
+        <!-- 搜索栏 -->
+        <div class="search">
+          <input type="text" name="peiwan" placeholder="搜索昵称、ID、靓号" value="">
+          <a href="{:url('Acc/search')}" id="search"><i class="layui-icon layui-icon-search"></i></a>
+        </div>
+    <script>
+      $(function(){
+        $('#search').click(function(){
+          var name =  $('[name=peiwan]').val()
+          if(name != ''){
+          //var url = "{:url('Acc/search',['search' => 123])}"
+          //var url = '/huoniao/public/index.php/index/acc/search/search/'+name
+           var url =  'https://csq.huoniaopeiwan.com/index/acc/search/search/'+name
+       //  return false
+          $('#search').attr('href',url)
+          }else{
+            return false
+          }
+        })
+      })
+    </script>
+
+    <!-- 顶部右侧板块 -->
+    <div class="top-right-box">
+      <div class="msg-box">
+        <a href="javascript:;"><i class="layui-icon layui-icon-layer"></i><span onclick="alert('暂未开放')">语音大厅</span></a>
+        <a href="{:url('User/msg')}">
+          <i class="layui-icon layui-icon-notice  "></i><span>消息</span>
+          <!-- 提示红点  
+           <i class="tip" style="display:none"></i>
+           -->
+         
+        </a>
+      </div>
+      
+    <?php if(isset($_SESSION['user']['user_info'])){ ?>
+      <!-- 登录后 -->
+      <div class="login-after">
+        <!-- 用户头像 -->
+        <a href="{:url('User/index')}" class="user-pic-box">
+          <?php if($_SESSION['user']['user_info']['head_img'] == ''){ ?>
+          <img class="user-pic" src="__IMG__default.jpg" alt="">
+          <?php }else{?>
+          <img class="user-pic" src="<?php  echo $_SESSION['user']['user_info']['head_img'];?>" alt="">
+          <?php }?>
+        </a>
+        <!-- 弹出用户信息 -->
+        <div class="user-info-tan">
+          <!-- 用户头像 -->
+          <div class="user-pic-tan">
+            <a href="{:url('User/index')}">
+            <?php if($_SESSION['user']['user_info']['head_img'] == ''){ ?>
+            <img class="user-pic" src="__IMG__default.jpg" alt="">
+            <?php }else{?>
+            <img class="user-pic" src="<?php  echo $_SESSION['user']['user_info']['head_img'];?>" alt="">
+            <?php }?>
+            </a>
+          </div>
+          <div>{$_SESSION['user']['user_info']['nickname']}</div>
+          <div>ID:{$_SESSION['user']['user_info']['uid']}</div>
+          <!-- 等级 -->
+          <div class="user-lv">
+            <span>LV {$_SESSION['user']['user_info']['level']}</span>
+            <div class="layui-progress miva-progress">
+              <div class="layui-progress-bar" lay-percent="10%"></div>
+            </div>
+            <span>LV 10</span>
+          </div>
+          <script>
+//        	经验条
+            layui.use('element', function(){
+              var element = layui.element;
+            });
+          </script>
+          <!-- 账户 -->
+          <div class="user-money">
+            <span>余额</span><span>{$_SESSION['user']['user_info']['cash']}</span>
+          </div>
+          <div class="user-money">
+            <span>鸟蛋</span><span>{$_SESSION['user']['user_info']['currency']}</span>
+          </div>
+          <!-- 功能 -->
+          <table>
+            <tr>
+              <td>
+                <a href="{:url('User/order')}">
+                  <div class="layui-icon layui-icon-form"></div>订单</a>
+              </td>
+              <td class="table-center">
+                <a href="{:url('User/index')}">
+                  <div class="layui-icon layui-icon-set"></div>设置</a>
+              </td>
+              <td>
+                <a href="{:url('Recharge/index')}">
+                  <div class="layui-icon layui-icon-dollar"></div>充值</a>
+              </td>
+            </tr>
+          </table>
+          <div class="go-out-tan">
+            <a href="{:url('Login/loginOut')}">退出登录</a>
+          </div>         
+        </div>
+        <?php  }else{?>
+          <!-- 登录前 -->
+        <div  class="login-before xiaoshou" >
+          <i class="layui-icon layui-icon-username"></i>
+          <span class="login">登录/注册</span>
+        </div>
+        <?php }?>
+      </div>
+    </div>
+  </div>
+   <script type="text/javascript">
+        $(function(){
+          $('.login').click(function(){
+            layui.use('layer', function() {
+              layer.open({
+                type: 2,
+                title: '登录/注册',
+                maxmin: false,
+                scrollbar: false,
+                skin: 'layui-layer-bai',
+                shadeClose: true, //点击遮罩关闭层
+                area: ['460px', '610px'],
+                content: "{:url('Login/login')}",
+                success: function(layero, index) {
+
+
+                  var body = layer.getChildFrame('body', index);
+                  var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                  // console.log(body.html()) //得到iframe页的body内容
+                  var from = body.find('.login-form')
+                  
+
+
+                  // body.find('[type=submit]').on('click',function() {
+                    
+                  //   layer.closeAll();
+                  // });
+
+
+
+
+                    $(from).submit(function(){
+                      var account = body.find('[name="account"]').val()
+                      var password = body.find('[name="password"]').val()
+
+                      $.post("{:url('Login/login')}",{account:account,password:password},function(data){
+                            if(data.code == 1){
+                              layui.use('layer',function(){
+                              layer.msg(data.msg)})
+                            }else if(data.code == 2){
+                              layui.use('layer',function(){
+                              layer.msg(data.msg)})
+                            }else if(data.code == 3){
+                              layui.use('layer',function(){
+                              layer.msg(data.msg)})
+                              layer.closeAll();
+                              window.location.href=data.url
+                            }
+
+                      },'json')
+                      return false
+                    })
+
+
+
+            $(body.find('.button')).click(function(){
+              var _this = body.find('.button');
+              var phone = $(body.find('[name="phone"]')).val()      
+              var mobile = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/;
+              var num = 60;
+              var timer;
+
+              timer = setInterval(function(e) {
+                $(_this).html('发送验证码(' + num + ')')
+                num--;
+                if (num <= 1) {
+                  clearInterval(timer)
+                  $(_this).removeAttr('disabled');
+                  $(_this).html('发送验证码')
+                }else {
+                  $(_this).attr('disabled','true');
+                }
+              }, 1000);
+
+              if(!mobile.test(phone)){
+                layui.use('layer',function(){
+                      layer.msg('手机号输入错误')})
+                  return false
+              }
+
+              $.post("{:url('Login/code')}",{phone:phone},function(data){
+
+                    if(data.code == 1){
+                      layui.use('layer',function(){
+                      layer.msg(data.msg)})
+
+                    }else if(data.code == 2){
+                      layui.use('layer',function(){
+                      layer.msg(data.msg)})
+                    }else if(data.code == 3){
+                      layui.use('layer',function(){
+                      layer.msg(data.msg)})
+                    }else{
+                      layui.use('layer',function(){
+                      layer.msg('未知错误')})
+                    }
+              },'json')
+              return false
+            })
+
+            var isRegOff = true;
+            $(body.find('#agreement')).on('change', function() {
+              isRegOff = !isRegOff;
+              if (!isRegOff) {
+                body.find('.register').attr('disabled', 'true')
+              }else {
+                body.find('.register').removeAttr('disabled')
+              };
+            });
+            //注册
+
+            $(body.find('.register')).click(function(){
+              var code = $(body.find('[name="code"]')).val()
+              var phone = $(body.find('[name="phone"]')).val()
+              var password = $(body.find('[data-item=pwd]')).val()
+
+              // alert(code,phone,password)
+              $.post("{:url('Login/register')}",{account:phone,password:password,code:code},function(data){
+                    if(data.code == 1){
+                      layui.use('layer',function(){
+                      layer.msg(data.msg)})
+                    }else if(data.code == 2){
+                      layui.use('layer',function(){
+                      layer.msg(data.msg)})
+                    }else if(data.code == 3){
+                      layui.use('layer',function(){
+                      layer.msg(data.msg)})
+                    }else if(data.code == 4){
+                      layui.use('layer',function(){
+                      layer.msg(data.msg)})
+                      layer.closeAll();
+                      window.location.href=data.url
+                      
+                    }
+
+              },'json')
+              return false
+            })
+
+
+
+                }
+              });
+            });
+          })
+
+
+        })
+      </script>
+</header>
+

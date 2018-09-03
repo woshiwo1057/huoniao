@@ -1,0 +1,110 @@
+{include file="public/header"}
+{include file="public/sidebar"}
+
+
+<body>
+<article class="page-container">
+	<form  action="#"  method="post" class="form form-horizontal" id="form-article-add">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">
+				<span class="c-red">*</span>菜单级别：
+			</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<span class="select-box">
+					<select name="fid" class="select">
+						<option value="0">顶级</option>
+						{foreach name="list_data" item="v"}
+						<option value="{$v.id}"  {if condition="$v.id == $data.fid"}selected{/if}>{$v.name}</option>
+						{/foreach}
+					</select>
+				</span> 
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>菜单名：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$data.name}" placeholder="中文名" name="name">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">
+				<span class="c-red">*</span>前/后台菜单：
+			</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<span class="select-box">
+					<select name="module" class="select">
+					{switch name="$data.module"}
+						{case value="admin"}
+						<option value="admin">后台</option>
+						<option value="index">前台</option>
+						{/case}
+						{case value="index"}
+						<option value="index">前台</option>
+						<option value="admin">后台</option>
+						{/case}
+						{default /}<option value="admin">未知/默认后台</option>
+					{/switch}
+				
+					</select>
+				</span> 
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>模块：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$data.controller}" placeholder="controller"  name="controller">
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>控制器：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$data.action}" placeholder="action"  name="action">
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">
+				<span class="c-red">*</span>是否显示：
+			</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<span class="select-box">
+					<select name="type" class="select">
+					{if condition="$data.type == 1"}
+						<option value="1">显示</option>
+						<option value="0">不显示</option>
+					{else /}
+						<option value="0">不显示</option>
+						<option value="1">显示</option>
+					{/if}
+					</select>
+				</span> 
+			</div>
+		</div>
+		
+		
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+				<button onClick="article_save_submit();" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">提交</button>
+				
+			</div>
+		</div>
+	</form>
+</article>
+
+{include file="public/footer"}
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="lib/My97DatePicker/4.8/WdatePicker.js"></script> 
+<script type="text/javascript" src="lib/jquery.validation/1.14.0/jquery.validate.js"></script> 
+<script type="text/javascript" src="lib/jquery.validation/1.14.0/validate-methods.js"></script> 
+<script type="text/javascript" src="lib/jquery.validation/1.14.0/messages_zh.js"></script>   
+<script type="text/javascript" src="lib/webuploader/0.1.5/webuploader.min.js"></script> 
+<script type="text/javascript" src="lib/ueditor/1.4.3/ueditor.config.js"></script> 
+<script type="text/javascript" src="lib/ueditor/1.4.3/ueditor.all.min.js"> </script> 
+<script type="text/javascript" src="lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
+
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

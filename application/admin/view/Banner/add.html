@@ -1,0 +1,154 @@
+{include file="public/header"}
+<link href="__ADMIN__lib/webuploader/0.1.5/webuploader.css" rel="stylesheet" type="text/css" />
+{include file="public/sidebar"}
+
+<body>
+<div class="page-container">
+	<form class="form form-horizontal" id="form-article-add" enctype="multipart/form-data" action="{:url('Banner/add')}"  method="post">
+	<!--
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>图片标题：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="" name="">
+			</div>
+		</div>
+	-->
+		
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>banner位置：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<span class="select-box">
+				<select name="status" class="select">
+					<option value="0">不显示（不上架）</option>
+					<option value="1">显示在PC轮播图</option>
+					<option value="2">显示在网吧详情页</option>
+					<option value="3">显示在小程序</option>			
+					<option value="4">显示在PC的悬赏约玩</option>	
+				</select>
+				</span>
+			</div>
+		</div>
+		
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">图片摘要：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<textarea name="explain" cols="" rows="" class="textarea"  placeholder="说点什么...最少输入1个字符" datatype="*10-100" dragonfly="true" nullmsg="备注不能为空！" onKeyUp="textarealength(this,200)"></textarea>
+				<p class="textarea-numberbar"><em class="textarea-length">0</em>/200</p>
+			</div>
+		</div>
+		
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>banner链接方式：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<span class="select-box">
+				<select name="link_type" class="select">
+					<option value="1">站内链接</option>
+					<option value="2">站外链接</option>
+				</select>
+				</span>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>链接地址：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" name="link" placeholder="站内链接填写请联系开发人员，站外链接直接填写全网址 例：https://www.baidu.com/" >
+			</div>
+		</div>
+		<!--
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">缩略图：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<div class="uploader-thum-container">
+					<div id="fileList" class="uploader-list"></div>
+					<div id="filePicker">选择图片</div>
+					<button id="btn-star" class="btn btn-default btn-uploadstar radius ml-10">开始上传</button>
+				</div>
+			</div>
+		</div>
+		
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">图片上传：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<div class="uploader-list-container"> 
+					<div class="queueList">
+						<div id="dndArea" class="placeholder">
+							<div id="filePicker-2"></div>
+							<p>或将照片拖到这里,支持多图上传</p>
+						</div>
+					</div>
+					<div class="statusBar" style="display:none;">
+						<div class="progress"> <span class="text">0%</span> <span class="percentage"></span> </div>
+						<div class="info"></div>
+						<div class="btns">
+							<div id="filePicker2"></div>
+							<div class="uploadBtn">开始上传</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		-->
+		<div class="row cl"  style="margin-left:200px;">
+			<img style="width:200px" id="pic-one" src="" alt="">
+			<input id="miva" type="file"  name="cover">
+		<!--
+			<img style="width:200px" id="pic-tow" src="" alt="">
+			<input id="mivb" type="file"  name="img_url[]">
+
+			<img style="width:200px" id="pic-three" src="" alt="">
+			<input id="mivc" type="file"  name="img_url[]">			
+			-->
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+				<button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i>提交</button>
+			</div>
+		</div>
+	</form>
+
+</div>
+</div>
+<!--_footer 作为公共模版分离出去-->
+{include file="public/footer"}
+<!--/_footer /作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script>
+	$('#miva').on('change',function(){
+		var file = document.querySelector('#miva').files[0];
+
+		var newfile = new FileReader();
+		newfile.readAsDataURL(file,"UTF-8");
+
+		newfile.onload = function () {
+			$('#pic-one').attr('src',newfile.result);
+		}
+	})
+/*
+	$('#mivb').on('change',function(){
+		var file = document.querySelector('#mivb').files[0];
+
+		var newfile = new FileReader();
+		newfile.readAsDataURL(file,"UTF-8");
+
+		newfile.onload = function () {
+			$('#pic-tow').attr('src',newfile.result);
+		}
+	})
+
+	$('#mivc').on('change',function(){
+		var file = document.querySelector('#mivc').files[0];
+
+		var newfile = new FileReader();
+		newfile.readAsDataURL(file,"UTF-8");
+
+		newfile.onload = function () {
+			$('#pic-three').attr('src',newfile.result);
+		}
+	})
+	*/
+</script>
+
+</body>
+</html>

@@ -1,0 +1,51 @@
+{include file="public/header"}
+{include file="public/sidebar"}
+
+			<div class="main">
+				<div class="miva-screen-list">
+					<!-- 一条 -->
+					
+					{foreach name="search_data" item="v"}
+					<a href="{:url('Index/user',['id' =>$v.uid])}" class="miva-star-items">
+						<div class="miva-star-pic">
+							{if condition="$v.head_img == ''"}
+								<img src="__IMG__default.jpg" />
+							{else /}
+								<img src="{$v.head_img}" />
+							{/if}
+						</div>
+						<table class="miva-star-info">
+							<tr>
+								<td>
+									<img src="__IMG__ico.gif" alt="图标">
+									<span class="star-name">{$v.nickname}</span>
+								</td>
+								<td class="miva-star-info-right">
+									<span class="tab tab-win">王者</span>
+									<span class="tab tab-shen">声优</span>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<img src="__IMG__火.png" alt="图标">
+									{switch name="$v.sex" }
+									    {case value="1"}<span>英俊</span>{/case}
+									    {case value="2"}<span>美腻</span>{/case}
+									    {default /}人妖
+									{/switch}								
+								</td>
+								<td class="miva-star-info-right">
+									<span class="star-price">{$v.age}岁</span>
+								</td>
+							</tr>
+						</table>
+					</a>
+					
+					{/foreach}
+
+					
+
+					<!-- end -->
+				</div>
+			</div>
+{include file="public/footer"}

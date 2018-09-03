@@ -1,0 +1,135 @@
+{include file="public/header"}
+{include file="public/sidebar"}
+<title>悬赏约玩</title>
+	<body>
+		<!-- 引入头部 -->
+		<!-- 版头图 -->
+		<div class="miva-top-pic-box">
+			{if condition="$banner_data['link_type'] == 1"}
+			<a href="{:url($banner_data['link'])}"><img src="{$banner_data.img_url}" /></a>
+			{else /}
+			<a href="{$banner_datalink}"><img src="{$banner_data.img_url}" /></a>
+			{/if}
+		</div>
+		<div class="main main-no-top">
+			<!-- 发布悬赏 -->
+			<div class="miva-reward-btn-box">
+				<a href="{:url('Playing/release')}" class="miva-reward-btn">发布悬赏</a>
+			</div>
+			<!--一条-->
+			{foreach name="playing_data" item="v"}
+			<div class="miva-one-reward-box">
+				<!-- 上 -->
+				<div class="miva-top-box">
+
+					<div class="miva-user-info-box">
+						<div class="miva-reward-user-box">
+							<!-- 用户头像 -->
+							<div class="miva-reward-user-pic">
+								{if condition="$v.head_img == '' "}
+								<img src="" alt="暂无头像">
+								{else /}
+								<img src="{$v.head_img}" alt="">
+								{/if}
+							</div>
+							<!-- 等级标签 -->
+							<span class="tip-box">
+								{switch name="$v.level"}
+									{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+									{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+									{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+									{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+									{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+									{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+									{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+									{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+									{default /}
+								{/switch}
+							</span>
+						</div>
+						<div class="miva-user-info">
+							<div class="user">
+								<span class="user-name">昵称：{$v.nickname}</span>
+								<!--
+								<span class="user-vip">
+									<img src="__IMG__png/biao3.png" alt="">
+									<img src="__IMG__png/biao3.png" alt="">
+									<img src="__IMG__png/biao3.png" alt="">
+								</span>
+								-->
+							</div>
+							<div class="time">
+								发布时间：{:date('Y-m-d H:i:s',$v.time)}
+							</div>
+						</div>
+					</div>
+					
+					<div class="miva-inline-box">
+						<span class="miva-inline-icon miva-inline-icon-act layui-icon layui-icon-add-circle-fine"></span>
+						{switch name="$v.method"}
+							{case value="1"}<span class="miva-inline-txt">线上</span>{/case}
+							{case value="2"}<span class="miva-inline-txt">线下</span>{/case}
+							{case value="3"}<span class="miva-inline-txt">线上/线下</span>{/case}
+						{/switch}
+					</div>
+					
+					<div class="miva-price">
+						悬赏 ￥<span>{$v.money}</span>
+					</div>
+
+					<div class="miva-add-like" onclick="alert('正在施工中，请耐心等待')">关注</div>
+				</div>
+				<!-- 悬赏列表每一条中间的盒子 -->
+				<a  href="{:url('Playing/details',['id' =>$v.id])}">
+					<div class="miva-middle-box">
+						<div class="miva-txt-box">
+							{$v.content}
+						</div>
+						<div class="miva-img-box">
+							{foreach name="$v['images']" item="vo"}
+							<div class="miva-img">
+								<img src="{$vo}" alt="">
+							</div>
+							{/foreach}
+						</div>
+						<div class="miva-middle-btn-box">
+							<!--
+							<div class="miva-get-box">
+								<div class="user-pic-box">
+									<img src="https://img1.daofengdj.com/uploads/avatar/000/11/06/110675_avatar_big.jpg" />
+								</div>
+								<div class="miva-get-txt">
+									火鸟一姐小萝莉拿到赏金~~~
+									<img src="__IMG__biao3.gif" alt="勋" />
+								</div>
+							</div>
+							-->
+							<!-- 报名按钮 -->
+							<div class="miva-bottom-right xiaoshou" >
+								我要报名
+							</div>
+						</div>
+					</div>
+				</a>
+				<!-- 下 -->
+				<div class="miva-bottom-box">
+					<table class="miva-bottom-tab">
+						<tr>
+							<td><i class="layui-icon layui-icon-praise"></i>要求：{$v.grade}</td>
+							<td><i class="layui-icon layui-icon-reply-fill"></i>评论</td>
+							<td><i class="layui-icon layui-icon-note"></i>{$v.project}</td>
+							<td><i class="layui-icon layui-icon-user"></i>已有五位火鸟一姐报名</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<!--end-->
+			{/foreach}
+		</div>
+
+		<!-- 引入侧边栏 -->
+		<!-- 引入页脚 -->
+		{include file="public/footer"}
+	</body>
+
+</html>

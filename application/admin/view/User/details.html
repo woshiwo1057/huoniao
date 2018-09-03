@@ -1,0 +1,106 @@
+{include file="public/header"}
+<link href="__ADMIN__lib/webuploader/0.1.5/webuploader.css" rel="stylesheet" type="text/css" />
+{include file="public/sidebar"}
+
+<body>
+<div class="page-container">
+	<form class="form form-horizontal" id="form-article-add" enctype="multipart/form-data" >
+		
+		
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>昵称：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$user_data.nickname}" disabled >
+			</div>
+		</div>
+
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>年龄</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$user_data.age}岁" disabled >
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>性别</label>
+			<div class="formControls col-xs-8 col-sm-9">
+			{if condition="$user_data.sex == 1"}
+				<input type="text" class="input-text" value="男" disabled >
+			{else /}
+				<input type="text" class="input-text" value="女" disabled >
+			{/if}
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>注册时间</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{:date('Y-m-d H:i:s',$user_data.time)}" disabled>
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>个性签名</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$user_data.table}"  disabled>
+			</div>
+		</div>		
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>手机号(登录账号)</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$user_data.account}" disabled>
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>账户余额</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$user_data.cash}元" disabled>
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>鸟蛋数</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$user_data.currency}" disabled>
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>总充值额度/元</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$user_data.mogul}元" disabled>
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>用户等级</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$user_data.level}级" disabled>
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>是否是陪玩师</label>
+			<div class="formControls col-xs-8 col-sm-9">
+			{if condition="$user_data.type == 1"}
+				<input type="text" class="input-text" value="是陪玩师" disabled>
+			{else /}				
+				<input type="text" class="input-text" value="不是陪玩师" disabled>
+			{/if}
+			</div>
+		</div>
+		
+	
+		
+	</form>
+
+</div>
+</div>
+<!--_footer 作为公共模版分离出去-->
+{include file="public/footer"}
+<!--/_footer /作为公共模版分离出去-->
+</body>
+</html>

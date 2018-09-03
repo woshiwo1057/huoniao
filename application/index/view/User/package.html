@@ -1,0 +1,49 @@
+{include file="public/header"}
+
+	<body class="u-body">
+		<!-- 引入头部 -->
+		
+		<div class="main u-main">
+{include file="public/nav"}
+			<div class="user-info-box u-page-body">
+				<div class="u-title">
+					<span>收到礼物</span>
+				</div>
+
+        <!-- 我的礼物 -->
+        <div class="miva-gift-box">
+          <!-- 排序? -->
+          <div class="pai">          
+            <span>礼物</span>
+            <span>数量</span>
+            <span>单价</span>
+            <span>总值</span>
+            <span>赠送时间</span>
+          </div>
+          <!-- end -->
+          <!-- 如果没数据 -->
+          <div class="if-black">
+            <img src="" alt="">
+            {foreach name="package_data" item="v"}
+              <div class="pai">
+                <span>{$v.gift_id}</span>
+                <span>{$v.num}</span>
+                <span>单价</span>
+                <span>{$v.egg_num}</span>
+                <span>{:date('Y-m-d H:i:s',$v.time)}</span>
+              </div>
+            {/foreach}
+            
+          </div>
+        </div>
+
+			</div>
+
+		</div>
+
+		<!-- 引入页脚 -->
+{include file="public/footer"}
+	</body>
+
+
+</html>

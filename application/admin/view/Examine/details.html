@@ -1,0 +1,207 @@
+{include file="public/header"}
+<link href="__ADMIN__lib/webuploader/0.1.5/webuploader.css" rel="stylesheet" type="text/css" />
+{include file="public/sidebar"}
+
+<body>
+<div class="page-container">
+	<form class="form form-horizontal" id="form-article-add" enctype="multipart/form-data" action="{:url('Examine/ok')}"  method="post">
+
+		<input type="hidden"  name="id" value="{$examine_data.id}">
+		<input type="hidden"  name="user_id" value="{$examine_data.user_id}">
+	
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>用户昵称：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$examine_data.nickname}" >
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>真实姓名：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$examine_data.real_name}" name="real_name">
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>个性签名</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$examine_data.table}"  name="table"  >
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>所在省份：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$examine_data.province}"  name="province" >
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>所在城市：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$examine_data.city}"  name="city">
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>现住址：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$examine_data.address}"  name="address">
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>身高：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$examine_data.height}" name="height" >
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>体重：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$examine_data.weight}" name="weight" >
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>职业：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$examine_data.duty}"  name="duty">
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>爱好：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$examine_data.hobby}" name="hobby" >
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>性感部位：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$examine_data.sexy}" name="sexy" >
+			</div>
+		</div>
+		{switch name="$examine_data.acc_type"}
+		{case value="0"}
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>陪玩方式：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="未知"  >
+				<input type="hidden" class="input-text" value="{$examine_data.acc_type}"  name="acc_type" >
+			</div>
+		</div>
+		{/case}
+		{case value="1"}
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>陪玩方式：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="线上"  >
+				<input type="hidden" class="input-text" value="{$examine_data.acc_type}"  name="acc_type" >
+			</div>
+		</div>
+		{/case}
+		{case value="2"}
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>陪玩方式：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="线下" >
+				<input type="hidden" class="input-text" value="{$examine_data.acc_type}"  name="acc_type" >
+			</div>
+		</div>
+		{/case}
+		{case value="3"}
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>陪玩方式：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="线上+线下" >
+				<input type="hidden" class="input-text" value="{$examine_data.acc_type}"  name="acc_type" >
+			</div>
+		</div>
+		{/case}
+		{/switch}
+		
+		{switch name="$examine_data.project"}
+		{case value="1"}
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>陪玩类型：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="游戏"   name="project">
+				<input type="hidden" class="input-text" value="{$examine_data.project}"  name="project">
+			</div>
+		</div>
+		{/case}
+
+		{case value="2"}
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>陪玩类型：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="娱乐"  name="project">
+				<input type="hidden" class="input-text" value="{$examine_data.project}"  name="project">
+			</div>
+		</div>
+		{/case}
+		{/switch}
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>服务项目：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$examine_data.name}"  >
+				<input type="hidden" class="input-text" value="{$examine_data.project_id}"  name="project_id">
+			</div>
+		</div>
+
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>说明：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$examine_data.explain}" >
+			</div>
+		</div>
+
+
+	
+		
+		
+		
+		<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span></label>：
+		<div class="row cl"  style="margin-left:200px;">
+
+			<img style="width:200px" id="pic-one" src="{$examine_data.data_url}" alt="">
+					
+		</div>
+		
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+				<button class="btn btn-primary radius" ><i class="Hui-iconfont">&#xe632;</i>审核通过</button>
+			</div>
+		</div>
+	</form>
+
+</div>
+</div>
+<script>
+	$(function(){
+		$('.radius').click(function(){
+			var a = confirm("真的要同意吗？")
+			if (a != true){
+				return false
+			}
+		})
+
+	})
+
+	
+</script>
+<!--_footer 作为公共模版分离出去-->
+{include file="public/footer"}
+<!--/_footer /作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+
+
+</body>
+</html>

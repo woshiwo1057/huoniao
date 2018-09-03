@@ -1,0 +1,47 @@
+{include file="public/header"}
+<link href="__ADMIN__lib/webuploader/0.1.5/webuploader.css" rel="stylesheet" type="text/css" />
+{include file="public/sidebar"}
+
+<body>
+<div class="page-container">
+	<form class="form form-horizontal" id="form-article-add" enctype="multipart/form-data" action="#"  method="post">
+	
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>陪玩师折扣：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$acc_data.discount}" placeholder="示例：0.9  /   1.0  /  0.08" name="discount">
+			</div>
+		</div>
+
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>陪玩师兑换现金比例：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$acc_data.convertible}" placeholder="示例：0.9  /   1.0  /  0.08" name="convertible">
+			</div>
+		</div>
+		
+		
+				
+		
+			
+		
+	
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+				<button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i>提交</button>
+			</div>
+		</div>
+	</form>
+
+</div>
+</div>
+<!--_footer 作为公共模版分离出去-->
+{include file="public/footer"}
+<!--/_footer /作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+
+
+</body>
+</html>

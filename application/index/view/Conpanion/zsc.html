@@ -1,0 +1,320 @@
+{include file="public/header"}
+{include file="public/sidebar"}
+<body>
+	<!-- 引入头部 -->
+	<div class="main miva-join-page">
+		<!-- 陪玩入驻服务 -->
+		<div class="miva-join-us">陪玩入驻服务(<span>*请务必完善个人资料</span>)</div>
+		<!-- 基本资料 -->
+		<div class="miva-join-title">基本资料</div>
+		<div class="miva-box miva-basic-box">
+<style media="screen">
+	.miva-input {
+		padding: 0 10px;
+	}
+</style>
+			<!-- *************************************************************************************** -->
+			<table class="miva-info-detail" border="0" cellspacing="" cellpadding="">
+				<tr>
+					<td class="up-title">真实姓名:</td>
+					<td><input class="miva-input" type="text" name="real_name" value="" /></td>
+				</tr>
+				<tr>
+					<td class="up-title">出生年月:</td>
+					<td><input class="miva-input" style="text-align:center" type="text" name="birthday" id="data-check" value="" placeholder="----/--/--" /></td>
+				</tr>
+				<tr>
+					<td class="up-title">个性签名:</td>
+					<td><input class="miva-input" type="text" name="table" id="" value="" /></td>
+				</tr>
+				<tr>
+					<td class="up-title">所在省份:</td>
+					<td>
+						<div class="miva-game-box layui-form">
+							<div class="miva-select layui-form-item">
+								<select class="province" lay-filter='province' lay-verify='province' name="province" >
+										<option value="0"></option>
+										{foreach name="province_data" item="v"}
+										<option value="{$v.code}">{$v.name}</option>
+										{/foreach}
+								</select>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td class="up-title">所在城市:</td>
+					<td>
+						<div class="miva-game-box layui-form">
+							<div class="miva-select layui-form-item">
+								<select class="city" lay-filter='city' id="city" lay-verify='' name="city">
+									<option value="">请选择省份</option>									
+								</select>
+							</div>
+						</div>
+					</td>
+				</tr>
+				
+				<tr>
+					<td class="up-bottom">居住地址:</td>
+					<td colspan="2"><input class="miva-input path-input" type="text" placeholder="请输入您的常用地址"  name="address">
+						<div class="tip">备注:精确的位置有助于您更好的接受线下约玩单</div>
+					</td>
+				</tr>
+				<tr>
+					<td class="up-title">身高:</td>
+					<td><input class="miva-input" type="text" name="height" id="" value="" /></td>
+				</tr>
+				<tr>
+					<td class="up-title">体重:</td>
+					<td><input class="miva-input" type="text" name="weight" id="" value="" /></td>
+				</tr>
+				<tr>
+					<td class="up-title">职业:</td>
+					<td><input class="miva-input" type="text" name="duty" id="" value="" /></td>
+				</tr>
+				<tr>
+					<td class="up-title">兴趣爱好:</td>
+					<td><input class="miva-input" type="text" name="hobby" id="" value="" /></td>
+				</tr>
+				<tr>
+					<td class="up-title">性感部位:</td>
+					<td id="buwei">
+						<span class="radio active-radio">腿</span>
+						<span class="radio">眼睛</span>
+						<span class="radio">鼻子</span>
+						<span class="radio">嘴巴</span>
+						<span class="radio">胸部</span>
+						<span class="radio">腰部</span>
+						<span class="radio">臀部</span>
+						<span class="radio">其他</span>
+					</td>
+				</tr>
+				<tr>
+					<td class="up-bottom">陪玩方式:</td>
+					<td id="xian" colspan="2">
+						<span class="miva-btn miva-btn-act">线上</span>
+						<span class="miva-btn">线下</span>
+						<span class="tip">备注:线上线下可同时选择</span>
+					</td>
+				</tr>
+			</table>
+			<script type="text/javascript">
+
+			</script>
+			<!-- ****************************************************************** -->
+		</div>
+		<div class="miva-join-title">开通游戏</div>
+		<div class="miva-box miva-game-box layui-form">
+			<div class="miva-select layui-form-item">
+				<select class="project" lay-filter='item-check' name="project" id="project">
+						<option>请选择服务项目</option>
+						<option value="1">游戏项目</option>
+						<option value="2">娱乐项目</option>
+				</select>
+			</div>
+			<!-- 二级类目选择 -->
+			<div class="miva-selected-box">
+				<span>呜啦啦啦啦啦啦啦啦啦啦</span>
+			</div>
+		</div>
+
+		<div class="miva-join-title">认证资料照</div>
+		<div class="miva-box miva-data-box">
+			<div ><img  style="border:none;"  class="miva-up-data-pic" src="" alt="">
+				<div class="up-data-tip"><span>点击上传您的游戏段位(等级)截图,<br>并填写游戏相关说明补充<br>(包含游戏ID)</span></div><br>
+				<div class="miva-btn mia-up-btn">点击上传</div>
+			</div><span class="miva-li">示例:</span><img style="border:none;"  src="__IMG__example.png" alt=""></div>
+		<div class="miva-join-title">说明</div>
+		<div class="miva-box miva-info-box"><textarea name="explain" class="txt-box" placeholder="可以写自己喜欢的游戏,喜欢的玩法和打法......"></textarea></div>
+		<!--
+		<div class="miva-join-title">语音介绍</div>
+		<div class="miva-box miva-audio-box">
+			<div class="audio-box-f">
+				<div class="audio-box">
+					<div class="audio-btn"><i class="layui-icon layui-icon-voice"></i><span>点击上传</span></div>
+				</div>
+				<audio src="" controls></audio>
+			</div><span class="tip">上传录音可供游客试听,请自行上传录音 格式为:MP3 大小:2MB<span>支持格式:MP3,ogg,mav,m4a</span></span>
+		</div>
+		-->
+		<div class="check-box"><input id="check" type="checkbox"> <label for="check">我已阅读并同意<a href="jsvascript:;"><<陪玩申请入驻协议>></a></label></div>
+		<div class="miva-btn miva-btn-act xiaoshou submit">提交入驻申请</div>
+	</div>
+	<!-- 引入侧边栏 -->
+	<!-- 引入页脚 -->
+{include file="public/footer"}
+
+
+	<script>
+
+
+
+layui.use('form',function(){
+							var form = layui.form;
+						
+							
+						})
+
+
+
+
+
+var cityVal = '';
+
+	layui.use('form', function() {
+				var form = layui.form;
+				form.on('select(item-check)', function(res) {
+	
+
+					$.post("{:url('conpanion/project')}",{type:res.value},function(res){
+						var str = '<span>呜啦啦啦啦啦啦啦啦啦啦</span>';
+						for(a of res) {
+								str += `<span attr_id="${a['id']}">${a['name']}</span>`;
+							}
+							$('.miva-selected-box').html(str);
+
+					},'json')
+
+
+
+					
+					
+			
+				})
+
+form.on('select(province)', function(result) {
+	$('#city').html('<option value="">请选择城市</option>');
+
+	$.post("{:url('conpanion/city_ajax')}",{province:result.value},function(res){
+
+		var html = '';
+		for (var i = 0; i < res.length; i++) {
+			html += '<option value="'+res[i].code+'">'+res[i].name+'</option>';
+		};
+		$("#city").append(html);
+   		 form.render('select'); //刷新select选择框渲染
+
+	},'json')
+	return false
+	
+})
+
+form.on('select(city)',function(res){
+       cityVal = res.value
+})
+
+
+
+			})
+			layui.use('laydate', function() {
+				var laydate = layui.laydate;
+				//执行一个laydate实例
+				laydate.render({
+					elem: '#data-check' //指定元素
+				});
+			});
+
+		//提交数据
+		$('.submit').click(function(){			
+			
+console.log(cityVal)
+
+// 性感部位
+			$('#buwei').on('click', 'span.radio', function() {
+				$(this).addClass('active-radio').siblings().removeClass('active-radio')
+			})
+// 线上线下
+			$('#xian').on('click', 'span.miva-btn', function() {
+				// console.log($(this).prop('class').indexOf('miva-btn-act'))
+				if ($(this).prop('class').indexOf('miva-btn-act') == -1) {
+					$(this).addClass('miva-btn-act');
+				}else {
+					$(this).removeClass('miva-btn-act');
+				}
+			})
+
+			
+
+
+
+
+
+
+			var real_name = $('[name="real_name"]').val()
+			if(real_name == ''){
+				layui.use('layer',function(){
+				layer.msg('请填写真实姓名')})
+				return false
+			}
+			
+			var table = $('[name="table"]').val()
+			if(table == ''){
+				layui.use('layer',function(){
+				layer.msg('请填写个性标签')})
+				return false
+			}
+			
+			var address = $('[name="address"]').val()
+			if(address == ''){
+				layui.use('layer',function(){
+				layer.msg('请填写常用住址')})
+				return false
+			}
+			
+			var height = $('[name="height"]').val()
+			if(height == ''){
+				layui.use('layer',function(){
+				layer.msg('请填写身高')})
+				return false
+			}
+
+			var weight = $('[name="weight"]').val()
+			if(weight == ''){
+				layui.use('layer',function(){
+				layer.msg('请填写体重')})
+				return false
+			}
+
+			var duty = $('[name="duty"]').val()
+			if(duty == ''){
+				layui.use('layer',function(){
+				layer.msg('请填写常职业')})
+				return false
+			}
+
+			var hobby = $('[name="hobby"]').val()
+			if(hobby == ''){
+				layui.use('layer',function(){
+				layer.msg('请填写爱好')})
+				return false
+			}
+
+			var explain = $('[name="explain"]').val()
+			if(explain == ''){
+				layui.use('layer',function(){
+				layer.msg('请填写说明')})
+				return false
+			}
+
+			var birthday = $('[name="birthday"]').val()
+			if(birthday == ''){
+				layui.use('layer',function(){
+				layer.msg('请填写生日')})
+				return false
+			}
+			
+		  //性感部位
+
+			$.post("{:url('')}",{city:city,},function(data){
+
+
+			},'json')
+			return false
+
+		})
+	</script>
+
+</body>
+
+</html>

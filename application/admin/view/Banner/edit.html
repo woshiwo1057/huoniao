@@ -1,0 +1,156 @@
+{include file="public/header"}
+<link href="__ADMIN__lib/webuploader/0.1.5/webuploader.css" rel="stylesheet" type="text/css" />
+{include file="public/sidebar"}
+
+<body>
+<div class="page-container">
+	<form class="form form-horizontal" id="form-article-add" enctype="multipart/form-data" action="#"  method="post">
+	<!--
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>图片标题：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="" name="">
+			</div>
+		</div>
+	-->
+		
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>banner位置：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<span class="select-box">
+				<select name="status" class="select">
+				{switch name="$banner_data.status"}
+					{case value="1"}
+					<option value="1">显示在PC轮播图</option>
+					<option value="0">不显示（不上架）</option>					
+					<option value="2">显示在网吧详情页</option>
+					<option value="3">显示在小程序</option>	
+					<option value="4">显示在PC的悬赏约玩</option>		
+					{/case}		
+					{case value="2"}
+					<option value="2">显示在网吧详情页</option>
+					<option value="0">不显示（不上架）</option>
+					<option value="1">显示在PC轮播图</option>					
+					<option value="3">显示在小程序</option>	
+					<option value="4">显示在PC的悬赏约玩</option>	
+					{/case}	
+					{case value="3"}
+					<option value="3">显示在小程序</option>	
+					<option value="0">不显示（不上架）</option>
+					<option value="1">显示在PC轮播图</option>
+					<option value="2">显示在网吧详情页</option>	
+					<option value="4">显示在PC的悬赏约玩</option>					
+					{/case}
+					{case value="4"}
+					<option value="4">显示在PC的悬赏约玩</option>
+					<option value="0">不显示（不上架）</option>	
+					<option value="1">显示在PC轮播图</option>									
+					<option value="2">显示在网吧详情页</option>
+					<option value="3">显示在小程序</option>		
+					{/case}			
+					{default /}
+					<option value="0">不显示（不上架）</option>	
+					<option value="1">显示在PC轮播图</option>									
+					<option value="2">显示在网吧详情页</option>
+					<option value="3">显示在小程序</option>
+					<option value="4">显示在PC的悬赏约玩</option>
+				{/switch}
+				</select>
+				</span>
+			</div>
+		</div>
+		
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">图片摘要：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<textarea name="explain" class="textarea"  placeholder="说点什么...最少输入1个字符" >{$banner_data.explain}</textarea>
+				<p class="textarea-numberbar"><em class="textarea-length">0</em>/200</p>
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>banner链接方式：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<span class="select-box">
+				<select name="link_type" class="select">
+				{switch name="$banner_data.link_type"}
+					{case value="1"}
+					<option value="1">站内链接</option>
+					<option value="2">站外链接</option>	
+					{/case}		
+					{case value="2"}
+					<option value="2">站外链接</option>
+					<option value="1">站内链接</option>					
+					{/case}
+					{default /}
+					<option value="1">站内链接</option>
+					<option value="2">站外链接</option>	
+				{/switch}				
+				</select>
+				</span>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>链接地址：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" name="link" value="{$banner_data.link}" placeholder="站内链接填写请联系开发人员，站外链接直接填写全网址 例：https://www.baidu.com/" >
+			</div>
+		</div>
+	
+		<div class="row cl"  style="margin-left:200px;">
+			<img style="width:200px" id="pic-one" src="{$banner_data.img_url}" alt="">
+			<input id="miva" type="file"  name="cover">
+		
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+				<button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i>提交</button>
+			</div>
+		</div>
+	</form>
+
+</div>
+</div>
+<!--_footer 作为公共模版分离出去-->
+{include file="public/footer"}
+<!--/_footer /作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script>
+	$('#miva').on('change',function(){
+		var file = document.querySelector('#miva').files[0];
+
+		var newfile = new FileReader();
+		newfile.readAsDataURL(file,"UTF-8");
+
+		newfile.onload = function () {
+			$('#pic-one').attr('src',newfile.result);
+		}
+	})
+/*
+	$('#mivb').on('change',function(){
+		var file = document.querySelector('#mivb').files[0];
+
+		var newfile = new FileReader();
+		newfile.readAsDataURL(file,"UTF-8");
+
+		newfile.onload = function () {
+			$('#pic-tow').attr('src',newfile.result);
+		}
+	})
+
+	$('#mivc').on('change',function(){
+		var file = document.querySelector('#mivc').files[0];
+
+		var newfile = new FileReader();
+		newfile.readAsDataURL(file,"UTF-8");
+
+		newfile.onload = function () {
+			$('#pic-three').attr('src',newfile.result);
+		}
+	})
+	*/
+</script>
+
+</body>
+</html>

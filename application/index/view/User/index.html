@@ -1,0 +1,237 @@
+{include file="public/header"}
+
+<link rel="stylesheet" type="text/css" href="__INDEX__css/cropper.min.css">
+<script type="text/javascript" src="__INDEX__js/cropper.min.js"></script>
+	<body class="u-body">
+		<!-- 引入头部 -->
+		<div class="main u-main">
+		<!--导航放在这里-->
+{include file="public/nav"}
+			<div class="user-info-box u-page-body">
+				<div class="u-title">
+					<span>个人中心</span>
+				</div>
+				<!--主内容盒子-->
+				<div class="u-data-set-box">
+					<!--上傳頭像盒子-->
+					<div class="u-up-pic">
+						<label for="user-pic" class="pic-box">
+						{if condition="empty($user_data.head_img)"}
+							<img id="user-pic-img"  style="border:none" src="__IMG__default.jpg" />
+						{else /}
+							<img id="user-pic-img"  style="border:none" src="{$user_data.head_img}" />
+						{/if}
+						</label>
+						<div>
+							<label for="user-pic" class="up-btn">
+								浏览
+							</label>
+							<div class="tip">支持jpg\gif\png格式的图片,文件必须小于2M</div>
+						</div>
+					</div>
+					<form action="{:url('User/head_img')}" enctype="multipart/form-data" method="post">
+
+						<input id="user-pic" type="file" name="image" style="display:none">
+
+						<!-- <input type="submit" value="上传" /> -->
+
+					</form>
+					<!--设置资料盒子-->
+
+					<table align="center" class="set-user-box">
+						<tr>
+							<td>性别:</td>
+							<td class="sex-radio">
+								{if condition="$user_data['sex'] == 1"}
+								<span class="radio active"  sex="1">男</span>
+								<span class="radio " sex="2">女</span>
+								{else /}
+								<span class="radio "  sex="1">男</span>
+								<span class="radio active" sex="2">女</span>
+								{/if}
+							</td>
+						</tr>
+						<tr>
+							{if condition="$user_data['change_name'] == 1"}
+							<td>昵称:</td>
+							<td><input type="text" name="nickname" value="{$user_data['nickname']}" /></td>
+							<td style="color:red;" class="change">您获得一次更改昵称的机会</td>
+							{else /}
+							<td>昵称:</td>
+							<td><input type="text" name="nickname" value="{$user_data['nickname']}" disabled/></td>
+							{/if}
+						</tr>
+						<tr>
+							<td>QQ:</td>
+							<td><input type="text" name="penguin" value="{$user_data['penguin']}" /></td>
+						</tr>
+						<tr>
+							<td>账号/手机号:</td>
+							<td><input type="text" name="phone" value="{$user_data['phone']}" /></td>
+						</tr>
+						<tr>
+							<td>个性签名:</td>
+							<td><input type="text"  name="table" value="{$user_data['table']}" /></td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<div class="submit">提交修改</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+
+
+<script>
+
+</script>
+		<!-- 引入页脚 -->
+		<script>
+		$(document).ready(function(){
+
+			//
+			// files.on('change', function(){
+			//
+			// 	if (files.prop('files').length != 0) {
+			// 		var reader = new FileReader();
+			// 		reader.readAsDataURL(files.prop('files')[0]);
+			// 		reader.onload = function(evt) {
+			// 			var fileString = evt.target.result;
+			// 			$('#user-pic-img').attr('src',fileString);
+			// 		}
+			// 	};
+			// })
+			//
+			var sex ={$user_data['sex']};
+
+			$('.radio').on('click', function(){
+				$(this).addClass('active').siblings().removeClass('active');
+				sex = $(this).attr('sex');
+			});
+
+
+
+			$('.submit').click(function(){
+				var nickname = $('[name="nickname"]').val()
+				var penguin = $('[name = "penguin"]').val()
+				var phone = $('[name = "phone"]').val()
+				var table = $('[name = "table"]').val()
+
+				$.post("{:url('User/index')}",{sex:sex,phone:phone,table:table,penguin:penguin,nickname:nickname},function(data){
+						if(data.code == 1)
+						{
+							layui.use('layer',function(){
+							layer.msg(data.msg)
+							})
+						}else if(data.code == 2)
+						{
+							layui.use('layer',function(){
+							layer.msg(data.msg)
+							})
+						}else if(data.code == 3)
+						{
+							//改名成功走这里
+							layui.use('layer',function(){
+							layer.msg(data.msg)
+							})
+							$('[name="nickname"]').attr('disabled','true')
+							$('.change').css('display','none')
+						}else if(data.code == 4)
+						{
+							layui.use('layer',function(){
+							layer.msg(data.msg)
+							})
+						}else{
+							layui.use('layer',function(){
+							layer.msg('未知错误')
+							})
+						}
+
+				},'json')
+				return false
+			})
+
+
+
+
+
+			var files = $('#user-pic');
+			// var btn = $('[data-item=upbtn]');
+
+			var reader = new FileReader();
+			var fileBuffer;
+			var alertHTML = '<img id="newMiva" src=""/>';
+
+			// 图片预览
+			files.on('change', function() {
+				reader.readAsDataURL(files.prop('files')[0]);
+				reader.onload = function(e) {
+					// 获取file里的内容
+					fileBuffer = e.target.result;
+					layui.use('layer',function(){
+						layer.open({
+						type: 1,
+						title: false,
+						content: alertHTML,
+						scrollbar: false,
+						btn: ['确认'],
+						area: ['100%', '100%'],
+						success: function(layero, index) {
+							var imgbox = layero.find("#newMiva");
+							imgbox.attr('src', fileBuffer);
+							imgbox.cropper({
+								aspectRatio: 1 / 1,
+								dragMode: 'move', // 设置为  ‘move’: 只可以移动模式
+								dragCrop: false, // 设置为禁止移除当前的剪裁框，并通过拖动来新建一个剪裁框区域。
+								toggleDragModeOnDblclick: false, // 禁止双击切换模式
+							});
+						},
+						yes: function(index, layero) {
+							var imgbox = layero.find("#newMiva");
+							var cas = imgbox.cropper('getCroppedCanvas');
+							var base64url = cas.toDataURL('image/jpeg');
+
+							var option = base64url; //上传图片的内容
+							$('#user-pic-img').attr('src',option);
+
+
+							 
+							 $.post("{:url('User/head_img')}",{option:option},function(data){
+										if(data.code == 0){
+											layui.use('layer',function(){
+											layer.msg(data.msg)})
+										}else if(data.code == 2){
+											layui.use('layer',function(){
+											layer.msg(data.msg)})
+										}else if(data.code == 3){
+											layui.use('layer',function(){
+											layer.msg(data.msg)})
+										}else{
+											layui.use('layer',function(){
+											layer.msg('未知错误')})
+										}
+							 
+							 },'json')
+
+							layer.closeAll();
+						}
+						})
+					})
+
+				};
+				// 重置input[type=file];
+				files.val('');
+			});
+
+
+		});
+
+
+		</script>
+
+{include file="public/footer"}
+	</body>
+
+</html>

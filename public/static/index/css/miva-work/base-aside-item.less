@@ -1,0 +1,53 @@
+// 侧边栏
+aside {
+    .miva-position(@p: fixed, @t: 40%, @r: 0, @z: @miva-max-z);
+    text-align: center;
+    background: rgb(40, 40, 40);
+    border-radius: 10px 0 0 10px;
+    padding: 10px;
+    .miva-sidebar-modules {
+        color: @miva-header-color;
+        display: block;
+        margin: 5px 0;
+        margin-top: 20px;
+        .miva-sidebar-img-box {
+            width: 50px;
+            height: 50px;
+            margin: auto;
+            transition: all .5s;
+            &:hover img{
+              animation: aside-animation .5s;
+            }
+            img {
+                width: 100%;
+            }
+        }
+        &:first-child,
+        &:nth-child(2) {
+            .miva-position(@z: @miva-max-z)
+        }
+    }
+    .miva-er-box {
+        .miva-nv {
+            .miva-position(@p: absolute, @t: 50px, @l: -120%, @z: 748943648);
+            width: 200px;
+            transform: scale(2.5);
+        }
+        .miva-erweima {
+            .miva-position(@p: absolute, @l: -120%);
+            transform: scale(1.2);
+            display: none;
+        }
+        &:hover .miva-erweima {
+            display: block;
+        }
+    }
+}
+
+// 来个动画
+@keyframes aside-animation {
+  0%{transform: scale(1);transition: all .5s;}
+  25%{transform: scale(1.2);transition: all .5s;}
+  50%{transform: scale(.8);transition: all .5s;}
+  100%{transform: scale(1);transition: all .5s;}
+}

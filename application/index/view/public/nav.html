@@ -1,0 +1,17 @@
+<div class="centerNav">
+	<ul class="nav">
+		{foreach name="nav_data" item="v"}
+		<a href="{:url('User/'.$v['action'])}" style="width:100%;height:100%;">
+		<li {if condition="strtolower(D) == $v['action']"}class="active"{/if}>
+			{$v.name}
+		</li>
+		</a>
+		{/foreach}
+	</ul>
+</div>
+<script>
+		$('.nav').on('click','li',function(){
+			$(this).addClass('active').siblings().removeClass('active');
+		})
+
+</script>

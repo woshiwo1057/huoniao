@@ -1,0 +1,50 @@
+{include file="public/header"}
+<div class="weui-cell"  style="margin-top:300px;">
+    <div class="weui-cell__hd">
+        <label class="weui-label">金额：</label>
+    </div>
+    <div class="weui-cell__bd">
+        <input class="weui-input" name="money" id = "money" type="number"placeholder="金额">
+    </div>
+</div>
+
+<img src="" style="widht:200px;height:200px;"  class="zhifu" >
+
+<div class="weui-btn-area">
+    <button class="weui-btn weui-btn_primary" id="chargebtn" type="button">确定</button>
+</div>
+
+<script>
+
+    $(function(){
+        $('.weui-btn').on('click',function(){
+            var money = $('#money').val();
+
+            alert(money)
+                        //qrcode.php?data=
+            $.post("{:url('Pay/wechatpay')}",{'money':money},function(data){
+                    var str = 'https://www.baifubao.com/o2o/0/qrcode?size=10&text='
+                    str += data
+            		$('.zhifu').attr('src',str)
+
+                     function query(){
+                        //{:url('Pay/query')};
+                         $.post("{:url('Pay/query')}",{},function(data){
+                                if(data.daw == 123){
+                                    alert('chenggong');
+                                    window.location.reload()
+
+                                 }
+                        },'json')
+                    }
+                            //seTimeOut('query()',2000);
+                    setInterval(query,2000);
+
+            },'json')
+
+
+
+        })
+	})
+
+</script>

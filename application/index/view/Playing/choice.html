@@ -1,0 +1,121 @@
+{include file="public/header"}
+{include file="public/sidebar"}
+
+	<body>
+		<!-- 引入头部 -->
+		<!-- 版头图 -->
+		<div class="miva-top-pic-box">
+			<img src="__IMG__binner.png" alt="">
+		</div>
+		<div class="main main-no-top">
+			<!-- 发布悬赏 -->
+			<div class="miva-reward-btn-box">
+				<a href="index-release.html" class="miva-reward-btn">陪玩师简介</a>
+			</div>
+			<!--一条-->
+			<div class="miva-one-reward-box">
+				<!-- 上 -->
+				{foreach name="data" item="v"}
+				<div class="miva-top-box">
+
+					<div class="miva-user-info-box">
+						<div class="miva-reward-user-box">
+							<!-- 用户头像 -->
+							<a href="{:url('Index/user',['id' => $v.uid])}">
+								<div class="miva-reward-user-pic">
+									{if condition="$v.head_img == ''"}
+									<img src="" alt="暂无头像">
+									{else /}
+									<img src="{$v.head_img}" alt="">
+									{/if}
+								</div>
+							</a>
+							<!-- 等级标签 -->
+							<span class="tip-box">
+								<img src="images/biao1.gif" alt="">
+							</span>
+						</div>
+						<div class="miva-user-info">
+							<div class="user">
+								<span class="user-name">{$v.nickname}</span>
+								<span class="user-vip">
+									<img src="images/png/biao3.png" alt="">
+									<img src="images/png/biao3.png" alt="">
+									<img src="images/png/biao3.png" alt="">
+								</span>
+							</div>
+							
+						</div>
+					</div>
+
+					<div class="miva-inline-box">
+						<span class="miva-inline-icon miva-inline-icon-act layui-icon layui-icon-add-circle-fine"></span>
+						{switch name="$v.status"}
+							{case value="0"}<span class="miva-inline-txt">登录状态未知</span>{/case}
+							{case value="1"}<span class="miva-inline-txt">登录状态：在线</span>{/case}
+							{case value="2"}<span class="miva-inline-txt">登录状态：已经下线</span>{/case}
+						{/switch}
+					</div>
+
+					<div class="miva-price">
+						选我选我
+					</div>
+
+					<div class="miva-add-like xiaoshou" user_id="{$v.uid}">就是他/她/它？了</div>
+				</div>
+				<!-- 悬赏列表每一条中间的盒子 -->
+				<!-- 下 -->
+				{/foreach}
+			</div>
+			<!--end-->
+
+		<script>
+	$(function(){
+		$('.miva-add-like').click(function(){
+			var a = confirm("真的要选择他吗？")
+			if(a != true){
+				return false
+			}
+
+			var id = {$bounty_id};
+			var acc_id = $(this).attr('user_id')
+			$.post("{:url('Playing/choice_acc')}",{id:id,acc_id:acc_id},function(data){
+								if(data.code == 1){
+									layui.use('layer',function(){
+                        			layer.msg(data.msg)})
+								}else if(data.code == 2){
+									layui.use('layer',function(){
+                        			layer.msg(data.msg)})
+								}else if(data.code == 3){
+									layui.use('layer',function(){
+                        			layer.msg(data.msg)})
+								}else if(data.code == 4){
+									layui.use('layer',function(){
+                        			layer.msg(data.msg)});
+                        			window.location.href="{:url('User/order')}";
+								}else{
+									layui.use('layer',function(){
+                        			layer.msg('未知错误')})
+								}
+
+			},'json')
+
+
+
+
+
+		})
+	})
+
+	
+</script>
+			
+		
+		</div>
+
+		<!-- 引入侧边栏 -->
+		<!-- 引入页脚 -->
+		{include file="public/footer"}
+	</body>
+
+</html>
