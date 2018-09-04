@@ -48,7 +48,7 @@ class User extends Common
 		$id = $_SESSION['user']['user_info']['uid'];
 		
 		//查询用户数据
-		$user_data = Db::table('hn_user')->field('head_img,sex,nickname,penguin,table,phone,change_name')->where('uid',$id)->find();
+		$user_data = Db::table('hn_user')->field('head_img,sex,nickname,penguin,table,account,change_name')->where('uid',$id)->find();
 //var_dump($user_data);die;
 	
 		//var_dump($user_data);die;
@@ -89,47 +89,141 @@ class User extends Common
 
 	//个人资料头像上传
 	public function head_img()
-	{		
-		$file = Request::instance()->param('option');
+	{	
+		//获取到用户ID
+		$id = $_SESSION['user']['user_info']['uid'];
+		//判断是否有尚未审核过的数据
+		$data = Db::table('hn_head_examine')->field('id')->where(['uid' => $id,'status' => 1])->find();
+		if($data){
+			return json(['code' => 1,'msg' => '后台工作人员正在审核头像，请勿重新提交']);
+		}
 
-		//var_dump($file);die;
+		$file = Request::instance()->param('option');
 			
 		$key = date('Y-m-d').'/'.md5(microtime()).'.jpg'; //路径
 
 		$data = $this->cos($file,$key);
-
+		//hn_head_examine
 		if($data['code'] == 0){
-			//成功后填入表单
-			//获取到用户ID
-			$id = $_SESSION['user']['user_info']['uid'];
-			$head_img = 'http://uploadimg-1257183241.piccd.myqcloud.com/'.$key; //将此路径存入表单
+			// //成功后填入审核表单
+			
+			$head_img = 'http://hn-001-1256760691.picbj.myqcloud.com/'.$key; //将此路径存入表单
+			//组装数据
+			$head_data['uid'] = $id;
+			$head_data['head_img'] = $head_img;
+			$head_data['time'] = time();
+			$res = Db::table('hn_head_examine')->insert($head_data);
 
-			//查出旧路径  删除cos上的图片
-			$img_url = Db::table('hn_user')->field('head_img')->where('uid',$id)->find();
-			$img_url =  substr($img_url['head_img'], 47);
-			//调用删除方法 删除图片
-			$this->cos_delete($img_url);
-			//将路径存入用户表 更新字段值
-			$res = Db::table('hn_user')->where('uid',$id)->setField('head_img', $head_img);
-			//重置session的图片路径
-			$_SESSION['user']['user_info']['head_img'] = $head_img;
 			if($res){
 
-				return json(['code' => 0,'msg' => '成功']);
+				return json(['code' => 0,'msg' => '已提交，请耐心等待后台审核']);
 
-			}else{
+			 }else{
 
-				return json(['code' => 2,'msg' => '失败']);
+			 	return json(['code' => 2,'msg' => '失败，错误码002']);
 
 			}
+			// //查出旧路径  删除cos上的图片
+			// $img_url = Db::table('hn_user')->field('head_img')->where('uid',$id)->find();
+			// $img_url =  substr($img_url['head_img'], 44);
+			// //调用删除方法 删除图片
+			// $this->cos_delete($img_url);
+			// //将路径存入用户表 更新字段值
+			// $res = Db::table('hn_user')->where('uid',$id)->setField('head_img', $head_img);
+			// //重置session的图片路径
+			// $_SESSION['user']['user_info']['head_img'] = $head_img;
+			// if($res){
+
+			// 	return json(['code' => 0,'msg' => '已提交']);
+
+			// }else{
+
+			// 	return json(['code' => 2,'msg' => '失败']);
+
+			// }
 
 		}else{
 
-			return json(['code' => 3,'msg' => '失败']);
+			return json(['code' => 3,'msg' => '失败，错误码003']);
 
 
 		}
 																	
+	}
+
+	//用户 账户/手机号  修改页面
+	public function change_account()
+	{	
+		//获取到用户ID
+		$uid = $_SESSION['user']['user_info']['uid'];
+		//通过ID查出该用户手机号
+		$account = Db::table('hn_user')->field('account')->where('uid',$uid)->find();
+		
+
+		$this->assign(['account' => $account]);
+		return $this->fetch('User/change_account');
+	}
+		//更改手机号的Ajax 短信验证码验证
+	public function change_ajax()
+	{
+		$phone = Request::instance()->param('phone');
+	
+		$code = rand(1000,9999);
+	
+		$_SESSION['think']['change'] = $code;
+		
+		$sms = 'SMS_141581179';
+		//调用短信服务
+		$result = $this->sendSms($phone,$code,$sms);
+		//将回调对象转化为数组
+		$code_data = get_object_vars($result);	
+	
+		if($code_data['Code'] == 'OK')
+	    {
+	        return json(['code' => 1,'msg' => '发送成功请注意查收']);
+	    }else{
+	        return json(['code' => 2,'msg' => '失败']);
+	    }
+	}
+
+	//更换手机号
+	public function change()
+	{
+		//获取数据 $data['code']   $data['type']
+ 		$data = Request::instance()->param();
+
+	 		$code = $_SESSION['think']['change'];
+
+	 		if(!isset($code)){
+			return  json(['code' => 1,'msg' => '自己填的验证码不算']);
+			}
+
+			if(empty($data['code'])){
+				return json(['code' => 2,'msg' => '验证码不能为空']);
+			}
+
+
+			if($code != $data['code']){
+				return json(['code' => 3,'msg' => '验证码输入错误']);
+			}
+			if($data['type'] == 2){
+				//新手机号提交  $data['phone']  判断该手机号是否已注册
+				$account = Db::table('hn_user')->field('uid')->where('account',$data['phone'])->find();
+				if($account){
+					return json(['code' => 7,'msg' => '该账户已注册']);
+				}
+				//获取用户ID
+				$id = $_SESSION['user']['user_info']['uid'];
+				//更新手机号/账户
+				$res = Db::table('hn_user')->where('uid', $id)->update(['account' => $data['phone']]);
+
+				if($res){
+					return json(['code' => 5,'msg' => '成功']);
+				}else{
+					return json(['code' => 6,'msg' => '失败，错误码006']);
+				}
+			}
+			return json(['code' => 4,'msg' => 'OK']);
 	}
 
 	//我的账户
@@ -271,7 +365,7 @@ class User extends Common
 			//判断返回数据是否成功
 			if($url_data['code'] == 0){
 				// 成功  将用户ID与图片存入数据库
-				$album['img_url'] = 'http://uploadimg-1257183241.piccd.myqcloud.com/'.$key; //拼装路径
+				$album['img_url'] = 'http://hn-001-1256760691.picbj.myqcloud.com/'.$key; //拼装路径
 				$res = Db::table('hn_user_album')->insert($album);
 
 				if($res){
@@ -305,7 +399,7 @@ class User extends Common
 		$id = Request::instance()->param('id');
 		//根据ID查数据  进行分割字符串 组装路径
 		$key = Db::table('hn_user_album')->field('img_url')->where('id',$id)->find();
-		$key =  substr( $key['img_url'], 47);
+		$key =  substr( $key['img_url'], 44);
 
 		//调用删除方法 删除图片
 		$data = $this->cos_delete($key);
@@ -514,8 +608,8 @@ class User extends Common
 			$real['name'] = $user_real['name'];
 			$real['card_num'] = $user_real['card_num'];
 			$real['zfb'] = 	$user_real['zfb'];
-			$real['front_img'] = 'http://uploadimg-1257183241.piccd.myqcloud.com/'.$key_zheng;//拼装路径
-			$real['back_img'] = 'http://uploadimg-1257183241.piccd.myqcloud.com/'.$key_fan;//拼装路径
+			$real['front_img'] = 'http://hn-001-1256760691.picbj.myqcloud.com/'.$key_zheng;//拼装路径
+			$real['back_img'] = 'http://hn-001-1256760691.picbj.myqcloud.com/'.$key_fan;//拼装路径
 			$real['time'] = time();
 
 			$res = Db::table('hn_acc_real')->insert($real);

@@ -160,7 +160,7 @@ class Common extends \think\Controller
         //$file = request()->file('image');
             
         //若初始化 Client 时未填写 appId，则 bucket 的命名规则为{name}-{appid} ，此处填写的存储桶名称必须为此格式
-        $bucket = 'uploadimg-1257183241'; //YG的桶名 
+        $bucket = 'hn-001-1256760691'; //YG的桶名 
        //路径组装  http://uploadimg-1257183241.piccd.myqcloud.com/ 为固定 .$key 就OK
 
       	if($file)
@@ -216,7 +216,7 @@ class Common extends \think\Controller
 
         $cosClient = new Client(config('tengxunyun'));
        
-        $bucket = 'uploadimg-1257183241'; //YG的桶名
+        $bucket = 'hn-001-1256760691'; //YG的桶名
 
         try {
             $result = $cosClient->deleteObject(array(

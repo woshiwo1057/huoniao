@@ -248,12 +248,12 @@ return [
     ],
 
     'tengxunyun' => [
-        'region' => 'ap-chengdu',
+        'region' => 'ap-beijing',
         'credentials' => 
             [   
-                'appId'     => '1257183241',
-                'secretId'  => 'AKIDHMCm7D3dz5wXs0sWt1vazDBuPhlaAXfY',
-                'secretKey' => 'mIacPwDEzThfNozua1C8oFPM8gz3uYyA'
+                'appId'     => '1256760691',
+                'secretId'  => 'AKIDvjMrBJ6zXu55tV49B2hBTZTCoESUj1Wp',
+                'secretKey' => 'FMH0b0DF5jy3wd8RXR9fcOyNZaP2Unup'
 
             ]
     ],

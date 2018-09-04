@@ -6,7 +6,37 @@
 		<!-- 引入头部 -->
 		<div class="main u-main">
 		<!--导航放在这里-->
-{include file="public/nav"}
+{include file="public/nav"}<style media="screen">
+		.layui-layer-content {
+			display: flex;
+			justify-content: space-between;
+		}
+		.yulan {
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			margin: 0 50px;
+		}
+		.yulan > div {
+			width: 165px
+		}
+		.yulan > div> img {
+			border-radius: 50%;
+			width: 100%
+		}
+		.yulan > div:nth-child(1) {
+			padding: 30px;
+		}
+		.yulan > div:nth-child(2) {
+			padding: 15px;
+			/* margin: 10px 0; */
+		}
+		.yulan > div:nth-child(3) {
+			padding: 0px;
+			/* margin: 20px 0; */
+		}
+
+	</style>
 			<div class="user-info-box u-page-body">
 				<div class="u-title">
 					<span>个人中心</span>
@@ -24,8 +54,8 @@
 						</label>
 						<div>
 							<label for="user-pic" class="up-btn">
-								浏览
-							</label>
+								浏览    
+							</label>&nbsp请勿上传违法信息
 							<div class="tip">支持jpg\gif\png格式的图片,文件必须小于2M</div>
 						</div>
 					</div>
@@ -37,25 +67,34 @@
 
 					</form>
 					<!--设置资料盒子-->
+					
 
 					<table align="center" class="set-user-box">
 						<tr>
 							<td>性别:</td>
 							<td class="sex-radio">
-								{if condition="$user_data['sex'] == 1"}
-								<span class="radio active"  sex="1">男</span>
-								<span class="radio " sex="2">女</span>
-								{else /}
-								<span class="radio "  sex="1">男</span>
-								<span class="radio active" sex="2">女</span>
-								{/if}
+								{switch name="$user_data.sex"}
+									{case value="1"}
+										<span class="radio active"  sex="1">男</span>
+										<span class="radio " sex="2">女</span>
+									{/case}
+									{case value="2"}
+										<span class="radio "  sex="1">男</span>
+										<span class="radio active" sex="2">女</span>
+									{/case}
+									{default /}
+									<span  style="color:red">只有一次选择性别的机会，请慎重</span>
+									<span class="radio"  sex="1">男</span>
+									<span class="radio" sex="2">女</span>
+
+								{/switch}
 							</td>
 						</tr>
 						<tr>
 							{if condition="$user_data['change_name'] == 1"}
 							<td>昵称:</td>
 							<td><input type="text" name="nickname" value="{$user_data['nickname']}" /></td>
-							<td style="color:red;" class="change">您获得一次更改昵称的机会</td>
+							<td style="color:red;" class="change">您获得改昵称的机会</td>
 							{else /}
 							<td>昵称:</td>
 							<td><input type="text" name="nickname" value="{$user_data['nickname']}" disabled/></td>
@@ -67,7 +106,8 @@
 						</tr>
 						<tr>
 							<td>账号/手机号:</td>
-							<td><input type="text" name="phone" value="{$user_data['phone']}" /></td>
+							<td><input type="text"  value="{$user_data['account']}"  disabled/></td>
+							<td><a href="{:url('User/change_account')}" style="color:red">重新绑定手机号</a></td>
 						</tr>
 						<tr>
 							<td>个性签名:</td>
@@ -104,16 +144,19 @@
 			// 	};
 			// })
 			//
-			var sex ={$user_data['sex']};
-
-			$('.radio').on('click', function(){
-				$(this).addClass('active').siblings().removeClass('active');
-				sex = $(this).attr('sex');
-			});
-
+		
+			var sex = {$user_data['sex']};
+		
+			if({$user_data['sex']} == 0){
+				$('.radio').on('click', function(){
+					$(this).addClass('active').siblings().removeClass('active');
+					sex = $(this).attr('sex');
+				});
+			}
 
 
 			$('.submit').click(function(){
+				
 				var nickname = $('[name="nickname"]').val()
 				var penguin = $('[name = "penguin"]').val()
 				var phone = $('[name = "phone"]').val()
@@ -125,6 +168,7 @@
 							layui.use('layer',function(){
 							layer.msg(data.msg)
 							})
+							window.location.reload()
 						}else if(data.code == 2)
 						{
 							layui.use('layer',function(){
@@ -137,7 +181,8 @@
 							layer.msg(data.msg)
 							})
 							$('[name="nickname"]').attr('disabled','true')
-							$('.change').css('display','none')
+							$('.change').css('display','none');
+							window.location.reload()
 						}else if(data.code == 4)
 						{
 							layui.use('layer',function(){
@@ -154,81 +199,130 @@
 			})
 
 
+/**************************************************
+var alertHTML = '请输入新手机号：<input type="text" />';
+layui.use('layer',function(){
+	layer.open({
+	type: 1,
+	title: false,
+	content: alertHTML,
+	scrollbar: false,
+	btn: ['确认'],
+	area: ['100%', '100%'],
+	success: function(layero, index) {
+		var imgbox = layero.find("#newMiva");
 
+	},
+	yes: function(index, layero) {
+		var imgbox = layero.find("#newMiva");
 
+		layer.closeAll();
+	}
+	})
+})
+/***************************************************/
+var files = $('#user-pic');
+		// var btn = $('[data-item=upbtn]');
 
-			var files = $('#user-pic');
-			// var btn = $('[data-item=upbtn]');
-
-			var reader = new FileReader();
-			var fileBuffer;
-			var alertHTML = '<img id="newMiva" src=""/>';
-
-			// 图片预览
-			files.on('change', function() {
-				reader.readAsDataURL(files.prop('files')[0]);
-				reader.onload = function(e) {
-					// 获取file里的内容
-					fileBuffer = e.target.result;
-					layui.use('layer',function(){
-						layer.open({
+		var reader = new FileReader();
+		var fileBuffer;
+		var zoomNum = 1;
+		var base64url;
+		var imgbox;
+		var alertHTML = '<div style="width:70%;height:100%"><img id="newMiva" src=""/></div>';
+		alertHTML += '<div class="yulan"><div><img alt="小" src="//placehold.it/200x200" alt="" /></div><div><img alt="中" src="//placehold.it/200x200" alt="" /></div><div><img alt="大" src="//placehold.it/200x200" alt="" /></div></div>'
+		// 图片预览
+		files.on('change', function() {
+			reader.readAsDataURL(files.prop('files')[0]);
+			reader.onload = function(e) {
+				// 获取file里的内容
+				fileBuffer = e.target.result;
+				layui.use('layer', function() {
+					layer.open({
 						type: 1,
 						title: false,
 						content: alertHTML,
 						scrollbar: false,
-						btn: ['确认'],
-						area: ['100%', '100%'],
+						resize: false,
+						zIndex: 7489436491,
+						btn: ['确认', '放大', '缩小', '预览'],
+						area: ['1000px', '600px'],
 						success: function(layero, index) {
-							var imgbox = layero.find("#newMiva");
+							imgbox = layero.find("#newMiva");
 							imgbox.attr('src', fileBuffer);
 							imgbox.cropper({
 								aspectRatio: 1 / 1,
 								dragMode: 'move', // 设置为  ‘move’: 只可以移动模式
 								dragCrop: false, // 设置为禁止移除当前的剪裁框，并通过拖动来新建一个剪裁框区域。
 								toggleDragModeOnDblclick: false, // 禁止双击切换模式
+								background: false,
+								// movable: false,
 							});
 						},
 						yes: function(index, layero) {
 							var imgbox = layero.find("#newMiva");
 							var cas = imgbox.cropper('getCroppedCanvas');
-							var base64url = cas.toDataURL('image/jpeg');
+							base64url = cas.toDataURL('image/jpeg');
 
 							var option = base64url; //上传图片的内容
-							$('#user-pic-img').attr('src',option);
+							$('#user-pic-img').attr('src', option);
 
 
-							 
-							 $.post("{:url('User/head_img')}",{option:option},function(data){
-										if(data.code == 0){
-											layui.use('layer',function(){
-											layer.msg(data.msg)})
-										}else if(data.code == 2){
-											layui.use('layer',function(){
-											layer.msg(data.msg)})
-										}else if(data.code == 3){
-											layui.use('layer',function(){
-											layer.msg(data.msg)})
-										}else{
-											layui.use('layer',function(){
-											layer.msg('未知错误')})
-										}
-							 
-							 },'json')
+							//
+							// $.post("{:url('User/head_img')}",{option:option},function(data){
+							// 		if(data.code == 0){
+							// 			layui.use('layer',function(){
+							// 			layer.msg(data.msg)})
+							// 		}else if(data.code == 2){
+							// 			layui.use('layer',function(){
+							// 			layer.msg(data.msg)})
+							// 		}else if(data.code == 3){
+							// 			layui.use('layer',function(){
+							// 			layer.msg(data.msg)})
+							// 		}else{
+							// 			layui.use('layer',function(){
+							// 			layer.msg('未知错误')})
+							// 		}
+							//
+							// },'json')
 
 							layer.closeAll();
+						},
+						btn2: function(index, layero) {
+							var imgbox = layero.find("#newMiva");
+							zoomNum -= 0.1;
+							imgbox.cropper('zoom', 0.1);
+							console.log(zoomNum)
+							return false;
+						},
+						btn3: function(index, layero) {
+							var imgbox = layero.find("#newMiva");
+							zoomNum += 0.1;
+							imgbox.cropper('zoom', -0.1);
+							console.log(zoomNum)
+							return false;
+						},
+						btn4: function(index, layero) {
+							var cas = imgbox.cropper('getCroppedCanvas');
+							base64url = cas.toDataURL('image/jpeg');
+							console.log($(layero.find('.yulan')))
+							$(layero.find('.yulan')).find(layero.find('img')).attr('src', base64url)
+							return false;
 						}
-						})
 					})
+				})
 
-				};
-				// 重置input[type=file];
-				files.val('');
-			});
+			};
+			// 重置input[type=file];
+			files.val('');
+		});
+
+
 
 
 		});
 
-
+			
 		</script>
 
 {include file="public/footer"}

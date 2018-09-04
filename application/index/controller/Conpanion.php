@@ -96,7 +96,7 @@ class Conpanion extends Common
 				$img_data = $this->cos($file,$key);
 				if($img_data['code'] == 0){
 					//拼装路径
-					$data['data_url'] = 'http://uploadimg-1257183241.piccd.myqcloud.com/'.$key;
+					$data['data_url'] = 'http://hn-001-1256760691.picbj.myqcloud.com/'.$key;
 					//删除无用的数据
 					unset($data['img_data']);
 

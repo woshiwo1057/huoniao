@@ -35,7 +35,7 @@ class Banner extends Common
 				$url_data = $this->cos($file,$key);	
 				if($url_data['code'] == 0){
 					//成功
-					$banner_data['img_url'] = 'http://uploadimg-1257183241.piccd.myqcloud.com/'.$key; //将此路径存入表单
+					$banner_data['img_url'] = 'http://hn-001-1256760691.picbj.myqcloud.com/'.$key; //将此路径存入表单
 				}
 			}
 			//组装数据			
@@ -76,9 +76,9 @@ class Banner extends Common
 				if($data['code'] == 0)
 				{
 					//成功时组装新路径
-					$data_updata['img_url'] = 'http://uploadimg-1257183241.piccd.myqcloud.com/'.$key;
+					$data_updata['img_url'] = 'http://hn-001-1256760691.picbj.myqcloud.com/'.$key;
 					//用旧路径  删除cos上的图片
-					$img_url =  substr($banner_data['img_url'], 47);
+					$img_url =  substr($banner_data['img_url'], 44);
 					//调用删除方法 删除cos上的图片
 					$this->cos_delete($img_url);
 				}

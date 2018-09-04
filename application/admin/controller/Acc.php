@@ -56,7 +56,7 @@ class Acc extends Common
 		$acc_data =	Db::table('hn_accompany')
 						->alias('a')
 						->join('hn_user u','u.uid = a.user_id')
-						->field('u.uid,u.nickname,u.head_img,u.age,u.sex,u.penguin,u.phone,a.real_name,a.table,a.discount,a.convertible,a.real')
+						->field('u.uid,u.nickname,u.head_img,u.age,u.sex,u.penguin,u.account,a.real_name,a.table,a.discount,a.convertible,a.real')
 						->where('a.id',$id)
 						->find();
 						//var_dump($acc_data);die;

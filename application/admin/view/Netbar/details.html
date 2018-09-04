@@ -1,0 +1,149 @@
+{include file="public/header"}
+<link href="__ADMIN__lib/webuploader/0.1.5/webuploader.css" rel="stylesheet" type="text/css" />
+{include file="public/sidebar"}
+
+<body>
+<div class="page-container">
+	<form class="form form-horizontal" id="form-article-add" enctype="multipart/form-data" >
+		
+		
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>所属账号：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$netbar_data.c_id}" disabled >
+			</div>
+		</div>
+
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>网吧名称</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$netbar_data.name}岁" disabled >
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>网吧缩略图</label>
+			<div class="formControls col-xs-8 col-sm-9">
+			<img src="{$netbar_data.img}">
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>网吧法人</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$netbar_data.legal_person}" disabled>
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>联系电话</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$netbar_data.phone}"  disabled>
+			</div>
+		</div>		
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>网吧地址</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$netbar_data.location}" disabled>
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>营业执照</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<img src="{$netbar_data.business_license}">
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>公网IP</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$netbar_data.ip}元" disabled>
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>网吧提成（提成合计）</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$netbar_data.extract}级" disabled>
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>未结算提成（网吧账户余额）</label>
+			<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" value="{$netbar_data.not_extract}级" disabled>
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>纬度值</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$netbar_data.lat}级" disabled>
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>经度值</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$netbar_data.lng}级" disabled>
+			</div>
+		</div>
+		
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>入驻时间</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{:date('Y-m-d H:i:s',$netbar_data.addtime)}" disabled>
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>网吧状态</label>
+			<div class="formControls col-xs-8 col-sm-9">
+			{if condition="$netbar_data.status == 1"}
+				<input type="text" class="input-text" value="正在营业" disabled>
+			{else /}				
+				<input type="text" class="input-text" value="歇业" disabled>
+			{/if}
+			</div>
+		</div>
+		
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+				{if condition="$netbar_data.examine_type == 1"}
+				<a class="btn btn-primary" ><i class="Hui-iconfont">&#xe632;</i>审核通过</a>
+				{else /}
+				<i class="Hui-iconfont">&#xe632;</i>该网吧已审核通过
+				{/if}
+			</div>
+		</div>
+		
+	</form>
+
+</div>
+</div>
+<!--_footer 作为公共模版分离出去-->
+{include file="public/footer"}
+<script>
+	
+	$(function(){
+		$('.btn-primary').click(function(){
+			var id = {$netbar_data.id};
+			
+			$.post("{:url('Netbar/examine')}",{id:id},function(data){
+				if(data == 1){
+					window.location.reload()
+				}else{
+					alert(失败)
+				}
+			},'json')
+
+		})
+	})
+
+</script>
+<!--/_footer /作为公共模版分离出去-->
+</body>
+</html>

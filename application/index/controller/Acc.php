@@ -9,6 +9,8 @@ use \think\Controller;
 use \think\Request;
 use \think\Db;
 
+
+
 class Acc extends Common
 {
 	//陪玩列表首页

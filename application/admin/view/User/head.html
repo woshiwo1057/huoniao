@@ -1,0 +1,121 @@
+﻿{include file="public/header"}
+
+<!--_menu 作为公共模版分离出去-->
+{include file="public/sidebar"}
+<!--/_menu 作为公共模版分离出去-->
+
+<section class="Hui-article-box">
+
+	<div class="Hui-article">
+		<article class="cl pd-20">
+		
+			<div class="mt-20">
+				<table class="table table-border table-bordered table-bg table-hover table-sort">
+					<thead>
+						<tr class="text-c">
+							<!--<th width="40"><input name="" type="checkbox" value=""></th>-->
+							<th width="80">用户ID</th>	
+							<th width="250">申请图片</th>						
+							<th width="250">申请时间</th>
+							<th width="60">图片状态</th>
+							<th width="100">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+					{foreach name="head_data" item="v"}
+						<tr class="text-c">
+							<td>{$v.uid}</td>
+							<td class="text-l">
+								<img src="{$v.head_img}"  style="width:100px;height:100ox;">
+							</td>							
+							<td>{:date('Y-m-d H:i:s' , $v.time)}</td>
+							<td>
+								{switch name="$v.status"}
+									{case  value="1"}待审核{/case}
+									{case  value="2"}审核通过{/case}
+									{case  value="3"}审核失败{/case}
+								{/switch}
+							</td>
+																									
+							<td class="td-manage">
+								
+								<a style="text-decoration:none" id="ml-5" user_id="{$v.uid}"  title="审核通过">
+									<i class="Hui-iconfont">&#xe6df;</i>
+								</a> 
+								<a style="text-decoration:none" class="ml-5" user_id="{$v.uid}" title="审核不通过">
+									<i class="Hui-iconfont">&#xe6e2;</i>			
+								</a>
+							</td>							
+						</tr>
+					{/foreach}
+					</tbody>
+				</table>
+			</div>
+		</article>
+	</div>
+</section>
+
+<!--_footer 作为公共模版分离出去-->
+{include file="public/footer"}
+<!--/_footer /作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+
+<script>
+	$(function(){
+		$('#ml-5').click(function(){
+			var a = confirm("操作前请确认")
+			if (a != true){
+				return false
+			}
+
+			var uid = $(this).attr('user_id') 
+
+			$.post("{:url('User/succeed')}",{uid:uid},function(data){
+						if(data.code == 1){
+							alert(data.msg)
+							window.location.reload()
+						}else if(data.code == 2){
+							alert(data.msg)
+						}else if(data.code == 3){
+							alert(data.msg)
+						}else{
+							alert('未知错误，请联系程序员')
+						}
+
+			},'json')
+			return false
+		})
+
+		$('.ml-5').click(function(){
+			var a = confirm("操作前请确认")
+			if (a != true){
+				return false
+			}
+
+			var uid = $(this).attr('user_id') 
+
+			$.post("{:url('User/fail')}",{uid:uid},function(data){
+						if(data.code == 1){
+							alert(data.msg)
+							window.location.reload()
+						}else if(data.code == 2 ){
+							alert(data.msg)
+						}else{
+							alert('未知错误，请联系程序员')
+						}
+
+			},'json')
+			return false
+		})
+
+
+
+	})
+
+	
+</script>
+
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

@@ -1,0 +1,204 @@
+{include file="public/header"}
+
+<link rel="stylesheet" type="text/css" href="__INDEX__css/cropper.min.css">
+<script type="text/javascript" src="__INDEX__js/cropper.min.js"></script>
+	<body class="u-body">
+		<!-- 引入头部 -->
+		<div class="main u-main">
+		<!--导航放在这里-->
+{include file="public/nav"}
+			<div class="user-info-box u-page-body">
+				<div class="u-title">
+					<span>更换登录 手机号/账户</span>
+				</div>
+				<!--主内容盒子-->
+				<div class="u-data-set-box">
+					<!--上傳頭像盒子-->
+					
+					<!--设置资料盒子-->
+					
+
+					<table align="center" class="set-user-box"  data-item="list">
+						
+						<tr>
+							<td>账号/手机号:</td>
+							<td><input type="text"  value="{$account['account']}" name="phone" disabled /></td>
+						</tr>
+
+						<tr>
+							<td class="code xiaoshou">点击发送验证码:</td>
+							<td><input type="text" name="code" /></td>
+						</tr>
+						
+						<tr>
+							<td colspan="2">
+								<div class="submit xiaoshou" type="1" >下一步</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+				<script type="text/javascript">
+					$(function(){
+						//获取验证码
+						$('.code').click(function(){
+					
+							var phone = $('[name="phone"]').val();
+
+							var mobile = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/;
+							if(!mobile.test(phone)){
+				               layui.use('layer',function(){
+				                     layer.msg('手机号输入错误')})
+				                return false
+				            }
+
+							$.post("{:url('User/change_ajax')}",{phone:phone},function(data){
+										if(data.code == 1){
+											layui.use('layer',function(){
+											layer.msg(data.msg)});
+											$('[name="phone"]').attr('disabled','true')
+										}else if(data.code == 2){
+											layui.use('layer',function(){
+											layer.msg(data.msg)})
+										}else{
+											layui.use('layer',function(){
+											layer.msg(data.msg)})
+										}
+							},'json')
+						})
+
+						//提交数据验证
+						$('.submit').click(function(){
+
+							var phone = $('[name="phone"]').val();
+							var mobile = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/;
+							if(!mobile.test(phone)){
+				               layui.use('layer',function(){
+				                     layer.msg('手机号输入错误')})
+				                return false
+				            }
+
+							var code = $('[name="code"]').val();
+							if(code == ''){
+								layui.use('layer',function(){
+								layer.msg('请填写验证码')})
+								return false
+							}
+
+							var type = $('.submit').attr('type');
+							
+							var str = '';
+							$.post("{:url('User/change')}",{code:code,type:type,phone:phone},function(data){
+										if(data.code == 1){
+											layui.use('layer',function(){
+											layer.msg(data.msg)})
+										}else if(data.code == 2){
+											layui.use('layer',function(){
+											layer.msg(data.msg)})
+										}else if(data.code == 3){
+											layui.use('layer',function(){
+											layer.msg(data.msg)})
+										}else if(data.code == 4){
+											str += `<tr>
+														<td>新 账号/手机号：</td>
+														<td><input type="text"   name="phone"  /></td>
+													</tr>
+
+													<tr>
+														<td class="code xiaoshou">点击发送验证码：</td>
+														<td><input type="text" name="code" /></td>
+													</tr>
+													
+													<tr>
+														<td colspan="2">
+															<div class="submit xiaoshou" type="2" >确认更换</div>
+														</td>
+													</tr>`
+											$('[data-item=list]').html(str);
+
+												$('.code').click(function(){
+							
+												var phone = $('[name="phone"]').val();
+
+												var mobile = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/;
+												if(!mobile.test(phone)){
+									               layui.use('layer',function(){
+									                     layer.msg('手机号输入错误')})
+									                return false
+									            }
+
+												$.post("{:url('User/change_ajax')}",{phone:phone},function(data){
+															if(data.code == 1){
+																layui.use('layer',function(){
+																layer.msg(data.msg)});
+																$('[name="phone"]').attr('disabled','true')
+															}else if(data.code == 2){
+																layui.use('layer',function(){
+																layer.msg(data.msg)})
+															}else{
+																layui.use('layer',function(){
+																layer.msg(data.msg)})
+															}
+												},'json')
+											})
+
+											$('.submit').click(function(){
+
+												var phone = $('[name="phone"]').val();
+												var mobile = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/;
+												if(!mobile.test(phone)){
+									               layui.use('layer',function(){
+									                     layer.msg('手机号输入错误')})
+									                return false
+									            }
+
+												var code = $('[name="code"]').val();
+												if(code == ''){
+													layui.use('layer',function(){
+													layer.msg('请填写验证码')})
+													return false
+												}
+
+												var type = $('.submit').attr('type');
+												
+												var str = '';
+												$.post("{:url('User/change')}",{code:code,type:type,phone:phone},function(data){
+														if(data.code == 5){
+															layui.use('layer',function(){
+															layer.msg(data.msg)})
+														}else if(data.code == 6){
+															layui.use('layer',function(){
+															layer.msg(data.msg)})
+														}else if(data.code == 7){
+															layui.use('layer',function(){
+															layer.msg(data.msg)})
+														}else{
+															layui.use('layer',function(){
+															layer.msg('未知错误')})
+														}
+
+
+
+												},'json');
+
+											})
+										}else{
+											layui.use('layer',function(){
+											layer.msg('未知错误')})
+										}
+
+
+							},'json')
+
+						})
+
+						
+
+					})
+				</script>
+
+{include file="public/footer"}
+	</body>
+
+</html>

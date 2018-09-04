@@ -52,7 +52,7 @@ class Examine extends Common
 		return $this->fetch('Examine/details');
 	}
 
-	//申请通过Ajax
+	//申请通过
 	public function ok()
 	{	
 		if(Request::instance()->isPost()){
