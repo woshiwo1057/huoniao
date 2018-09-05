@@ -30,7 +30,8 @@ class Index  extends Common
     	$banner_data = Db::table('hn_banner')->field('img_url,link,link_type')->where('status',1)->select();
 
     	//首页服务项目
-    	$game_data = Db::table('hn_game')->field('id,name,game_index_img')->limit(4)->select();
+    	$game_data = Db::table('hn_game')->field('id,name,game_index_img')->order('sort_id esc')->limit(4)->select();
+       
 
     	//首页明星推荐
     	$acc_data = Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num')->where('a.status',1)->limit('0,12')->select();
@@ -38,6 +39,7 @@ class Index  extends Common
             $type = 'order_num';
             $acc_data = $this->ranking($acc_data,$type);
         }
+    
     	//优质新人
     	$new_data =	Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->field('u.uid,u.nickname,u.head_img,u.age')->where('a.new_people',1)->limit('0,6')->select();
     	

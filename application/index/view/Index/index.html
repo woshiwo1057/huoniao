@@ -49,7 +49,7 @@
 				$(function(){
 					$('.miva-service-items').click(function(){
 						var project_id = $(this).attr('game_id')
-						alert(project_id)
+					
 						window.location.href="{:url('Acc/index')}?game_id="+project_id
 
 					})
@@ -62,42 +62,43 @@
 					<span class="miva-title-icon"><img src="__IMG__title (1).gif" alt=""></span> 明星推荐
 					<a class="miva-moer" href="#">更多</a>
 				</div>
-				<div class="miva-star-box">
+				<ul class="miva-star-box">
 					<!-- 一条 -->
 					{foreach name="acc_data" item="v"}
-					<a href="{:url('Index/user',['id' => $v.uid])}" class="miva-star-items">
-						<div class="miva-star-pic">
-							{if condition="$v.head_img == ''"}
-								<img src="__IMG__default.jpg" />
-							{else /}
-								<img src="{$v.head_img}" />
-							{/if}
-						</div>
-						<table class="miva-star-info">
-							<tr>
-								<td>
-									<img src="__IMG__ico.gif" alt="图标">
-									<span class="star-name">{$v.nickname}</span>
-								</td>
-								<td class="miva-star-info-right">
-									<span class="tab tab-win">王者</span>
-									<span class="tab tab-shen">声优</span>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<img src="__IMG__火.png" alt="图标">
-									<span>{$v.hot}</span>
-								</td>
-								<td class="miva-star-info-right">
-									<span class="star-price">￥{$v.pice}/小时</span>
-								</td>
-							</tr>
-						</table>
-					</a>
-
+					<li>
+						<a href="{:url('Index/user',['id' => $v.uid])}" class="miva-star-items">
+							<div class="miva-star-pic">
+								{if condition="$v.head_img == ''"}
+									<img src="__IMG__default.jpg" />
+								{else /}
+									<img src="{$v.head_img}" />
+								{/if}
+							</div>
+							<table class="miva-star-info">
+								<tr>
+									<td>
+										
+										<span class="star-name">{$v.nickname}</span>
+									</td>
+									<td class="miva-star-info-right">
+										<span class="tab tab-win">王者</span>
+										<span class="tab tab-shen">声优</span>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<img src="__IMG__火.png" alt="图标">
+										<span>{$v.hot}</span>
+									</td>
+									<td class="miva-star-info-right">
+										<span class="star-price">￥{$v.pice}/小时</span>
+									</td>
+								</tr>
+							</table>
+						</a>
+					</li>
 					{/foreach}
-				</div>
+				</ul>
 			</div>
 
 			<!-- 优质新人 -->
@@ -861,11 +862,24 @@
 				var newSwiper = new Swiper('.miva-new-swiper', {
 					slidesPerView: 5,
 					spaceBetween: 30,
+					loop: true,
+					speed: 1000,
+					autoplay: {
+						delay: 1000,
+						disableOnInteraction: false,
+					},
 					navigation: {
 						nextEl: '.swiper-button-next',
 						prevEl: '.swiper-button-prev',
 					},
 				});
+
+				$('.miva-new-swiper').on('mouseover', '.swiper-slide', function() {
+					newSwiper.autoplay.stop()
+				}).on('mouseout', function() {
+					newSwiper.autoplay.start()
+				})
+
 
 				var a = window.location.href;
 				a = a.indexOf('qingnidenglu')

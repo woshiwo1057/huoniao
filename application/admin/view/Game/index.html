@@ -25,7 +25,8 @@
 						<tr class="text-c">
 							<!--<th width="40"><input name="" type="checkbox" value=""></th>-->
 							<th width="20">ID</th>
-							<th width="150">游戏名字</th>
+							<th width="50">排序ID</th>
+							<th width="100">游戏名字</th>
 							<th width="300">LOGO</th>
 							
 							<th width="300">首页显示图片</th>
@@ -35,11 +36,11 @@
 						</tr>
 					</thead>
 					<tbody>
-					{foreach name="game_data" item="v"}
+					{foreach name="game_data" item="v" key="k"}
 						<tr class="text-c">
 							<!--<td><input name="" type="checkbox" value=""></td>-->
 							<td>{$v.id}</td>
-
+							<td>{$v.sort_id}</td>
 							<td class="text-l">
 								<a class="maincolor" href="javascript:;" >{$v.name}</a>
 							</td>
@@ -73,9 +74,12 @@
 							
 
 							<td class="td-status">
-							{switch name="$v.status"}
+							{switch name="$k"}
+								{case value="0"}<span class="label label-success radius">显示在首页</span>{/case}
 								{case value="1"}<span class="label label-success radius">显示在首页</span>{/case}
-								{default /}<span class="label label-success radius">不显示（不上架）</span>
+								{case value="2"}<span class="label label-success radius">显示在首页</span>{/case}
+								{case value="3"}<span class="label label-success radius">显示在首页</span>{/case}
+								{default /}<span class="label label-success radius">不显示在首页</span>
 							{/switch}
 							</td>
 

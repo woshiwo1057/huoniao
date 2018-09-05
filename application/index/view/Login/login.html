@@ -31,11 +31,16 @@
 				<form class="login-form" action="{:url('Login/login')}" method="post">
 					<input type="text" name="account" value="" placeholder="手机号/邮箱" />
 					<input type="password" name="password" value="" placeholder="密码" />
+
+					<img src="{:url('Login/captcha_code')}?"onclick="this.src=this.src+Math.random()"  style="widht:130px;height:50px;" id="miva">
+					<input type="text"  placeholder="请输入验证码"  name="captcha_code" style="width:50%;" >
+					<a id="kanbuq" href="javascript:;">看不清，换一张</a>
 					<input type="submit" value="登录" />
-					<label for="remember-me"><input type="checkbox" name="" id="remember-me" value="" />下次自动登录</label>
+					<label for="remember-me"><!--<input type="checkbox" name="" id="remember-me" value="" />下次自动登录--></label>
 					<span class="re-pwd">忘记密码</span>
 				</form>
-
+				
+					
 				<form class="reg-form" action="{:url('Login/register')}" method="post">
 					<div class="phone-box">
 						<span class="">+86</span>
@@ -53,8 +58,7 @@
 					<br/>
 					<input type="submit" class="register" value="注册" />
 				</form>
-
-
+				
 
 				<div class="other-login">
 					<div class="other-title">社交帐号登录</div>

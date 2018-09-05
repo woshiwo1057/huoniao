@@ -10,7 +10,7 @@ use \think\Db;
 use \think\Cookie;
 use \think\Request;
 use \think\Session;
-use \think\captcha\Captcha;
+use \think\captcha\Captcha; 
 
 
 class Login extends \think\Controller
@@ -26,7 +26,7 @@ class Login extends \think\Controller
 			
 			if(empty($data))
 			{
-				return json(['code' => 1,'msg' => '你他娘的智障吧，没东西还要点登录']);
+				return json(['code' => 1,'msg' => '你他娘的**吧，没东西还要点登录']);
 			}
 
 			//var_dump($data);die;

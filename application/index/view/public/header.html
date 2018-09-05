@@ -180,27 +180,40 @@
 
 
 
+                        $(body.find('#kanbuq')).on("click",function(){   
+                          $(body.find('#miva')).trigger('click');
+                        })
 
                     $(from).submit(function(){
                       var account = body.find('[name="account"]').val()
                       var password = body.find('[name="password"]').val()
+                      var captcha_code = body.find('[name="captcha_code"]').val()
+                      var src = $(body.find('#miva')).attr('src')
 
-                      $.post("{:url('Login/login')}",{account:account,password:password},function(data){
+                      $.post("{:url('Login/login')}",{account:account,password:password,captcha_code:captcha_code},function(data){
                             if(data.code == 1){
                               layui.use('layer',function(){
                               layer.msg(data.msg)})
+                              $(body.find('#miva')).attr('src',src+'&'+Math.random())
                             }else if(data.code == 2){
                               layui.use('layer',function(){
                               layer.msg(data.msg)})
+                               $(body.find('#miva')).attr('src',src+'&'+Math.random())
                             }else if(data.code == 3){
                               layui.use('layer',function(){
                               layer.msg(data.msg)})
                               layer.closeAll();
                               window.location.href=data.url
+                            }else if(data.code == 4){
+                              layui.use('layer',function(){
+                              layer.msg(data.msg)});
+                              $(body.find('#miva')).attr('src',src+'&'+Math.random())
                             }
 
-                      },'json')
-                      return false
+                      },'json')            
+                     
+                    return false
+       
                     })
 
 

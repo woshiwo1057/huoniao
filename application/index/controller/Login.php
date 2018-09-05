@@ -6,6 +6,7 @@
 */
 
 namespace app\index\controller;
+use \think\captcha\Captcha;
 use \think\Request;
 use \think\Session;
 use \think\Cookie;
@@ -36,12 +37,24 @@ class Login extends \think\Controller
 			//$user = db('hn_user');
 			//获取到登录提交数据
 			$login_data = Request::instance()->param();
+
+//var_dump($login_data);
+			//验证验证码是否错误
+			if(!captcha_check($login_data['captcha_code']))
+			{
+				
+				return json(['code' => 4, 'msg' => '哇，验证码被妖怪吃了，请重新输入']);
+			}
+
+		
 			//进行账号（手机号）验证
 			$res = Db::table('hn_user')->where('account',$login_data['account'])->find();
 			if(!$res)
 			{
 				return json(['code' => 1,'msg' => '账号或密码错误']);
 			}
+
+			
 			//进行密码验证
 			if(md5($login_data['password']) != $res['password'])
 			{				
@@ -224,6 +237,28 @@ class Login extends \think\Controller
         $acsResponse = static::$acsClient->getAcsResponse($request);
 
         return $acsResponse;
+
+	}
+
+	//图像验证码
+	public function captcha_code()
+	{
+		$config =    [
+	    // 验证码字体大小
+	    'fontSize'    => 30,    
+	    // 验证码位数
+	    'length'      => 4,   
+	    //验证码高度
+	    'imageH'   => 60,
+	    //验证码宽度
+	    'imageW'	=>200,
+	  	//验证码背景
+		'useCurve'=>false
+		];
+		
+		$captcha = new Captcha($config);
+		$captcha->codeSet = '0123456789';//设置纯数字验证码
+		return $captcha->entry();
 
 	}
 }

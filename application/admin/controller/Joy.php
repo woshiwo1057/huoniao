@@ -14,7 +14,7 @@ class Joy extends Common
 	//娱乐项目列表
 	public function index()
 	{
-		$joy_data = Db::table('hn_joy')->field('id,name,joy_logo_img,status')->select();
+		$joy_data = Db::table('hn_joy')->field('id,name,joy_logo_img')->select();
 
 		$this->assign(['joy_data' => $joy_data]);
 		return $this->fetch('Joy/index');

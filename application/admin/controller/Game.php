@@ -14,7 +14,8 @@ class Game extends Common
 	//游戏项目列表
 	public function index()
 	{
-		$game_data = Db::table('hn_game')->field('id,name,game_logo_img,game_index_img,status')->select();
+
+		$game_data = Db::table('hn_game')->field('id,name,game_logo_img,game_index_img,sort_id')->order('sort_id esc')->select();
 
 		$this->assign(['game_data' => $game_data]);
 		return $this->fetch('Game/index');
@@ -88,7 +89,7 @@ class Game extends Common
 	public function edit()
 	{
 		$id = Request::instance()->param('id');
-		$game_data = Db::table('hn_game')->field('name,game_logo_img,game_index_img')->where('id',$id)->find();
+		$game_data = Db::table('hn_game')->field('name,game_logo_img,game_index_img,sort_id')->where('id',$id)->find();
 		//var_dump($game_data);die;
 
 		if(Request::instance()->isPost())
