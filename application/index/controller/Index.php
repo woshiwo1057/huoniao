@@ -34,14 +34,15 @@ class Index  extends Common
        
 
     	//首页明星推荐
-    	$acc_data = Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num')->where('a.status',1)->limit('0,12')->select();
-    	 if($acc_data != NULL){          
-            $type = 'order_num';
-            $acc_data = $this->ranking($acc_data,$type);
-        }
-    
-    	//优质新人
-    	$new_data =	Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->field('u.uid,u.nickname,u.head_img,u.age')->where('a.new_people',1)->limit('0,6')->select();
+    	$acc_data = Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num')->where('a.status',1)->limit('0,15')->select();
+   //  	 if($acc_data != NULL){          
+   //          $type = 'order_num';
+   //          $acc_data = $this->ranking($acc_data,$type);
+   //      }
+   //     $acc_data  =Db::table('hn_accompany')->select();
+   // var_dump($acc_data);die;
+    	//优质新人  先注册的排前面（15天内）
+    	$new_data =	Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->field('u.uid,u.nickname,u.head_img,u.age')->where('a.new_people',1)->limit('15 ')->select();
     	
         //$adhwuhwad = $this->wechat_query();
         //var_dump($adhwuhwad);die;
@@ -59,11 +60,13 @@ class Index  extends Common
                 }
 
     			//②总榜
+                
     			$hot_data = Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->field('u.uid,u.nickname,u.head_img,u.level,a.hot')->limit(10)->select();
     			if($hot_data != NULL){
                     $type = 'hot';
                     $hot_data = $this->ranking($hot_data,$type);
                 }
+                
     		//2.陪玩师大神榜
     			//①日榜
     			$okami_day_data = Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->field('u.uid,u.nickname,u.head_img,u.level,a.okami_day')->limit(10)->select();
@@ -72,6 +75,7 @@ class Index  extends Common
                     $okami_day_data = $this->ranking($okami_day_data,$type);
                 }
     			//②总榜	
+                
     			$okami_data = Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->field('u.uid,u.nickname,u.head_img,u.level,a.okami')->limit(10)->select();
     			if($okami_data != NULL){
                     $type = 'okami';
@@ -91,6 +95,7 @@ class Index  extends Common
                     $type = 'mogul';
                     $mogul_data = $this->ranking($mogul_data,$type);
                 }
+                
     	$this->assign([
     		//首页banner图
               'banner_data' => $banner_data,
@@ -100,15 +105,15 @@ class Index  extends Common
     		     'acc_data' => $acc_data,
     		//优质新人数据
     		      'new_data'=> $new_data,
-    		//人气榜数据   		      
+    		//人气榜数据   
+              'hot_day_data'=> $hot_day_data,      
     		      'hot_data'=> $hot_data,
-    		  'hot_day_data'=> $hot_day_data,
     		//大神榜数据
     		'okami_day_data'=> $okami_day_data,
     		    'okami_data'=> $okami_data,
     		//贡献榜数据
     		'mogul_day_data'=> $mogul_day_data,
-    		    'mogul_data'=> $mogul_data
+    	        'mogul_data'=> $mogul_data
     		     
     				]);
 
@@ -132,6 +137,58 @@ class Index  extends Common
 
     }
 
+    public function ranking_list()
+    {
+
+        $rank = Request::instance()->param('rank');
+       
+        if($rank == 1){
+            $hot_day_data = Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->field('u.uid,u.nickname,u.head_img,u.level,a.hot_day')->limit(10)->select();
+            if($hot_day_data != NULL){
+                $type = 'hot_day';
+                $hot_day_data = $this->ranking($hot_day_data,$type);
+            }
+             return json($hot_day_data);
+        }else if($rank == 2){
+            $hot_data = Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->field('u.uid,u.nickname,u.head_img,u.level,a.hot')->limit(10)->select();
+            if($hot_data != NULL){
+                $type = 'hot';
+                $hot_data = $this->ranking($hot_data,$type);
+            }
+             return json($hot_data);
+        }else if($rank == 3){
+            $okami_day_data = Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->field('u.uid,u.nickname,u.head_img,u.level,a.okami_day')->limit(8)->select();
+            if($okami_day_data != NULL){
+                $type = 'okami_day';
+                $okami_day_data = $this->ranking($okami_day_data,$type);
+            }
+             return json($okami_day_data);
+        }else if($rank == 4){
+            $okami_data = Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->field('u.uid,u.nickname,u.head_img,u.level,a.okami')->limit(8)->select();
+            if($okami_data != NULL){
+                $type = 'okami';
+                $okami_data = $this->ranking($okami_data,$type);
+            }
+             return json($okami_data);
+        }else if($rank == 5){
+            $mogul_day_data = Db::table('hn_user')->field('uid,nickname,head_img,mogul_day,level')->limit(8)->select();
+            if($mogul_day_data != NULL){
+                $type = 'mogul_day';
+                $mogul_day_data = $this->ranking($mogul_day_data,$type);
+            }
+            return json($mogul_day_data);
+        }else if($rank == 6){
+            $mogul_data = Db::table('hn_user')->field('uid,nickname,head_img,mogul,level')->limit(8)->select();
+            if($mogul_data != NULL){
+                $type = 'mogul';
+                $mogul_data = $this->ranking($mogul_data,$type);
+            }
+            return json($mogul_data);
+
+        }
+
+    } 
+
     //前台index/user  用户点进去看的地方  可以下单
     public function user()
     {
@@ -152,15 +209,16 @@ class Index  extends Common
         //查询服务项目
         if($user_data['project'] == 1){
             //游戏项目查询
-            $service_data = Db::table('hn_game')->field('id,name,game_logo_img')->where('id',$user_data['project_id'])->find();
+            $service_data = Db::table('hn_game')->field('id,name,game_index_img')->where('id',$user_data['project_id'])->find();
         }else{
             //娱乐项目查询
             $service_data = Db::table('hn_joy')->field('id,name,joy_logo_img')->where('id',$user_data['project_id'])->find();
             //保持数据统一
-            $service_data['game_logo_img'] =  $service_data['joy_logo_img'];
+            $service_data['game_index_img'] =  $service_data['joy_logo_img'];
             //无用的数据删除
             unset($service_data['joy_logo_img']);
         }
+
         //var_dump($service_data);die;
         //查询评论数据
         $comment_data = Db::table('hn_comment')

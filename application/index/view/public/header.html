@@ -30,7 +30,7 @@
     <nav class="top-nav-box">
       <ul>
         {foreach name="menus_index"  item="v"}       
-        <li  {if condition="strtolower(C) == $v['controller']"}class="active"{/if} >
+        <li  {if condition="strtolower(C) == $v['controller']"}class="active"{/if}>
          <!-- <a href="/huoniao/public/index.php/index/{$v.controller}/{$v.action}">{$v.name}</a>-->
          <a href="{:url($v['controller'].'/'.$v['action'])}">{$v.name}</a>
         </li>
@@ -162,6 +162,7 @@
                 skin: 'layui-layer-bai',
                 shadeClose: true, //点击遮罩关闭层
                 area: ['460px', '610px'],
+     //           zIndex:99999999,
                 content: "{:url('Login/login')}",
                 success: function(layero, index) {
 
@@ -173,17 +174,10 @@
                   
 
 
-                  // body.find('[type=submit]').on('click',function() {
-                    
-                  //   layer.closeAll();
-                  // });
-
-
-
                         $(body.find('#kanbuq')).on("click",function(){   
                           $(body.find('#miva')).trigger('click');
                         })
-
+                    //登录
                     $(from).submit(function(){
                       var account = body.find('[name="account"]').val()
                       var password = body.find('[name="password"]').val()
@@ -217,13 +211,23 @@
                     })
 
 
-
+            
             $(body.find('.button')).click(function(){
+
               var _this = body.find('.button');
               var phone = $(body.find('[name="phone"]')).val()      
               var mobile = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/;
               var num = 60;
               var timer;
+
+
+               if(!mobile.test(phone)){
+                alert(phone)
+                layui.use('layer',function(){
+                layer.msg('手机号输入错误')})
+                  return false
+              }
+
 
               timer = setInterval(function(e) {
                 $(_this).html('发送验证码(' + num + ')')
@@ -237,12 +241,7 @@
                 }
               }, 1000);
 
-              if(!mobile.test(phone)){
-                layui.use('layer',function(){
-                      layer.msg('手机号输入错误')})
-                  return false
-              }
-
+             
               $.post("{:url('Login/code')}",{phone:phone},function(data){
 
                     if(data.code == 1){
@@ -301,12 +300,88 @@
               },'json')
               return false
             })
+  
+                //忘记密码
+                $(body.find('[send="forget"]')).click(function(){
+               
+                var _this = body.find('.send');
+                var phone = $(body.find('[name="call"]')).val()      
+                var mobile = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/;
+                var num = 60;
+                var timer;
 
+                if(!mobile.test(phone)){  
+                  $(body.find('.succe').html('手机号输入错误，请重新输入'))
+                  return false
+                }
+                timer = setInterval(function(e) {
+                  $(_this).html('发送验证码(' + num + ')')
+                  num--;
+                  if (num <= 1) {
+                    clearInterval(timer)
+                    $(_this).removeAttr('disabled');
+                    $(_this).html('发送验证码')
+                  }else {
+                    $(_this).attr('disabled','true');
+                  }
+                }, 1000);
 
+             
+ 
+                $.post("{:url('Login/forget_code')}",{phone:phone},function(data){
 
+                      if(data.code == 1){
+                         $(body.find('.succe').html('发送成功，请注意查收'))
+
+                      }else if(data.code == 2){
+                        $(body.find('.succe').html('发送失败，错误码002'))
+                      }else if(data.code == 3){
+                        layui.use('layer',function(){
+                        layer.msg(data.msg)})
+                      }else{
+                        $(body.find('.succe').html('未知错误，请检查后重新尝试发送'))
+                      }
+                },'json')
+                return false
+              })
+                
+              $(body.find('[reset-pwd="click"]')).click(function(){
+
+                  var phone = $(body.find('[name="call"]')).val() 
+                  var code =  $(body.find('[name="forget_code"]')).val()
+                  var password =  $(body.find('[name="forget_password"]')).val()
+                  var repeat =  $(body.find('[name="forget_repeat"]')).val()
+
+                  if(password != repeat){
+                      $(body.find('.succe').html('新密码输入不一致，请重新输入'))
+                      return false
+                  }
+
+                  $.post("{:url('Login/forget')}",{phone:phone,code:code,password:password},function(data){
+                        if(data.code == 1){
+                           $(body.find('.succe').html('自己填的验证码不算'))
+                        }else if(data.code ==2){
+                          $(body.find('.succe').html('验证码不能为空'))
+                        }else if(data.code == 3){
+                          $(body.find('.succe').html('验证码输入错误，请重新填写，或重新发送验证码'))
+                        }else if(data.code == 4){
+                          $(body.find('.succe').html('重置成功，请去登录'))
+                        }else if(data.code ==5){
+                          $(body.find('.succe').html('重置失败，错误码005'))
+                        }else{
+                          $(body.find('.succe').html('未知错误，请检查后重新尝试发送'))
+                        }
+
+                  },'json')
+                  return false
+                
+              })
+              
+    
                 }
               });
             });
+
           })
 
 

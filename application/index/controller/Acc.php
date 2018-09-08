@@ -17,7 +17,7 @@ class Acc extends Common
 	public function index()
 	{
 		//查询游戏项目
-		$game_data = Db::table('hn_game')->field('id,name,game_logo_img')->select();
+		$game_data = Db::table('hn_game')->field('id,name,game_logo_img')->order('sort_id esc')->select();
 		
 		//查询娱乐项目
 		$joy_data = Db::table('hn_joy')->field('id,name,joy_logo_img')->select();
@@ -43,7 +43,7 @@ class Acc extends Common
 
 		$data = Request::instance()->param();
 		$data['search'] = empty($data['search'])?'':$data['search'];
-		var_dump($data['search']); die;//这是用户搜索的东西
+		//var_dump($data['search']); die;//这是用户搜索的东西
 
 		if(is_numeric($data['search']))
 		{

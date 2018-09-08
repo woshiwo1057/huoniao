@@ -226,6 +226,41 @@ class User extends Common
 			return json(['code' => 4,'msg' => 'OK']);
 	}
 
+
+	//更改密码
+	public function change_password()
+	{	
+		//通过旧密码来修改至新密码
+		//echo 1;die;
+		if(Request::instance()->isPost())
+		{
+			//获取到用户ID
+			$id = $_SESSION['user']['user_info']['uid'];
+			//接收数据 处理POST Ajax请求
+			$data = Request::instance()->param();
+			//md5($data['used'])密码    $data['new_pwd']新密码
+			//查出用户密码数据
+			$pwd = Db::table('hn_user')->field('password')->where('uid',$id)->find();
+			if(md5($data['used']) != $pwd['password']){
+				return json(['code' =>1,'msg' => '旧密码输入错误']);
+			}
+			$password = md5($data['new_pwd']);
+			//将新密码存入表中
+
+			$res = Db::table('hn_user')->where('uid', $id)->update(['password' => $password]);
+
+			if($res){
+				return json(['code' =>2,'msg' => '修改成功，正在跳转']);
+			}else{
+				return json(['code' =>3,'msg' => '修改失败，错误码003']);
+			}
+
+			var_dump($data);die;
+		}
+
+		return $this->fetch();
+	}
+
 	//我的账户
 	public function account()
 	{

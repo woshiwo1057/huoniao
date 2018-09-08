@@ -53,7 +53,7 @@ class Common extends \think\Controller
 	//公共前台首页输出信息（导航栏）
 	public function menus_index()
 	{
-		$menus_data  = Db::table('hn_menus')->field('name,module,controller,action')->where('module','index')->select();
+		$menus_data  = Db::table('hn_menus')->field('name,module,controller,action')->where(['module' =>'index','type' => 1])->select();
 
     	//Db::table('think_user')->field('id,title,content')->select();
     	return $menus_data;
@@ -86,7 +86,7 @@ class Common extends \think\Controller
 
 
 		//截取数组
-		$data = array_slice($data, 0,6);
+		$data = array_slice($data, 0,8);
 		return $data;
 	}
 

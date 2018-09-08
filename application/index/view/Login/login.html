@@ -26,9 +26,14 @@
 					<span class="active">登录</span> |
 					<span class="">注册</span>
 				</div>
+				
+				<!--************************************************************-->
+				<div style="display: none;" class="login-title re-pwd-title">
+					<span class="active">← 返回登录界面</span>
+				</div>
+				<!--************************************************************-->
 
-
-				<form class="login-form" action="{:url('Login/login')}" method="post">
+				<form data-item="loginFrom" class="login-form" action="{:url('Login/login')}" method="post">
 					<input type="text" name="account" value="" placeholder="手机号/邮箱" />
 					<input type="password" name="password" value="" placeholder="密码" />
 
@@ -41,7 +46,7 @@
 				</form>
 				
 					
-				<form class="reg-form" action="{:url('Login/register')}" method="post">
+				<form  data-item="regFrom" class="reg-form" action="{:url('Login/register')}" method="post">
 					<div class="phone-box">
 						<span class="">+86</span>
 						<input type="text" name="phone" value="" placeholder="手机号" />
@@ -59,6 +64,26 @@
 					<input type="submit" class="register" value="注册" />
 				</form>
 				
+				<!--************************************************************-->
+				<form style="display: none;" data-item="reFrom" class="re-pwd-box reg-form"  action="{:url('Login/forget')}" method="post">
+					<div class="phone-box">
+						<span class="">+86</span>
+						<input type="text" name="call" value="" placeholder="手机号" />
+					</div>
+					<div class="yanzheng">
+						<input type="text" name="forget_code" value="" placeholder="验证码" />
+						<button class="send"  send="forget"><span style="display: none;">0</span>发送验证码</button>
+					</div>
+					<div>
+						<input type="password" name="forget_password" id="" value="" placeholder="6-20位字母/数字/符号至少两种" />
+					</div>
+					<div>
+						<input type="password" name="forget_repeat" id="" value="" placeholder="请再次输入密码" />
+						<span class="succe" style="color:red;">&nbsp;</span>
+					</div>
+					<input type="submit" value="重置密码" reset-pwd="click" />
+				</form>
+				<!--************************************************************-->
 
 				<div class="other-login">
 					<div class="other-title">社交帐号登录</div>
@@ -70,21 +95,42 @@
 				</div>
 			</div>
 			<script type="text/javascript">
-				$(document).ready(function() {
-					var login = $('.login-form');
-					var reg = $('.reg-form');
-					$('.login-title').on('click', 'span', function() {
-						$(this).addClass('active').siblings().removeClass('active');
-						if($(this).html() == "注册") {
-							login.hide();
-							reg.show();
-						} else {
-							reg.hide();
-							login.show();
-						}
-					});
+			
+			$(function() {
+				var login = $('[data-item="loginFrom"]');
+				var reg = $('[data-item="regFrom"]');
+				var rePwd = $('[data-item="reFrom"]');
+				var loginTitle = $('.login-title');
+				var rePwdTitle = $('.re-pwd-title');
+
+				$('.login-title').on('click', 'span', function() {
+					$(this).addClass('active').siblings().removeClass('active');
+					if($(this).html() == "注册") {
+						login.hide();
+						reg.show();
+					} else if($(this).html() == "登录") {
+						reg.hide();
+						login.show();
+					} else if($(this).html() == "← 返回登录界面") {
+						login.show();
+						loginTitle.show();
+						rePwd.hide();
+						rePwdTitle.hide();
+						$('.other-login').show();
+					}
 				});
-			</script>
+
+				$('.re-pwd').on('click', function() {
+					login.hide();
+					reg.hide();
+					loginTitle.hide();
+					rePwd.show();
+					rePwdTitle.show();
+					$('.other-login').hide()
+				});
+			});
+			
+		</script>
 		</div>
 	</body>
 

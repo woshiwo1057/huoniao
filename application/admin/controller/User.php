@@ -97,6 +97,11 @@ class User extends Common
 	{
 		$uid = Request::instance()->param('uid');
 
+		//查出图片路径  进行删除
+		$img_url = Db::table('hn_head_examine')->field('head_img')->where('uid',$uid)->find();
+		$img_url =  substr($img_url['head_img'], 44);
+		//调用删除方法 删除图片
+		$this->cos_delete($img_url);
 		//删除数据库数据
 		$res = Db::table('hn_head_examine')->where('uid',$uid)->delete();
 

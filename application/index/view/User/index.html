@@ -115,7 +115,12 @@
 						</tr>
 						<tr>
 							<td colspan="2">
-								<div class="submit">提交修改</div>
+								<div class="submit xiaoshou"  id="submit">提交修改</div>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<a href="{:url('User/change_password')}" class="submit">点击去修改密码</a>
 							</td>
 						</tr>
 					</table>
@@ -155,7 +160,7 @@
 			}
 
 
-			$('.submit').click(function(){
+			$('#submit').click(function(){
 				
 				var nickname = $('[name="nickname"]').val()
 				var penguin = $('[name = "penguin"]').val()
@@ -230,7 +235,7 @@ var files = $('#user-pic');
 		var base64url;
 		var imgbox;
 		var alertHTML = '<div style="width:70%;height:100%"><img id="newMiva" src=""/></div>';
-		alertHTML += '<div class="yulan"><div><img alt="小" src="//placehold.it/200x200" alt="" /></div><div><img alt="中" src="//placehold.it/200x200" alt="" /></div><div><img alt="大" src="//placehold.it/200x200" alt="" /></div></div>'
+		alertHTML += '<div class="yulan"><div><img alt="小" src="__IMG__default.jpg" alt="" /></div><div><img alt="中" src="__IMG__default.jpg" alt="" /></div><div><img alt="大" src="__IMG__default.jpg" alt="" /></div></div>'
 		// 图片预览
 		files.on('change', function() {
 			reader.readAsDataURL(files.prop('files')[0]);
@@ -268,23 +273,23 @@ var files = $('#user-pic');
 							$('#user-pic-img').attr('src', option);
 
 
-							//
-							// $.post("{:url('User/head_img')}",{option:option},function(data){
-							// 		if(data.code == 0){
-							// 			layui.use('layer',function(){
-							// 			layer.msg(data.msg)})
-							// 		}else if(data.code == 2){
-							// 			layui.use('layer',function(){
-							// 			layer.msg(data.msg)})
-							// 		}else if(data.code == 3){
-							// 			layui.use('layer',function(){
-							// 			layer.msg(data.msg)})
-							// 		}else{
-							// 			layui.use('layer',function(){
-							// 			layer.msg('未知错误')})
-							// 		}
-							//
-							// },'json')
+							
+							$.post("{:url('User/head_img')}",{option:option},function(data){
+									if(data.code == 0){
+										layui.use('layer',function(){
+										layer.msg(data.msg)})
+									}else if(data.code == 2){
+										layui.use('layer',function(){
+										layer.msg(data.msg)})
+									}else if(data.code == 3){
+										layui.use('layer',function(){
+										layer.msg(data.msg)})
+									}else{
+										layui.use('layer',function(){
+										layer.msg('未知错误')})
+									}
+							
+							},'json')
 
 							layer.closeAll();
 						},

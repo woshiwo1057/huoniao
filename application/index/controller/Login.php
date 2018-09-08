@@ -91,7 +91,7 @@ class Login extends \think\Controller
 	//从session里取出code验证码
 	$code = Session::get('code','think');
 
-	if(!isset($code)){
+	if(!isset($code['code'])){
 		return  json(['code' => 1,'msg' => '自己填的验证码不算']);
 	}
 
@@ -100,10 +100,12 @@ class Login extends \think\Controller
 	}
 
 
-	if($code != $register_data['code']){
+	if($code['code'] != $register_data['code']){
 		return json(['code' => 3,'msg' => '验证码输入错误']);
+		 
 	}
-
+	//手机号
+	$register_data['account'] = $code['phone'];
 	//删除验证码（已经不需要了）
 	Session::delete('code');
 	unset($register_data['code']);
@@ -146,23 +148,22 @@ class Login extends \think\Controller
 	public function code()
 	{
 
-		$phone = Request::instance()->param('phone');
-		
+		$code['phone'] = Request::instance()->param('phone');
 		//检测是否以注册
-		$res = Db::table('hn_user')->field('account')->where('account',$phone)->find();
+		$res = Db::table('hn_user')->field('account')->where('account',$code['phone'])->find();
 
 		if($res)
 		{
 			return json(['code' => 3 , 'msg' => '该账号以注册']);
 		}else{
 	
-			$code = rand(1000,9999);
+			$code['code'] = rand(1000,9999);
 			Session::set('code',$code);//将验证码存入Session
 			//$_SESSION['think']['code'] = $code;
 			
 			$sms = 'SMS_141616064';
 			//调用短信服务
-			$result = $this->sendSms($phone,$code,$sms);
+			$result = $this->sendSms($code['phone'],$code['code'],$sms);
 			//将回调对象转化为数组
 			$code_data = get_object_vars($result);	
 	
@@ -176,28 +177,91 @@ class Login extends \think\Controller
 
 	}
 
+	//忘记密码
+	public function forget()
+	{
+		$forget_data = Request::instance()->param();
+
+		//从session里取出code验证码 forget_data['phone']  forget_data['code']  forget_data['password']
+		$code = Session::get('code','think');
+
+		if(!isset($code)){
+			return  json(['code' => 1,'msg' => '自己填的验证码不算']);
+		}
+
+		if(empty($forget_data['code'])){
+			return  json(['code' => 2,'msg' => '验证码不能为空']);
+		}
+
+		if($code != $forget_data['code']){
+			return  json(['code' => 3,'msg' => '验证码输入错误']);
+		}
+
+		//删除验证码（已经不需要了）
+		Session::delete('code');
+		unset($forget_data['code']);
+
+		//通过账号将数据更新
+		$forget_data['password'] = md5($forget_data['password']);
+		$res = Db::table('hn_user')->where('account',$forget_data['phone'])->update([ 'password' => $forget_data['password'] ]);
+
+		if($res){
+			return  json(['code' => 4,'msg' => '重置成功，请去登录']);
+		}else{
+			return  json(['code' => 5,'msg' => '重置失败，错误码005']);
+		}
+
+	}
+
+
+	//忘记密码，短信验证码
+	public function forget_code()
+	{
+		$phone = Request::instance()->param('phone');
+
+		$res = Db::table('hn_user')->field('uid')->where('account',$phone)->find();
+
+		if(!$res){
+			return json(['code' => 1,'msg' => '该手机号未注册']);
+		}
+
+		$code = rand(1000,9999);
+		Session::set('code',$code);//将验证码存入Session
+
+		$sms = 'SMS_141581178';
+		//调用验证码服务
+		$result = $this->sendSms($phone,$code,$sms);
+
+		//将回调对象转化为数组
+		$code_data = get_object_vars($result);	
+	
+		if($code_data['Code'] == 'OK')
+	    {
+	        return json(['code' => 1,'msg' => '发送成功请注意查收']);
+	    }else{
+	        return json(['code' => 2,'msg' => '失败']);
+	    }
+			
+	}
+
 	//阿里云短信服务（因为Common 不继承   所以重新写一份）
 	public function  sendSms($phone,$code,$sms)
 	{
 		
 
-		require_once EXTEND_PATH.'alisms/vendor/autoload.php'; 
+		require_once EXTEND_PATH.'alisms/vendor/autoload.php';
 
 		Config::load();
 
-		
 		$product = "Dysmsapi";
-
 	
         $domain = "dysmsapi.aliyuncs.com";
 
         $accessKeyId = "LTAIUTctPQIcLx5d";
 
         $accessKeySecret = "kWXlikz4MGlJDpeWBaQs9uVnwCRMSF";
-
-       
+      
         $region = 'cn-hangzhou';
-
       
         $endPointName = 'cn-hangzhou';
 
@@ -212,9 +276,6 @@ class Login extends \think\Controller
         
         	static::$acsClient = new DefaultAcsClient($profile);
         }
-
-
-
 		
 		$request = new SendSmsRequest();
 
@@ -224,15 +285,12 @@ class Login extends \think\Controller
 		$request->setSignName("火鸟陪玩");
       
         $request->setTemplateCode($sms);
-
         
         $request->setTemplateParam(json_encode(array(
         		'code' => $code,
         		'product' => 'zsc'
 
-        	),JSON_UNESCAPED_UNICODE));
-
-    
+        	),JSON_UNESCAPED_UNICODE));   
 
         $acsResponse = static::$acsClient->getAcsResponse($request);
 

@@ -1,56 +1,59 @@
 {include file="public/header"}
 {include file="public/sidebar"}
 
-<body style="background:#f3f3f3">
-	<!-- 引入头部 -->
-	<div class="main peiwan-info">
-		<!-- 上面的用户信息 -->
-		<div class="top-user-info">
-			<!--头像-->
-			<div class="pic-box">
-			{if condition="empty($user_data['head_img'])"}
-			<img src="__IMG__default.jpg" />
-			{else /}
-			<img src="{$user_data.head_img}" />
-			{/if}
+	<body style="background:#f3f3f3">
+		<!-- 引入头部 -->
+		<div class="main peiwan-info">
+			<!-- 上面的用户信息 -->
+			<div class="top-user-info">
+				<!--头像-->
+				<div class="pic-box">
+				{if condition="empty($user_data['head_img'])"}
+				<img src="__IMG__default.jpg" />
+				{else /}
+				<img src="{$user_data.head_img}" />
+				{/if}
 				{if condition="$user_data.status == 1" }
 				<!--在线状态--><span>在线</span>
 				{else /}
-				<!--在线状态--><span>已下线</span>
+				<!--在线状态--><span>下线</span>
 				{/if}
 
 			</div>
-			<!--用户信息-->
+				<!--用户信息-->
 			<div class="user-info"><span>{$user_data.nickname}</span>
 				<div class="user-id"><span>ID:{$user_data.uid}</span><span><i class="layui-icon layui-icon-fire"></i>{$user_data.hot}</span></div>
 				<div class="tab">个性签名:<span>{$user_data.table}</span></div>
 			</div>
-			<!--礼物消息-->
-			<div class="gift-msg">
-				<!--一条--> 
-				<div class="msg-box">
-					<div class="msg"><span class="time">{:date('H:i',time())}</span><span class="body"><span>用户名字</span> 赠送给 陪玩师名字<span>1个棒棒糖 <img src="images/png/ea5cd4eeed76a59fac1f8184acc2c695.png"/></span></span>
+				<!--礼物消息-->
+				<div style="height: 140px; width: 45%;" id="gift" class="swiper-container">
+					<div style="100% !important" class="gift-msg swiper-wrapper">
+						<!--一条-->
+						<div class="msg-box swiper-slide">
+							<div class="msg"><span class="time">11:07</span><span class="body"><span>用户名字</span> 赠送给 陪玩师名字<span>1个棒棒糖 <img src="images/png/ea5cd4eeed76a59fac1f8184acc2c695.png"/></span></span>
+							</div>
+						</div>
+						<!--一条-->
+						<div class="msg-box swiper-slide">
+							<div class="msg"><span class="time">11:07</span><span class="body"><span>用户名字</span> 赠送给 陪玩师名字<span>1个棒棒糖 <img src="images/png/ea5cd4eeed76a59fac1f8184acc2c695.png"/></span></span>
+							</div>
+						</div>
 					</div>
 				</div>
-				<!--一条-->
-				<div class="msg-box">
-					<div class="msg"><span class="time">{:date('H:i',time())}</span><span class="body"><span>用户名字</span> 赠送给 陪玩师名字<span>1个棒棒糖 <img src="images/png/ea5cd4eeed76a59fac1f8184acc2c695.png"/></span></span>
-					</div>
+				<!--关注按钮-->
+				<div class="follw-box">
+					<div class="follow-btn" onclick="alert('正在施工 0.0  稍等哦')"><span>关注</span>未知</div>
+					<div class="btm"><span>微信下单</span><span>分享</span></div>
 				</div>
 			</div>
-			<!--关注按钮-->
-			<div class="follw-box">
-				<div class="follow-btn" onclick="alert('正在施工 0.0  稍等哦')"><span>关注</span>未知</div>
-				<div class="btm"><span>微信下单</span><span>分享</span></div>
-			</div>
-		</div>
-		<!--页面下方的盒子-->
-		<div class="bottom-box">
-			<!-- 这里为左右结构 -->
-			<!-- 左 -->
-			<div class="left-box">
-				<!-- 照片展示 -->
-				{if condition="!empty($album_data)"}
+			<!--页面下方的盒子-->
+			<div class="bottom-box">
+				<!-- 这里为左右结构 -->
+				<!-- 左 -->
+
+				<div class="left-box">
+					<!-- 照片展示 -->
+					{if condition="!empty($album_data)"}
 				<div class="photo-show-box">
 					<div class="photo-box"><img src="{$album_data[0]['img_url']}" alt="" class="photo-big"></div>
 					<!-- 照片选择 -->
@@ -81,9 +84,94 @@
 						<!-- 右箭头 --><span class="jt-right"></span></div>
 				</div>
 				{/if}
-				<!-- 照片展示end -->
-				<!-- 礼物盒子 -->
-				<div class="gift-box">
+					<script type="text/javascript">
+						var gitf = new Swiper('.swiper-container', {
+							direction: 'vertical',
+							slidesPerView: 2,
+							loop: true,
+							autoplay: {
+								disableOnInteraction: false,
+							}
+						})
+
+						$('.photo-box').on('click', 'img', function() {
+							var $this = $(this);
+							layui.use('layer', function() {
+								layer.open({
+									type: 1,
+									title: false,
+									content: '<img height=100% width=100% id="newMiva" src=""/>',
+									scrollbar: false,
+									resize: false,
+									zIndex: 7489436491,
+//									btn: ['确认'],
+									area: ['800px', '800px'],
+									success: function(layero, index) {
+										imgbox = layero.find("#newMiva");
+										imgbox.attr('src', $this.prop('src'));
+									}
+								})
+							})
+						})
+					</script>
+					
+					<script type="text/javascript">
+						$(function() {
+							var nowNum = 0; // 当前预览图位置
+
+							$('.photo-select').on('mouseover', 'img', function() {
+								$('.photo-big').prop('src', $(this).prop('src'))
+							})
+
+							$('.photo-select').on('click', 'span', function() {
+								var mBox = $('.middle-img-box');
+								var className = $(this).prop('class');
+								var maxNum = mBox.children('img').length;
+								var transform = 'transform';
+
+								if(className == 'jt-left' && nowNum < 0) {
+									nowNum++
+								}
+								if(className == 'jt-right' && nowNum > -maxNum + 5) {
+									nowNum--
+								}
+
+								if(!support_css3('transform')) transform = '-webkit-transform';
+
+								mBox.css(transform, 'translateX(' + 84 * nowNum + 'px)')
+							})
+
+							/**
+							 * @description 判断css兼容性头缀
+							 * @example 'var xx = support_css3(xxx)'
+							 * @return {[bollean]}
+							 */
+							var support_css3 = (function() {
+								var div = document.createElement('div'),
+									vendors = 'Ms,O,Moz,Webkit'.split(','),
+									len = vendors.length;
+
+								return function(prop) {
+									if(prop in div.style) return true;
+
+									prop = prop.replace(/^[a-z]/, function(val) {
+										return val.toLowerCase();
+									});
+
+									while(len--) {
+										if(vendors[len] + prop in div.style) {
+											return true;
+										}
+									}
+									return false;
+								};
+							})();
+
+						});
+					</script>
+					<!-- 照片展示end -->
+					<!-- 礼物盒子 -->
+					<div class="gift-box">
 					<!-- 标签页 -->
 					<div class="tab"><span class="active"><img src="" alt="">礼物</span><!--<span class=""><img src="" alt="">冠军</span>--></div>
 					<!-- 箱子 -->
@@ -122,9 +210,9 @@
 						})
 					})
 				</script>
-				<!-- 礼物盒子end -->
-				<!-- 个人资料 -->
-				<div class="user-info-box">
+					<!-- 礼物盒子end -->
+					<!-- 个人资料 -->
+					<div class="user-info-box">
 					<div class="title-box"><img src="__IMG__user-title-1.png" alt="" class="bg">
 						<span>个人资料<img src="" alt=""></span>
 					</div>
@@ -138,32 +226,15 @@
 						<div class="one"><img src="images/png/data_05.png" alt=""> 心里的话 : <span>{$user_data.table}</span></div>
 					</div>
 				</div>
-				<!-- 个人资料end -->
-			</div>
-			<!-- 右 上中下三层结构 -->
-			<div class="right-box">
-				<!-- 1.礼物 分上下两层 -->
-				<div class="gift-box">
+					<!-- 个人资料end -->
+				</div>
+				<!-- 右 上中下三层结构 -->
+				<div class="right-box">
+					<!-- 1.礼物 分上下两层 -->
+					<div class="gift-box">
 					<div class="top-box-gift">
 						<div><img src="__IMG__abb6deef23da7d552e54e1d035d1c91c.png" alt="">守护榜</div>
-						<!--
-						{foreach name="sort_data" item="v" key="k"}
-								<div>
-									{if condition="$v.head_img == ''"}
-									<img class="have-corwm" src="__IMG__crowm.png" alt="">
-									<img class="user-pic one" src="__IMGS__php.jpg" alt="">
-									{else /}
-									<img class="have-corwm" src="__IMG__crowm.png" alt="">
-									<img class="user-pic one" src="{$v.head_img}" alt="">
-									{/if}
-									
-									
-									<div>
-										<img src="__IMG__icon2.gif" alt="">{$v.egg_num}
-									</div>
-								</div>
-						{/foreach}
-						-->
+			
 						{if condition="empty($sort_data[0])"}
 							
 
@@ -336,14 +407,14 @@
 						
 					</div>
 				</div>
-				<!-- 2.游戏介绍 下单 -->
-				<div class="game-info-box">
+					<!-- 2.游戏介绍 下单 -->
+					<div class="game-info-box">
 					<!-- 1.标签页形式的标题 -->
 					<div class="tab-title"><span class="active">{$service_data.name}</span></div>
 					<!-- 2.单子的详细内容 -->
 					<div class="order-info">
 						{if condition="isset($service_data.game_logo_img)"}
-						<img src="{$service_data.game_logo_img}" alt="">
+						<img src="{$service_data.game_index_img}" alt="">
 						{else /}
 						<img class="user-pic one" src="__IMGS__php.jpg" alt="">
 						{/if}
@@ -354,19 +425,19 @@
 							<div class="audio-box"><img src="__IMG__icon-play.png" alt=""><span>0 S</span><audio src="" style="display:none"></audio><img src="__IMG__icon-auido.png" alt=""></div>
 						</div><a href="{:url('Order/index',['id' => $user_data['uid']])}"><span class="submit-btn">立即下单</span></a></div>
 					
-					<!-- 3.陪玩师自我介绍 -->
-					<div class="about-user">
-						<div class="title-user"><span>自我</span>介绍</div>
-						<p>{$user_data.explain}~</p>
+						<!-- 3.陪玩师自我介绍 -->
+						<div class="about-user">
+							<div class="title-user"><span>自我</span>介绍</div>
+							<p>{$user_data.explain}~</p>
+						</div>
 					</div>
-				</div>
-				<!-- 3.用户评价 -->
-				<!-- 互动区 -->
-				<div class="hudong user-eval">
-					<!-- <div class="title-hudong"><span>互动区</span></div> -->
-					<div class="title-user"><span>用户</span>评价</div>
-					<!-- 互动列表 -->
-					<div class="hudong-list">
+					<!-- 3.用户评价 -->
+					<!-- 互动区 -->
+					<div class="hudong user-eval">
+						<!-- <div class="title-hudong"><span>互动区</span></div> -->
+						<div class="title-user"><span>用户</span>评价</div>
+						<!-- 互动列表 -->
+						<div class="hudong-list">
 						{foreach  name="comment_data"  item="v"}
 						<!-- 一条 -->
 						<div class="hudong-one-box"><img src="{$v.head_img}" alt="">
@@ -420,76 +491,21 @@
 						}
 				
 					</script>
-					<script type="text/javascript">
-						$(function() {
-							var nowNum = 0; // 当前预览图位置
-
-							$('.photo-select').on('mouseover', 'img', function() {
-								$('.photo-big').prop('src', $(this).prop('src'))
-							})
-
-							$('.photo-select').on('click', 'span', function() {
-								var mBox = $('.middle-img-box');
-								var className = $(this).prop('class');
-								var maxNum = mBox.children('img').length;
-								var transform = 'transform';
-
-								if(className == 'jt-left' && nowNum < 0) {
-									nowNum++
-								}
-								if(className == 'jt-right' && nowNum > -maxNum + 5) {
-									nowNum--
-								}
-
-								if(!support_css3('transform')) transform = '-webkit-transform';
-
-								mBox.css(transform, 'translateX(' + 84 * nowNum + 'px)')
-							})
-
-							/**
-							 * @description 判断css兼容性头缀
-							 * @example 'var xx = support_css3(xxx)'
-							 * @return {[bollean]}
-							 */
-							var support_css3 = (function() {
-								var div = document.createElement('div'),
-									vendors = 'Ms,O,Moz,Webkit'.split(','),
-									len = vendors.length;
-
-								return function(prop) {
-									if(prop in div.style) return true;
-
-									prop = prop.replace(/^[a-z]/, function(val) {
-										return val.toLowerCase();
-									});
-
-									while(len--) {
-										if(vendors[len] + prop in div.style) {
-											return true;
-										}
-									}
-									return false;
-								};
-							})();
-
-						});
-					</script>
-					<!--
-					<div class="page-cut">
-						<div class="page-up">上一页</div>
-						<div class="page-before">首页</div><span class="active">1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>...</span>
-						<div class="page-last">尾页</div>
-						<div class="page-down">下一页</div>
+						<!--
+						<div class="page-cut">
+							<div class="page-up">上一页</div>
+							<div class="page-before">首页</div><span class="active">1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>...</span>
+							<div class="page-last">尾页</div>
+							<div class="page-down">下一页</div>
+						</div>
+						-->
 					</div>
-					-->
+					<!-- 互动end -->
 				</div>
-				<!-- 互动end -->
 			</div>
 		</div>
-	</div>
-	<!-- 引入侧边栏 -->
-	<!-- 引入页脚 -->
-	{include file="public/footer"}
-</body>
+		<!-- 引入侧边栏 -->
+		<!-- 引入页脚 -->
+	</body>
 
 </html>
