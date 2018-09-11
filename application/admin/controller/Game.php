@@ -49,7 +49,7 @@ class Game extends Common
 				if($data['code'] == 0)
 				{
 					//成功时组装新路径
-					$game_data['game_logo_img'] = 'http://hn-001-1256760691.picbj.myqcloud.com/'.$key;
+					$game_data['game_logo_img'] = $this->img.$key;
 
 				}
 			}
@@ -68,7 +68,7 @@ class Game extends Common
 				if($data['code'] == 0)
 				{
 					//成功时组装新路径
-					$game_data['game_index_img'] = 'http://hn-001-1256760691.picbj.myqcloud.com/'.$key;
+					$game_data['game_index_img'] = $this->img.$key;
 
 				}
 			}
@@ -108,7 +108,7 @@ class Game extends Common
 				{
 					//成功时删除原来的图片 $game_data['game_logo_img']  组装新路径 
 					$this->cos_delete($game_data['game_logo_img']);
-					$data_updata['game_logo_img'] = 'http://hn-001-1256760691.picbj.myqcloud.com/'.$key;
+					$data_updata['game_logo_img'] = $this->img.$key;
 
 				}
 			}
@@ -126,7 +126,7 @@ class Game extends Common
 				{
 					//成功时删除原来的图片 $game_data['game_index_img']  组装新路径 
 					$this->cos_delete($game_data['game_index_img']);
-					$data_updata['game_index_img'] = 'http://hn-001-1256760691.picbj.myqcloud.com/'.$key;
+					$data_updata['game_index_img'] = $this->img.$key;
 
 				}
 			}
@@ -155,12 +155,12 @@ class Game extends Common
 
 		//删除图片
 		if($res['game_logo_img']){
-			$img_url =  substr($res['game_logo_img'], 44);
+			$img_url =  substr($res['game_logo_img'], $this->Intercept);
 			$this->cos_delete($img_url);
 		}
 
 		if($res['game_index_img']){
-			$img_url =  substr($res['game_index_img'], 44);
+			$img_url =  substr($res['game_index_img'], $this->Intercept);
 			$this->cos_delete($img_url);
 		}
 

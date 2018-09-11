@@ -24,7 +24,8 @@ class Common extends \think\Controller
 {
 
 	static $acsClient = null;
-
+    public $img = 'https://hn-001-1256760691.picbj.myqcloud.com/'; //腾讯云路径
+    public $Intercept = 45; //cos路径截取长度
 	 
 
 	//构造函数
@@ -217,7 +218,7 @@ class Common extends \think\Controller
     }
 
 
-    //1.上传图片至腾讯cos   文件形式上传
+    //1.上传图片至腾讯cos   文件形式上传 base64
      public function cos($file,$key)
     {
      /*

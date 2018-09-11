@@ -33,7 +33,7 @@ class Gift extends Common
 				$url_data = $this->cos($file,$key);	
 				if($url_data['code'] == 0){
 					//成功
-					$gift_data['img_url'] = 'http://hn-001-1256760691.picbj.myqcloud.com/'.$key; //将此路径存入表单
+					$gift_data['img_url'] = $this->img.$key; //将此路径存入表单
 				}
 			}
 
@@ -64,7 +64,7 @@ class Gift extends Common
 				$url_data = $this->cos($file,$key);	
 				if($url_data['code'] == 0){
 					//成功
-					$gift_edit['img_url'] = 'http://hn-001-1256760691.picbj.myqcloud.com/'.$key; //将此路径存入表单
+					$gift_edit['img_url'] = $this->img.$key; //将此路径存入表单
 				}
 			}
 
@@ -96,7 +96,7 @@ class Gift extends Common
 
 		//cos图片删除
 		//用路径  删除cos上的图片
-		$img_url =  substr($res['img_url'], 44);
+		$img_url =  substr($res['img_url'], $this->Intercept);
 		//调用删除方法 删除cos上的图片
 		$this->cos_delete($img_url);
 

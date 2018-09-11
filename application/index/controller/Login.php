@@ -51,7 +51,7 @@ class Login extends \think\Controller
 			$res = Db::table('hn_user')->where('account',$login_data['account'])->find();
 			if(!$res)
 			{
-				return json(['code' => 1,'msg' => '账号或密码错误']);
+				return json(['code' => 1,'msg' => '该手机号未注册']);
 			}
 
 			
@@ -88,6 +88,9 @@ class Login extends \think\Controller
 		
 	$register_data = Request::instance()->param();
 
+	if($register_data['password'] == ''){
+		return  json(['code' => 5,'msg' => '密码不能为空']);
+	}
 	//从session里取出code验证码
 	$code = Session::get('code','think');
 

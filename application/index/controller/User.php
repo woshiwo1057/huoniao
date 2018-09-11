@@ -79,7 +79,7 @@ class User extends Common
 			if($res){
 				return json(['code' => 1,'msg' => '成功']);
 			}else{ 
-				return json(['code' => 2,'msg' => '失败']);
+				return json(['code' => 2,'msg' => '未修改任何数据']);
 			}
 		}
 
@@ -107,7 +107,7 @@ class User extends Common
 		if($data['code'] == 0){
 			// //成功后填入审核表单
 			
-			$head_img = 'http://hn-001-1256760691.picbj.myqcloud.com/'.$key; //将此路径存入表单
+			$head_img = $this->img.$key; //将此路径存入表单
 			//组装数据
 			$head_data['uid'] = $id;
 			$head_data['head_img'] = $head_img;
@@ -400,7 +400,7 @@ class User extends Common
 			//判断返回数据是否成功
 			if($url_data['code'] == 0){
 				// 成功  将用户ID与图片存入数据库
-				$album['img_url'] = 'http://hn-001-1256760691.picbj.myqcloud.com/'.$key; //拼装路径
+				$album['img_url'] = $this->img.$key; //拼装路径
 				$res = Db::table('hn_user_album')->insert($album);
 
 				if($res){
@@ -434,7 +434,7 @@ class User extends Common
 		$id = Request::instance()->param('id');
 		//根据ID查数据  进行分割字符串 组装路径
 		$key = Db::table('hn_user_album')->field('img_url')->where('id',$id)->find();
-		$key =  substr( $key['img_url'], 44);
+		$key =  substr( $key['img_url'], $this->Intercept);
 
 		//调用删除方法 删除图片
 		$data = $this->cos_delete($key);
@@ -643,8 +643,8 @@ class User extends Common
 			$real['name'] = $user_real['name'];
 			$real['card_num'] = $user_real['card_num'];
 			$real['zfb'] = 	$user_real['zfb'];
-			$real['front_img'] = 'http://hn-001-1256760691.picbj.myqcloud.com/'.$key_zheng;//拼装路径
-			$real['back_img'] = 'http://hn-001-1256760691.picbj.myqcloud.com/'.$key_fan;//拼装路径
+			$real['front_img'] = $this->img.$key_zheng;//拼装路径
+			$real['back_img'] = $this->img.$key_fan;//拼装路径
 			$real['time'] = time();
 
 			$res = Db::table('hn_acc_real')->insert($real);
@@ -686,16 +686,68 @@ class User extends Common
 	    }
 	}
 
-	
+	//关注
 	public function follow()
 	{
 		$this->error('暂未开放','User/index');
 	}
 
-	//服务项目
+	//服务项目管理（是不是应该还有个申请记录列表？）
 	public function service()
 	{
-		$this->error('暂未开放','User/index');
+		//$this->error('暂未开放','User/index');
+		//查询申请记录
+			//获取用户ID
+		$uid = $_SESSION['user']['user_info']['uid'];
+		//$apply_data = Db::table('think_user')->field('id,???,???')->where('uid',$uid)->limit(10)->select();
+		if(Request::instance()->isPost())
+		{
+			//获取到数据
+			$data = Request::instance()->param();
+			// cos上传 
+			$file = $data['tupian'];//图片
+
+			$key = date('Y-m-d').'/'.md5(microtime()).'.jpg'; //路径
+
+			$status = $this->cos($file,$key);
+
+			//$data['图片路径'] = 'http://hn-001-1256760691.picbj.myqcloud.com/'.$key; //将此路径存入表单
+			if($status['code'] == 0){
+				//存表
+				$data['time'] = time();
+				$res = Db::table('think_user')->insert($data);
+				if($res){
+					return json(['code' => 1, 'msg' => '申请成功，请耐心等待']);
+				}else{
+					return json(['code' => 2, 'msg' => '申请失败，错误码002' ]);
+				}
+			}else{
+				return json(['code' => 3, 'msg' => '图片上传失败，请检查后重新尝试']);
+			}
+
+		}
+
+		//$this->assign(['apply_data' => $apply_data]);
+		return $this->fetch('User/service');
+
+	}
+
+	//申请服务项目Ajax
+	public function service_ajax()
+	{
+	                                                                    echo 1;		die;
+ 
+		$type = Request::instance()->param('type');
+		
+		//1为游戏
+		//2为娱乐
+		if($type == 1){ 
+			$data = Db::table('hn_game')->field('name,id')->select();
+		}else if($type == 2){
+			$data = Db::table('hn_joy')->field('name,id')->select();
+		}
+
+		return json($data);
 	}
 
 	//优惠券

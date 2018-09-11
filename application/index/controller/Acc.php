@@ -56,12 +56,12 @@ class Acc extends Common
 			];
 			*/
 
-			$search_data = Db::table('hn_user')->where('uid','like',$data['search'].'%')->select();
+			$search_data = Db::table('hn_user')->where('uid','like',$data['search'].'%')->where('type',1)->limit('15')->select();
 
 		}else{
 			//不为整形的时候查询nickname
 		
-			$search_data = Db::table('hn_user')->where('nickname','like',$data['search'].'%')->select();
+			$search_data = Db::table('hn_user')->where('nickname','like',$data['search'].'%')->where('type',1)->limit('15')->select();
 			
 		}
 		

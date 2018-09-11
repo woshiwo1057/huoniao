@@ -15,6 +15,10 @@ use \Qcloud\Cos\Client;
 
 class Common extends \think\Controller
 {
+
+	public $img = 'https://hn-001-1256760691.picbj.myqcloud.com/'; //腾讯云路径
+    public $Intercept = 45; //cos路径截取长度
+    
 	//构造函数
 	public function __construct()
 	{
@@ -144,7 +148,7 @@ class Common extends \think\Controller
 		}
 	}
 
-	//1.上传图片至腾讯cos   文件形式上传
+	//1.上传图片至腾讯cos   文件形式上传  Tp方法
      public function cos($file,$key)
     {
      /*
@@ -232,7 +236,6 @@ class Common extends \think\Controller
                        
                     ];
                     return $data;
-           // echo($e);
         }
     }
 

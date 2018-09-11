@@ -1,0 +1,57 @@
+{include file="public/header"}
+
+	<body class="u-body">
+		<!-- 引入头部 -->
+		<div class="main u-main">
+{include file="public/nav"}
+			<div class="user-info-box u-page-body">
+				<div class="u-title">
+					<span>开通服务</span>
+           <span  style="float:right;" class="xiaoshou"  onclick="alert('别急，客官')">添加服务</span>
+				</div>
+       
+        <!-- 我的赠礼 -->
+        <div class="miva-my-send">
+          
+          <!-- 排序? -->
+          <div class="pai">
+            <span>服务名称</span>
+            <span>状态</span>
+            <span>开通时间</span>
+            <span>备注说明</span>
+            <span>价格/小时</span>
+            <span>操作</span>
+          </div>
+
+          <!-- 赠礼内容 -->
+          <div class="send-info">
+            <!-- 如果没数据 -->
+            <div class="if-black">
+              <img src="" alt="">
+              <div class="if-have">
+
+         
+           
+              <div class="pai">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+     
+         </div>
+            </div>
+          </div>
+        </div>
+
+			</div>
+
+		</div>
+
+		<!-- 引入页脚 -->
+{include file="public/footer"}
+	</body>
+
+</html>

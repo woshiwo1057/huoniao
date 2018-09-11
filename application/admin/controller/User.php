@@ -72,7 +72,7 @@ class User extends Common
 
 		//删除用户旧头像
 		$img_url = Db::table('hn_user')->field('head_img')->where('uid',$uid)->find();
-		$img_url =  substr($img_url['head_img'], 44);
+		$img_url =  substr($img_url['head_img'], $this->Intercept);
 		//调用删除方法 删除图片
 		$this->cos_delete($img_url);
 
@@ -99,7 +99,7 @@ class User extends Common
 
 		//查出图片路径  进行删除
 		$img_url = Db::table('hn_head_examine')->field('head_img')->where('uid',$uid)->find();
-		$img_url =  substr($img_url['head_img'], 44);
+		$img_url =  substr($img_url['head_img'], $this->Intercept);
 		//调用删除方法 删除图片
 		$this->cos_delete($img_url);
 		//删除数据库数据

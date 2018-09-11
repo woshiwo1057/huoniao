@@ -33,7 +33,7 @@ class Joy extends Common
 				$url_data = $this->cos($file,$key);	
 				if($url_data['code'] == 0){
 					//成功
-					$joy_data['img_url'] = 'http://hn-001-1256760691.picbj.myqcloud.com/'.$key; //将此路径存入表单
+					$joy_data['img_url'] = $this->img.$key; //将此路径存入表单
 				}
 			}
 
@@ -70,9 +70,9 @@ class Joy extends Common
 				if($data['code'] == 0)
 				{
 					//成功时组装新路径
-					$data_updata['joy_logo_img'] = 'http://hn-001-1256760691.picbj.myqcloud.com/'.$key;
+					$data_updata['joy_logo_img'] = $this->img.$key;
 					//用旧路径  删除cos上的图片
-					$img_url =  substr($joy_data['joy_logo_img'], 44);
+					$img_url =  substr($joy_data['joy_logo_img'], $this->Intercept);
 					//调用删除方法 删除cos上的图片
 					$this->cos_delete($img_url);
 				}
@@ -101,7 +101,7 @@ class Joy extends Common
 		$res = Db::table('hn_joy')->field('joy_logo_img')->where('id',$id)->find();
 
 		//cos图片删除
-		$img_url =  substr($res['joy_logo_img'], 44);
+		$img_url =  substr($res['joy_logo_img'], $this->Intercept);
 		//调用删除方法 删除cos上的图片
 		$this->cos_delete($img_url);
 		

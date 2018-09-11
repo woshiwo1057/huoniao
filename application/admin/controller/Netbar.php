@@ -44,7 +44,7 @@ class Netbar extends Common
 				if($data['code'] == 0)
 				{
 					//成功时组装新路径
-					$netbar_data['img'] = 'http://hn-001-1256760691.picbj.myqcloud.com/'.$key;
+					$netbar_data['img'] = $tgis->img.$key;
 
 				}
 			}
@@ -64,7 +64,7 @@ class Netbar extends Common
 				if($data['code'] == 0)
 				{
 					//成功时组装新路径
-					$netbar_data['business_license'] = 'http://hn-001-1256760691.picbj.myqcloud.com/'.$key;
+					$netbar_data['business_license'] = $this->img.$key;
 														http://hn-001-1256760691.picbj.myqcloud.com/2018-09-04/011b3ba691e177e4711b7bcc989b67fc.jpg
 				}		
 			}

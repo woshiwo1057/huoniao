@@ -112,7 +112,7 @@ class Playing extends Common
 					$str .= rand(1000,9999);
 					$key = date('Y-m-d').'/'.md5($str).'.jpg'; //路径
 
-					$images[$k] = 'http://hn-001-1256760691.picbj.myqcloud.com/'.$key;		
+					$images[$k] = $this->img.$key;		
 					$this->cos($v,$key);
 				}
 				$images = implode(',', $images);  //图片路径 
@@ -162,7 +162,7 @@ class Playing extends Common
 			$str .= rand(1000,9999);
 			$key = date('Y-m-d').'/'.md5($str).'.jpg'; //路径
 
-			$images[$k] = 'http://hn-001-1256760691.picbj.myqcloud.com/'.$key;		
+			$images[$k] = $this->img.$key;		
 			//$this->cos($v,$key);
 		}
 		$images = implode(',', $images);  //图片路径 

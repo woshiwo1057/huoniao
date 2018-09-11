@@ -49,7 +49,7 @@ class Conpanion extends Common
 		//2为娱乐
 		if($type == 1){
 			$data = Db::table('hn_game')->field('name,id')->select();
-		}else{
+		}else if($type == 2){
 			$data = Db::table('hn_joy')->field('name,id')->select();
 		}
 
@@ -96,7 +96,7 @@ class Conpanion extends Common
 				$img_data = $this->cos($file,$key);
 				if($img_data['code'] == 0){
 					//拼装路径
-					$data['data_url'] = 'http://hn-001-1256760691.picbj.myqcloud.com/'.$key;
+					$data['data_url'] = $this->img.$key;
 					//删除无用的数据
 					unset($data['img_data']);
 

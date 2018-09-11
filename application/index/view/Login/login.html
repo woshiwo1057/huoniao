@@ -37,8 +37,9 @@
 					<input type="text" name="account" value="" placeholder="手机号/邮箱" />
 					<input type="password" name="password" value="" placeholder="密码" />
 
-					<img src="{:url('Login/captcha_code')}?"onclick="this.src=this.src+Math.random()"  style="widht:130px;height:50px;" id="miva">
+					
 					<input type="text"  placeholder="请输入验证码"  name="captcha_code" style="width:50%;" >
+					<img src="{:url('Login/captcha_code')}?"onclick="this.src=this.src+Math.random()"  style="widht:130px;height:50px;" id="miva">
 					<a id="kanbuq" href="javascript:;">看不清，换一张</a>
 					<input type="submit" value="登录" />
 					<label for="remember-me"><!--<input type="checkbox" name="" id="remember-me" value="" />下次自动登录--></label>
@@ -56,7 +57,11 @@
 						<button class="button">发送验证码</button>
 					</div>
 					<div>
-						<input type="password" data-item=pwd name="password" id="" value="" placeholder="6-20位字母/数字/符号至少两种" />
+						<input type="password" data-item=pwd name="password" id="" value="" placeholder="输入密码" />
+						<span class=""></span>
+					</div>
+					<div>
+						<input type="password" data-item=repeat name="repeat" id="" value="" placeholder="再次输入密码" />
 						<span class=""></span>
 					</div>
 					<label for="agreement"><input type="checkbox" name="" id="agreement" checked="true" value="" />我已阅读 <a href="">《用户协议》</a></label>

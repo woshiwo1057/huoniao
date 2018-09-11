@@ -16,11 +16,11 @@ use \Qcloud\Cos\Client;
 
 class Index  extends Common
 {
-
+   
 
     public function index()
     { 	
-
+        
     	//Session::delete('think'); 
     	//var_dump($_SESSION);die;
 
@@ -340,11 +340,10 @@ class Index  extends Common
     //送礼物控制器
     public function giving_gifts()
     {
-        if(!$_SESSION){
+        if(!isset($_SESSION['user'])){
             return  json(['code' => 1,'msg' => '跳去登录']);
         }
-
-
+      
         //获取到用户ID
         $user_id = $_SESSION['user']['user_info']['uid'];
         $gift_data = Request::instance()->param(); //gift_data['gift_id']礼物ID   gift_data['acc_id']该陪玩师ID

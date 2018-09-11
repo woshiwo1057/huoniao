@@ -63,6 +63,7 @@
     <!-- 顶部右侧板块 -->
     <div class="top-right-box">
       <div class="msg-box">
+        <span class="xiaoshou start" onclick="alert('暂未开放')">开始服务</span>
         <a href="javascript:;"><i class="layui-icon layui-icon-layer"></i><span onclick="alert('暂未开放')">语音大厅</span></a>
         <a href="{:url('User/msg')}">
           <i class="layui-icon layui-icon-notice  "></i><span>消息</span>
@@ -222,13 +223,13 @@
 
 
                if(!mobile.test(phone)){
-                alert(phone)
+              
                 layui.use('layer',function(){
                 layer.msg('手机号输入错误')})
                   return false
               }
 
-
+/*
               timer = setInterval(function(e) {
                 $(_this).html('发送验证码(' + num + ')')
                 num--;
@@ -240,13 +241,27 @@
                   $(_this).attr('disabled','true');
                 }
               }, 1000);
-
+*/
              
               $.post("{:url('Login/code')}",{phone:phone},function(data){
 
                     if(data.code == 1){
                       layui.use('layer',function(){
-                      layer.msg(data.msg)})
+                      layer.msg(data.msg)});
+
+
+                       timer = setInterval(function(e) {
+                        $(_this).html('发送验证码(' + num + ')')
+                        num--;
+                        if (num <= 1) {
+                          clearInterval(timer)
+                          $(_this).removeAttr('disabled');
+                          $(_this).html('发送验证码')
+                        }else {
+                          $(_this).attr('disabled','true');
+                        }
+                      }, 1000);
+                       
 
                     }else if(data.code == 2){
                       layui.use('layer',function(){
@@ -276,10 +291,27 @@
             $(body.find('.register')).click(function(){
               var code = $(body.find('[name="code"]')).val()
               var phone = $(body.find('[name="phone"]')).val()
-              var password = $(body.find('[data-item=pwd]')).val()
+              var passwor = $(body.find('[data-item=pwd]')).val()
+              if(code == ''){
+                layui.use('layer',function(){
+                layer.msg('验证码不能为空')})              
+                return false
+              }
+              if(passwor == ''){
+                layui.use('layer',function(){
+                layer.msg('密码不能为空')})                     
+                return false
+              }
+              var repea =  $(body.find('[data-item=repeat]')).val()
+            
+              if(passwor != repea){
+                layui.use('layer',function(){
+                layer.msg('2次密码输入不一致，请重新输入')})
+                return false
+              }
 
               // alert(code,phone,password)
-              $.post("{:url('Login/register')}",{account:phone,password:password,code:code},function(data){
+              $.post("{:url('Login/register')}",{account:phone,password:passwor,code:code},function(data){
                     if(data.code == 1){
                       layui.use('layer',function(){
                       layer.msg(data.msg)})
@@ -293,8 +325,17 @@
                       layui.use('layer',function(){
                       layer.msg(data.msg)})
                       layer.closeAll();
-                      window.location.href=data.url
-                      
+
+                      function jump(){
+                       // window.location.href="{:url('Index/index')}"//data.url
+                        window.location.href=data.url
+                      }
+
+                      setInterval(jump,1000);
+                                           
+                    }else if(data.code == 5){
+                      layui.use('layer',function(){
+                      layer.msg(data.msg)})
                     }
 
               },'json')
@@ -311,35 +352,41 @@
                 var timer;
 
                 if(!mobile.test(phone)){  
-                  $(body.find('.succe').html('手机号输入错误，请重新输入'))
+                  layui.use('layer',function(){
+                  layer.msg('手机号输入错误，请重新输入')})
                   return false
                 }
-                timer = setInterval(function(e) {
-                  $(_this).html('发送验证码(' + num + ')')
-                  num--;
-                  if (num <= 1) {
-                    clearInterval(timer)
-                    $(_this).removeAttr('disabled');
-                    $(_this).html('发送验证码')
-                  }else {
-                    $(_this).attr('disabled','true');
-                  }
-                }, 1000);
 
              
  
                 $.post("{:url('Login/forget_code')}",{phone:phone},function(data){
 
                       if(data.code == 1){
-                         $(body.find('.succe').html('发送成功，请注意查收'))
+                        layui.use('layer',function(){
+                        layer.msg('发送成功，请注意查收')})
+
+                        timer = setInterval(function(e){
+                          $(_this).html('发送验证码(' + num + ')')
+                          num--;
+                          if (num <= 1) {
+                            clearInterval(timer)
+                            $(_this).removeAttr('disabled');
+                            $(_this).html('发送验证码')
+                          }else {
+                            $(_this).attr('disabled','true');
+                          }
+                        }, 1000);
 
                       }else if(data.code == 2){
-                        $(body.find('.succe').html('发送失败，错误码002'))
+                        layui.use('layer',function(){
+                        layer.msg('发送失败，错误码002')})
+                    
                       }else if(data.code == 3){
                         layui.use('layer',function(){
                         layer.msg(data.msg)})
                       }else{
-                        $(body.find('.succe').html('未知错误，请检查后重新尝试发送'))
+                        layui.use('layer',function(){
+                        layer.msg('未知错误，请检查后重新尝试发送')})
                       }
                 },'json')
                 return false
@@ -351,25 +398,37 @@
                   var code =  $(body.find('[name="forget_code"]')).val()
                   var password =  $(body.find('[name="forget_password"]')).val()
                   var repeat =  $(body.find('[name="forget_repeat"]')).val()
+                  if(password == ''){
+                      layui.use('layer',function(){
+                      layer.msg('密码不能为空')})
+                      return false
+                  }
 
                   if(password != repeat){
-                      $(body.find('.succe').html('新密码输入不一致，请重新输入'))
+                      layui.use('layer',function(){
+                      layer.msg('新密码输入不一致，请重新输入')})
                       return false
                   }
 
                   $.post("{:url('Login/forget')}",{phone:phone,code:code,password:password},function(data){
                         if(data.code == 1){
-                           $(body.find('.succe').html('自己填的验证码不算'))
+                          layui.use('layer',function(){
+                          layer.msg('自己填的验证码不算')})                         
                         }else if(data.code ==2){
-                          $(body.find('.succe').html('验证码不能为空'))
+                          layui.use('layer',function(){
+                          layer.msg('验证码不能为空')})                    
                         }else if(data.code == 3){
-                          $(body.find('.succe').html('验证码输入错误，请重新填写，或重新发送验证码'))
+                          layui.use('layer',function(){
+                          layer.msg('验证码输入错误，请重新填写，或重新发送验证码')})           
                         }else if(data.code == 4){
-                          $(body.find('.succe').html('重置成功，请去登录'))
+                          layui.use('layer',function(){
+                          layer.msg('重置成功，请去登录界面登录')})                         
                         }else if(data.code ==5){
-                          $(body.find('.succe').html('重置失败，错误码005'))
+                          layui.use('layer',function(){
+                          layer.msg('重置失败，错误码005')})                         
                         }else{
-                          $(body.find('.succe').html('未知错误，请检查后重新尝试发送'))
+                          layui.use('layer',function(){
+                          layer.msg('未知错误，请检查后重新尝试发送')})                       
                         }
 
                   },'json')

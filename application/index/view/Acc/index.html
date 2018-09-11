@@ -3,8 +3,8 @@
 
 <style>
 	.icon-active > img {
-		-webkit-transform: translateY(-61px);
-		transform: translateY(-61px);
+		-webkit-transform: translateY(<?php  echo intval(-61*0.6) ?>px);
+		transform: translateY(<?php  echo intval(-61*0.6) ?>px);
 	}
 	.icon-active > img:hover {
 		-webkit-transform: translateY(0px);
@@ -30,7 +30,7 @@
 							{foreach name="game_data" item="v"}
 							<a>
 								<div class="miva-iocn-box" project="1"  project_id="{$v.id}" dawdawdawd>
-									{if condition="$v.game_logo_img == ''"}
+								{if condition="$v.game_logo_img == ''"}
 									<img src="__IMG__default.jpg" alt="1">
 								{else /}
 									<img src="{$v.game_logo_img}" alt="">
