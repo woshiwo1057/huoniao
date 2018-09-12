@@ -692,14 +692,15 @@ class User extends Common
 		$this->error('暂未开放','User/index');
 	}
 
-	//服务项目管理（是不是应该还有个申请记录列表？）
+	//服务项目管理
 	public function service()
 	{
 		//$this->error('暂未开放','User/index');
 		//查询申请记录
 			//获取用户ID
 		$uid = $_SESSION['user']['user_info']['uid'];
-		//$apply_data = Db::table('think_user')->field('id,???,???')->where('uid',$uid)->limit(10)->select();
+		$apply_data = Db::table('hn_apply_project')->field('project_name,status,time,order_num,pric,type')->where('uid',$uid)->order('id desc')->limit(10)->select();
+		//var_dump($apply_data);die;
 		if(Request::instance()->isPost())
 		{
 			//获取到数据
@@ -727,15 +728,27 @@ class User extends Common
 
 		}
 
-		//$this->assign(['apply_data' => $apply_data]);
+		$this->assign(['apply_data' => $apply_data]);
 		return $this->fetch('User/service');
 
+	}
+
+	//申请服务
+	public function service_add()
+	{
+		if(Request::instance()->isPost())
+		{
+			$data = Request::instance()->param();
+			var_dump($data);die;
+	
+		}
+		return $this->fetch();
 	}
 
 	//申请服务项目Ajax
 	public function service_ajax()
 	{
-	                                                                    echo 1;		die;
+	      echo 1;		die;
  
 		$type = Request::instance()->param('type');
 		

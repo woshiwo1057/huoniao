@@ -1,0 +1,98 @@
+{include file="public/header"}
+<link href="__ADMIN__lib/webuploader/0.1.5/webuploader.css" rel="stylesheet" type="text/css"  />
+{include file="public/sidebar"}
+
+<body>
+<div class="page-container">
+	<form class="form form-horizontal" id="form-article-add" enctype="multipart/form-data"  action="#" method="post">
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>该用户ID：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$apply_data.uid}" name="name">
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>申请的项目名：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$apply_data.project_name}" name="name">
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>说明：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$apply_data.explain}" placeholder="无">
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>申请时间：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{:date('Y-m-d H:i:s' ,$apply_data.time)}"name="name">
+			</div>
+		</div>
+
+		<label class="form-label col-xs-4 col-sm-2"  style="margin-left:50px;"><span class="c-red">*</span>申请资料照片</label>：
+		<div class="row cl"  style="margin-left:200px;">
+			<img style="width:700px" id="pic-tow" src="http://hn-001-1256760691.picbj.myqcloud.com/2018-09-04/336da084d913f07ca8eadf8189208b66.jpg" alt="">
+		</div>
+		
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+				<a class="btn btn-primary radius" data-type="1"><i class="Hui-iconfont">&#xe632;</i>审核通过</a>
+			</div>
+
+			
+		</div>
+		<div class="row cl">
+			
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+				<a class="btn btn-primary radius" data-type="2" ><i class="Hui-iconfont">&#xe632;</i>审核不通过</a>
+			</div>
+		</div>
+	</form>
+
+</div>
+</div>
+<script>
+	$(function(){
+		$('.radius').click(function(){
+			var a = confirm("真的这样做吗？")
+			if (a != true){
+				return false
+			}
+
+			var type = $(this).attr('data-type')
+			var uid = {$apply_data.uid};
+
+			$.post("{:url('Examine/inspect')}",{type:type,uid:uid},function(data){
+					if(data == 1){
+						alert('成功')
+						window.location.href="{:url('Examine/service')}"
+					}else if(data==2){
+						alert('操作失败')
+						//window.location.href="{:url('Examine/service')}"
+					}else{
+						alert('失败')
+					}
+
+			},'json')
+
+
+		})
+
+	})
+
+	
+</script>
+<!--_footer 作为公共模版分离出去-->
+{include file="public/footer"}
+<!--/_footer /作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+
+
+</body>
+</html>

@@ -7,7 +7,7 @@
 			<div class="user-info-box u-page-body">
 				<div class="u-title">
 					<span>开通服务</span>
-           <span  style="float:right;" class="xiaoshou"  onclick="alert('别急，客官')">添加服务</span>
+           <span  style="float:right;" class="xiaoshou"  onclick="alert('别急，客官')"><a href="{:url('User/service_add')}">添加服务</a></span>
 				</div>
        
         <!-- 我的赠礼 -->
@@ -15,11 +15,11 @@
           
           <!-- 排序? -->
           <div class="pai">
-            <span>服务名称</span>
-            <span>状态</span>
-            <span>开通时间</span>
-            <span>备注说明</span>
+            <span>服务名称</span>        
+            <span>申请/开通时间</span>
+            <span>该项目接单数</span>
             <span>价格/小时</span>
+            <span>状态</span>
             <span>操作</span>
           </div>
 
@@ -31,16 +31,21 @@
               <div class="if-have">
 
          
-           
+           {foreach name="apply_data" item="v"}
               <div class="pai">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
+                <span>{$v.project_name}</span>
+                
+                <span>{:date('Y-m-d H:i:s',$v.time)}</span>
+                <span>{$v.order_num}</span>
+                <span>{$v.pric}</span>
+                {switch name="$v.status"}
+                  {case value='0'}<span>待审核</span><span class="xiaoshou">删除</span>{/case}
+                  {case value='1'}<span>审核成功</span><span class="xiaoshou">下架服务</span>{/case}
+                  {case value='2'}<span>审核失败</span><span class="xiaoshou">删除记录</span>{/case}
+                {/switch}
+                
               </div>
-     
+            {/foreach}
          </div>
             </div>
           </div>
