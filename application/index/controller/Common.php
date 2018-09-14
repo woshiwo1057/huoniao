@@ -424,4 +424,100 @@ class Common extends \think\Controller
 
     }
 
+    /*
+     *
+     *
+     *地图位置检索
+     * query:地理位置
+     * region：所在地区
+     *
+     */
+    function suggestion(){
+        $request = request();//think助手函数
+        $data_get = $request->param();//获取get与post数据
+        $query = urlencode($data_get['query']);
+        $region = urlencode($data_get['region']);
+        $url = 'http://api.map.baidu.com/place/v2/suggestion?query='.$query.'&region='.$region.'&city_limit=true&output=json&ak='._AK_;
+        $data = curlGet($url);
+        return $data;
+    }
+
+    /*
+     *
+     *地理编码,返回所在的经纬度
+     *
+     */
+
+    function address($address){
+        $address = urlencode($address);
+        $url = 'http://api.map.baidu.com/geocoder/v2/?address='.$address.'&output=json&ak='._AK_;
+        $data = curlGet($url);
+        $data = json_decode($data,true);
+        if($data['status']==0){
+            $location = $data['result']['location'];
+        }else{
+            $location = null;
+        }
+        return $location;
+    }
+
+
+
+    /**
+     * 根据经纬度和半径计算出范围
+     * @param string $lat 经度
+     * @param String $lng 纬度
+     * @param float $radius 半径
+     * @return Array 范围数组
+     */
+    private function calcScope($lat, $lng) {
+        $radius = 2000;
+        $PI = 3.14159265;
+        $degree = (24901*1609)/360.0;
+        $dpmLat = 1/$degree;
+
+        $radiusLat = $dpmLat*$radius;
+        $minLat = $lat - $radiusLat;       // 最小经度
+        $maxLat = $lat + $radiusLat;       // 最大经度
+
+        $mpdLng = $degree*cos($lat * ($PI/180));
+        $dpmLng = 1 / $mpdLng;
+        $radiusLng = $dpmLng*$radius;
+        $minLng = $lng - $radiusLng;      // 最小纬度
+        $maxLng = $lng + $radiusLng;      // 最大纬度
+
+        /** 返回范围数组 */
+        $scope = array(
+            'minLat'    =>  $minLat,
+            'maxLat'    =>  $maxLat,
+            'minLng'    =>  $minLng,
+
+            'maxLng'    =>  $maxLng
+        );
+        return $scope;
+    }
+
+    /**
+     * 获取两个经纬度之间的距离
+     * @param  string $lat1 经一
+     * @param  String $lng1 纬一
+     * @param  String $lat2 经二
+     * @param  String $lng2 纬二
+     * @return float  返回两点之间的距离
+     */
+    public function calcDistance($lat1, $lng1, $lat2, $lng2) {
+        /** 转换数据类型为 double */
+        $lat1 = doubleval($lat1);
+        $lng1 = doubleval($lng1);
+        $lat2 = doubleval($lat2);
+        $lng2 = doubleval($lng2);
+        /** 以下算法是 Google 出来的，与大多数经纬度计算工具结果一致 */
+        $theta = $lng1 - $lng2;
+        $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
+        $dist = acos($dist);
+        $dist = rad2deg($dist);
+        $miles = $dist * 60 * 1.1515;
+        return (int)($miles * 1.609344 * 1000);
+    }
+
 }

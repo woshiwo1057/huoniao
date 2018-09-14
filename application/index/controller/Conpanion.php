@@ -33,10 +33,13 @@ class Conpanion extends Common
 	{	
 		//获取到用户ID
 		$id = $_SESSION['user']['user_info']['uid'];
+		//查询到用户数据
+		$user_data = Db::table('hn_user')->field('nickname,head_img,sex,penguin,change_name')->where('uid',$id)->find();
 		//查省份表
 		$province_data = Db::table('hn_province')->field('code,name')->select();
 
-		$this->assign(['province_data' => $province_data]);
+		$this->assign(['province_data' => $province_data,
+						'user_data' => $user_data]);
 		return $this->fetch('Conpanion/index');
 	}
 
@@ -53,6 +56,22 @@ class Conpanion extends Common
 			$data = Db::table('hn_joy')->field('name,id')->select();
 		}
 
+		return json($data);
+	}
+
+	//选择服务项目等级Ajax 数据传递
+	public function project_grade()
+	{
+		$type = Request::instance()->param();
+	
+		if($type['type'] == 1){
+			//查询 hn_game_grade
+			$data = Db::table('hn_game_grade')->field('id,type_name')->where('game_id',$type['game_id'])->select();
+		}else if($type['type'] == 2){
+			//查询 hn_game_grade
+			$data = Db::table('hn_joy_grade')->field('id,type_name')->where('joy_id',$type['game_id'])->select();
+		}
+		
 		return json($data);
 	}
 
@@ -74,7 +93,7 @@ class Conpanion extends Common
 		
 			
 			$data = Request::instance()->param();
-
+		
 			$data['user_id'] = $_SESSION['user']['user_info']['uid'];
 			
 			//判断是否有提交
@@ -84,11 +103,26 @@ class Conpanion extends Common
 				return json(['code' => 4,'msg'=>'已有记录，请勿再次提交']);
 			}else{
 			//进行数据处理
+				//如果$data['acc_type'] == 3; name证明进行了实名认证
+				if($data['acc_type'] == 3){
+			
+					//1.身份证照片处理$data['zhengData']  card_photo       2.$data['card_num']
+					$key_card =  date('Y-m-d').'/'.md5(microtime()).'.jpg'; //身份证图片路径
+					$file_card = $data['zhengData'];
+
+					$this->cos($file_card,$key_card);//上传至cos
+
+					//拼装路径
+					$data['card_photo'] = $this->img.$key_card;
+					
+					
+				}
+				
 				//1.处理城市
 				$data['city'];
 				$city = Db::table('hn_city')->field('name')->where('code',$data['city'])->find();
 				$data['city'] = $city['name'];
-				//2.处理图片
+				//2.处理图片  
 				$key = date('Y-m-d').'/'.md5(microtime()).'.jpg'; //路径
 				$file = $data['img_data'];
 				//3.时间戳
@@ -99,6 +133,7 @@ class Conpanion extends Common
 					$data['data_url'] = $this->img.$key;
 					//删除无用的数据
 					unset($data['img_data']);
+					unset($data['zhengData']);
 
 					//填表
 					$res = Db::table('hn_apply_acc')->insert($data);

@@ -209,7 +209,7 @@ console.log(res)
 				var str = ''
 					for(a of res){
 						str += `<li>
-									<a href="" class="miva-star-items">
+									<a href="{:url('Index/user',['id' => $v.uid])}" class="miva-star-items">
 										<div class="miva-star-pic">
 												<img src="${a.head_img || '__IMG__default.jpg'}" />
 										</div>

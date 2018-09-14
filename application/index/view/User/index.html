@@ -278,6 +278,9 @@ var files = $('#user-pic');
 									if(data.code == 0){
 										layui.use('layer',function(){
 										layer.msg(data.msg)})
+									}else if(data.code == 1){
+										layui.use('layer',function(){
+										layer.msg(data.msg)})
 									}else if(data.code == 2){
 										layui.use('layer',function(){
 										layer.msg(data.msg)})

@@ -49,7 +49,7 @@
 		<div class="miva-box miva-info-box"><textarea name="explain" class="txt-box" placeholder="可以写自己喜欢的游戏,喜欢的玩法和打法......"></textarea></div>
 		<!--<div class="miva-join-title">语音介绍</div><div class="miva-box miva-audio-box"><div class="audio-box-f"><div class="audio-box"><div class="audio-btn"><i class="layui-icon layui-icon-voice"></i><span>点击上传</span></div></div><audio src="" controls></audio></div><span class="tip">上传录音可供游客试听,请自行上传录音 格式为:MP3 大小:2MB<span>支持格式:MP3,ogg,mav,m4a</span></span></div>-->
 		<div class="check-box"><!--<input id="check" type="checkbox"> <label for="check">我已阅读并同意<a href="{:url('Conpanion/agreement')}" target="__blnk"><<陪玩申请入驻协议>></a></label>--></div>
-		<button style="color:#FFF" class="miva-btn miva-btn-act xiaoshou submit">提交入驻申请</button>
+		<button style="color:#FFF" class="miva-btn miva-btn-act xiaoshou submit">提交项目申请</button>
 	</div>
 	<!-- 引入侧边栏 -->
 	<!-- 引入页脚 -->
@@ -100,7 +100,7 @@ var isSubmitOff = false;
 					});
 
 				},
-				yes: function(index, layero) {
+				yes: function(index, layero){
 					var imgbox = layero.find("#newMiva");
 					var cas = imgbox.cropper('getCroppedCanvas');
 					var base64url = cas.toDataURL('image/jpeg');
@@ -108,7 +108,7 @@ var isSubmitOff = false;
 					img.attr('src', base64url);
 					layer.closeAll();
 				},
-				btn2: function(index, layero) {
+				btn2: function(index, layero){
 					layer.closeAll();
 				}
 			});
@@ -224,14 +224,16 @@ $('.check-box').on('change','input', function() {
 
 			var explain = $('[name="explain"]').val();
 			if (explain == '') {
-				layui.use('layer', function() {
+				layui.use('layer', function(){
 					layer.msg('请填写说明')
 				}) 
 				return false
 			}
 			
+			var project_name = $('.service-act').html();
 
-			var acc_type = num //   线上/线下
+
+			//var acc_type = num //   线上/线下
 			
 			//type     1：游戏项目  2：娱乐项目
 			//img_data  base64
@@ -239,13 +241,14 @@ $('.check-box').on('change','input', function() {
 
 
 
-			$.post("{:url('User/service_add')}", {
+			$.post("{:url('User/service_add')}",{
 				
 				project:type,
-				//img_data:img_data,				
+				img_url:img_data,				
 				project_id:project_id,
 				explain:explain,
 				acc_type:acc_type
+				project_name:project_name
 			}, function(data){
 				if(data.code == 1){
 					layui.use('layer', function() {

@@ -1,0 +1,180 @@
+
+
+	<div class="u-body">
+		<!-- 引入头部 -->
+		<div style="margin:0;width:100%" class="main u-main">
+
+	
+	
+			<div style="box-shadow:none;margin:0" class="user-info-box u-page-body">
+				<div class="u-title u-title-true">
+					<span>实名认证</span>
+				</div>
+				<!--主内容盒子-->
+		
+				<div class="u-true-set-box">
+					<table align="center">
+						
+						<tr>
+							<td>身份证号</td>
+							<td><input type="text" placeholder="请输入二代身份证号"  name="card_num" /></td>
+						</tr>
+						
+						<tr>
+							<td>手持身份证正面照</td>
+							<td>
+								<label style="display:block; overflow:hidden" for="input1" class="img-box">
+									<img id="zheng" src="" alt="" />
+								</label>
+							</td>
+						</tr>
+						
+						
+						
+					</table>
+				</div>
+		
+				 
+				 <div id="miva-input" style="display:none">
+					 <input type="file" id="input1"><input type="file" id="input2">	
+				 </div>
+				 
+			</div>
+					  										
+		</div>
+
+		<!-- 引入页脚 -->
+	</div>
+	<script>
+	/*
+		$(function(){			
+			$('#code').click(function(){
+				var phone = $('[name ="phone"]').val()
+				if(phone == ''){
+					alert('手机号不能为空')
+					return  false
+				}	
+				
+				$.post("{:url('User/real_code')}",{phone:phone},function(data){
+					if(data.code == 1){
+						layui.use('layer',function(){
+						layer.msg(data.msg)
+						})
+					}else if(data.code == 2){
+						layui.use('layer',function(){
+						layer.msg(data.msg)
+						})
+					}
+				},'json')
+
+			})
+		})
+*/
+	</script>
+	<script>
+	
+	$(function(){
+			var zheng = $('#zheng');
+			var fan = $('#fan');
+			var reader = new FileReader();
+			var zhengData = '';
+			var fanData = '';
+			$('#miva-input').on('change', 'input', function() {
+				var _this = this;
+				reader.readAsDataURL($(this).prop('files')[0]);
+				reader.onload = function(e) {
+					var fileBuffer = e.target.result;
+
+					if (_this.id == 'input1') {
+						zhengData = fileBuffer;
+						zheng.attr('src', fileBuffer);
+					}
+					else if (_this.id == 'input2') {
+						fanData = fileBuffer;
+						fan.attr('src', fileBuffer);
+					}
+					else 
+						alert('error');
+				}
+			});
+});
+			
+	// 			$('#submit').click(function(){
+	// 				if(zhengData != '' && fanData != ''){
+						
+	// 					var name = $("[name = 'name']").val()			//真实姓名
+	// 					var card_num = $("[name = 'card_num']").val()	//身份证号
+	// 					var zfb = $("[name = 'zfb']").val()				//支付宝账户
+	// 					var phone = $("[name = 'phone']").val()			//手机号  不传手机号  只做判定
+	// 					var code = $("[name = 'code']").val()			//验证码
+	// 					if(name == ''){
+	// 						layui.use('layer',function(){
+	// 						layer.msg('请填写真实姓名')
+	// 						})
+	// 						return  false
+	// 					}	
+	// 					if(card_num == ''){
+	// 						layui.use('layer',function(){
+	// 						layer.msg('请填写身份证号码')
+	// 						})
+	// 						return  false
+	// 					}	
+	// 					if(zfb == ''){
+	// 						layui.use('layer',function(){
+	// 						layer.msg('请填写支付宝账户')
+	// 						})
+	// 						return  false
+	// 					}
+
+	// 					if(phone == ''){
+	// 						layui.use('layer',function(){
+	// 						layer.msg('手机号不能为空')
+	// 						})
+	// 						return  false
+	// 					}	
+	// 					if(code ==''){
+	// 						layui.use('layer',function(){
+	// 						layer.msg('请填写验证码')
+	// 						})
+	// 						return false
+	// 					}
+	// 					$.post("{:url('User/real_data')}",{zhengData:zhengData,fanData:fanData,name:name,zfb:zfb,card_num:card_num,code:code},function(data){
+	// 							if(data.code == 1){
+	// 								layui.use('layer',function(){
+	// 								layer.msg(data.msg)
+	// 								})
+	// 							}else if(data.code == 2){
+	// 								layui.use('layer',function(){
+	// 								layer.msg(data.msg)
+	// 								})
+	// 							}else if(data.code == 3){
+	// 								layui.use('layer',function(){
+	// 								layer.msg(data.msg)
+	// 								})
+	// 								window.location.reload()
+	// 							}else if(data.code == 4){
+	// 								layui.use('layer',function(){
+	// 								layer.msg(data.msg)
+	// 								})
+	// 							}else if(data.code == 5){
+	// 								layui.use('layer',function(){
+	// 								layer.msg(data.msg)
+	// 								})
+	// 							}else{
+	// 								layui.use('layer',function(){
+	// 								layer.msg('未知错误')
+	// 								})
+	// 							}
+	// 					},'json')
+	// 				}else{
+	// 					layui.use('layer',function(){
+	// 					layer.msg('图片错误')
+	// 					})
+	// 				}
+
+	// 			})
+			
+	// });
+
+	</script>
+</html>

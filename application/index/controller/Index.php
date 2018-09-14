@@ -199,27 +199,30 @@ class Index  extends Common
         $user_data = Db::table('hn_user')
                         ->alias('u')
                         ->join('hn_accompany a','u.uid = a.user_id')
-                        ->field('u.uid,u.nickname,u.head_img,u.age,a.table,a.status,a.hot,a.explain,a.height,a.weight,a.hobby,a.duty,a.pice,a.acc_time,a.project_id,a.project')
+                        ->field('u.uid,u.nickname,u.head_img,u.age,a.table,a.status,a.hot,a.explain,a.height,a.weight,a.hobby,a.duty,a.pice,a.acc_time')
                         ->where('user_id',$id)
                         ->find();
         //查询相册数据
         $album_data = Db::table('hn_user_album')->field('id,img_url')->where('user_id',$id)->limit(8)->select();
         //查询礼物数据
         $gift_data = Db::table('hn_gift')->field('id,name,pice,img_url')->select();
-        //查询服务项目
-        if($user_data['project'] == 1){
-            //游戏项目查询
-            $service_data = Db::table('hn_game')->field('id,name,game_index_img')->where('id',$user_data['project_id'])->find();
-        }else{
-            //娱乐项目查询
-            $service_data = Db::table('hn_joy')->field('id,name,joy_logo_img')->where('id',$user_data['project_id'])->find();
-            //保持数据统一
-            $service_data['game_index_img'] =  $service_data['joy_logo_img'];
-            //无用的数据删除
-            unset($service_data['joy_logo_img']);
+        //查询服务项目(只查询第一个服务项目  其他的走Ajax)
+            //查出所有名字循环输出
+        $service_name = Db::table('hn_apply_project')->field('project_name,project_id,project')->where(['status' => 1, 'type' => 1,'uid' => $id])->select();
+
+        $project_data = Db::table('hn_apply_project')->field('project,project_id,project_name,project_grade_name,pric,length_time')->where(['status' => 1, 'type' => 1,'uid' => $id])->find();
+        
+        if($project_data['project'] == 1){
+            //查游戏表
+            $game_data = Db::table('hn_game')->field('id,name,game_index_img')->where('id',$project_data['project_id'])->find();
+            $service_data = array_merge($project_data,$game_data);
+        }else if($project_data['project'] == 2){
+            //查娱乐表
+            $joy_data = Db::table('hn_joy')->field('id,name,joy_logo_img')->where('id',$project_data['project_id'])->find();
+            $service_data = array_merge($project_data,$joy_data);
         }
 
-        //var_dump($service_data);die;
+//var_dump($service_name);die;
         //查询评论数据
         $comment_data = Db::table('hn_comment')
                         ->alias('c')
@@ -245,9 +248,8 @@ class Index  extends Common
         }
        
         //查询自己收到的礼物数据
-        $my_gift = Db::table('hn_give_gift')->field('gift_id,num')->where('acc_id',$id)->limit(6)->select();
+        $my_gift = Db::table('hn_give_gift')->field('gift_id,num')->where('acc_id',$id)->select(); 
         $my_gift = $this->gift_sort($my_gift);
-       
         $sort_gift = [];
         foreach ($my_gift as $k => $v) {
             $gift_header = Db::table('hn_gift')->field('img_url')->where('id',2)->find();
@@ -262,6 +264,8 @@ class Index  extends Common
             'album_data' => $album_data,
             //礼物数据
             'gift_data' => $gift_data,
+            //服务项目名
+            'service_name' => $service_name,
             //服务项目（单个）
             'service_data' => $service_data,
             //礼物排序数据
@@ -273,6 +277,12 @@ class Index  extends Common
 
             ]);
         return $this->fetch('Index/user');
+    }
+
+    //陪玩师服务项目Ajax
+    public function  service_ajax()
+    {   
+
     }
 
     //无限点赞

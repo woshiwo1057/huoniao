@@ -149,8 +149,16 @@
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>服务项目：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="{$examine_data.name}"  >
+				<input type="text" class="input-text" value="{$examine_data.name}" >
 				<input type="hidden" class="input-text" value="{$examine_data.project_id}"  name="project_id">
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>项目等级：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$examine_data.grade_name}"  name="project_grade_name">
+				<input type="hidden" class="input-text" value="{$examine_data.project_grade}"  name="project_grade">
 			</div>
 		</div>
 
@@ -167,12 +175,28 @@
 		
 		
 		
-		<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span></label>：
+		<label class="form-label col-xs-4 col-sm-2"><span class="c-red">服务项目图片*</span></label>：
 		<div class="row cl"  style="margin-left:200px;">
 
 			<img style="width:200px" id="pic-one" src="{$examine_data.data_url}" alt="">
 					
 		</div>
+
+		{if condition="$examine_data.acc_type == 3"}
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>身份证号码：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$examine_data.card_num}">
+			</div>
+		</div>
+
+		<label class="form-label col-xs-4 col-sm-2"><span class="c-red">实名认证图片*</span></label>：
+		<div class="row cl"  style="margin-left:200px;">
+
+			<img style="width:200px" id="pic-one" src="{$examine_data.card_photo}" alt="">
+					
+		</div>
+		{/if}
 		
 		<div class="row cl">
 			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">

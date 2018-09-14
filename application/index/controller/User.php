@@ -92,60 +92,78 @@ class User extends Common
 	{	
 		//获取到用户ID
 		$id = $_SESSION['user']['user_info']['uid'];
-		//判断是否有尚未审核过的数据
-		$data = Db::table('hn_head_examine')->field('id')->where(['uid' => $id,'status' => 1])->find();
-		if($data){
-			return json(['code' => 1,'msg' => '后台工作人员正在审核头像，请勿重新提交']);
-		}
+		$type = $_SESSION['user']['user_info']['type'];
 
-		$file = Request::instance()->param('option');
-			
-		$key = date('Y-m-d').'/'.md5(microtime()).'.jpg'; //路径
-
-		$data = $this->cos($file,$key);
-		//hn_head_examine
-		if($data['code'] == 0){
-			// //成功后填入审核表单
-			
-			$head_img = $this->img.$key; //将此路径存入表单
-			//组装数据
-			$head_data['uid'] = $id;
-			$head_data['head_img'] = $head_img;
-			$head_data['time'] = time();
-			$res = Db::table('hn_head_examine')->insert($head_data);
-
-			if($res){
-
-				return json(['code' => 0,'msg' => '已提交，请耐心等待后台审核']);
-
-			 }else{
-
-			 	return json(['code' => 2,'msg' => '失败，错误码002']);
-
+		if($type == 1){
+			//判断是否有尚未审核过的数据
+			$data = Db::table('hn_head_examine')->field('id')->where(['uid' => $id,'status' => 1])->find();
+			if($data){
+				return json(['code' => 1,'msg' => '后台工作人员正在审核头像，请勿重新提交']);
 			}
-			// //查出旧路径  删除cos上的图片
-			// $img_url = Db::table('hn_user')->field('head_img')->where('uid',$id)->find();
-			// $img_url =  substr($img_url['head_img'], 44);
-			// //调用删除方法 删除图片
-			// $this->cos_delete($img_url);
-			// //将路径存入用户表 更新字段值
-			// $res = Db::table('hn_user')->where('uid',$id)->setField('head_img', $head_img);
-			// //重置session的图片路径
-			// $_SESSION['user']['user_info']['head_img'] = $head_img;
-			// if($res){
+			$file = Request::instance()->param('option');
+					
+			$key = date('Y-m-d').'/'.md5(microtime()).'.jpg'; //路径
 
-			// 	return json(['code' => 0,'msg' => '已提交']);
+			$data = $this->cos($file,$key);
+			//hn_head_examine
+			if($data['code'] == 0){
+				// //成功后填入审核表单
+				
+				$head_img = $this->img.$key; //将此路径存入表单
+				//组装数据
+				$head_data['uid'] = $id;
+				$head_data['head_img'] = $head_img;
+				$head_data['time'] = time();
+				$res = Db::table('hn_head_examine')->insert($head_data);
 
-			// }else{
+				if($res){
 
-			// 	return json(['code' => 2,'msg' => '失败']);
+					return json(['code' => 0,'msg' => '已提交，请耐心等待后台审核']);
 
-			// }
+				 }else{
 
+				 	return json(['code' => 2,'msg' => '失败，错误码002']);
+
+				}
+				
+			}else{
+				return json(['code' => 3,'msg' => '失败，错误码003']);
+			}
 		}else{
 
-			return json(['code' => 3,'msg' => '失败，错误码003']);
+			$file = Request::instance()->param('option');
+					
+			$key = date('Y-m-d').'/'.md5(microtime()).'.jpg'; //路径
 
+			$data = $this->cos($file,$key);
+
+			if($data['code'] == 0){
+					// //成功后填入审核表单
+					
+					$head_img = $this->img.$key; //将此路径存入表单
+					//组装数据
+					
+					$head_data['head_img'] = $head_img;
+
+			//查出旧路径  删除cos上的图片
+				$img_url = Db::table('hn_user')->field('head_img')->where('uid',$id)->find();
+				$img_url =  substr($img_url['head_img'], 44);
+				//调用删除方法 删除图片
+				$this->cos_delete($img_url);
+				//将路径存入用户表 更新字段值
+				$res = Db::table('hn_user')->where('uid',$id)->setField('head_img', $head_img);
+				//重置session的图片路径
+				$_SESSION['user']['user_info']['head_img'] = $head_img;
+				if($res){
+
+					return json(['code' => 0,'msg' => '成功']);
+
+				}else{
+
+					return json(['code' => 2,'msg' => '失败']);
+
+				}
+			}
 
 		}
 																	
@@ -740,12 +758,44 @@ class User extends Common
 		{
 			$data = Request::instance()->param();
 			var_dump($data);die;
-	
+			$file = $data['img_url'];
+
+			$key = date('Y-m-d').'/'.md5(microtime()).'.jpg'; //路径
+			//$head_img = $this->img.$key; //将此路径存入表单
+			$status = $this->cos($file,$key);
+
+			if($status['code'] == 0){
+				//组装数据
+					//1.陪玩服务名字 
+					if($data['project'] == 1)
+					//2.用户ID
+				$data['uid'] = $_SESSION['user']['user_info']['uid'];
+					//3.时间
+				$data['time'] = time();
+				//图片路径
+				$data['img_url'] = $this->img.$key;
+
+				unset($data['acc_type']);
+				
+				//填表
+				$res = Db::table('hn_apply_project')->insert($data);
+
+				if($res){
+					return json(['code' => 1 , 'msg' => '成功']);
+				}else{
+					return json(['code' => 2 , 'msg' => '失败']);
+				}
+			}else{
+				return json(['code' => 3 , 'msg' => '失败，错误码003']);
+			}
+
 		}
-		return $this->fetch();
+		
+		return $this->fetch('User/service_add');
 	}
 
 	//申请服务项目Ajax
+	/*
 	public function service_ajax()
 	{
 	      echo 1;		die;
@@ -762,7 +812,8 @@ class User extends Common
 
 		return json($data);
 	}
-
+	*/
+	
 	//优惠券
 	public function coupon()
 	{

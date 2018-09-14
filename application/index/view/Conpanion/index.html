@@ -25,7 +25,52 @@
 				}
 			</style>
 			<!-- *************************************************************************************** -->
+			<table class="miva-basic-table">
+				<tr>
+				<span style="color:red">（*注：选择线下陪玩师，需上传本人头像）</span>
+					<td class="up-pic" rowspan="4">
+
+						<img src="{$user_data.head_img}" alt="">
+						<div class="up-pic-btn">可选择上传头像</div>
+					</td>
+					{if condition="$user_data['change_name'] == 1"}
+						<td>昵称:</td>
+						<td style="width:270px"><input type="text" name="nickname" value="{$user_data['nickname']}" class="miva-input " /></td>
+						<td style="color:red; " class="change">您获得改昵称的机会</td>
+					{else /}
+					<td>昵称:</td>
+						<td><input type="text" name="nickname" value="{$user_data['nickname']}" disabled  class="miva-input " /></td>
+					{/if}
+				</tr>
+				
+				<tr>		
+					<td class="up-title">QQ:</td>
+					<td><input class="miva-input " type="text" placeholder="输入您的常企鹅号"  name="penguin" value="{$user_data.penguin}" ></td>
+				</tr>
+
+				<tr>
+					<td class="up-title">性别:</td>
+					<td class="up-sex-box">
+						{switch name="$user_data.sex"}
+									{case value="1"}
+										<span class="radio active-radio"  sex="1">男</span>
+										<span class="radio " sex="2">女</span>
+									{/case}
+									{case value="2"}
+										<span class="radio "  sex="1">男</span>
+										<span class="radio active-radio" sex="2">女</span>
+									{/case}
+									{default /}
+									<span  style="color:red">只有一次选择性别的机会，请慎重</span>
+									<span class="radio"  sex="1">男</span>
+									<span class="radio" sex="2">女</span>
+
+								{/switch}
+					</td>
+				</tr>
+			</table>
 			<table class="miva-info-detail" border="0" cellspacing="" cellpadding="">
+
 				<tr>
 					<td class="up-title">真实姓名:</td>
 					<td><input class="miva-input" type="text" name="real_name" value="" /></td>
@@ -82,14 +127,35 @@
 					<td id="buwei"><span class="radio active-radio">腿</span><span class="radio">眼睛</span><span class="radio">鼻子</span><span class="radio">嘴巴</span><span class="radio">胸部</span><span class="radio">腰部</span><span class="radio">臀部</span><span class="radio">其他</span></td>
 				</tr>
 				<tr>
-					<td class="up-bottom">陪玩方式:</td>
+					<td class="up-bottom">是否开通线下陪玩:</td>
 					<td id="xian" colspan="2">
-						<span class="miva-btn miva-btn-act" acc_type="1">线上</span>
-						<span class="miva-btn" acc_type="2" >线下</span>
-						<span class="tip">备注:线上线下可同时选择</span></td>
+						<!--<span class="miva-btn miva-btn-act" acc_type="1">线上</span>-->
+						
+						<span class="miva-btn" acc_type="2"  data-item="xiaxian" >开通</span>
+						<!--<span class="tip">备注:线上线下可同时选择</span>--></td>
 				</tr>
 			</table>
-			<script type="text/javascript"></script>
+			<div class="xiaxian" style="display:none">
+				{include file="Conpanion/real"}
+			</div>
+			<script type="text/javascript">
+				$(function(){
+					var status = true
+					$('[data-item="xiaxian"]').click(function(){
+						status = !status
+						if(!status){
+							
+							$('.xiaxian').show()
+							console.log(status)
+						}else{
+							$('.xiaxian').hide()
+							console.log(status)
+						} 
+						 //hide
+
+					})
+				})
+			</script>
 			<!-- ****************************************************************** -->
 		</div>
 		<div class="miva-join-title">开通游戏</div>
@@ -102,7 +168,10 @@
 				</select>
 			</div>
 			<!-- 二级类目选择 -->
-			<div class="miva-selected-box"></div>
+			<div data-item="game1" class="miva-selected-box"></div>
+			<!-- 三级类目选择 -->
+
+			<div data-item="game2" class="miva-selected-box" data-item="grade"></div>
 		</div>
 		<div class="miva-join-title">认证资料照</div>
 		<div class="miva-box miva-data-box">
@@ -123,6 +192,7 @@
 	<!-- 引入侧边栏 -->
 	<!-- 引入页脚 -->
 	{include file="public/footer"}
+	
 	<script>
 var img_data = '';
 var type;
@@ -130,65 +200,91 @@ var cityVal = '';
 var isSubmitOff = false;
 
 	// 图片预览
-	$('input[type=file]').on('change', function() {
+	$('#duanwei').on('change', function() {
 		var _this = this;
 		var files = $(this);
 		var img = $('.miva-up-data-pic');
 		var fileBuffer;
 		var reader = new FileReader();
 		var alertHTML = '<img id="newMiva" src=""/>';
-		
+		var project_grade;
 		reader.readAsDataURL(files.prop('files')[0]);
 		reader.onload = function(e) {
 			// 获取file里的内容
 			fileBuffer = e.target.result;
 
-			layer.open({
-				type: 1,
-				title: false,
-				closeBtn: 0,
-				content: alertHTML,
-				scrollbar: false,
-				btn: ['确认', '取消'],
-				area: ['100%', '100%'],
-				success: function(layero, index) {
-					var imgbox = layero.find("#newMiva");
-					var miva;
-					imgbox.attr('src', fileBuffer);
+			// layer.open({
+			// 	type: 1,
+			// 	title: false,
+			// 	closeBtn: 0,
+			// 	content: alertHTML,
+			// 	scrollbar: false,
+			// 	btn: ['确认', '取消'],
+			// 	area: ['100%', '100%'],
+			// 	success: function(layero, index) {
+			// 		var imgbox = layero.find("#newMiva");
+			// 		var miva;
+			// 		imgbox.attr('src', fileBuffer);
+		img_data = fileBuffer
+		img.attr('src', fileBuffer);
+					// 		if (_this.id == 'user-pic')
+					// 			miva = 1 / 1;
+					// 		else if (_this.id == 'bg-pic')
+					// 			miva = 9 / 16;
 
-					if (_this.id == 'user-pic')
-						miva = 1 / 1;
-					else if (_this.id == 'bg-pic')
-						miva = 9 / 16;
+					// 		imgbox.cropper({
+					// 			aspectRatio: miva,
+					// 			dragMode: 'move', // 设置为  ‘move’: 只可以移动模式
+					// 			dragCrop: false, // 设置为禁止移除当前的剪裁框，并通过拖动来新建一个剪裁框区域。
+					// 			toggleDragModeOnDblclick: false, // 禁止双击切换模式
+					// 		});
 
-					imgbox.cropper({
-						aspectRatio: miva,
-						dragMode: 'move', // 设置为  ‘move’: 只可以移动模式
-						dragCrop: false, // 设置为禁止移除当前的剪裁框，并通过拖动来新建一个剪裁框区域。
-						toggleDragModeOnDblclick: false, // 禁止双击切换模式
-					});
-
-				},
-				yes: function(index, layero) {
-					var imgbox = layero.find("#newMiva");
-					var cas = imgbox.cropper('getCroppedCanvas');
-					var base64url = cas.toDataURL('image/jpeg');
-					img_data = base64url
-					img.attr('src', base64url);
-					layer.closeAll();
-				},
-				btn2: function(index, layero) {
-					layer.closeAll();
-				}
-			});
-
+					// 	},
+					// 	yes: function(index, layero) {
+					// 		var imgbox = layero.find("#newMiva");
+					// 		var cas = imgbox.cropper('getCroppedCanvas');
+					// 		var base64url = cas.toDataURL('image/jpeg');
+					// 		img_data = base64url
+					// 		img.attr('src', base64url);
+					// 		layer.closeAll();
+					// 	},
+					// 	btn2: function(index, layero) {
+					// 		layer.closeAll();
+					// 	}
+					// });
 		};
 		// 重置input[type=file];
 		files.val('');
 	});
 
 
-		
+
+	//手持身份证照 base64   zhengData
+	var zheng = $('#zheng');
+			var fan = $('#fan');
+			var reader = new FileReader();
+			var zhengData = '';
+			var fanData = '';
+			$('#miva-input').on('change', 'input', function() {
+				var _this = this;
+				reader.readAsDataURL($(this).prop('files')[0]);
+				reader.onload = function(e) {
+					var fileBuffer = e.target.result;
+
+					if (_this.id == 'input1') {
+						zhengData = fileBuffer;
+						zheng.attr('src', fileBuffer);
+					}
+					else if (_this.id == 'input2') {
+						fanData = fileBuffer;
+						fan.attr('src', fileBuffer);
+					}
+					else 
+						alert('error');
+				}
+			});
+
+		/************************************************/
 		layui.use(['form', 'laydate'], function() {
 			var form = layui.form;
 			var laydate = layui.laydate;
@@ -198,32 +294,57 @@ var isSubmitOff = false;
 					elem: '#data-check' //指定元素
 				});; // 使用layui日期选择器
 			
+			//服务项目Ajax
 			form.on('select(item-check)', function(res) {
+
 			type = res.value
+
 				$.post("{:url('Conpanion/project')}", {
 					type: res.value
-				}, function(res) {
+				}, function(res){
+
 					var str = '';
 					for (a of res) {
-						str += "<span data-item=mivaservice attr_id=" + a['id'] + ">" + a['name'] + "</span>";
+						str += "<span data-item=mivaservice data-floor=floor1 attr_id=" + a['id'] + ">" + a['name'] + "</span>"; // 第一层渲染 
 					}
-
-					$('.miva-selected-box').html(str);
+					$('[data-item="game1"]').html(str);
 
 						if (isMivaService) {
 							$('.miva-selected-box').on('click', '[data-item=mivaservice]', function() { // 选择服务时的激活样式
 								$(this).addClass('service-act').siblings().removeClass('service-act');
-							// if ($(this).prop('class').indexOf('service-act') == -1) {
+								console.log($(this).attr('grade_id'))
+								if($(this).attr('grade_id')){
+									 project_grade = $(this).attr('grade_id')
+								}
+							// if ($(this).prop('class').indexOf('service-act') == -1) { // 多选
 							// 	$(this).addClass('service-act');
 							// } else {
 							// 	$(this).removeClass('service-act');
 							// }
-							isMivaService = false;
+							isMivaService = false; 
 						});
 					};
 
 				}, 'json')
 			});
+
+			//服务项目等级Ajax
+			$('.miva-selected-box').on('click', '[data-floor=floor1]', function(){
+				// type  1:游戏项目hn_game_grade  2：娱乐 hn_game_grade
+				var game_id = $(this).attr('attr_id')
+				
+				$.post("{:url('Conpanion/project_grade')}",{type:type,game_id:game_id},function(res){
+					var str = '';
+					for (a of res) {
+						str += "<span data-item=mivaservice grade_id=" + a['id'] + " >" + a['type_name'] + "</span>"; // 第二层渲染
+					}
+					$('[data-item="game2"]').html(str);
+					project_grade = undefined;
+
+				},'json')
+
+
+			})
 
 			form.on('select(province)', function(result) { // 请选择省份
 				$('#city').html('<option value="">请选择城市</option>');
@@ -271,9 +392,18 @@ $('.check-box').on('change','input', function() {
 	}
 })
 
+var sex = {$user_data['sex']};
+		
+if({$user_data['sex']} == 0){
+	$('.radio').on('click', function(){
+		$(this).addClass('active-radio').siblings().removeClass('active-radio');
+		sex = $(this).attr('sex');
+	});
+}
 
 		$('.submit').click(function() { 
-						
+				//	alert(num);   这一项有2个值  1：没有选择线下    3：选择了线下 所以需要判断填写的东西是否存在
+				
 			var real_name = $('[name="real_name"]').val();
 			if (real_name == '') {
 				layui.use('layer', function() {
@@ -312,6 +442,7 @@ $('.check-box').on('change','input', function() {
 				}) 
 				return false
 			}
+
 			var height = $('[name="height"]').val();
 			if (height == '') {
 				layui.use('layer', function() {
@@ -328,20 +459,23 @@ $('.check-box').on('change','input', function() {
 			}
 			var duty = $('[name="duty"]').val();
 			if (duty == '') {
-				layui.use('layer', function() {
+				layui.use('layer', function(){
 					layer.msg('请填写常职业')
 				}) 
 				return false
 			}
 			var hobby = $('[name="hobby"]').val();
 			if (hobby == '') {
-				layui.use('layer', function() {
+				layui.use('layer', function()  {
 					layer.msg('请填写爱好')
 				}) 
 				return false
 			}
 
+			var sexy = $('.active-radio').html(); //性感部位
+
 			var project_id = $('.service-act').attr('attr_id') //游戏ID
+
 			if(!project_id){
 				layui.use('layer', function(){
 					layer.msg('请选择服务项目')
@@ -349,6 +483,12 @@ $('.check-box').on('change','input', function() {
 				return false
 			}
 
+			if(typeof project_grade === 'undefined'){
+				layui.use('layer', function(){
+					layer.msg('请选择服务等级')
+				}) 
+				return false
+			}
 
 			if(!img_data){
 				layui.use('layer', function() {
@@ -367,9 +507,29 @@ $('.check-box').on('change','input', function() {
 			
 
 			var acc_type = num //   线上/线下
+
+			var card_num = $('[name="card_num"]').val();//身份证号
 			
 			//type     1：游戏项目  2：娱乐项目
 			//img_data  base64
+			if(acc_type == 3){
+				//选择了开通线下  在这里判断里面的东西是否填写
+				if(zhengData == ''){
+					layui.use('layer', function() {
+					layer.msg('请上传手持身份证照片')
+				}) 
+				return false
+				}
+				
+				if(card_num == ''){
+					layui.use('layer', function() {
+					layer.msg('请输入身份证号')
+				}) 
+				return false
+				}
+				
+
+			}
 
 
 
@@ -377,7 +537,7 @@ $('.check-box').on('change','input', function() {
 			$.post("{:url('Conpanion/apply')}", {
 				city:cityVal,
 				project:type,
-				img_data:img_data,
+				img_data:img_data,  //认证图片
 				real_name:real_name,
 				birthday:birthday,
 				table:table,
@@ -386,9 +546,13 @@ $('.check-box').on('change','input', function() {
 				weight:weight,
 				duty:duty,
 				hobby:hobby,
+				sexy:sexy,
 				project_id:project_id,
+				project_grade:project_grade,
 				explain:explain,
-				acc_type:acc_type
+				acc_type:acc_type,
+				zhengData:zhengData,  //身份证 base64
+				card_num:card_num
 			}, function(data){
 				if(data.code == 1){
 					layui.use('layer', function() {
@@ -415,6 +579,7 @@ $('.check-box').on('change','input', function() {
 			return false
 		})
 	</script>
+
 </body>
 
 </html>
