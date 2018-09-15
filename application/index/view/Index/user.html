@@ -400,7 +400,7 @@
 						{/if}
 					</div>
 					<div class="bottom-box-gift">
-						<div><img src="images/png/user-info-icon1.png" alt=""><span class="title-bottom-gift">我的礼物</span></div>
+						<div><img src="__IMG__user-info-icon1.png" alt=""><span class="title-bottom-gift">我的礼物</span></div>
 						{foreach name="sort_gift" item="v"}
 						<div><img src="{$v.img_url}"><span>{$v.num}</span></div>
 						{/foreach}
@@ -411,10 +411,11 @@
 					<div class="game-info-box">
 					<!-- 1.标签页形式的标题 -->
 					<div class="tab-title">
-					{foreach name="service_name" item="v"}
-					<span class="active"  project="{$v.project}" project_id="{$v.project_id}" >{$v.project_name}</span>
+					{foreach name="service_name" item="v" key="k"}
+					<span {if condition="$k == 0"}class="active"{/if}  project="{$v.project}" project_id="{$v.project_id}" >{$v.project_name}</span>
 					{/foreach}
 					</div>
+					
 					<!-- 2.单子的详细内容 -->
 					<div class="order-info">
 						{if condition="isset($service_data.game_index_img)"}
@@ -427,13 +428,44 @@
 							<div class="tip-box"><span>{$service_data.project_grade_name}</span></div>
 							<div class="max-time"><img src="" alt=""><span>接单时长:{$service_data.length_time/60} min</span></div>
 							<div class="audio-box"><img src="__IMG__icon-play.png" alt=""><span>0 S</span><audio src="" style="display:none"></audio><img src="__IMG__icon-auido.png" alt=""></div>
-						</div><a href="{:url('Order/index',['id' => $user_data['uid']])}"><span class="submit-btn">立即下单</span></a></div>
-					
-						<!-- 3.陪玩师自我介绍 -->
-						<div class="about-user">
-							<div class="title-user"><span>自我</span>介绍</div>
-							<p>{$user_data.explain}~</p>
 						</div>
+						<a href="{:url('Order/index',['id' => $user_data['uid']])}"><span class="submit-btn">立即下单</span></a>
+					</div>
+					<script type="text/javascript">
+						$('.tab-title').on('click', 'span', function() {
+							$(this).addClass('active').siblings().removeClass('active')
+							var project = $(this).attr('project')
+							var project_id = $(this).attr('project_id')
+						
+							var str = '';
+							$.post("{:url('index/service_ajax')}",{project:project,project_id:project_id},function(data){
+								
+								console.log(data)
+								var uid = {$user_data['uid']};
+								var jump = "{:url('Order/index',['id' => $user_data['uid']])}";
+								str += `
+										<img src="${data.project_img}" alt="">
+									
+										<div class="info-box">
+											<div class="money"><span>￥${data.pric}</span>/小時</div>
+											<div class="tip-box"><span>${data.project_grade_name}</span></div>
+											<div class="max-time"><img src="" alt=""><span>接单时长:${data.length_time/60} min</span></div>
+											<div class="audio-box"><img src="__IMG__icon-play.png" alt=""><span>0 S</span><audio src="" style="display:none"></audio><img src="__IMG__icon-auido.png" alt=""></div>
+										</div>
+										<a href="${jump}"><span class="submit-btn">立即下单</span></a>`
+
+								$('.order-info').html(str)
+
+
+							},'json')
+
+						});
+					</script>
+					
+					<div class="about-user">
+						<div class="title-user"><span>自我</span>介绍</div>
+						<p>{$user_data.explain}~</p>
+					</div>
 					</div>
 					<!-- 3.用户评价 -->
 					<!-- 互动区 -->

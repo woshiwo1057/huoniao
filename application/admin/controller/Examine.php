@@ -33,7 +33,7 @@ class Examine extends Common
 						->alias('a')
 						->join('hn_user u','a.user_id = u.uid')
 						->join('hn_game g','a.project_id = g.id')
-						->field('a.id,a.user_id,u.nickname,a.real_name,a.table,a.province,a.city,a.address,a.height,a.weight,a.duty,a.hobby,a.sexy,a.acc_type,a.project,a.project_id,g.name,a.data_url,a.explain,a.card_photo,a.card_num,a.project_grade')->where('a.id',$id)->find();
+						->field('a.id,a.user_id,a.head_img,u.nickname,u.sex,a.real_name,a.table,a.province,a.city,a.address,a.height,a.weight,a.duty,a.hobby,a.sexy,a.acc_type,a.project,a.project_id,g.name,a.data_url,a.explain,a.card_photo,a.card_num,a.project_grade')->where('a.id',$id)->find();
 		
 		$grade = Db::table('hn_game_grade')->field('type_name')->where('id',$judge['project_grade'])->find();
 		$examine_data['grade_name'] = $grade['type_name'];
@@ -44,7 +44,7 @@ class Examine extends Common
 						->alias('a')
 						->join('hn_user u','a.user_id = u.uid')
 						->join('hn_joy j','a.project_id = j.id')
-						->field('a.id,a.user_id,u.nickname,a.real_name,a.table,a.province,a.city,a.address,a.height,a.weight,a.duty,a.hobby,a.sexy,a.acc_type,a.project,a.project_id,j.name,a.data_url,a.explain,a.card_photo,a.card_num,a.project_grade')
+						->field('a.id,a.user_id,a.head_img,u.nickname,u.sex,a.real_name,a.table,a.province,a.city,a.address,a.height,a.weight,a.duty,a.hobby,a.sexy,a.acc_type,a.project,a.project_id,j.name,a.data_url,a.explain,a.card_photo,a.card_num,a.project_grade')
 						->where('a.id',$id)
 						->find();
 
@@ -75,7 +75,7 @@ class Examine extends Common
 			$ras = Db::table('hn_user')->where('uid', $data['user_id'])->update(['type' => 1]);	//成为陪玩师
 
 			//删除不需要的数据 将数据填陪玩师表  填入陪玩师服务项目表
-//var_dump($data);die;
+			//var_dump($data);die;
 			$wow = [];
 			unset($data['id']);
 			unset($data['data_url']);
@@ -91,9 +91,12 @@ class Examine extends Common
 			}else{
 				$this->error('数据错误,请联系客服人员');
 			}
-			
-		//$rcs = Db::table('hn_accompany')->insert($data); //填入陪玩师表
+		//更新用户头像
 
+		Db::table('hn_user')->where('uid', $data['user_id'])->update(['head_img' => $data['head_img']]);
+		unset($data['head_img']);
+		//$rcs = Db::table('hn_accompany')->insert($data); //填入陪玩师表
+$rcs = 1;
 			//组装数据填入服务项目表
 			//$wow['project_name']  $wow['project_id']  $wow['time'] = time()    $wow['status'] = 1  $wow['explain'] = '第一次开通'
 			//$wow['project_name'] = $project['name']
@@ -106,7 +109,7 @@ class Examine extends Common
 			$wow['explain'] = '第一次开通'; //简介
 			$wow['status'] = 1; //状态  成功
 			$wow['time'] = time(); //时间
-			var_dump($wow['project_grade_name']);die;
+			//var_dump($wow['project_grade_name']);die;
 			//$wow['pric']  默认为8 
 			//需要游戏 单价/小时  需要订单总数  需要订单总时间吗？
 			//800 24*365 == 8760

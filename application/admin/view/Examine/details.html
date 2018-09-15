@@ -8,11 +8,28 @@
 
 		<input type="hidden"  name="id" value="{$examine_data.id}">
 		<input type="hidden"  name="user_id" value="{$examine_data.user_id}">
+
+		<label class="form-label col-xs-4 col-sm-2"><span class="c-red">用户头像*</span></label>：
+		<div class="row cl"  style="margin-left:200px;">
+			<input type="hidden"  value="{$examine_data.head_img}"   name="head_img">
+			<img style="width:200px" id="pic-one" src="{$examine_data.head_img}" alt="">
+					
+		</div>
 	
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>用户昵称：</label>
 			<div class="formControls col-xs-8 col-sm-9">
 				<input type="text" class="input-text" value="{$examine_data.nickname}" >
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>用户性别：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				{switch name="$examine_data.sex"}
+					{case value="1"}<input type="text" class="input-text" value="男" >{/case}
+					{case value="2"}<input type="text" class="input-text" value="女" >{/case}
+				{/switch}
 			</div>
 		</div>
 

@@ -20,7 +20,17 @@ class Index  extends Common
 
     public function index()
     { 	
-        
+         
+        //$wb_id = Session::get('wb_id');
+        if(isset($_SESSION['think']['wb_id'])){
+            $wb_id = $_SESSION['think']['wb_id'];
+          
+            if(isset($wb_id)&&$wb_id){
+                $data = db('hn_netbar')->where('id',$wb_id)->field('id,name')->find();
+                $name = $data['name'];
+                echo "<script>alert('$name'+'欢迎您');</script>";
+            }
+        }
     	//Session::delete('think'); 
     	//var_dump($_SESSION);die;
 
@@ -220,6 +230,7 @@ class Index  extends Common
             //查娱乐表
             $joy_data = Db::table('hn_joy')->field('id,name,joy_logo_img')->where('id',$project_data['project_id'])->find();
             $service_data = array_merge($project_data,$joy_data);
+            $service_data['game_index_img'] = $joy_data['joy_logo_img']; //容错
         }
 
 //var_dump($service_name);die;
@@ -234,7 +245,7 @@ class Index  extends Common
                         ->select();
 
         //查询送礼人数据
-        $user_gift = Db::table('hn_give_gift')->field('user_id,egg_num')->where('acc_id',$id)->limit(6)->select();
+        $user_gift = Db::table('hn_give_gift')->field('user_id,egg_num')->where('acc_id',$id)->order('egg_num desc')->select();
         $user_gift = $this->sort($user_gift);
             
         $sort_data = [];
@@ -251,12 +262,13 @@ class Index  extends Common
         $my_gift = Db::table('hn_give_gift')->field('gift_id,num')->where('acc_id',$id)->select(); 
         $my_gift = $this->gift_sort($my_gift);
         $sort_gift = [];
+      
         foreach ($my_gift as $k => $v) {
-            $gift_header = Db::table('hn_gift')->field('img_url')->where('id',2)->find();
+            $gift_header = Db::table('hn_gift')->field('img_url')->where('id',$k)->find();
             $gift_header['num'] = $v;
             $sort_gift[] =  $gift_header;
         }
-        
+      
         $this->assign([
             //陪玩师数据
             'user_data' => $user_data,
@@ -282,8 +294,48 @@ class Index  extends Common
     //陪玩师服务项目Ajax
     public function  service_ajax()
     {   
+        $data = Request::instance()->param();
+     
+        //需要的数据 1.游戏图片   2.陪玩师该项目级别  3.价钱  4.接单时长 5.当前项目接单数  6.status == 1(审核成功) 7.type == 1(不下架)   以后需要陪玩师音频
+        $service_data = [];
+        if($data['project'] == 1){
+            //游戏项目
+            $img = Db::table('hn_game')->field('game_index_img')->where('id',$data['project_id'])->find();
+           
+            $service_data = Db::table('hn_apply_project')
+                        ->field('project_grade,project_grade_name,pric,length_time,order_num')
+                        ->where(['status' => 1, 'type' => 1, 'project_id' => $data['project_id']])
+                        ->find();
+            $service_data['project_img'] = $img['game_index_img'];
+
+            //算出一个正确的价钱  $service_data['pric']
+            if($service_data['order_num']>=2){
+                $pric = Db::table('hn_game_grade')->field('pric')->where('id',$service_data['project_grade']); //项目初始价格
+
+                $service_data['pric'] = $this->pric($service_data['order_num'],$pric);
+            }
+            return json($service_data);
+        }else if($data['project'] == 2){
+            //娱乐项目
+            $img = Db::table('hn_joy')->field('joy_logo_img')->where('id',$data['project_id'])->find();
+           
+            $service_data = Db::table('hn_apply_project')
+                        ->field('project_grade,project_grade_name,pric,length_time,order_num')
+                        ->where(['status' => 1, 'type' => 1, 'project_id' => $data['project_id']])
+                        ->find();
+            $service_data['project_img'] = $img['joy_logo_img'];
+
+            //算出一个正确的价钱  $service_data['pric']
+            if($service_data['order_num']>=2){
+                $pric = Db::table('hn_game_grade')->field('pric')->where('id',$service_data['project_grade']); //项目初始价格
+
+                $service_data['pric'] = $this->pric($service_data['order_num'],$pric);
+            }
+            return json($service_data);
+        }
 
     }
+
 
     //无限点赞
     public function zan_ajax()

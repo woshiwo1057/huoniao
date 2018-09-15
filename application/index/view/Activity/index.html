@@ -3,8 +3,8 @@
 
 <style>
 	.icon-active > img {
-		-webkit-transform: translateY(-61px);
-		transform: translateY(-61px);
+		-webkit-transform: translateY(<?php  echo intval(-61*0.6) ?>px);
+		transform: translateY(<?php  echo intval(-61*0.6) ?>px);
 	}
 	.icon-active > img:hover {
 		-webkit-transform: translateY(0px);
@@ -235,7 +235,7 @@ console.log(res)
 										<table class="miva-star-info">
 											<tr>
 												<td>
-													<img src="__IMG__ico.gif" alt="图标">
+													
 													<span class="star-name">${a.nickname}</span>
 												</td>
 											

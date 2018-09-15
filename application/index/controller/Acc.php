@@ -25,11 +25,12 @@ class Acc extends Common
 		$game_id = Request::instance()->param('game_id');
 		
 		if($game_id){
-			$acc_data = Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num')->where(['a.status'=>1,'a.project_id' => $game_id])->limit('0,12')->select();;
+			$acc_data = Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num')->where(['a.status'=>1,'a.project_id' => $game_id])->limit('0,12')->select();
 		}else{
 			//查询一哈陪玩师列表  然后输出
 			$acc_data = Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num')->where('a.status',1)->limit('0,12')->select();
 		}
+//var_dump($acc_data);die;
 		$this->assign([
 				'game_data' => $game_data,
 				'joy_data' => $joy_data,
@@ -90,6 +91,7 @@ class Acc extends Common
 	//筛选Ajax
 	public function screen()
 	{
+		die;
 		$data = Request::instance()->param();
 		//var_dump($data);die;
 		//$data['project'];

@@ -6,7 +6,9 @@
 */
 namespace app\index\controller;
 use \think\Request;
+use \think\Session;
 use \think\Db;
+
 
 //短信验证码引入阿里云短信命名空间
 use Aliyun\Core\Config;
@@ -31,12 +33,12 @@ class Common extends \think\Controller
 	//构造函数
 	public function __construct()
 	{
-
 		parent:: __construct(); //集成父级构造函数
 		session_start();
+        
 		
 		$menus_index = $this->menus_index();
-
+        
 		//$foot_index = $this->foot_index();
 		$index = 'index';
 		$this->assign([
@@ -90,6 +92,25 @@ class Common extends \think\Controller
 		$data = array_slice($data, 0,8);
 		return $data;
 	}
+
+//陪玩师价格计算方式    订单数  项目初始价格
+    public function pric($order_num,$pric){
+        if($order_num>=500){
+            return $pric+30;
+        }else if($order_num>=200){
+           return $pric+25;
+        }else if($order_num>=100){
+           return $pric+20;
+        }else if($order_num>=50){
+            return $pric+15;
+        }else if($order_num>=20){
+            return $pric+10;
+        }else if($order_num>=10){
+            return $pric+5;
+        }else{
+            return $pric;
+        }
+    }
 
 
 	//手机验证码			手机号  验证码

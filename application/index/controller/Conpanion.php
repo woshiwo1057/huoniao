@@ -90,10 +90,10 @@ class Conpanion extends Common
 	public function apply()
 	{
 		//获取到用户ID
-		
+		$id = $_SESSION['user']['user_info']['uid'];
 			
 			$data = Request::instance()->param();
-		
+	
 			$data['user_id'] = $_SESSION['user']['user_info']['uid'];
 			
 			//判断是否有提交
@@ -103,6 +103,15 @@ class Conpanion extends Common
 				return json(['code' => 4,'msg'=>'已有记录，请勿再次提交']);
 			}else{
 			//进行数据处理
+				//将基本信息填入用户表
+				$user_data = [];
+				$user_data['nickname'] = $data['nickname'];
+				$user_data['penguin'] = $data['penguin'];
+				$user_data['sex'] = $data['sex'];
+				Db::table('hn_user')->where('uid', $id)->update($user_data);
+				unset($data['nickname']);
+				unset($data['penguin']);
+				unset($data['sex']);
 				//如果$data['acc_type'] == 3; name证明进行了实名认证
 				if($data['acc_type'] == 3){
 			
@@ -123,6 +132,20 @@ class Conpanion extends Common
 				$city = Db::table('hn_city')->field('name')->where('code',$data['city'])->find();
 				$data['city'] = $city['name'];
 				//2.处理图片  
+					//这是陪玩师头像
+				if(isset($data['option'])){
+					//存在  意为上传了头像
+					$file_head = $data['option'];
+					$key_a = date('Y-m-d').'/'.md5(rand(0,999999999)).'.jpg';
+					$img_head_data = $this->cos($file_head,$key_a);
+
+					$data['head_img'] = $this->img.$key_a;
+				}else{
+					//不存在  意为用原来的头像
+					$head_img = Db::table('hn_user')->field('head_img')->where('uid',$id)->find();
+					$data['head_img'] = $head_img['head_img'];
+				}
+				//这是申请资料图片
 				$key = date('Y-m-d').'/'.md5(microtime()).'.jpg'; //路径
 				$file = $data['img_data'];
 				//3.时间戳
