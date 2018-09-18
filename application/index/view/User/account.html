@@ -18,30 +18,19 @@
           <!-- 俩按钮 -->
           <div class="account-top-btn">
             <span><a href="{:url('Recharge/index')}">充值</a></span>
-            <span onclick="alert('暂未开放')">优惠卷</span>
+            <span onclick="alert('暂未开放')">提现</span>
           </div>
 
           <!-- 标签页 -->
           <div class="account-tab">
-            <a  href="{:url('User/account')}"><span class="active">资金明细</span></a>
-            <span  id="egg">砖石明细</span>
+            <span class="active" data-item="1" data-val=1>资金明细</span>
+            <span  id="egg" data-item="1" data-val=2>鸟蛋明细</span>
 
           </div>
           <!-- 筛选 -->
           
           <div class="miva-search-box">
-            <!--
-
-              <div class="left">
-                <input type="text" id="startTime" class="layui-input" placeholder="开始时间">
-                <input type="text" id="endTime" class="layui-input" placeholder="结束时间">
-                <span class="active">
-                  <i class="layui-icon layui-icon-search"></i>
-                  搜索
-                </span>
-              </div>
-
-            -->
+          
             <script type="text/javascript">
             // 选择时间的
             layui.use('laydate', function(){
@@ -56,9 +45,9 @@
             </script>
 
 
-            <span class="active"><i class="miva-icon layui-icon layui-icon-align-right"></i>全部</span>
-            <span><i class="miva-icon layui-icon layui-icon-date"></i>收入</span>
-            <span><i class="miva-icon layui-icon layui-icon-date"></i>支出</span>
+            <span class="active" data-son="1"><i class="miva-icon layui-icon layui-icon-align-right" ></i>全部</span>
+            <span data-son="2"><i class="miva-icon layui-icon layui-icon-date" ></i>收入</span>
+            <span data-son="3"><i class="miva-icon layui-icon layui-icon-date" ></i>支出</span>
           </div>
           <!-- 排序? -->
           <div class="pai">
@@ -83,7 +72,7 @@
             {/foreach}
          </div>
          {else /}
-          <div class="if-have">           
+          <div class="if-have">
             <!-- 空的 -->
             <div class="if-black"><img src="" alt=""><span>这位亲,您还没有体验过火鸟陪玩的服务哦!</span></div>
          </div>
@@ -111,18 +100,67 @@
         return Y+M+D+h+m+s;
     }
 
-      $('#egg').click(function(){
-          var html = '';
-        $.post("{:url('User/account_egg')}",{},function(res){
-          for (var i = 0; i < res.length; i++) {
+var mivaType = 1;  
+var sonType = 1;
+
+    $('.account-tab').on('click', 'span', function() {
+      mivaType = $(this).attr('data-val')
+      $(this).addClass('active').siblings().removeClass('active')
+      sonType = 1;
+      console.log(mivaType +'_'+ sonType)
+
+
+      var html = '';
+       $.post("{:url('User/account_details')}",{mivaType:mivaType,sonType:sonType},function(res){
+        for (var i = 0; i < res.length; i++) {
             data = res[i]
             html +=`<div class="pai"><span>${data.type}</span><span>${data.money}</span><span>${data.explan}</span><span>${timestampToTime(data.time)}</span></div>`
 
-          };
+        };
 
-          $('.if-have').html(html)
-        },'json')
-      })
+        $('.if-have').html(html)
+
+      },'json')
+    })
+
+    $('.miva-search-box').on('click', 'span', function() {
+      sonType = $(this).attr('data-son')
+      $(this).addClass('active').siblings().removeClass('active')
+      console.log(mivaType +'_'+ sonType)
+
+
+      var html = '';
+      $.post("{:url('User/account_details')}",{mivaType:mivaType,sonType:sonType},function(res){
+        for (var i = 0; i < res.length; i++) {
+            data = res[i]
+            html +=`<div class="pai"><span>${data.type}</span><span>${data.money}</span><span>${data.explan}</span><span>${timestampToTime(data.time)}</span></div>`
+
+        };
+
+        $('.if-have').html(html)
+
+      },'json')
+
+    })
+
+
+      // $('#egg').click(function(){
+
+        //$(this).addClass('active').siblings().removeClass('active');
+
+
+
+        //   var html = '';
+        // $.post("{:url('User/account_egg')}",{},function(res){
+        //   for (var i = 0; i < res.length; i++) {
+        //     data = res[i]
+        //     html +=`<div class="pai"><span>${data.type}</span><span>${data.money}</span><span>${data.explan}</span><span>${timestampToTime(data.time)}</span></div>`
+
+        //   };
+
+        //   $('.if-have').html(html)
+        // },'json')
+      // })
     })
 
 </script>

@@ -1,0 +1,128 @@
+{include file="public/header"}
+
+	<body class="u-body">
+		<!-- 引入头部 -->
+		<div class="main u-main">
+{include file="public/nav"}
+			<div class="user-info-box u-page-body">
+				<div class="u-title">
+					<span><a class="">我的关注 </a>  <a class="" {if condition="$user_.type neq 1"} style="display: none" {/if}> | 我的粉丝</a></span>
+				</div>
+				<!-- 关注列表内容 -->
+				<div class="follow-list-box">
+					<ul>
+						<!-- 一条 -->
+
+							{foreach name='data1' item='v'}
+								<li id="a_{$v.id}">
+									<!-- 左侧 -->
+									<div class="follow-pic">
+										<img src="{$v.head_img}" alt="">
+									</div>
+									<!-- 右侧 -->
+									<div class="follow-info">
+										<div>{$v.nickname}</div>
+										<!--<div class="socre">魅力值:5</div>-->
+										<span onclick="guanzhu('{$v.id}','a')"><i class="layui-icon layui-icon-close"></i>取消关注</span>
+									</div>
+								</li>
+							{/foreach}
+
+
+
+					</ul>
+					<!-- 分页器 -->
+					<div class="page-cut-box">
+						<div class="page-cut">
+							{$page1}
+						</div>
+					</div>
+				</div>
+				<div style="display: none;" class="fan-list-box">
+
+					{foreach name='data2' item='v'}
+					<div class="fan-box" id="b_{$v.id}">
+						<div class="right">
+							<img src="{$v.head_img}" />
+						</div>
+						<div class="center">
+							<div class="top">
+								<span>{$v.nickname}</span>
+								<i>{switch name="$v.sex"}
+								{case  value="0"}♧{/case}
+								{case  value="1"}♂{/case}
+								{case  value="2"}♀{/case}
+								{/switch}
+								{$v.age}</i>
+							</div>
+							<!--<div class="middel">
+								<i class="layui-icon layui-icon-location"></i>
+								<span>陕西西安</span>
+							</div>-->
+							<!--<div class="btm">
+								<i class="layui-icon layui-icon-note"></i>
+								<span>幽默逗比</span>
+								<span>情感知心</span>
+							</div>-->
+						</div>
+						<div class="left">
+							<div class="follow-btn"><span class="active" onclick="guanzhu('{$v.id}','b')">关注</span> 取消关注</div>
+						</div>
+					</div>
+					{/foreach}
+
+					<!--一条-->
+
+					<div class="page-cut-box">
+						<div class="page-cut">
+							{$page1}
+						</div>
+					</div>
+					
+					
+					<!--end-->
+				</div>
+			</div>
+		</div>
+{include file="public/footer"}
+		<!-- 引入页脚 -->
+		<script type="text/javascript">
+			$(function() {
+				var isChange = true;
+				var follow = $('.follow-list-box');
+				var fan = $('.fan-list-box');
+				$('.u-title').on('click', function() {
+					isChange = !isChange;
+					if(isChange) {
+						follow.show();
+						fan.hide();
+					} else {
+						fan.show();
+						follow.hide();
+					}
+				})
+			})
+			function guanzhu($id,$a){
+                $.post("{:url('User/follow_operate')}",{id:$id},function(data){
+                    if(data.code == 2){
+                        layui.use('layer',function(){
+                            layer.msg(data.msg)})
+                    }else if(data.code == 1){
+                        layui.use('layer',function(){
+                            layer.msg(data.msg)})
+                        setTimeout(function(){
+							if($a == 'a'){
+							    $('#a_'+$id).remove()
+							}else{
+                                $('#b_'+$id).remove()
+							}
+                        },500)
+
+                    }
+                },'json')
+                return false
+			}
+		</script>
+	</body>
+
+</html>

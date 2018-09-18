@@ -67,15 +67,22 @@ class Examine extends Common
 	{	
 		if(Request::instance()->isPost()){
 			$data = Request::instance()->param();
-		//var_dump($data);die;
+			
 			//修改陪玩师申请表字段
-			$res = Db::table('hn_apply_acc')->where('id', $data['id'])->update(['status' => 1]); //通过审核
-
+			if($data['acc_type']){
+				
+				//带有实名通过审核
+				$res = Db::table('hn_apply_acc')->where('id', $data['id'])->update(['status' => 1 , 'real' => 3]); //通过审核 
+			}else{
+				//没有实名通过审核
+				$res = Db::table('hn_apply_acc')->where('id', $data['id'])->update(['status' => 1]); //通过审核  
+			}
 			//修改用户表字段
 			$ras = Db::table('hn_user')->where('uid', $data['user_id'])->update(['type' => 1]);	//成为陪玩师
 
 			//删除不需要的数据 将数据填陪玩师表  填入陪玩师服务项目表
 			//var_dump($data);die;
+
 			$wow = [];
 			unset($data['id']);
 			unset($data['data_url']);
@@ -95,8 +102,8 @@ class Examine extends Common
 
 		Db::table('hn_user')->where('uid', $data['user_id'])->update(['head_img' => $data['head_img']]);
 		unset($data['head_img']);
-		//$rcs = Db::table('hn_accompany')->insert($data); //填入陪玩师表
-$rcs = 1;
+
+		$rcs = Db::table('hn_accompany')->insert($data); //填入陪玩师表
 			//组装数据填入服务项目表
 			//$wow['project_name']  $wow['project_id']  $wow['time'] = time()    $wow['status'] = 1  $wow['explain'] = '第一次开通'
 			//$wow['project_name'] = $project['name']
@@ -104,7 +111,7 @@ $rcs = 1;
 			
 			$wow['uid'] = $data['user_id']; //用户ID(陪玩师)
 			$wow['project'] = $data['project']; //项目类型  1：游戏  2：娱乐
-			$wow['project_id'] = $data['project_id']; //服务内容（具体服务项目） 
+			$wow['project_id'] = $data['project_id']; //服务内容（具体服务项目）
 			$wow['project_name'] = $project_name['name']; //服务名字
 			$wow['explain'] = '第一次开通'; //简介
 			$wow['status'] = 1; //状态  成功
@@ -139,16 +146,29 @@ $rcs = 1;
 	public function inspect()
 	{	
 		$id = Request::instance()->param('id');
-		$apply_data = Db::table('hn_apply_project')->field('uid,project_name,img_url,explain,time')->where('id',$id)->find();
+		$apply_data = Db::table('hn_apply_project')->field('id,uid,project,project_id,project_name,project_grade_name,img_url,explain,time')->where('id',$id)->find();
 
 		if(Request::instance()->isPost())
 		{
 			$data = Request::instance()->param();
 
 			if($data['type'] == 1){
-				//审核通过    改变状态   改变time
+				//审核通过    改变状态   改变time   
+					//注意  重复的项目去更新  覆盖    
+				$judge = Db::table('hn_apply_project')->field('id')->where(['project' => $data['project'], 'project_id' => $data['project_id'], 'uid' => $data['uid'],'status' => 1])->find();
 
-				$res = Db::table('hn_apply_project')->where('uid', $data['uid'])->update(['status' => 1,'time' => time()]);
+				if($judge){
+					//删除原来的服务项目
+					Db::table('hn_apply_project')->delete($judge['id']);
+					//改变申请项目的状态  
+					$res = Db::table('hn_apply_project')->where('id', $data['id'])->update(['status' => 1,'time' => time()]);
+
+				}else{
+					//改变申请项目的状态  
+					$res = Db::table('hn_apply_project')->where('id', $data['id'])->update(['status' => 1,'time' => time()]);
+				}
+				
+				
 				if($res){
 					return 1;
 				}else{
@@ -156,7 +176,7 @@ $rcs = 1;
 				}
 			}else if($data['type'] == 2){
 				//审核不通过  改变状态  改变时间
-				$res = Db::table('hn_apply_project')->where('uid', $data['uid'])->update(['status' => 2,'time' => time()]);
+				$res = Db::table('hn_apply_project')->where('id', $data['id'])->update(['status' => 2,'time' => time()]);
 				if($res){
 					return 1;
 				}else{
@@ -166,6 +186,45 @@ $rcs = 1;
 
 		}
 		$this->assign(['apply_data' => $apply_data]);
-		return $this->fetch();
+		return $this->fetch('Examine/inspect');
 	}	
+
+
+	//陪玩师二次审核（实名认证）
+	public function realname()
+	{											   	 //用户ID  真实姓名 身份证照片路径 身份证号
+		$real_data = Db::table('hn_apply_acc')->field('user_id,real_name,card_photo,card_num')->where('real',1)->select();
+
+		$this->assign(['real_data' => $real_data]);
+
+		return $this->fetch('Examine/realname');
+	}
+
+	public function request()
+	{
+		$data = Request::instance()->param();
+
+		
+		if($data['status'] == 'ok'){
+			//同意 real 改为3
+			$res = Db::table('hn_apply_acc')->where('user_id',$data['user_id'])->update(['real' => 3]);
+
+			if($res){
+				return json(['code' => 1 , 'msg' => '操作成功']);
+			}else{
+				return json(['code' => 2 , 'msg' => '失败错误码002']);
+			}
+		}else{
+			//不同意 real 改为2
+			$res = Db::table('hn_apply_acc')->where('user_id',$data['user_id'])->update(['real' => 3]);
+
+			if($res){
+				return json(['code' => 1 , 'msg' => '操作成功']);
+			}else{
+				return json(['code' => 3 , 'msg' => '失败错误码003']);
+			}
+		}
+	}
+
+	
 }

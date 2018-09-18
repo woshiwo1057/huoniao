@@ -113,16 +113,34 @@
 							<td>个性签名:</td>
 							<td><input type="text"  name="table" value="{$user_data['table']}" /></td>
 						</tr>
+						{if condition="$user_data['type'] == 1"}
+						<tr>
+							<td>详细地址:</td>
+							<td><input type="text"  name="address" value="{$user_data['address']}" /></td>
+						</tr>
+						<tr>
+							<td>身高:</td>
+							<td><input type="text"  name="height" value="{$user_data['height']}" /></td>
+						</tr>
+						<tr>
+							<td>体重:</td>
+							<td><input type="text"  name="weight" value="{$user_data['weight']}" /></td>
+						</tr>
+						<tr>
+							<td>职业:</td>
+							<td><input type="text"  name="duty" value="{$user_data['duty']}" /></td>
+						</tr>
+						<tr>
+							<td>爱好:</td>
+							<td><input type="text"  name="hobby" value="{$user_data['hobby']}" /></td>
+						</tr>
+						{/if}
 						<tr>
 							<td colspan="2">
 								<div class="submit xiaoshou"  id="submit">提交修改</div>
 							</td>
 						</tr>
-						<tr>
-							<td colspan="2">
-								<a href="{:url('User/change_password')}" class="submit">点击去修改密码</a>
-							</td>
-						</tr>
+					
 					</table>
 				</div>
 			</div>
@@ -166,8 +184,17 @@
 				var penguin = $('[name = "penguin"]').val()
 				var phone = $('[name = "phone"]').val()
 				var table = $('[name = "table"]').val()
+				var type = {$user_data['type']};
+				
+				if(type == 1){
+					var address = $('[name="address"]').val()
+					var height = $('[name="height"]').val()
+					var weight = $('[name="weight"]').val()
+					var duty = $('[name="duty"]').val()
+					var hobby = $('[name="hobby"]').val()
+				}
 
-				$.post("{:url('User/index')}",{sex:sex,phone:phone,table:table,penguin:penguin,nickname:nickname},function(data){
+				$.post("{:url('User/index')}",{sex:sex,phone:phone,table:table,penguin:penguin,nickname:nickname,address:address,height:height,weight:weight,duty:duty,hobby:hobby,type:type},function(data){
 						if(data.code == 1)
 						{
 							layui.use('layer',function(){

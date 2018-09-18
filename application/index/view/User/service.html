@@ -7,10 +7,13 @@
 			<div class="user-info-box u-page-body">
 				<div class="u-title">
 					<span>开通服务</span>
-           <span  style="float:right;" class="xiaoshou"  onclick="alert('别急，客官')"><a href="{:url('User/service_add')}">添加服务</a></span>
+          <span>是否开通特价服务</span>
+          <span>是</span>
+          <span>否</span>
+           <span  style="float:right;" class="xiaoshou" ><a href="{:url('User/service_add')}">添加服务</a></span>
 				</div>
        
-        <!-- 我的赠礼 -->
+        
         <div class="miva-my-send">
           
           <!-- 排序? -->
@@ -19,6 +22,7 @@
             <span>申请/开通时间</span>
             <span>该项目接单数</span>
             <span>价格/小时</span>
+  
             <span>状态</span>
             <span>操作</span>
           </div>
@@ -26,21 +30,34 @@
           <!-- 赠礼内容 -->
           <div class="send-info">
             <!-- 如果没数据 -->
-            <div class="if-black">
+            <div class="">
               <img src="" alt="">
               <div class="if-have">
 
          
-           {foreach name="apply_data" item="v"}
+           {foreach name="apply_data" item="v" key="k"}
               <div class="pai">
                 <span>{$v.project_name}</span>
                 
                 <span>{:date('Y-m-d H:i:s',$v.time)}</span>
                 <span>{$v.order_num}</span>
-                <span>{$v.pric}</span>
+                <span> 
+                  <select data-item="miva" name="123">
+                    <option value="{$v['pric'][0]}">{$v['pric'][0]}</option>
+                    {foreach name="$v['pric']" item="val" key="ke"}
+                      <option value="{$val}">{$val}</option>
+                    {/foreach}
+                    
+                  </select> 
+
+                </span>
+                <span>
+                  
+
+                </span>
                 {switch name="$v.status"}
-                  {case value='0'}<span>待审核</span><span class="xiaoshou">删除</span>{/case}
-                  {case value='1'}<span>审核成功</span><span class="xiaoshou">下架服务</span>{/case}
+                  {case value='0'}<span>待审核</span><span class="xiaoshou">删除</span><a href="#"></a>{/case}
+                  {case value='1'}<span>审核成功</span><span class="xiaoshou">下架服务</span><a href="#" attr_id="{$v.id}" class="edit">修改服务价格</a>{/case}
                   {case value='2'}<span>审核失败</span><span class="xiaoshou">删除记录</span>{/case}
                 {/switch}
                 
@@ -54,9 +71,47 @@
 			</div>
 
 		</div>
+    <script type="text/javascript">
+    $(function(){
+        $('.if-have').on('click', '.edit', function(e){
+          e.preventDefault()
+            var id = $(this).attr('attr_id');
+            $(this).parent('.pai').find('[data-item=miva]')
+
+            var pric = $(this).parent('.pai').find('[data-item=miva]').val();
+            
+            //console.log(pric)
+
+            $.post("{:url('User/pric_edit')}",{id:id,pric:pric},function(data){
+                  if(data.code == 1){
+                    layui.use('layer',function(){
+                    layer.msg(data.msg)
+                    })
+                  }else if(data.code == 2){
+                    layui.use('layer',function(){
+                    layer.msg(data.msg)
+                    })
+                  }else if(data.code == 3){
+                    layui.use('layer',function(){
+                    layer.msg(data.msg)
+                    })
+                  }else{
+                    layui.use('layer',function(){
+                    layer.msg('未知错误')
+                    })
+                  }
+
+            },'json')
+
+
+        })
+    })
+    </script>
 
 		<!-- 引入页脚 -->
 {include file="public/footer"}
 	</body>
 
 </html>
+https://www.daofengdj.com/item/1186931.html?classid=&special=act
+https://www.daofengdj.com/item/1186931.html

@@ -231,8 +231,9 @@ class Index  extends Common
             $joy_data = Db::table('hn_joy')->field('id,name,joy_logo_img')->where('id',$project_data['project_id'])->find();
             $service_data = array_merge($project_data,$joy_data);
             $service_data['game_index_img'] = $joy_data['joy_logo_img']; //容错
+        }else{
+            $service_data = null;
         }
-
 //var_dump($service_name);die;
         //查询评论数据
         $comment_data = Db::table('hn_comment')
@@ -268,6 +269,23 @@ class Index  extends Common
             $gift_header['num'] = $v;
             $sort_gift[] =  $gift_header;
         }
+
+        //统计此陪玩师关注数量  确定是否已关注
+        $follow = \db('hn_follow');
+        //获取到用户ID
+         $number = $follow->where('followed_user',$id)->count();
+        if(isset($_SESSION['user']['user_info']['uid'])){
+            $user_id = $_SESSION['user']['user_info']['uid'];
+           
+            $is_follow = $follow->where(['user_id'=>$user_id,'followed_user'=> $id,'status'=>1])->find();
+            if($is_follow){
+                $is_follow = 1;
+            }else{
+                $is_follow = 2;
+            }
+        }else{
+             $is_follow = 2;
+        }
       
         $this->assign([
             //陪玩师数据
@@ -285,7 +303,9 @@ class Index  extends Common
             //我的礼物数据
             'sort_gift' => $sort_gift,
             //评论数据
-            'comment_data' => $comment_data
+            'comment_data' => $comment_data,
+            'number' => $number,
+            'is_follow' => $is_follow,
 
             ]);
         return $this->fetch('Index/user');
@@ -295,7 +315,7 @@ class Index  extends Common
     public function  service_ajax()
     {   
         $data = Request::instance()->param();
-     
+    
         //需要的数据 1.游戏图片   2.陪玩师该项目级别  3.价钱  4.接单时长 5.当前项目接单数  6.status == 1(审核成功) 7.type == 1(不下架)   以后需要陪玩师音频
         $service_data = [];
         if($data['project'] == 1){
@@ -309,11 +329,16 @@ class Index  extends Common
             $service_data['project_img'] = $img['game_index_img'];
 
             //算出一个正确的价钱  $service_data['pric']
-            if($service_data['order_num']>=2){
-                $pric = Db::table('hn_game_grade')->field('pric')->where('id',$service_data['project_grade']); //项目初始价格
+            if($service_data['order_num']>=1){
+                $pric = Db::table('hn_game_grade')->field('pric')->where('id',$service_data['project_grade'])->find(); //项目初始价格
 
-                $service_data['pric'] = $this->pric($service_data['order_num'],$pric);
+           
+                $service_data['pric'] = $this->pric($service_data['order_num'],$pric['pric']);
+
             }
+
+           
+
             return json($service_data);
         }else if($data['project'] == 2){
             //娱乐项目
@@ -327,9 +352,9 @@ class Index  extends Common
 
             //算出一个正确的价钱  $service_data['pric']
             if($service_data['order_num']>=2){
-                $pric = Db::table('hn_game_grade')->field('pric')->where('id',$service_data['project_grade']); //项目初始价格
+                $pric = Db::table('hn_game_grade')->field('pric')->where('id',$service_data['project_grade'])->find(); //项目初始价格
 
-                $service_data['pric'] = $this->pric($service_data['order_num'],$pric);
+                $service_data['pric'] = $this->pric($service_data['order_num'],$pric['pric']);
             }
             return json($service_data);
         }
@@ -434,6 +459,46 @@ class Index  extends Common
             return  json(['code' => 3,'msg' => '赠送成功']);
         }else{
             return  json(['code' => 4,'msg' => '赠送失败，错误码004']);
+        }
+    }
+
+    function follow_add(){
+        $request = request();//think助手函数
+        $data_get = $request->param();//获取get与post数据
+
+        $follow = db('hn_follow');//关注表
+        if(!isset($_SESSION['user']['user_info']['uid'])){
+            return ['code' => 4,'msg' => '您还未登录，请先登录'];exit;
+        }
+        $uid = $_SESSION['user']['user_info']['uid'];
+        $res = $follow->where(['user_id'=>$uid,'followed_user'=>$data_get['followed_user']])->find();
+        if($res){
+            if($res['status'] == 1){
+                $data = [
+                    'status'=>2
+                ];
+                $aa = ['code' => 2,'msg' => '操作成功'];
+            }else{
+                $data = [
+                    'status'=>1
+                ];
+                $aa = ['code' => 1,'msg' => '操作成功'];
+            }
+            $red = $follow->where(['user_id'=>$uid,'followed_user'=>$data_get['followed_user']])->update($data);
+
+        }else{
+            $data = [
+                'user_id'=> $uid,
+                'followed_user'=> $data_get['followed_user'],
+                'status'=>1
+            ];
+            $red = $follow->insert($data);
+            $aa = ['code' => 1,'msg' => '操作成功'];
+        }
+        if($red){
+            return $aa;
+        }else{
+            return ['code' => 3,'msg' => '操作失败，请重试'];
         }
     }
 

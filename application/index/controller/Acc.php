@@ -91,9 +91,9 @@ class Acc extends Common
 	//筛选Ajax
 	public function screen()
 	{
-		die;
+	
 		$data = Request::instance()->param();
-		//var_dump($data);die;
+		var_dump($data);die;
 		//$data['project'];
 		//$data['project_id'];
 		//用户有没有选择性别

@@ -1,0 +1,285 @@
+{include file="public/header"}
+
+
+		<!--<link rel="stylesheet" type="text/css" href="css/common.css" />-->
+<script src="https://cdn.bootcss.com/mui/3.7.1/js/mui.min.js"></script>
+		<title>网吧入驻申请</title>
+		
+
+
+	<body class="u-body">
+
+		<div class="main u-main">
+		{include  file="public/nav"}
+			
+			<div class="user-info-box u-page-body">
+				<div class="u-title "><span>上线服务</span></div>
+
+				<div class="u-true-set-box">
+					<div class="miva-btn-box">
+						<span>线上接单</span>
+						<div id="line-up" class="mui-switch mui-active"   >
+							<div class="mui-switch-handle"></div>
+						</div>
+					</div>
+				</div>
+
+				<div class="u-true-set-box">
+					<div class="miva-btn-box">
+						<span>线下接单</span>
+						<div id="line-down" class="mui-switch ">
+							<div class="mui-switch-handle"></div>
+						</div>
+					</div>
+				</div>
+
+				<div style="padding: 20px;" class="">
+					<i class="mui-icon mui-icon-location"></i><span>高新三路财富中心二期B座</span> <span style="color: #FBC94C; margin: 0 5px;">修改</span><em style="color: red; font-size: 12px;">(*位置越准确越有利于你接单哦!)</em>
+				</div>
+
+				<div class="u-title "><span>附近网咖供您选择</span></div>
+
+				<div class="netBar-list-box">
+					<ul>
+						<li>
+							<div class="item-box">
+								<div class="netbar-img-box">
+									<img src="//placehold.it/200x800" />
+									<i class="select-btn"></i>
+								</div>
+								<div class="net-title">
+									<span class="">太平洋网咖</span>
+									<!--<em>选择</em>-->
+									<i class="select-btn"></i>
+								</div>
+								<div class="net-txt">
+									<i class="mui-icon mui-icon-location"></i>
+									<span>高新区距您1.2km</span>
+								</div>
+							</div>
+						</li>
+						<!---->
+						<li>
+							<div class="item-box">
+								<div class="netbar-img-box">
+									<img src="//placehold.it/200x800" />
+									<i class="select-btn active"></i>
+								</div>
+								<div class="net-title">
+									<span class="">太平洋网咖</span>
+									<!--<em>选择</em>-->
+									<i class="select-btn"></i>
+								</div>
+								<div class="net-txt">
+									<i class="mui-icon mui-icon-location"></i>
+									<span>高新区距您1.2km</span>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="item-box">
+								<div class="netbar-img-box">
+									<img src="//placehold.it/200x800" />
+									<i class="select-btn active"></i>
+								</div>
+								<div class="net-title">
+									<span class="">太平洋网咖</span>
+									<!--<em>选择</em>-->
+									<i class="select-btn"></i>
+								</div>
+								<div class="net-txt">
+									<i class="mui-icon mui-icon-location"></i>
+									<span>高新区距您1.2km</span>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="item-box">
+								<div class="netbar-img-box">
+									<img src="//placehold.it/200x800" />
+									<i class="select-btn active"></i>
+								</div>
+								<div class="net-title">
+									<span class="">太平洋网咖</span>
+									<!--<em>选择</em>-->
+									<i class="select-btn"></i>
+								</div>
+								<div class="net-txt">
+									<i class="mui-icon mui-icon-location"></i>
+									<span>高新区距您1.2km</span>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="item-box">
+								<div class="netbar-img-box">
+									<img src="//placehold.it/200x800" />
+									<i class="select-btn active"></i>
+								</div>
+								<div class="net-title">
+									<span class="">太平洋网咖</span>
+									<!--<em>选择</em>-->
+									<i class="select-btn"></i>
+								</div>
+								<div class="net-txt">
+									<i class="mui-icon mui-icon-location"></i>
+									<span>高新区距您1.2km</span>
+								</div>
+							</div>
+						</li>
+						<!---->
+					</ul>
+				</div>
+
+				<div class="peiwan-info ">
+					<div class="bottom-box">
+						<div class="user-eval">
+							<!-- 分页器 -->
+							<div class="page-cut-box">
+								<div class="page-cut">
+									<div class="page-up">上一页</div>
+									<div class="page-before">首页</div><span class="active">1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>...</span>
+									<div class="page-last">尾页</div>
+									<div class="page-down">下一页</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+
+		<script type="text/javascript">
+			$(function() {
+				var zhengData = '';
+
+				$("#line-up").on("toggle", function(event) {
+					if(event.detail.isActive) {
+						console.log("你启动了线上");
+					} else {
+						console.log("你关闭了线上");
+					}
+				})
+
+				$("#line-down").on("toggle", function(event) {
+					if(event.detail.isActive) {
+
+						console.log("你启动了线下");
+
+						var real = `<div class="u-true-set-box">
+										<table align="center">
+										
+											<tr>
+												<td>身份证号</td>
+												<td><input type="text" placeholder="请输入二代身份证号"  name="card_num" /></td>
+											</tr>
+											
+											<tr>
+												<td>手持身份证正面照</td>
+												<td>
+													<label style="display:block; overflow:hidden" for="input1" class="img-box">
+														<input  type="file" id="input1"  style="display:none" />
+														<img id="zheng" src="" alt="" />
+													</label>
+												</td>
+											</tr>
+											
+										</table>
+									</div>
+
+									`
+						var status = {$real['real']};
+						
+		if(status != 3){
+						// 并且判断未实名
+						layui.use('layer', function(){
+							layer.confirm('开通线下服务需先实名认证,未实名认证，去认证吗？', {
+								title: '开通线下服务',
+								btn:['去认证', '算了吧'],
+								btn1: function(index) {
+									layer.open({
+										type:1,
+										resize:false,
+										content: real,
+										zIndex: 7489436491,
+										btn: ['提交认证', '取消'],
+										area: ['1100px', '600px'],
+										success: function(layero, index) {
+											var zheng = $(layero.find('#zheng'));
+											var reader = new FileReader();
+											
+											$(layero.find('#input1')).on('change', function() {
+												
+												var _this = this;
+												reader.readAsDataURL($(this).prop('files')[0]);
+												reader.onload = function(e) {
+													var fileBuffer = e.target.result;
+													zhengData = fileBuffer;
+													zheng.attr('src', fileBuffer);
+													
+												}
+											});
+										},
+										yes: function(index, layero) {
+											var card_num = $(layero.find('[name="card_num"]')).val();
+											
+											if(card_num == ''){
+												layui.use('layer',function(){
+												layer.msg('请正确填写身份证号码',{zIndex: 7489437492})})
+												return false
+											}
+
+											if(zhengData == ''){
+												layui.use('layer',function(){
+												layer.msg('请上传图片',{zIndex: 7489437492})})
+												return false 
+											}
+
+											$.post("{:url('User/real_data')}",{card_num:card_num,zhengData:zhengData},function(data){
+													if(data.code == 1){
+														layui.use('layer',function(){
+														layer.msg(data.msg,{zIndex: 7489437492})})
+													}else if(data.code == 2){
+														layer.closeAll()
+														layer.msg('已提交审核请等待',{time:3000, zIndex: 7489436492})
+														mui("#line-down").switch().toggle()
+													}else if(data.code == 3){
+														layui.use('layer',function(){
+														layer.msg(data.msg,{zIndex: 7489437492})})
+													}else{
+														layui.use('layer',function(){
+														layer.msg('未知错误',{zIndex: 7489437492})})
+													}
+
+											},'json')
+											
+											
+
+										}
+									})
+								},
+								btn2: function(index) {
+									mui("#line-down").switch().toggle()
+								}
+							})
+
+						})
+		}
+					} else {
+						console.log("你关闭了线下");
+					}
+				})
+
+				$('.item-box').on('click', function() {
+					if(!$(this).find('.active')[0]) {
+						$(this).find('.select-btn').addClass('active')
+					} else {
+						$(this).find('.select-btn').removeClass('active')
+					}
+				})
+			})
+		</script>
+	</body>
+{include file="public/footer"}
+</html>

@@ -7,9 +7,7 @@
 	<!-- 引入头部 -->
 	<div class="main miva-join-page">
 		<!-- 陪玩入驻服务 -->
-		<div class="miva-join-us">陪玩申请服务项目(<span>*请上传清晰图片</span>)</div>
-		<!-- 基本资料 -->
-			<style media="screen">
+	<style media="screen">
 				.miva-input {
 					padding: 0 10px;
 				}
@@ -21,7 +19,15 @@
 					padding: 5px 15px;
 					margin: 5px !important;
 				}
+				.miva-join-page .miva-basic-table .up-title {
+					width: 10%
+				}
+				.up-input {
+					width: 24%
+				}
 			</style>
+		<!-- 基本资料 -->
+	
 		
 		<div class="miva-join-title">开通游戏</div>
 		<div class="miva-box miva-game-box layui-form">
@@ -33,7 +39,10 @@
 				</select>
 			</div>
 			<!-- 二级类目选择 -->
-			<div class="miva-selected-box"></div>
+			<div data-item="game1" class="miva-selected-box"></div>
+			<!-- 三级类目选择 -->
+
+			<div data-item="game2" class="miva-selected-box" data-item="grade"></div>
 		</div>
 		<div class="miva-join-title">认证资料照</div>
 		<div class="miva-box miva-data-box">
@@ -48,78 +57,206 @@
 		<div class="miva-join-title">说明</div>
 		<div class="miva-box miva-info-box"><textarea name="explain" class="txt-box" placeholder="可以写自己喜欢的游戏,喜欢的玩法和打法......"></textarea></div>
 		<!--<div class="miva-join-title">语音介绍</div><div class="miva-box miva-audio-box"><div class="audio-box-f"><div class="audio-box"><div class="audio-btn"><i class="layui-icon layui-icon-voice"></i><span>点击上传</span></div></div><audio src="" controls></audio></div><span class="tip">上传录音可供游客试听,请自行上传录音 格式为:MP3 大小:2MB<span>支持格式:MP3,ogg,mav,m4a</span></span></div>-->
-		<div class="check-box"><!--<input id="check" type="checkbox"> <label for="check">我已阅读并同意<a href="{:url('Conpanion/agreement')}" target="__blnk"><<陪玩申请入驻协议>></a></label>--></div>
-		<button style="color:#FFF" class="miva-btn miva-btn-act xiaoshou submit">提交项目申请</button>
+		<div class="check-box"><input id="check" type="checkbox"> <label for="check">我已阅读并同意<a href="{:url('Conpanion/agreement')}" target="__blnk"><<陪玩申请入驻协议>></a></label></div>
+		<button style="color:#FFF" disabled=true class="miva-btn xiaoshou submit">提交入驻申请</button>
 	</div>
 	<!-- 引入侧边栏 -->
 	<!-- 引入页脚 -->
 	{include file="public/footer"}
+	
 	<script>
 var img_data = '';
 var type;
 var cityVal = '';
 var isSubmitOff = false;
-
+var option
+var sex
 	// 图片预览
-	$('input[type=file]').on('change', function() {
+	$('#duanwei').on('change', function() {
 		var _this = this;
 		var files = $(this);
 		var img = $('.miva-up-data-pic');
 		var fileBuffer;
 		var reader = new FileReader();
 		var alertHTML = '<img id="newMiva" src=""/>';
-		
+		var project_grade;
 		reader.readAsDataURL(files.prop('files')[0]);
 		reader.onload = function(e) {
 			// 获取file里的内容
 			fileBuffer = e.target.result;
 
-			layer.open({
-				type: 1,
-				title: false,
-				closeBtn: 0,
-				content: alertHTML,
-				scrollbar: false,
-				btn: ['确认', '取消'],
-				area: ['100%', '100%'],
-				success: function(layero, index) {
-					var imgbox = layero.find("#newMiva");
-					var miva;
-					imgbox.attr('src', fileBuffer);
+			// layer.open({
+			// 	type: 1,
+			// 	title: false,
+			// 	closeBtn: 0,
+			// 	content: alertHTML,
+			// 	scrollbar: false,
+			// 	btn: ['确认', '取消'],
+			// 	area: ['100%', '100%'],
+			// 	success: function(layero, index) {
+			// 		var imgbox = layero.find("#newMiva");
+			// 		var miva;
+			// 		imgbox.attr('src', fileBuffer);
+		img_data = fileBuffer
+		img.attr('src', fileBuffer);
+					// 		if (_this.id == 'user-pic')
+					// 			miva = 1 / 1;
+					// 		else if (_this.id == 'bg-pic')
+					// 			miva = 9 / 16;
 
-					if (_this.id == 'user-pic')
-						miva = 1 / 1;
-					else if (_this.id == 'bg-pic')
-						miva = 9 / 16;
+					// 		imgbox.cropper({
+					// 			aspectRatio: miva,
+					// 			dragMode: 'move', // 设置为  ‘move’: 只可以移动模式
+					// 			dragCrop: false, // 设置为禁止移除当前的剪裁框，并通过拖动来新建一个剪裁框区域。
+					// 			toggleDragModeOnDblclick: false, // 禁止双击切换模式
+					// 		});
 
-					imgbox.cropper({
-						aspectRatio: miva,
-						dragMode: 'move', // 设置为  ‘move’: 只可以移动模式
-						dragCrop: false, // 设置为禁止移除当前的剪裁框，并通过拖动来新建一个剪裁框区域。
-						toggleDragModeOnDblclick: false, // 禁止双击切换模式
-					});
-
-				},
-				yes: function(index, layero){
-					var imgbox = layero.find("#newMiva");
-					var cas = imgbox.cropper('getCroppedCanvas');
-					var base64url = cas.toDataURL('image/jpeg');
-					img_data = base64url
-					img.attr('src', base64url);
-					layer.closeAll();
-				},
-				btn2: function(index, layero){
-					layer.closeAll();
-				}
-			});
-
+					// 	},
+					// 	yes: function(index, layero) {
+					// 		var imgbox = layero.find("#newMiva");
+					// 		var cas = imgbox.cropper('getCroppedCanvas');
+					// 		var base64url = cas.toDataURL('image/jpeg');
+					// 		img_data = base64url
+					// 		img.attr('src', base64url);
+					// 		layer.closeAll();
+					// 	},
+					// 	btn2: function(index, layero) {
+					// 		layer.closeAll();
+					// 	}
+					// });
 		};
 		// 重置input[type=file];
 		files.val('');
 	});
 
+	//头像
+	var files = $('#user-pic');
+		// var btn = $('[data-item=upbtn]');
 
-		
+		var reader = new FileReader();
+		var fileBuffer;
+		var zoomNum = 1;
+		var base64url;
+		var imgbox;
+		var alertHTML = '<div style="width:70%;height:100%"><img id="newMiva" src=""/></div>';
+		alertHTML += '<div class="yulan"><div><img alt="小" src="__IMG__default.jpg" alt="" /></div><div><img alt="中" src="__IMG__default.jpg" alt="" /></div><div><img alt="大" src="__IMG__default.jpg" alt="" /></div></div>'
+		// 图片预览
+		files.on('change', function() {
+			reader.readAsDataURL(files.prop('files')[0]);
+			reader.onload = function(e) {
+				// 获取file里的内容
+				fileBuffer = e.target.result;
+				layui.use('layer', function() {
+					layer.open({
+						type: 1,
+						title: false,
+						content: alertHTML,
+						scrollbar: false,
+						resize: false,
+						zIndex: 7489436491,
+						btn: ['确认', '放大', '缩小', '预览'],
+						area: ['1000px', '600px'],
+						success: function(layero, index) {
+							imgbox = layero.find("#newMiva");
+							imgbox.attr('src', fileBuffer);
+							imgbox.cropper({
+								aspectRatio: 1 / 1,
+								dragMode: 'move', // 设置为  ‘move’: 只可以移动模式
+								dragCrop: false, // 设置为禁止移除当前的剪裁框，并通过拖动来新建一个剪裁框区域。
+								toggleDragModeOnDblclick: false, // 禁止双击切换模式
+								background: false,
+								// movable: false,
+							});
+						},
+						yes: function(index, layero) {
+							var imgbox = layero.find("#newMiva");
+							var cas = imgbox.cropper('getCroppedCanvas');
+							base64url = cas.toDataURL('image/jpeg');
+
+							 option = base64url; //上传图片的内容
+							$('#user-pic-img').attr('src', option);
+
+/*
+							
+							$.post("{:url('User/head_img')}",{option:option},function(data){
+									if(data.code == 0){
+										layui.use('layer',function(){
+										layer.msg(data.msg)})
+									}else if(data.code == 1){
+										layui.use('layer',function(){
+										layer.msg(data.msg)})
+									}else if(data.code == 2){
+										layui.use('layer',function(){
+										layer.msg(data.msg)})
+									}else if(data.code == 3){
+										layui.use('layer',function(){
+										layer.msg(data.msg)})
+									}else{
+										layui.use('layer',function(){
+										layer.msg('未知错误')})
+									}
+							
+							},'json')
+*/
+							layer.closeAll();
+						},
+						btn2: function(index, layero) {
+							var imgbox = layero.find("#newMiva");
+							zoomNum -= 0.1;
+							imgbox.cropper('zoom', 0.1);
+							console.log(zoomNum)
+							return false;
+						},
+						btn3: function(index, layero) {
+							var imgbox = layero.find("#newMiva");
+							zoomNum += 0.1;
+							imgbox.cropper('zoom', -0.1);
+							console.log(zoomNum)
+							return false;
+						},
+						btn4: function(index, layero) {
+							var cas = imgbox.cropper('getCroppedCanvas');
+							base64url = cas.toDataURL('image/jpeg');
+							console.log($(layero.find('.yulan')))
+							$(layero.find('.yulan')).find(layero.find('img')).attr('src', base64url)
+							return false;
+						}
+					})
+				})
+
+			};
+			// 重置input[type=file];
+			files.val('');
+		});
+
+
+
+	//手持身份证照 base64   zhengData
+	var zheng = $('#zheng');
+			var fan = $('#fan');
+			var reader = new FileReader();
+			var zhengData = '';
+			var fanData = '';
+			$('#miva-input').on('change', 'input', function() {
+				var _this = this;
+				reader.readAsDataURL($(this).prop('files')[0]);
+				reader.onload = function(e) {
+					var fileBuffer = e.target.result;
+
+					if (_this.id == 'input1') {
+						zhengData = fileBuffer;
+						zheng.attr('src', fileBuffer);
+					}
+					else if (_this.id == 'input2') {
+						fanData = fileBuffer;
+						fan.attr('src', fileBuffer);
+					}
+					else 
+						alert('error');
+				}
+			});
+
+		/************************************************/
 		layui.use(['form', 'laydate'], function() {
 			var form = layui.form;
 			var laydate = layui.laydate;
@@ -129,32 +266,57 @@ var isSubmitOff = false;
 					elem: '#data-check' //指定元素
 				});; // 使用layui日期选择器
 			
+			//服务项目Ajax
 			form.on('select(item-check)', function(res) {
+
 			type = res.value
+
 				$.post("{:url('Conpanion/project')}", {
 					type: res.value
-				}, function(res) {
+				}, function(res){
+
 					var str = '';
 					for (a of res) {
-						str += "<span data-item=mivaservice attr_id=" + a['id'] + ">" + a['name'] + "</span>";
+						str += "<span data-item=mivaservice data-floor=floor1 attr_id=" + a['id'] + ">" + a['name'] + "</span>"; // 第一层渲染 
 					}
-
-					$('.miva-selected-box').html(str);
+					$('[data-item="game1"]').html(str);
 
 						if (isMivaService) {
 							$('.miva-selected-box').on('click', '[data-item=mivaservice]', function() { // 选择服务时的激活样式
 								$(this).addClass('service-act').siblings().removeClass('service-act');
-							// if ($(this).prop('class').indexOf('service-act') == -1) {
+								console.log($(this).attr('grade_id'))
+								if($(this).attr('grade_id')){
+									 project_grade = $(this).attr('grade_id')
+								}
+							// if ($(this).prop('class').indexOf('service-act') == -1) { // 多选
 							// 	$(this).addClass('service-act');
 							// } else {
 							// 	$(this).removeClass('service-act');
 							// }
-							isMivaService = false;
+							isMivaService = false; 
 						});
 					};
 
 				}, 'json')
 			});
+
+			//服务项目等级Ajax
+			$('.miva-selected-box').on('click', '[data-floor=floor1]', function(){
+				// type  1:游戏项目hn_game_grade  2：娱乐 hn_game_grade
+				var game_id = $(this).attr('attr_id')
+				
+				$.post("{:url('Conpanion/project_grade')}",{type:type,game_id:game_id},function(res){
+					var str = '';
+					for (a of res) {
+						str += "<span data-item=mivaservice grade_id=" + a['id'] + " >" + a['type_name'] + "</span>"; // 第二层渲染
+					}
+					$('[data-item="game2"]').html(str);
+					project_grade = undefined;
+
+				},'json')
+
+
+			})
 
 			form.on('select(province)', function(result) { // 请选择省份
 				$('#city').html('<option value="">请选择城市</option>');
@@ -178,6 +340,7 @@ var isSubmitOff = false;
 
 $('#buwei').on('click', 'span.radio', function() {
 	$(this).addClass('active-radio').siblings().removeClass('active-radio')
+	$(this).addClass('sexy').siblings().removeClass('sexy')
 });
  			var isMivaService = true;
 			var num = 1;
@@ -192,7 +355,7 @@ $('#buwei').on('click', 'span.radio', function() {
 				}
 			});
 
-/*
+
 $('.check-box').on('change','input', function() {
 	isSubmitOff = !isSubmitOff;
 	if (isSubmitOff) {
@@ -201,12 +364,15 @@ $('.check-box').on('change','input', function() {
 		$('.submit').attr('disabled', 'true').removeClass('miva-btn-act');
 	}
 })
-*/
+
+
 
 		$('.submit').click(function() { 
-								
+				//	alert(num);   这一项有2个值  1：没有选择线下    3：选择了线下 所以需要判断填写的东西是否存在  
+
 
 			var project_id = $('.service-act').attr('attr_id') //游戏ID
+
 			if(!project_id){
 				layui.use('layer', function(){
 					layer.msg('请选择服务项目')
@@ -214,6 +380,12 @@ $('.check-box').on('change','input', function() {
 				return false
 			}
 
+			if(typeof project_grade === 'undefined'){
+				layui.use('layer', function(){
+					layer.msg('请选择服务等级')
+				}) 
+				return false
+			}
 
 			if(!img_data){
 				layui.use('layer', function() {
@@ -224,31 +396,24 @@ $('.check-box').on('change','input', function() {
 
 			var explain = $('[name="explain"]').val();
 			if (explain == '') {
-				layui.use('layer', function(){
+				layui.use('layer', function() {
 					layer.msg('请填写说明')
 				}) 
 				return false
 			}
 			
-			var project_name = $('.service-act').html();
 
-
-			//var acc_type = num //   线上/线下
 			
-			//type     1：游戏项目  2：娱乐项目
-			//img_data  base64
 
-
-
-
-			$.post("{:url('User/service_add')}",{
-				
+			
+			$.post("{:url('User/service_add')}", {
+				//前往用户表的数据
 				project:type,
-				img_url:img_data,				
+				img_url:img_data,  //认证图片
 				project_id:project_id,
+				project_grade:project_grade,
 				explain:explain,
-				acc_type:acc_type
-				project_name:project_name
+			
 			}, function(data){
 				if(data.code == 1){
 					layui.use('layer', function() {
@@ -268,13 +433,14 @@ $('.check-box').on('change','input', function() {
 					})
 				}else{
 					layui.use('layer', function() {
-					layer.msg('未知错误')
+					layer.msg('位置错误')
 					})
 				}
 			}, 'json')
 			return false
 		})
 	</script>
+
 </body>
 
 </html>

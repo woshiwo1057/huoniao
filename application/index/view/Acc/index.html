@@ -92,14 +92,24 @@
 			</div>
 	
 			<!-- 筛选 -->
+			<style>
+			.screen-btn-active {
+				background: #f5b105;
+				color: #fff !important;
+			}
+			.btn-admin-act {
+				background: transparent!important; 
+				color: #f5b105 !important; 
+			}
+			</style>
 			<div class="miva-screen-box">
-				<div class="miva-screen-btn-admin">
-					<i class="layui-icon layui-icon-align-right"></i> 综合筛选
+				<div class="miva-screen-btn-admin" cheap="1" data-item="shaiBtn" >
+					<i class="layui-icon layui-icon-align-right" ></i> 综合筛选
 				</div>
-				<div class="miva-screen-btn">人气</div>
-				<div class="miva-screen-btn">价格</div>
-				<div class="miva-screen-btn">评价</div>
-				<div class="miva-screen-btn">线下</div>
+				<div class="miva-screen-btn" cheap="2" data-item="shaiBtn">人气</div>
+				<div class="miva-screen-btn" cheap="3" data-item="shaiBtn">价格</div>
+				<div class="miva-screen-btn" cheap="4" data-item="shaiBtn">评价</div>
+				<div class="miva-screen-btn" cheap="5" data-item="shaiBtn">线下</div>
 			</div>
 
 			<!-- 陪玩列表 -->
@@ -166,6 +176,20 @@
 		var projectId = 1;
 		var porjectLv = 0;
 		var sex = 0;
+		var type = 1;
+
+
+		$('[cheap]').on('click', function(){
+			type = $(this).attr('cheap');
+			alert(type)
+			$(this).addClass('screen-btn-active');
+			$('.miva-screen-btn-admin').addClass('btn-admin-act');
+		})
+		$('.miva-screen-box').on('click', '.miva-screen-btn-admin', function() {
+			$(this).removeClass('btn-admin-act');
+			$('.miva-screen-box').find('[cheap]').removeClass('screen-btn-active');
+		})
+
 
 		$('.miva-acc-tab-box').on('click', '.miva-iocn-box', function() {			
 			$('.miva-acc-tab-box').find('.miva-iocn-box').removeClass('icon-active')
@@ -204,7 +228,7 @@
 // 	console.log(res)
 // })
 			//筛选
-			$.post("{:url('Acc/screen')}",{project:project,project_id:projectId,sex:sex},function(res){
+			$.post("{:url('Acc/screen')}",{project:project,project_id:projectId,sex:sex,type:type},function(res){
 console.log(res)
 				var str = ''
 					for(a of res){

@@ -74,7 +74,7 @@ class Common extends \think\Controller
 	}
 
 
-	// 截取前6  用于排行榜   (该方法待测试)
+	// 截取前8  用于排行榜   
 			  //参数说明: 用户信息    排序字段
 	public function ranking($data,$type)
 	{

@@ -42,9 +42,9 @@
 
 				<td class="up-pic" rowspan="4">
 
-						<img style="border-radius:50%;box-shadow: 0 0 5px #000" src="{$user_data.head_img}" alt=""  id="user-pic-img">
+						<img style="border-radius:50%;box-shadow: 0 0 3px #aaa; margin:25px" src="{$user_data.head_img}" alt=""  id="user-pic-img">
 						<label for="user-pic">
-							<div class="up-pic-btn">可选择上传头像</div>
+							<div class="up-pic-btn" style="margin-left:45px">可选择上传头像</div>
 							<input type="file" id="user-pic" style="display:none" >
 						</label>
 					</td>
@@ -188,7 +188,7 @@
 			<input style="display:none" type="file" id="duanwei">
 
 			<span class="miva-li">示例:</span>
-			<img style="border:none;" src="__IMG__example.png" alt=""></div>
+			<img style="border:none;" src="__IMG__example.png" alt="" class="style-picture"></div>
 		<div class="miva-join-title">说明</div>
 		<div class="miva-box miva-info-box"><textarea name="explain" class="txt-box" placeholder="可以写自己喜欢的游戏,喜欢的玩法和打法......"></textarea></div>
 		<!--<div class="miva-join-title">语音介绍</div><div class="miva-box miva-audio-box"><div class="audio-box-f"><div class="audio-box"><div class="audio-btn"><i class="layui-icon layui-icon-voice"></i><span>点击上传</span></div></div><audio src="" controls></audio></div><span class="tip">上传录音可供游客试听,请自行上传录音 格式为:MP3 大小:2MB<span>支持格式:MP3,ogg,mav,m4a</span></span></div>-->
@@ -439,6 +439,18 @@ var sex
 			$('.miva-selected-box').on('click', '[data-floor=floor1]', function(){
 				// type  1:游戏项目hn_game_grade  2：娱乐 hn_game_grade
 				var game_id = $(this).attr('attr_id')
+				console.log(type)
+				console.log(game_id)
+				if(type == 2){
+					if(game_id == 2){
+						$('.style-picture').attr('src','__IMG__gedan.jpg')
+						return 
+					}
+
+					$('.style-picture').attr('src','__IMG__shengjian.jpg')
+				}else{
+					$('.style-picture').attr('src','__IMG__example.png')
+				}
 				
 				$.post("{:url('Conpanion/project_grade')}",{type:type,game_id:game_id},function(res){
 					var str = '';

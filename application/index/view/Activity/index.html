@@ -178,12 +178,12 @@
 
 
 
-		$('[cheap]').on('click', function() {
+		$('[cheap]').on('click', function(){
 			type = $(this).attr('cheap');
 			$(this).addClass('screen-btn-active');
 			$('.miva-screen-btn-admin').addClass('btn-admin-act');
 		})
-		$('.miva-screen-box').on('click', '.miva-screen-btn-admin', function() {
+		$('.miva-screen-box').on('click', '.miva-screen-btn-admin', function(){
 			$(this).removeClass('btn-admin-act');
 			$('.miva-screen-box').find('[cheap]').removeClass('screen-btn-active');
 		})

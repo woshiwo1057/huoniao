@@ -27,7 +27,7 @@
 			</div>
 				<!--礼物消息-->
 				<div style="height: 140px; width: 45%;" id="gift" class="swiper-container">
-					<div style="100% !important" class="gift-msg swiper-wrapper">
+					<div style="width: 100% !important" class="gift-msg swiper-wrapper">
 						<!--一条-->
 						<div class="msg-box swiper-slide">
 							<div class="msg"><span class="time">11:07</span><span class="body"><span>用户名字</span> 赠送给 陪玩师名字<span>1个棒棒糖 <img src="images/png/ea5cd4eeed76a59fac1f8184acc2c695.png"/></span></span>
@@ -42,10 +42,330 @@
 				</div>
 				<!--关注按钮-->
 				<div class="follw-box">
-					<div class="follow-btn" onclick="alert('正在施工 0.0  稍等哦')"><span>关注</span>未知</div>
+					<div class="follow-btn" onclick="guanzhu('{$user_data.uid}')"><span>{if condition="$is_follow eq 1"}已关注{else/}关注{/if}</span><b>{$number}</b></div>
 					<div class="btm"><span>微信下单</span><span>分享</span></div>
 				</div>
 			</div>
+			<!--关注js-->
+			<script type="text/javascript">
+                function guanzhu($id){
+
+                    if(!$id){
+                        layui.use('layer',function(){
+                            layer.msg('您还未登录，请先登录')})
+							setTimeout(function(){
+								layui.use('layer', function(){
+									layer.open({
+										type: 2,
+										title: '登录/注册',
+										maxmin: false,
+										scrollbar: false,
+										skin: 'layui-layer-bai',
+										shadeClose: true, //点击遮罩关闭层
+										area: ['460px', '610px'],
+										//           zIndex:99999999,
+										content: "{:url('Login/login')}",
+										success: function(layero, index) {
+
+
+											var body = layer.getChildFrame('body', index);
+											var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+											// console.log(body.html()) //得到iframe页的body内容
+											var from = body.find('.login-form')
+
+
+
+											$(body.find('#kanbuq')).on("click",function(){
+												$(body.find('#miva')).trigger('click');
+											})
+											//登录
+											$(from).submit(function(){
+												var account = body.find('[name="account"]').val()
+												var password = body.find('[name="password"]').val()
+												var captcha_code = body.find('[name="captcha_code"]').val()
+												var src = $(body.find('#miva')).attr('src')
+
+												$.post("{:url('Login/login')}",{account:account,password:password,captcha_code:captcha_code},function(data){
+													if(data.code == 1){
+														layui.use('layer',function(){
+															layer.msg(data.msg)})
+														$(body.find('#miva')).attr('src',src+'&'+Math.random())
+													}else if(data.code == 2){
+														layui.use('layer',function(){
+															layer.msg(data.msg)})
+														$(body.find('#miva')).attr('src',src+'&'+Math.random())
+													}else if(data.code == 3){
+														layui.use('layer',function(){
+															layer.msg(data.msg)})
+														layer.closeAll();
+														window.location.href=data.url
+													}else if(data.code == 4){
+														layui.use('layer',function(){
+															layer.msg(data.msg)});
+														$(body.find('#miva')).attr('src',src+'&'+Math.random())
+													}
+
+												},'json')
+
+												return false
+
+											})
+
+
+
+											$(body.find('.button')).click(function(){
+
+												var _this = body.find('.button');
+												var phone = $(body.find('[name="phone"]')).val()
+												var mobile = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/;
+												var num = 60;
+												var timer;
+
+
+												if(!mobile.test(phone)){
+
+													layui.use('layer',function(){
+														layer.msg('手机号输入错误')})
+													return false
+												}
+
+												/*
+															  timer = setInterval(function(e) {
+																$(_this).html('发送验证码(' + num + ')')
+																num--;
+																if (num <= 1) {
+																  clearInterval(timer)
+																  $(_this).removeAttr('disabled');
+																  $(_this).html('发送验证码')
+																}else {
+																  $(_this).attr('disabled','true');
+																}
+															  }, 1000);
+												*/
+
+												$.post("{:url('Login/code')}",{phone:phone},function(data){
+
+													if(data.code == 1){
+														layui.use('layer',function(){
+															layer.msg(data.msg)});
+
+
+														timer = setInterval(function(e) {
+															$(_this).html('发送验证码(' + num + ')')
+															num--;
+															if (num <= 1) {
+																clearInterval(timer)
+																$(_this).removeAttr('disabled');
+																$(_this).html('发送验证码')
+															}else {
+																$(_this).attr('disabled','true');
+															}
+														}, 1000);
+
+
+													}else if(data.code == 2){
+														layui.use('layer',function(){
+															layer.msg(data.msg)})
+													}else if(data.code == 3){
+														layui.use('layer',function(){
+															layer.msg(data.msg)})
+													}else{
+														layui.use('layer',function(){
+															layer.msg('未知错误')})
+													}
+												},'json')
+												return false
+											})
+
+											var isRegOff = true;
+											$(body.find('#agreement')).on('change', function() {
+												isRegOff = !isRegOff;
+												if (!isRegOff) {
+													body.find('.register').attr('disabled', 'true')
+												}else {
+													body.find('.register').removeAttr('disabled')
+												};
+											});
+											//注册
+
+											$(body.find('.register')).click(function(){
+												var code = $(body.find('[name="code"]')).val()
+												var phone = $(body.find('[name="phone"]')).val()
+												var passwor = $(body.find('[data-item=pwd]')).val()
+												if(code == ''){
+													layui.use('layer',function(){
+														layer.msg('验证码不能为空')})
+													return false
+												}
+												if(passwor == ''){
+													layui.use('layer',function(){
+														layer.msg('密码不能为空')})
+													return false
+												}
+												var repea =  $(body.find('[data-item=repeat]')).val()
+
+												if(passwor != repea){
+													layui.use('layer',function(){
+														layer.msg('2次密码输入不一致，请重新输入')})
+													return false
+												}
+
+												// alert(code,phone,password)
+												$.post("{:url('Login/register')}",{account:phone,password:passwor,code:code},function(data){
+													if(data.code == 1){
+														layui.use('layer',function(){
+															layer.msg(data.msg)})
+													}else if(data.code == 2){
+														layui.use('layer',function(){
+															layer.msg(data.msg)})
+													}else if(data.code == 3){
+														layui.use('layer',function(){
+															layer.msg(data.msg)})
+													}else if(data.code == 4){
+														layui.use('layer',function(){
+															layer.msg(data.msg)})
+														layer.closeAll();
+
+														function jump(){
+															// window.location.href="{:url('Index/index')}"//data.url
+															window.location.href=data.url
+														}
+
+														setInterval(jump,1000);
+
+													}else if(data.code == 5){
+														layui.use('layer',function(){
+															layer.msg(data.msg)})
+													}
+
+												},'json')
+												return false
+											})
+
+											//忘记密码
+											$(body.find('[send="forget"]')).click(function(){
+
+												var _this = body.find('.send');
+												var phone = $(body.find('[name="call"]')).val()
+												var mobile = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/;
+												var num = 60;
+												var timer;
+
+												if(!mobile.test(phone)){
+													layui.use('layer',function(){
+														layer.msg('手机号输入错误，请重新输入')})
+													return false
+												}
+
+
+
+												$.post("{:url('Login/forget_code')}",{phone:phone},function(data){
+
+													if(data.code == 1){
+														layui.use('layer',function(){
+															layer.msg('发送成功，请注意查收')})
+
+														timer = setInterval(function(e){
+															$(_this).html('发送验证码(' + num + ')')
+															num--;
+															if (num <= 1) {
+																clearInterval(timer)
+																$(_this).removeAttr('disabled');
+																$(_this).html('发送验证码')
+															}else {
+																$(_this).attr('disabled','true');
+															}
+														}, 1000);
+
+													}else if(data.code == 2){
+														layui.use('layer',function(){
+															layer.msg('发送失败，错误码002')})
+
+													}else if(data.code == 3){
+														layui.use('layer',function(){
+															layer.msg(data.msg)})
+													}else{
+														layui.use('layer',function(){
+															layer.msg('未知错误，请检查后重新尝试发送')})
+													}
+												},'json')
+												return false
+											})
+
+											$(body.find('[reset-pwd="click"]')).click(function(){
+
+												var phone = $(body.find('[name="call"]')).val()
+												var code =  $(body.find('[name="forget_code"]')).val()
+												var password =  $(body.find('[name="forget_password"]')).val()
+												var repeat =  $(body.find('[name="forget_repeat"]')).val()
+												if(password == ''){
+													layui.use('layer',function(){
+														layer.msg('密码不能为空')})
+													return false
+												}
+
+												if(password != repeat){
+													layui.use('layer',function(){
+														layer.msg('新密码输入不一致，请重新输入')})
+													return false
+												}
+
+												$.post("{:url('Login/forget')}",{phone:phone,code:code,password:password},function(data){
+													if(data.code == 1){
+														layui.use('layer',function(){
+															layer.msg('自己填的验证码不算')})
+													}else if(data.code ==2){
+														layui.use('layer',function(){
+															layer.msg('验证码不能为空')})
+													}else if(data.code == 3){
+														layui.use('layer',function(){
+															layer.msg('验证码输入错误，请重新填写，或重新发送验证码')})
+													}else if(data.code == 4){
+														layui.use('layer',function(){
+															layer.msg('重置成功，请去登录界面登录')})
+													}else if(data.code ==5){
+														layui.use('layer',function(){
+															layer.msg('重置失败，错误码005')})
+													}else{
+														layui.use('layer',function(){
+															layer.msg('未知错误，请检查后重新尝试发送')})
+													}
+
+												},'json')
+												return false
+
+											})
+
+
+										}
+									});
+								});
+								//window.location.href="{:url('Login/login')}"
+							},1000)
+							return false
+					}
+                    $.post("{:url('User/follow_add')}",{followed_user:$id},function(data){
+
+                        if(data.code == 2){
+                            layui.use('layer',function(){
+                                layer.msg(data.msg)})
+                            $('.follow-btn >span').text('关注')
+                            $('.follow-btn >b').text(parseInt($('.follow-btn >b').text())-1)
+                        }else if(data.code == 1){
+                            layui.use('layer',function(){
+                                layer.msg(data.msg)})
+                            $('.follow-btn >span').text('已关注')
+                            $('.follow-btn >b').text(parseInt($('.follow-btn >b').text())+1)
+
+                        }else {
+                            layui.use('layer',function(){
+                                layer.msg(data.msg)})
+						}
+                    },'json')
+                    return false
+                }
+            </script>
+			<!--关注js-->
 			<!--页面下方的盒子-->
 			<div class="bottom-box">
 				<!-- 这里为左右结构 -->
@@ -186,7 +506,7 @@
 					$(function(){
 						$('.xiaoshou').click(function(){
 							var gift_id = $(this).attr('gift_id') 
-							var acc_id = {$user_data.uid}; 
+							var acc_id = "{$user_data.uid}";
 
 							$.post("{:url('Index/giving_gifts')}",{gift_id:gift_id,acc_id:acc_id},function(data){
 									if(data.code == 1){
@@ -441,7 +761,7 @@
 							$.post("{:url('index/service_ajax')}",{project:project,project_id:project_id},function(data){
 								
 								console.log(data)
-								var uid = {$user_data['uid']};
+								var uid = "{$user_data['uid']}";
 								var jump = "{:url('Order/index',['id' => $user_data['uid']])}";
 								str += `
 										<img src="${data.project_img}" alt="">
@@ -494,7 +814,7 @@
 								</div>
 								<div class="bottom">
 									<span>
-										<img src="__IMG__icon-good.png" alt="点赞"  comment_id =""  onclick="comment({$v.id})" >{$v.zan}
+										<img src="__IMG__icon-good.png" alt="点赞"  comment_id =""  onclick="comment('{$v.id}')" >{$v.zan}
 									</span>
 									<!--
 									<span>

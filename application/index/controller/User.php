@@ -38,6 +38,7 @@ class User extends Common
 		}
 		
 		$this->assign(['nav_data' =>$nav_data]);
+		$this->assign(['user_' =>$_SESSION['user']['user_info']]);
 
 		define('D', Request::instance()->action());
 	}
@@ -48,38 +49,87 @@ class User extends Common
 		$id = $_SESSION['user']['user_info']['uid'];
 		
 		//查询用户数据
-		$user_data = Db::table('hn_user')->field('head_img,sex,nickname,penguin,table,account,change_name')->where('uid',$id)->find();
+		$user_data = Db::table('hn_user')->field('head_img,sex,nickname,penguin,table,account,change_name,type')->where('uid',$id)->find();
 //var_dump($user_data);die;
+		if($user_data['type'] == 1){
+			//用户是陪玩师
+			$user_data = Db::table('hn_user')
+								->alias('u')
+								->join('hn_accompany a','u.uid = a.user_id')       //详细地址 身高  体重  职业  爱好
+								->field('u.head_img,u.sex,u.nickname,u.penguin,u.table,u.account,u.change_name,u.type,a.address,a.height,a.weight,a.duty,a.hobby')
+								->find();
+		}
 	
 		//var_dump($user_data);die;
 		if(Request::instance()->isPost())
 		{
 			$user_edit = Request::instance()->param();
 			//$user_edit['uid'] = $id;
-			//判断是否改了名字  提交的数据  与原数据对比
-			if($user_edit['nickname'] != $user_data['nickname']){
+		
+			if($user_edit['type'] == 1){
+				//判断是否改了名字  提交的数据  与原数据对比
+				if($user_edit['nickname'] != $user_data['nickname']){
 
-				$repeat = Db::table('hn_user')->field('uid')->where('nickname',$user_edit['nickname'])->find();
-				if($repeat){
-					return json(['code' => 4,'msg'=>'昵称重复，请换一个吧0.0']);
-				}			
+					$repeat = Db::table('hn_user')->field('uid')->where('nickname',$user_edit['nickname'])->find();
+					if($repeat){
+						return json(['code' => 4,'msg'=>'昵称重复，请换一个吧0.0']);
+					}			
+					$res = Db::table('hn_user')->where('uid',$id)->update($user_edit);
+
+					if($res){
+						//改字段为0
+						Db::table('hn_user')->where('uid',$id)->setField('change_name', 0);
+						return json(['code' => 3,'msg' => '成功']);
+					}else{ 
+						return json(['code' => 2,'msg' => '失败']);
+					}
+				}
+
+				//组装数据 该去用户表的去用户表  该去陪玩师表的去陪玩师 
+				$users_data['sex'] = $user_edit['sex'];
+				$users_data['table'] = $user_edit['table'];
+				$users_data['penguin'] = $user_edit['penguin'];
+				$users_data['nickname'] = $user_edit['nickname'];
+				$res = Db::table('hn_user')->where('uid',$id)->update($users_data);
+
+				$acc_data['address'] = $user_edit['address'];
+				$acc_data['height'] = $user_edit['height'];
+				$acc_data['weight'] = $user_edit['weight'];
+				$acc_data['duty'] = $user_edit['duty'];
+				$acc_data['hobby'] = $user_edit['hobby'];
+				$ras = Db::table('hn_accompany')->where('user_id',$id)->update($acc_data);
+				if($res||$ras){
+					return json(['code' => 1,'msg' => '成功']);
+				}else{ 
+					return json(['code' => 2,'msg' => '未修改任何数据']);
+				}
+			}else{
+			//判断是否改了名字  提交的数据  与原数据对比
+				if($user_edit['nickname'] != $user_data['nickname']){
+
+					$repeat = Db::table('hn_user')->field('uid')->where('nickname',$user_edit['nickname'])->find();
+					if($repeat){
+						return json(['code' => 4,'msg'=>'昵称重复，请换一个吧0.0']);
+					}			
+					$res = Db::table('hn_user')->where('uid',$id)->update($user_edit);
+
+					if($res){
+						//改字段为0
+						Db::table('hn_user')->where('uid',$id)->setField('change_name', 0);
+						return json(['code' => 3,'msg' => '成功']);
+					}else{ 
+						return json(['code' => 2,'msg' => '失败']);
+					}
+				}
+				//var_dump($user_edit);die;
 				$res = Db::table('hn_user')->where('uid',$id)->update($user_edit);
 
 				if($res){
-					//改字段为0
-					Db::table('hn_user')->where('uid',$id)->setField('change_name', 0);
-					return json(['code' => 3,'msg' => '成功']);
+					return json(['code' => 1,'msg' => '成功']);
 				}else{ 
-					return json(['code' => 2,'msg' => '失败']);
+					return json(['code' => 2,'msg' => '未修改任何数据']);
 				}
-			}
-			//var_dump($user_edit);die;
-			$res = Db::table('hn_user')->where('uid',$id)->update($user_edit);
 
-			if($res){
-				return json(['code' => 1,'msg' => '成功']);
-			}else{ 
-				return json(['code' => 2,'msg' => '未修改任何数据']);
 			}
 		}
 
@@ -176,7 +226,7 @@ class User extends Common
 		$uid = $_SESSION['user']['user_info']['uid'];
 		//通过ID查出该用户手机号
 		$account = Db::table('hn_user')->field('account')->where('uid',$uid)->find();
-		
+
 
 		$this->assign(['account' => $account]);
 		return $this->fetch('User/change_account');
@@ -273,10 +323,9 @@ class User extends Common
 				return json(['code' =>3,'msg' => '修改失败，错误码003']);
 			}
 
-			var_dump($data);die;
 		}
 
-		return $this->fetch();
+		return $this->fetch('User/change_password');
 	}
 
 	//我的账户
@@ -385,6 +434,172 @@ class User extends Common
 //var_dump($egg_data);die;
 		return json($egg_data);
 
+	}
+
+	//账户明细
+	public function account_details()
+	{
+		$data = Request::instance()->param();
+		
+		//获取到用户ID
+		$id = $_SESSION['user']['user_info']['uid'];
+
+		if($data['mivaType'] == 1){
+			//资金明细
+			if($data['sonType'] == 1){
+				//资金全部明细
+				//1. 查询充值表
+				$recharge_data = Db::table('hn_recharge_balance')->field('time,type,money')->where('user_id',$id)->order('id desc')->limit('9')->select();
+			
+				foreach ($recharge_data as $k => $v){
+					if($v['type'] == 1){
+						$recharge_data[$k]['type'] = '支付宝支付';
+					}else if($v['type'] == 2){
+						$recharge_data[$k]['type'] = '微信支付';
+					}
+
+					$recharge_data[$k]['money'] = $v['money'];
+					$recharge_data[$k]['explan'] = '充值';
+					$recharge_data[$k]['time'] = $v['time'];
+
+				}
+				//2.查询订单表
+				$order_data = Db::table('hn_order')->field('time,price')->where('user_id',$id)->order('id desc')->limit('9')->select();
+
+				foreach ($order_data as $k => $v){
+					$order_data[$k]['type'] = '陪玩消费';
+					$order_data[$k]['money'] = $v['price'];
+					$order_data[$k]['explan'] = '支付';
+					$order_data[$k]['time'] = $v['time'];
+				}
+
+				//3.查询通过账户余额购买的鸟蛋记录
+				$gift_data  = Db::table('hn_recharge_diamond')->field('time,type,money')->where(['user_id' => $id,'type' => 0])->order('id desc')->limit('9')->select();
+				foreach ($gift_data as $k => $v){
+					$gift_data[$k]['type'] = '余额购买鸟蛋';
+					$gift_data[$k]['money'] = $v['money'];
+					$gift_data[$k]['explan'] = '充值';
+					$gift_data[$k]['time'] = $v['time'];
+				}
+
+				//合并数组
+				$detailed_data = array_merge($recharge_data,$order_data,$gift_data);
+				return json($detailed_data);
+
+			}else if($data['sonType'] == 2){
+				//资金收入明细
+					//1. 查询充值表
+				$recharge_data = Db::table('hn_recharge_balance')->field('time,type,money')->where('user_id',$id)->order('id desc')->limit('9')->select();
+	
+				foreach ($recharge_data as $k => $v){
+					if($v['type'] == 1){
+						$recharge_data[$k]['type'] = '支付宝支付';
+					}else if($v['type'] == 2){
+						$recharge_data[$k]['type'] = '微信支付';
+					}
+
+					$recharge_data[$k]['money'] = $v['money'];
+					$recharge_data[$k]['explan'] = '充值';
+					$recharge_data[$k]['time'] = $v['time'];
+
+				}
+				return json($recharge_data);
+			}else if($data['sonType'] == 3){
+				//资金支出
+				//2.查询订单表
+				$order_data = Db::table('hn_order')->field('time,price')->where('user_id',$id)->order('id desc')->limit('9')->select();
+
+				foreach ($order_data as $k => $v){
+					$order_data[$k]['type'] = '陪玩消费';
+					$order_data[$k]['money'] = $v['price'];
+					$order_data[$k]['explan'] = '支付';
+					$order_data[$k]['time'] = $v['time'];
+				}
+
+				//3.查询通过账户余额购买的鸟蛋记录
+				$gift_data  = Db::table('hn_recharge_diamond')->field('time,type,money')->where(['user_id' => $id,'type' => 0])->order('id desc')->limit('9')->select();
+				foreach ($gift_data as $k => $v){
+					$gift_data[$k]['type'] = '余额购买鸟蛋';
+					$gift_data[$k]['money'] = $v['money'];
+					$gift_data[$k]['explan'] = '充值鸟蛋';
+					$gift_data[$k]['time'] = $v['time'];
+				}
+
+				//合并数组
+				$detailed_data = array_merge($order_data,$gift_data);
+				return json($detailed_data);
+			}
+
+
+
+		}else if($data['mivaType'] == 2){
+			//鸟蛋明细
+			if($data['sonType'] == 1){
+				//鸟蛋全部明细
+					//1.查询充值表
+				$diamond_data = Db::table('hn_recharge_diamond')->field('time,type,diamond')->where('user_id',$id)->order('id desc')->limit('9')->select();
+				foreach ($diamond_data as $k => $v){
+					if($v['type'] == 0){
+						$diamond_data[$k]['type'] = '余额';
+					}else if($v['type'] == 1){
+						$diamond_data[$k]['type'] = '支付宝支付';
+					}else if($v['type'] == 2){
+						$diamond_data[$k]['type'] = '微信支付';
+					}
+
+					$diamond_data[$k]['money'] = $v['diamond'];
+					$diamond_data[$k]['explan'] = '充值';
+					$diamond_data[$k]['time'] = $v['time'];
+
+				}
+
+					//2.查询礼物消费表
+				$gift_data = Db::table('hn_give_gift')->field('egg_num,time')->where('user_id',$id)->order('id desc')->limit('9')->select();
+				foreach ($gift_data as $k => $v){
+					$gift_data[$k]['type'] = '送礼物';
+					$gift_data[$k]['money'] = $v['egg_num'];
+					$gift_data[$k]['explan'] = '消费';
+					$gift_data[$k]['time'] = $v['time'];
+				}
+
+				//合并数组
+				$egg_data = array_merge($diamond_data,$gift_data);
+				//var_dump($egg_data);die;
+				return json($egg_data);
+			}else if($data['sonType'] == 2){
+				//鸟蛋收入明细
+				//1.查询充值表
+				$diamond_data = Db::table('hn_recharge_diamond')->field('time,type,diamond')->where('user_id',$id)->order('id desc')->limit('9')->select();
+				foreach ($diamond_data as $k => $v){
+					if($v['type'] == 0){
+						$diamond_data[$k]['type'] = '余额';
+					}else if($v['type'] == 1){
+						$diamond_data[$k]['type'] = '支付宝支付';
+					}else if($v['type'] == 2){
+						$diamond_data[$k]['type'] = '微信支付';
+					}
+
+					$diamond_data[$k]['money'] = $v['diamond'];
+					$diamond_data[$k]['explan'] = '充值';
+					$diamond_data[$k]['time'] = $v['time'];
+
+				}
+				return json($diamond_data);
+
+			}else if($data['sonType'] == 3){
+				//鸟蛋支出明细
+				//2.查询礼物消费表
+				$gift_data = Db::table('hn_give_gift')->field('egg_num,time')->where('user_id',$id)->order('id desc')->limit('9')->select();
+				foreach ($gift_data as $k => $v){
+					$gift_data[$k]['type'] = '送礼物';
+					$gift_data[$k]['money'] = $v['egg_num'];
+					$gift_data[$k]['explan'] = '消费';
+					$gift_data[$k]['time'] = $v['time'];
+				}
+
+				return json($gift_data);
+			}
+		}
 	}
 
 	//相册管理
@@ -628,7 +843,42 @@ class User extends Common
 
 	//实名认证提交数据处理控制器
 	public function real_data()
-	{
+	{	
+		//获取到用户ID
+		$uid = $_SESSION['user']['user_info']['uid'];
+
+		$real_data = Db::table('hn_apply_acc')->field('real')->where(['user_id' => $uid , 'real' => 1])->find();
+
+		if($real_data){
+			return json(['code' => 1 , 'msg' => '已经提交审核，请耐心等待']);
+		}
+
+		//获取数据内容
+		$user_real = Request::instance()->param();
+		//$user_real['card_num'] //身份证号
+		
+
+		$file = $user_real['zhengData']; //上传图片的base64
+		$key = date('Y-m-d').'/'.md5(microtime()).'.jpg';
+		$this->cos($file,$key); //上传正面图片至服务器
+
+		$user_real['card_photo'] = $this->img.$key; //图片路径
+
+		$user_real['real'] = 1;//改变状态
+		//删除没用的数据
+		unset($user_real['zhengData']);
+
+		//填表
+		$res = Db::table('hn_apply_acc')->where('user_id',$uid)->update($user_real);
+
+		if($res){
+			return json(['code' => 2 , 'msg' => '已经提交审核，请耐心等待']);
+		}else{
+			return json(['code' => 3 , 'msg' => '失败，错误码003']);
+		}
+
+
+		/*
 		$user_real = Request::instance()->param();
 		//获取到用户ID
 		$real['user_id'] = $_SESSION['user']['user_info']['uid'];
@@ -678,6 +928,7 @@ class User extends Common
 		}else{
 				return json(['code' => 2,'msg' => '图片上传失败']);
 		}	
+		*/
 		
 	}
 
@@ -707,8 +958,98 @@ class User extends Common
 	//关注
 	public function follow()
 	{
-		$this->error('暂未开放','User/index');
+        $uid = $_SESSION['user']['user_info']['uid'];
+        $follow = \db('hn_follow');//关注表
+        $follows1 = $follow->alias('f')->join('hn_user u','u.uid = f.followed_user')->join('hn_accompany a','a.user_id = f.followed_user')->where(['f.user_id'=>$uid,'f.status'=>1])->field('a.hot,f.id,u.sex,u.age,u.uid,u.nickname,u.head_img')->paginate(25);
+        $page1 = $follows1->render();
+       // print_r($follows1);die;
+        //echo $follow->alias('f')->join('hn_user u','f.followed_user = u.uid')->join('hn_accompany a','a.user_id = f.followed_user')->where(['f.user_id'=>$uid,'f.status'=>1])->getLastSql();
+        if($_SESSION['user']['user_info']['type'] == 1){
+            $follows2 = $follow->alias('f')->join('hn_user u','f.user_id = u.uid')->where(['f.followed_user'=>$uid,'f.status'=>1])->field('f.id,u.sex,u.age,u.uid,u.nickname,u.head_img')->paginate(25);
+            $page2 = $follows2->render();
+
+        }else{
+            $follows2 = null;
+            $page2 = null;
+        }
+        $this->assign([
+            'data1'=> $follows1,
+            'data2'=> $follows2,
+            'page1'=> $page1,
+            'page2'=> $page2
+        ]);
+
+        return $this->fetch('User/follow');
 	}
+
+	function follow_operate(){
+        $request = request();//think助手函数
+        $data_get = $request->param();//获取get与post数据
+        $follow = \db('hn_follow');//关注表
+        $uid = $_SESSION['user']['user_info']['uid'];
+        $res = $follow->where('id',$data_get['id'])->find();
+        if($res){
+            if($res['status'] == 1){
+                $data = [
+                    'status'=>2
+                ];
+            }else{
+                $data = [
+                    'status'=>1
+                ];
+            }
+            $red = $follow->where('id',$data_get['id'])->update($data);
+
+        }else{
+            $data = [
+                'user_id'=> $uid,
+                'followed_user'=> $data_get['followed_user'],
+                'status'=>1
+            ];
+            $red = $follow->insert($data);
+        }
+        if($red){
+            return ['code' => 1,'msg' => '操作成功'];
+        }else{
+            return ['code' => 2,'msg' => '操作失败，请重试'];
+        }
+    }
+
+    function follow_add(){
+        $request = request();//think助手函数
+        $data_get = $request->param();//获取get与post数据
+        $follow = \db('hn_follow');//关注表
+        $uid = $_SESSION['user']['user_info']['uid'];
+        $res = $follow->where(['user_id'=>$uid,'followed_user'=>$data_get['followed_user']])->find();
+        if($res){
+            if($res['status'] == 1){
+                $data = [
+                    'status'=>2
+                ];
+                $aa = ['code' => 2,'msg' => '操作成功'];
+            }else{
+                $data = [
+                    'status'=>1
+                ];
+                $aa = ['code' => 1,'msg' => '操作成功'];
+            }
+            $red = $follow->where(['user_id'=>$uid,'followed_user'=>$data_get['followed_user']])->update($data);
+
+        }else{
+            $data = [
+                'user_id'=> $uid,
+                'followed_user'=> $data_get['followed_user'],
+                'status'=>1
+            ];
+            $red = $follow->insert($data);
+            $aa = ['code' => 1,'msg' => '操作成功'];
+        }
+        if($red){
+            return $aa;
+        }else{
+            return ['code' => 3,'msg' => '操作失败，请重试'];
+        }
+    }
 
 	//服务项目管理
 	public function service()
@@ -717,34 +1058,64 @@ class User extends Common
 		//查询申请记录
 			//获取用户ID
 		$uid = $_SESSION['user']['user_info']['uid'];
-		$apply_data = Db::table('hn_apply_project')->field('project_name,status,time,order_num,pric,type')->where('uid',$uid)->order('id desc')->limit(10)->select();
-		//var_dump($apply_data);die;
-		if(Request::instance()->isPost())
-		{
-			//获取到数据
-			$data = Request::instance()->param();
-			// cos上传 
-			$file = $data['tupian'];//图片
+		$apply_data = Db::table('hn_apply_project')->field('id,project,project_id,project_grade,project_name,status,time,order_num,pric,type')->where('uid',$uid)->order('id desc')->limit(10)->select();
+		
+		//组装价格
+		foreach($apply_data as $k => $v){
 
-			$key = date('Y-m-d').'/'.md5(microtime()).'.jpg'; //路径
+			if($v['project'] == 1)
+			{	
+				//查到项目初始的价格
+				$pric = Db::table('hn_game_grade')->field('pric')->where('id',$v['project_grade'])->find();
 
-			$status = $this->cos($file,$key);
+				//查到当前陪玩师该项目最高的价格
+				$height_pric = $this->pric($v['order_num'],$pric['pric']);
 
-			//$data['图片路径'] = 'http://hn-001-1256760691.picbj.myqcloud.com/'.$key; //将此路径存入表单
-			if($status['code'] == 0){
-				//存表
-				$data['time'] = time();
-				$res = Db::table('think_user')->insert($data);
-				if($res){
-					return json(['code' => 1, 'msg' => '申请成功，请耐心等待']);
-				}else{
-					return json(['code' => 2, 'msg' => '申请失败，错误码002' ]);
+				$count = ($height_pric-$pric['pric'])/5;
+					
+				$data = [];
+				
+					
+					for($i=0; $i<=$count; ++$i){
+
+						$data[$i] = (5*$i)+$pric['pric'];
+					}
+				
+
+				$data[0] = $v['pric'];
+
+				$apply_data[$k]['pric'] = $data;	
+
+
+				
+				
+				
+			}else if($v['project'] == 2){
+				//查到项目初始的价格
+				$pric = Db::table('hn_joy_grade')->field('pric')->where('id',$v['project_grade'])->find();
+
+				//查到当前陪玩师该项目最高的价格
+				$height_pric = $this->pric($v['order_num'],$pric['pric']);
+
+				$count = ($height_pric-$pric['pric'])/5;
+					
+				$data[0] = $v['pric'];
+
+				for($i=1; $i <= $count; $i++){ 
+					if($count == 0){
+						$data[0] = $v['pric'];
+					}
+					$data[$i] = (5*$i)+$pric['pric'];
+
 				}
-			}else{
-				return json(['code' => 3, 'msg' => '图片上传失败，请检查后重新尝试']);
+		
+				$apply_data[$k]['pric'] = $data;
+			
 			}
 
 		}
+		//var_dump($apply_data);die;
+
 
 		$this->assign(['apply_data' => $apply_data]);
 		return $this->fetch('User/service');
@@ -756,8 +1127,16 @@ class User extends Common
 	{
 		if(Request::instance()->isPost())
 		{
+			//获取用户ID
+			$uid = $_SESSION['user']['user_info']['uid'];
+
 			$data = Request::instance()->param();
-			var_dump($data);die;
+
+			$judge = Db::table('hn_apply_project')->field('id')->where(['uid' => $uid,'project' => $data['project'] , 'project_id' => $data['project_id'] , 'status' => 0])->find();
+			if($judge){
+				return json(['code' => 4 , 'msg' => '该项目已有数据，请勿重复提交']);
+			}
+			//var_dump($data);die;
 			$file = $data['img_url'];
 
 			$key = date('Y-m-d').'/'.md5(microtime()).'.jpg'; //路径
@@ -766,16 +1145,35 @@ class User extends Common
 
 			if($status['code'] == 0){
 				//组装数据
-					//1.陪玩服务名字 
-					if($data['project'] == 1)
-					//2.用户ID
-				$data['uid'] = $_SESSION['user']['user_info']['uid'];
-					//3.时间
-				$data['time'] = time();
-				//图片路径
+					//1.图片路径
 				$data['img_url'] = $this->img.$key;
+					//2.陪玩服务名字与陪玩等级名字
+					if($data['project'] == 1){
+						//游戏
+						$gama_name = Db::table('hn_game')->field('name')->where('id',$data['project_id'])->find();
+						$grade_name = Db::table('hn_game_grade')->field('type_name,pric')->where('id',$data['project_grade'])->find();
+						$data['project_name'] = $gama_name['name'];
+						$data['project_grade_name'] = $grade_name['type_name'];
+						//服务项目初始价格
+						$data['pric'] = $grade_name['pric'];
 
-				unset($data['acc_type']);
+					}else if($data['project'] == 2){
+						//娱乐
+						$gama_name = Db::table('hn_joy')->field('name')->where('id',$data['project_id'])->find();
+						$grade_name = Db::table('hn_joy_grade')->field('type_name,pric')->where('id',$data['project_grade'])->find();
+						$data['project_name'] = $gama_name['name'];
+						$data['project_grade_name'] = $grade_name['type_name'];
+						//服务项目初始价格
+						$data['pric'] = $grade_name['pric'];
+						
+					}
+					//3.用户ID
+				$data['uid'] = $_SESSION['user']['user_info']['uid'];
+					//4.时间
+				$data['time'] = time();
+					
+
+				
 				
 				//填表
 				$res = Db::table('hn_apply_project')->insert($data);
@@ -792,6 +1190,32 @@ class User extends Common
 		}
 		
 		return $this->fetch('User/service_add');
+	}
+
+	//修改服务价格
+	public function pric_edit()
+	{
+		$data = Request::instance()->param();
+		
+		//获取用户ID
+		$uid = $_SESSION['user']['user_info']['uid'];
+
+		//容错  防止他人修改
+		$id = Db::table('hn_apply_project')->field('uid')->where('id',$data['id'])->find();
+		if($uid != $id['uid']){
+			return json(['code' => 1 , 'msg' => '非法操作']);
+		}
+		//修改数据
+		$res = Db::table('hn_apply_project')->where('id', $data['id'])->update(['pric' => $data['pric']]);
+
+		if($res){
+			return json(['code' => 2 , 'msg' => '修改成功']);
+		}else{
+			return json(['code' => 3 , 'msg' => '操作失败']);
+		}
+
+
+
 	}
 
 	//申请服务项目Ajax
@@ -813,7 +1237,21 @@ class User extends Common
 		return json($data);
 	}
 	*/
+
+
+	//开启服务
+	public function open_service()
+	{
+		//获取用户ID
+		$uid = $_SESSION['user']['user_info']['uid'];
+		//查询实名认证字段
+		$real = Db::table('hn_accompany')->field('real')->where('user_id',$uid)->find();
+		
+		$this->assign(['real' => $real]);
+		return $this->fetch('User/open_service');
+	}
 	
+
 	//优惠券
 	public function coupon()
 	{
