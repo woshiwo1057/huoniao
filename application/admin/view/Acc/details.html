@@ -88,12 +88,21 @@
 		<a style="margin-left:300px" id="discount" >修改折扣</a>
 
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>陪玩师兑换现金比例</label>
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>订单金额兑换余额比例</label>
 			<div class="formControls col-xs-8 col-sm-9">
 				<input type="text" class="input-text" value="{$acc_data.convertible}" name="convertible">
 			</div>
 		</div>
 		<a style="margin-left:300px" id="convertible" >修改比例</a>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>礼物金额兑换余额比例</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$acc_data.gift_exchange}" name="gift_exchange">
+			</div>
+		</div>
+		<a style="margin-left:300px" id="gift_exchange" >修改比例</a>
+
 
 	
 		
@@ -123,7 +132,10 @@
 			$.post("{:url('Acc/edit_ajax')}",{discount:discount,id:id},function(data){
 					if(data.code == 1){
 						alert(data.msg)
+						window.location.reload()
 					}else if(data.code == 2){
+						alert(data.msg)
+					}else if(data.code == 3){
 						alert(data.msg)
 					}
 			},'json')
@@ -142,7 +154,32 @@
 			$.post("{:url('Acc/edit_ajax')}",{convertible:convertible,id:id},function(data){
 					if(data.code == 1){
 						alert(data.msg)
+						window.location.reload()
 					}else if(data.code == 2){
+						alert(data.msg)
+					}else if(data.code == 3){
+						alert(data.msg)
+					}
+			},'json')
+			return false
+		})
+
+		$('#gift_exchange').click(function(){
+			var id = {$acc_data.uid}
+			
+			var gift_exchange = $('[name ="gift_exchange"]').val()
+			if(gift_exchange == {$acc_data.gift_exchange}){
+				alert('请做出修改')
+				return false
+			}
+			
+			$.post("{:url('Acc/edit_ajax')}",{gift_exchange:gift_exchange,id:id},function(data){
+					if(data.code == 1){
+						alert(data.msg)
+						window.location.reload()
+					}else if(data.code == 2){
+						alert(data.msg)
+					}else if(data.code == 3){
 						alert(data.msg)
 					}
 			},'json')

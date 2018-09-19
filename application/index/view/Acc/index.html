@@ -106,10 +106,9 @@
 				<div class="miva-screen-btn-admin" cheap="1" data-item="shaiBtn" >
 					<i class="layui-icon layui-icon-align-right" ></i> 综合筛选
 				</div>
-				<div class="miva-screen-btn" cheap="2" data-item="shaiBtn">人气</div>
+				<div class="miva-screen-btn" cheap="2" data-item="shaiBtn">魅力</div>
 				<div class="miva-screen-btn" cheap="3" data-item="shaiBtn">价格</div>
-				<div class="miva-screen-btn" cheap="4" data-item="shaiBtn">评价</div>
-				<div class="miva-screen-btn" cheap="5" data-item="shaiBtn">线下</div>
+				<div class="miva-screen-btn" cheap="4" data-item="shaiBtn">线下</div>
 			</div>
 
 			<!-- 陪玩列表 -->
@@ -182,12 +181,91 @@
 		$('[cheap]').on('click', function(){
 			type = $(this).attr('cheap');
 			alert(type)
-			$(this).addClass('screen-btn-active');
+			$(this).addClass('screen-btn-active').siblings().removeClass('screen-btn-active');
 			$('.miva-screen-btn-admin').addClass('btn-admin-act');
+
+			if(type == 4){
+				var url = 'www.baidu.com';
+				$('.miva-star-items').attr('href',url)
+			}
+			//筛选
+			$.post("{:url('Acc/screen')}",{project:project,project_id:projectId,sex:sex,type:type},function(res){
+console.log(res)
+				var str = ''
+					for(a of res){
+						str += `<li>
+									<a href="{:url('Index/user',['id' => $v.uid])}" class="miva-star-items">
+										<div class="miva-star-pic">
+												<img src="${a.head_img || '__IMG__default.jpg'}" />
+										</div>
+										<table class="miva-star-info">
+											<tr>
+												<td>
+													
+													<span class="star-name">${a.nickname}</span>
+												</td>
+												<td class="miva-star-info-right">
+													<span class="tab tab-win">王者</span>
+													<span class="tab tab-shen">声优</span>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<img src="__IMG__火.png" alt="图标">
+													<span>${a.hot}</span>
+												</td>
+												<td class="miva-star-info-right">
+													<span class="star-price">￥${a.pice}/小时</span>
+												</td>
+											</tr>
+										</table>
+									</a>
+								</li>`;
+					}
+$('.miva-screen-list').html(str)
+			},'json')
 		})
+
 		$('.miva-screen-box').on('click', '.miva-screen-btn-admin', function() {
 			$(this).removeClass('btn-admin-act');
 			$('.miva-screen-box').find('[cheap]').removeClass('screen-btn-active');
+
+			//筛选
+			$.post("{:url('Acc/screen')}",{project:project,project_id:projectId,sex:sex,type:type},function(res){
+console.log(res)
+				var str = ''
+					for(a of res){
+						str += `<li>
+									<a href="{:url('Index/user',['id' => $v.uid])}" class="miva-star-items">
+										<div class="miva-star-pic">
+												<img src="${a.head_img || '__IMG__default.jpg'}" />
+										</div>
+										<table class="miva-star-info">
+											<tr>
+												<td>
+													
+													<span class="star-name">${a.nickname}</span>
+												</td>
+												<td class="miva-star-info-right">
+													<span class="tab tab-win">王者</span>
+													<span class="tab tab-shen">声优</span>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<img src="__IMG__火.png" alt="图标">
+													<span>${a.hot}</span>
+												</td>
+												<td class="miva-star-info-right">
+													<span class="star-price">￥${a.pice}/小时</span>
+												</td>
+											</tr>
+										</table>
+									</a>
+								</li>`;
+					}
+$('.miva-screen-list').html(str)
+			},'json')
 		})
 
 

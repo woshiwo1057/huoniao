@@ -30,12 +30,42 @@
 					<div style="width: 100% !important" class="gift-msg swiper-wrapper">
 						<!--一条-->
 						<div class="msg-box swiper-slide">
-							<div class="msg"><span class="time">11:07</span><span class="body"><span>用户名字</span> 赠送给 陪玩师名字<span>1个棒棒糖 <img src="images/png/ea5cd4eeed76a59fac1f8184acc2c695.png"/></span></span>
+							<div class="msg"><span class="time"><?php echo rand(06,23)?>:<?php echo rand(0,59)?></span><span class="body"><span>蝴蝶为谁开~</span> 赠送给 无缘的缘分<span>1个小礼物 <img src="images/png/ea5cd4eeed76a59fac1f8184acc2c695.png"/></span></span>
 							</div>
 						</div>
 						<!--一条-->
 						<div class="msg-box swiper-slide">
-							<div class="msg"><span class="time">11:07</span><span class="body"><span>用户名字</span> 赠送给 陪玩师名字<span>1个棒棒糖 <img src="images/png/ea5cd4eeed76a59fac1f8184acc2c695.png"/></span></span>
+							<div class="msg"><span class="time"><?php echo rand(06,23)?>:<?php echo rand(0,59)?></span><span class="body"><span>N个网名用不完</span> 赠送给 冷月妖娆 ヽ由命<span>1个小礼物 <img src="images/png/ea5cd4eeed76a59fac1f8184acc2c695.png"/></span></span>
+							</div>
+						</div>
+						<!--一条-->
+						<div class="msg-box swiper-slide">
+							<div class="msg"><span class="time"><?php echo rand(06,23)?>:<?php echo rand(0,59)?></span><span class="body"><span>可悲的小孩</span> 赠送给 经年°reminis<span>1个小礼物 <img src="images/png/ea5cd4eeed76a59fac1f8184acc2c695.png"/></span></span>
+							</div>
+						</div>
+						<!--一条-->
+						<div class="msg-box swiper-slide">
+							<div class="msg"><span class="time"><?php echo rand(06,23)?>:<?php echo rand(0,59)?></span><span class="body"><span>Summer</span> 赠送给 逆光的少年<span>1个小礼物 <img src="images/png/ea5cd4eeed76a59fac1f8184acc2c695.png"/></span></span>
+							</div>
+						</div>
+						<!--一条-->
+						<div class="msg-box swiper-slide">
+							<div class="msg"><span class="time"><?php echo rand(06,23)?>:<?php echo rand(0,59)?></span><span class="body"><span>梦亡 </span> 赠送给 HEY1 贵人诱惑<span>1个小礼物 <img src="images/png/ea5cd4eeed76a59fac1f8184acc2c695.png"/></span></span>
+							</div>
+						</div>
+						<!--一条-->
+						<div class="msg-box swiper-slide">
+							<div class="msg"><span class="time"><?php echo rand(06,23)?>:<?php echo rand(0,59)?></span><span class="body"><span>Sadness</span> 赠送给 伊始E<span>1个小礼物 <img src="images/png/ea5cd4eeed76a59fac1f8184acc2c695.png"/></span></span>
+							</div>
+						</div>
+						<!--一条-->
+						<div class="msg-box swiper-slide">
+							<div class="msg"><span class="time"><?php echo rand(06,23)?>:<?php echo rand(0,59)?></span><span class="body"><span>仅此一念</span> 赠送给 唯有一心<span>1个小礼物 <img src="images/png/ea5cd4eeed76a59fac1f8184acc2c695.png"/></span></span>
+							</div>
+						</div>
+						<!--一条-->
+						<div class="msg-box swiper-slide">
+							<div class="msg"><span class="time"><?php echo rand(06,23)?>:<?php echo rand(0,59)?></span><span class="body"><span>蓝眸少年</span> 赠送给 灿小花<span>1个小礼物 <img src="images/png/ea5cd4eeed76a59fac1f8184acc2c695.png"/></span></span>
 							</div>
 						</div>
 					</div>
@@ -378,7 +408,7 @@
 					<div class="photo-box"><img src="{$album_data[0]['img_url']}" alt="" class="photo-big"></div>
 					<!-- 照片选择 -->
 					<div class="photo-select">
-						<!-- 左箭头 --><span class="jt-left"></span>
+						<!-- 左箭头 --><span style="background-image: url('./images/png/right.png')" class="jt-left"></span>
 						<!-- 中间的可选项 -->
 						<div class="middle-box">
 							<div class="middle-img-box">
@@ -387,21 +417,21 @@
 							{/foreach}
 							</div>
 						</div>
-						<!-- 右箭头 --><span class="jt-right"></span></div>
+						<!-- 右箭头 --><span style="background-image: url('./images/png/right.png')" class="jt-right"></span></div>
 				</div>
 				{else /}
 				<div class="photo-show-box">
 					<div class="photo-box"><img src="__IMG__default.jpg" alt="" class="photo-big"></div>
 					<!-- 照片选择 -->
 					<div class="photo-select">
-						<!-- 左箭头 --><span class="jt-left"></span>
+						<!-- 左箭头 --><span style="background-image: url('./images/png/right.png')" class="jt-left"></span>
 						<!-- 中间的可选项 -->
 						<div class="middle-box">
 						
 						<img src="__IMG__default.jpg" alt="">
 						
 						</div>
-						<!-- 右箭头 --><span class="jt-right"></span></div>
+						<!-- 右箭头 --><span style="background-image: url('./images/png/right.png')" class="jt-right"></span></div>
 				</div>
 				{/if}
 					<script type="text/javascript">
@@ -495,20 +525,132 @@
 					<!-- 标签页 -->
 					<div class="tab"><span class="active"><img src="" alt="">礼物</span><!--<span class=""><img src="" alt="">冠军</span>--></div>
 					<!-- 箱子 -->
-					<div class="box">
+				
+					<ul class="box">
 						{foreach  name="gift_data" item="v" }
-						<img src="{$v.img_url}" alt="{$v.name},{$v.pice}鸟蛋" gift_id="{$v.id}" class="xiaoshou">
-						{/foreach}
-					</div>
+							<li class="give-list-one">
+								<div class="img-box">
+									<img src="{$v.img_url}" alt="">
+								</div>
+								<div class="gift-info">
+									<!--我的信息-->
+									<div class="my-info"><span>{$user_data.nickname}</span><!--<span>剩余钻石:0</span>--></div>
+									<!--礼物的信息-->
+									<div class="this-info">
+										<div class="gift-img-box">
+											<img src="{$v.img_url}" alt="">
+										</div>
+										
+										<div class="gift-num-box">
+											<div>{$v.name}</div>
+											<div>需要鸟蛋:{$v.pice}</div>
+											<div><input type="text" name="num" id=""  data-item-num /><span class="xiaoshou" gift_id="{$v.id}">赠送</span></div>
+										</div>
+
+									</div>
+									<hr />
+									<div class="biajie">
+										<ul>
+											<li>
+												<div class="liwu" gift_id="{$v.id}" num="1" >
+													<div>1</div>
+													<span>一心一意</span>
+												</div>
+											</li>
+											<li>
+												<div class="liwu" gift_id="{$v.id}"  num="10" >
+													<div>10</div>
+													<span>十全十美</span>
+												</div>
+											</li>
+											<li>
+												<div class="liwu" gift_id="{$v.id}" num="30"  >
+													<div>30</div>
+													<span>情不自禁</span>
+												</div>
+											</li>
+											<li>
+												<div class="liwu" gift_id="{$v.id}" num="66"  >
+													<div>66</div>
+													<span>六六大顺</span>
+												</div>
+											</li>
+											<li>
+												<div class="liwu" gift_id="{$v.id}" num="520"  >
+													<div>520</div>
+													<span>情有独钟</span>
+												</div>
+											</li>
+											<li>
+												<div class="liwu" gift_id="{$v.id}" num="1314"  >
+													<div>1314</div>
+													<span>一生一世</span>
+												</div>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</li>
+							{/foreach}
+						</ul>
+						
 				</div>
 				<script>
 						//送礼Ajax
 					$(function(){
-						$('.xiaoshou').click(function(){
-							var gift_id = $(this).attr('gift_id') 
-							var acc_id = "{$user_data.uid}";
+						$('.box').on('click','.xiaoshou',function(){
+							var gift_id = $(this).attr('gift_id')//礼物ID
+							var acc_id = "{$user_data.uid}";//陪玩师ID
+							var num =  $(this).parent().find('[data-item-num]').val()//礼物数量		
 
-							$.post("{:url('Index/giving_gifts')}",{gift_id:gift_id,acc_id:acc_id},function(data){
+							var reg = /^\+?[1-9][0-9]*$/;
+								
+							if(!reg.test(num))
+							{
+								layui.use('layer',function(){
+								layer.msg('请填写正整数')
+								})
+								return false
+							}
+
+							$.post("{:url('Index/giving_gifts')}",{gift_id:gift_id,acc_id:acc_id,num:num},function(data){
+									if(data.code == 1){
+										window.location.href="{:url('Index/index',['qingnidenglu' => 1])}"
+									}else if(data.code == 2){
+										layui.use('layer',function(){
+										layer.msg(data.msg)})
+									}else if(data.code == 3){
+										layui.use('layer',function(){
+										layer.msg(data.msg)})
+									}else if(data.code == 4){
+										layui.use('layer',function(){
+										layer.msg(data.msg)})
+									}else{
+										layui.use('layer',function(){
+										layer.msg('未知错误')})
+									}
+
+							},'json')
+
+						})
+						
+
+						$('.liwu').click(function(){
+							var gift_id = $(this).attr('gift_id')//礼物ID
+							var acc_id = "{$user_data.uid}";//陪玩师ID
+							var num =  $(this).attr('num')//礼物数量
+
+							var reg = /^\+?[1-9][0-9]*$/;
+								
+							if(!reg.test(num))
+							{
+								layui.use('layer',function(){
+								layer.msg('乱改什么东西啊')
+								})
+								return false
+							}
+
+							$.post("{:url('Index/giving_gifts')}",{gift_id:gift_id,acc_id:acc_id,num:num},function(data){
 									if(data.code == 1){
 										window.location.href="{:url('Index/index',['qingnidenglu' => 1])}"
 									}else if(data.code == 2){
@@ -538,12 +680,12 @@
 					</div>
 					<!-- 详细资料 -->
 					<div class="user-info">
-						<div class="one"><img src="images/png/data_01.png" alt=""> 年龄 : <span>{$user_data.age}岁</span></div>
-						<div class="one"><img src="images/png/data_01.png" alt=""> 身高 : <span>{$user_data.height} cm</span></div>
-						<div class="one"><img src="images/png/data_02.png" alt=""> 体重 : <span>{$user_data.weight} 觔</span></div>
-						<div class="one"><img src="images/png/data_03.png" alt=""> 职业 : <span>{$user_data.hobby}</span></div>
-						<div class="one"><img src="images/png/data_04.png" alt=""> 兴趣爱好 : <span>{$user_data.duty}</span></div>
-						<div class="one"><img src="images/png/data_05.png" alt=""> 心里的话 : <span>{$user_data.table}</span></div>
+						<div class="one"><!--<img src="images/png/data_01.png" alt="">--> 年龄 : <span>{$user_data.age}岁</span></div>
+						<div class="one"><!--<img src="images/png/data_01.png" alt="">--> 身高 : <span>{$user_data.height} cm</span></div>
+						<div class="one"><!--<img src="images/png/data_02.png" alt="">--> 体重 : <span>{$user_data.weight} Kg</span></div>
+						<div class="one"><!--<img src="images/png/data_03.png" alt="">--> 职业 : <span>{$user_data.duty}</span></div>
+						<div class="one"><!--<img src="images/png/data_04.png" alt="">--> 兴趣爱好 : <span>{$user_data.hobby}</span></div>
+						<div class="one"><!--<img src="images/png/data_05.png" alt="">--> 心里的话 : <span>{$user_data.table}</span></div>
 					</div>
 				</div>
 					<!-- 个人资料end -->

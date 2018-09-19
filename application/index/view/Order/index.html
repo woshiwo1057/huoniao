@@ -3,7 +3,7 @@
 	<body>
 		<!-- 引入头部 -->
 
-		<div class="main miva-pay-order-box ">
+		<div style="background:#fff" class="main miva-pay-order-box ">
       <div class="order-info">
         <span>订单信息</span>
         <table>
@@ -41,14 +41,14 @@
 						<img src="" alt="图标">
 						手机
 					</div>
-					<input type="text" name="phone">
+					<input type="text" name="phone"  value="{$user_data['phone']}">
 					<span style="color:red">(必填)</span>
 
 					<div>
 						<img src="" alt="图标">
 						QQ
 					</div>
-					<input type="text" name="qq">
+					<input type="text" name="qq"  value="{$user_data['qq']}">
           <span style="color:red">(必填)</span>
 					
 
@@ -168,8 +168,10 @@
 
             var money = '{$acc_data.pice}'
 
-            //获取到支付方式 （这里只存在微信支付，所以是单一的东西）
-            var type = 2
+            //获取到支付方式 
+            var type = $('.pay-act').attr('payment')
+
+
             
             $.post("{:url('Order/confirm_order')}",{acc_id:acc_id,service:service,length_time:length_time,explain:explain,phone:phone,qq:qq,wechat:wechat,money:money,type:type},function(data){
                       if(data.code == 1){

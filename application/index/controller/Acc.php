@@ -93,37 +93,132 @@ class Acc extends Common
 	{
 	
 		$data = Request::instance()->param();
-		var_dump($data);die;
-		//$data['project'];
+		//var_dump($data);die;
+		//$data['project'];    $data['type'] == 1全部  $data['type'] == 2魅力  $data['type'] == 3价格  $data['type'] == 4线下 
 		//$data['project_id'];
-		//用户有没有选择性别
-		if($data['sex'] == 0){
-			//没有选择性别
-			$acc_data = Db::table('hn_user')
-						->alias('u')
-						->join('hn_accompany a','u.uid = a.user_id')
-						->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num')
-						->where(['a.status'=> 1,'a.project' => $data['project'],'a.project_id' => $data['project_id']])
-						->limit('0,12')
-						->select();
-					
-			// var_dump($acc_data);die;
-			return json($acc_data);
-		}else{
-			//选择了性别
+		if($data['type'] == 1){
+		//全部
+
+			//用户有没有选择性别
+			if($data['sex'] == 0){
+				//没有选择性别
+				$acc_data = Db::table('hn_user')
+							->alias('u')
+							->join('hn_accompany a','u.uid = a.user_id')
+							->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num')
+							->where(['a.status'=> 1,'a.project' => $data['project'],'a.project_id' => $data['project_id']])
+							->limit('0,12')
+							->select();
+						
+				// var_dump($acc_data);die;
+				return json($acc_data);
+			}else{
+				//选择了性别
+				
+				$acc_data = Db::table('hn_user')
+							->alias('u')
+							->join('hn_accompany a','u.uid = a.user_id')
+							->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num')
+							->where(['a.status'=> 1,'a.project' => $data['project'],'a.project_id' => $data['project_id'],'u.sex' => $data['sex']])
+							->limit('0,12')
+							->select();
+						
+
+				// var_dump($acc_data);die;
+				return json($acc_data);
+			}
+		}else if($data['type'] == 2){
+			//魅力
+			if($data['sex'] == 0){
+				//没有选择性别
+				$acc_data = Db::table('hn_user')
+							->alias('u')
+							->join('hn_accompany a','u.uid = a.user_id')
+							->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num')
+							->where(['a.status'=> 1,'a.project' => $data['project'],'a.project_id' => $data['project_id']])
+							->order('a.hot desc')
+							->limit('0,12')
+							->select();
+						
 			
-			$acc_data = Db::table('hn_user')
-						->alias('u')
-						->join('hn_accompany a','u.uid = a.user_id')
-						->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num')
-						->where(['a.status'=> 1,'a.project' => $data['project'],'a.project_id' => $data['project_id'],'u.sex' => $data['sex']])
-						->limit('0,12')
-						->select();
-					
+				return json($acc_data);
+			}else{
+				//选择了性别
+				
+				$acc_data = Db::table('hn_user')
+							->alias('u')
+							->join('hn_accompany a','u.uid = a.user_id')
+							->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num')
+							->where(['a.status'=> 1,'a.project' => $data['project'],'a.project_id' => $data['project_id'],'u.sex' => $data['sex']])
+							->order('a.hot desc')
+							->limit('0,12')
+							->select();
+						
 
-			// var_dump($acc_data);die;
-			return json($acc_data);
+				
+				return json($acc_data);
+			}
+
+		}else if($data['type'] == 3){
+			//价格
+			if($data['sex'] == 0){
+				//没有选择性别
+				$acc_data = Db::table('hn_user')
+							->alias('u')
+							->join('hn_accompany a','u.uid = a.user_id')
+							->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num')
+							->where(['a.status'=> 1,'a.project' => $data['project'],'a.project_id' => $data['project_id']])
+							->order('a.pice desc')
+							->limit('0,12')
+							->select();
+						
+			
+				return json($acc_data);
+			}else{
+				//选择了性别
+				
+				$acc_data = Db::table('hn_user')
+							->alias('u')
+							->join('hn_accompany a','u.uid = a.user_id')
+							->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num')
+							->where(['a.status'=> 1,'a.project' => $data['project'],'a.project_id' => $data['project_id'],'u.sex' => $data['sex']])
+							->order('a.pice desc')
+							->limit('0,12')
+							->select();
+						
+
+				
+				return json($acc_data);
+			}
+		}else if($data['type'] == 4){
+			//线下  acc_type == 3
+			if($data['sex'] == 0){
+				//没有选择性别
+				$acc_data = Db::table('hn_user')
+							->alias('u')
+							->join('hn_accompany a','u.uid = a.user_id')
+							->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num')
+							->where(['a.status'=> 1,'a.project' => $data['project'],'a.project_id' => $data['project_id'],'a.acc_type' => 3])					
+							->limit('0,12')
+							->select();
+						
+			
+				return json($acc_data);
+			}else{
+				//选择了性别
+				
+				$acc_data = Db::table('hn_user')
+							->alias('u')
+							->join('hn_accompany a','u.uid = a.user_id')
+							->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num')
+							->where(['a.status'=> 1,'a.project' => $data['project'],'a.project_id' => $data['project_id'],'u.sex' => $data['sex'],'a.acc_type' => 3])
+							->limit('0,12')
+							->select();
+	
+				
+				return json($acc_data);
+			}
+
 		}
-
 	}
 }

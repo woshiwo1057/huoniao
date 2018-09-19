@@ -50,13 +50,14 @@ class User extends Common
 		
 		//查询用户数据
 		$user_data = Db::table('hn_user')->field('head_img,sex,nickname,penguin,table,account,change_name,type')->where('uid',$id)->find();
-//var_dump($user_data);die;
+		//var_dump($user_data);die;
 		if($user_data['type'] == 1){
 			//用户是陪玩师
 			$user_data = Db::table('hn_user')
 								->alias('u')
 								->join('hn_accompany a','u.uid = a.user_id')       //详细地址 身高  体重  职业  爱好
 								->field('u.head_img,u.sex,u.nickname,u.penguin,u.table,u.account,u.change_name,u.type,a.address,a.height,a.weight,a.duty,a.hobby')
+								->where('uid',$id)
 								->find();
 		}
 	
@@ -358,7 +359,8 @@ class User extends Common
 			$recharge_data[$k]['time'] = $v['time'];
 
 		}
-		//2.查询订单表
+		//2.查询订单表  
+			//消费
 		$order_data = Db::table('hn_order')->field('time,price')->where('user_id',$id)->order('id desc')->limit('9')->select();
 
 		foreach ($order_data as $k => $v){
@@ -367,7 +369,33 @@ class User extends Common
 			$order_data[$k]['explan'] = '支付';
 			$order_data[$k]['time'] = $v['time'];
 		}
+			//提现
+		$take_data = Db::table('hn_withdraw_cash')->field('time,money,status')->where('user_id',$id)->select();
+		foreach ($take_data as $k => $v) {
 
+			$take_data[$k]['type'] = '提现';
+			$take_data[$k]['money'] = $v['money'];
+
+			if($v['status'] == 1){
+				$take_data[$k]['explan'] = '等待后台审核中';
+			}else if($v['status'] == 2){
+				$take_data[$k]['explan'] = '审核通过，已提现';
+			}else if($v['status'] == 3){
+				$take_data[$k]['explan'] = '审核失败';
+			}
+			
+			$take_data[$k]['time'] = $v['time'];
+		}
+			//获得
+				
+		$order_get = Db::table('hn_order')->field('time,really_price')->where('acc_id' , $id)->where('status','>',3)->order('id desc')->limit('9')->select();
+//var_dump($order_get);die;
+		foreach ($order_get as $k => $v){
+			$order_get[$k]['type'] = '订单结算';
+			$order_get[$k]['money'] = $v['really_price'];
+			$order_get[$k]['explan'] = '赚取金额';
+			$order_get[$k]['time'] = $v['time'];
+		}
 		//3.查询通过账户余额购买的鸟蛋记录
 		$gift_data  = Db::table('hn_recharge_diamond')->field('time,type,money')->where(['user_id' => $id,'type' => 0])->order('id desc')->limit('9')->select();
 		foreach ($gift_data as $k => $v){
@@ -376,12 +404,26 @@ class User extends Common
 			$gift_data[$k]['explan'] = '充值';
 			$gift_data[$k]['time'] = $v['time'];
 		}
-//var_dump($gift_data);die;
-		//合并数组
-		$detailed_data = array_merge($recharge_data,$order_data,$gift_data);
-		//$type = "money";
-		//$this->ranking($data,$type);
-		//var_dump($data);die;
+
+		//4.查询别人给他送的礼物换算为余额
+		$gift_get = Db::table('hn_give_gift')->field('time,egg_num')->where('acc_id',$id)->limit('9')->order('id desc')->select();
+		if(isset($gift_get)){
+			//(1.查出该陪玩师的余额换算)
+			$gift_exchange = Db::table('hn_accompany')->field('gift_exchange')->where('user_id',$id)->limit('9')->order('id desc')->find();
+			
+			foreach ($gift_get as $k => $v){
+				$gift_get[$k]['type'] = '他人赠送礼物收入';
+				$gift_get[$k]['money'] = $v['egg_num']/10*$gift_exchange['gift_exchange'];
+				$gift_get[$k]['explan'] = '赚取金额';
+				$gift_get[$k]['time'] = $v['time'];
+			}
+		}
+		//var_dump($gift_data);die;
+		//合并数组  以时间排序
+		$detailed_data = array_merge($recharge_data,$order_data,$gift_data,$order_get,$gift_get);
+		$type = "time";
+		$detailed_data = $this->infinite_ranking($detailed_data,$type);
+		//var_dump($detailed_data);die;
 		$this->assign([
 					'user_data' => $user_data,
 					'detailed_data' => $detailed_data
@@ -431,7 +473,7 @@ class User extends Common
 		//	$type = 'time';
 		//	$egg_data = $this->ranking($egg_data,$type);
 		//}
-//var_dump($egg_data);die;
+		//var_dump($egg_data);die;
 		return json($egg_data);
 
 	}
@@ -450,7 +492,7 @@ class User extends Common
 				//资金全部明细
 				//1. 查询充值表
 				$recharge_data = Db::table('hn_recharge_balance')->field('time,type,money')->where('user_id',$id)->order('id desc')->limit('9')->select();
-			
+
 				foreach ($recharge_data as $k => $v){
 					if($v['type'] == 1){
 						$recharge_data[$k]['type'] = '支付宝支付';
@@ -463,7 +505,8 @@ class User extends Common
 					$recharge_data[$k]['time'] = $v['time'];
 
 				}
-				//2.查询订单表
+				//2.查询订单表  
+					//消费
 				$order_data = Db::table('hn_order')->field('time,price')->where('user_id',$id)->order('id desc')->limit('9')->select();
 
 				foreach ($order_data as $k => $v){
@@ -473,6 +516,33 @@ class User extends Common
 					$order_data[$k]['time'] = $v['time'];
 				}
 
+					//提现
+				$take_data = Db::table('hn_withdraw_cash')->field('time,money,status')->where('user_id',$id)->select();
+				foreach ($take_data as $k => $v) {
+
+					$take_data[$k]['type'] = '提现';
+					$take_data[$k]['money'] = $v['money'];
+
+					if($v['status'] == 1){
+						$take_data[$k]['explan'] = '等待后台审核中';
+					}else if($v['status'] == 2){
+						$take_data[$k]['explan'] = '审核通过，已提现';
+					}else if($v['status'] == 3){
+						$take_data[$k]['explan'] = '审核失败';
+					}
+
+					$take_data[$k]['time'] = $v['time'];
+				}
+					//获得
+						
+				$order_get = Db::table('hn_order')->field('time,really_price')->where('acc_id' , $id)->where('status','>',3)->order('id desc')->limit('9')->select();
+				//var_dump($order_get);die;
+				foreach ($order_get as $k => $v){
+					$order_get[$k]['type'] = '订单结算';
+					$order_get[$k]['money'] = $v['really_price'];
+					$order_get[$k]['explan'] = '赚取金额';
+					$order_get[$k]['time'] = $v['time'];
+				}
 				//3.查询通过账户余额购买的鸟蛋记录
 				$gift_data  = Db::table('hn_recharge_diamond')->field('time,type,money')->where(['user_id' => $id,'type' => 0])->order('id desc')->limit('9')->select();
 				foreach ($gift_data as $k => $v){
@@ -482,9 +552,25 @@ class User extends Common
 					$gift_data[$k]['time'] = $v['time'];
 				}
 
-				//合并数组
-				$detailed_data = array_merge($recharge_data,$order_data,$gift_data);
-				return json($detailed_data);
+				//4.查询别人给他送的礼物换算为余额
+				$gift_get = Db::table('hn_give_gift')->field('time,egg_num')->where('acc_id',$id)->limit('9')->order('id desc')->select();
+				if(isset($gift_get)){
+					//(1.查出该陪玩师的余额换算)
+					$gift_exchange = Db::table('hn_accompany')->field('gift_exchange')->where('user_id',$id)->limit('9')->order('id desc')->find();
+					
+					foreach ($gift_get as $k => $v){
+						$gift_get[$k]['type'] = '他人赠送礼物收入';
+						$gift_get[$k]['money'] = $v['egg_num']/10*$gift_exchange['gift_exchange'];
+						$gift_get[$k]['explan'] = '赚取金额';
+						$gift_get[$k]['time'] = $v['time'];
+					}
+				}
+
+						//合并数组
+						$detailed_data = array_merge($recharge_data,$order_data,$gift_data,$order_get,$gift_get,$take_data);
+						$type = "time";
+						$detailed_data = $this->infinite_ranking($detailed_data,$type);
+						return json($detailed_data);
 
 			}else if($data['sonType'] == 2){
 				//资金收入明细
@@ -503,6 +589,33 @@ class User extends Common
 					$recharge_data[$k]['time'] = $v['time'];
 
 				}
+
+					//2.订单获得收益					
+					$order_get = Db::table('hn_order')->field('time,really_price')->where('acc_id' , $id)->where('status','>',3)->order('id desc')->limit('9')->select();
+					//var_dump($order_get);die;
+					foreach ($order_get as $k => $v){
+						$order_get[$k]['type'] = '订单结算';
+						$order_get[$k]['money'] = $v['really_price'];
+						$order_get[$k]['explan'] = '赚取金额';
+						$order_get[$k]['time'] = $v['time'];
+					}
+					//3.查询别人给他送的礼物换算为余额
+					$gift_get = Db::table('hn_give_gift')->field('time,egg_num')->where('acc_id',$id)->limit('9')->order('id desc')->select();
+					if(isset($gift_get)){
+						//(1.查出该陪玩师的余额换算)
+						$gift_exchange = Db::table('hn_accompany')->field('gift_exchange')->where('user_id',$id)->limit('9')->order('id desc')->find();
+						
+						foreach ($gift_get as $k => $v){
+							$gift_get[$k]['type'] = '他人赠送礼物收入';
+							$gift_get[$k]['money'] = $v['egg_num']/10*$gift_exchange['gift_exchange'];
+							$gift_get[$k]['explan'] = '赚取金额';
+							$gift_get[$k]['time'] = $v['time'];
+						}
+					}
+				//合并数据
+				$recharge_data = array_merge($recharge_data,$order_get,$gift_get);
+				$type = "time";
+				$recharge_data = $this->infinite_ranking($recharge_data,$type);
 				return json($recharge_data);
 			}else if($data['sonType'] == 3){
 				//资金支出
@@ -527,6 +640,8 @@ class User extends Common
 
 				//合并数组
 				$detailed_data = array_merge($order_data,$gift_data);
+				$type = "time";
+				$detailed_data = $this->infinite_ranking($detailed_data,$type);
 				return json($detailed_data);
 			}
 
@@ -564,6 +679,8 @@ class User extends Common
 
 				//合并数组
 				$egg_data = array_merge($diamond_data,$gift_data);
+				$type = "time";
+				$egg_data = $this->infinite_ranking($egg_data,$type);
 				//var_dump($egg_data);die;
 				return json($egg_data);
 			}else if($data['sonType'] == 2){
@@ -584,6 +701,9 @@ class User extends Common
 					$diamond_data[$k]['time'] = $v['time'];
 
 				}
+
+				$type = "time";
+				$diamond_data = $this->infinite_ranking($diamond_data,$type);
 				return json($diamond_data);
 
 			}else if($data['sonType'] == 3){
@@ -597,6 +717,8 @@ class User extends Common
 					$gift_data[$k]['time'] = $v['time'];
 				}
 
+				$type = "time";
+				$gift_data = $this->infinite_ranking($gift_data,$type);
 				return json($gift_data);
 			}
 		}
@@ -691,7 +813,7 @@ class User extends Common
 		Guzzle\Service\Resource\Model Object ( 
 			[structure:protected] => [data:protected] => Array 
 				( [DeleteMarker] => [VersionId] => [RequestCharged] => [RequestId] => NWI4MTEyNjZfNWFiMjU4NjRfMjkyNl8yYWFjMDU= ) )
-*/
+		*/
 	}
 
 
@@ -711,7 +833,7 @@ class User extends Common
 						->join('hn_user u','o.acc_id = u.uid')
 						->field('o.id,o.number,o.service,o.length_time,o.time,o.status,o.price,u.nickname,u.head_img')
 						->where('o.user_id',$id)->limit('8')->order('id desc')->select();
-//var_dump($order_data);die;
+		//var_dump($order_data);die;
 		$this->assign(['order_data' => $order_data]);
 		return $this->fetch('User/order');
 	}
@@ -742,14 +864,19 @@ class User extends Common
 				return json(['code' => 4,'msg' => '失败，错误码004']);
 			}
 		}else if($data['type'] == 3){
-			//通过订单ID查出订单详情 给陪玩师账户余额加钱
-			$order_data = Db::table('hn_order')->field('acc_id,price')->where('id',$data['order_id'])->find();
-					//在这里看要不要给算上平台的收益		
-			$ras = Db::table('hn_user')->where('uid', $order_data['acc_id'])->setInc('cash',$order_data['price']);
+			//确认完成 通过订单ID查出订单详情 给陪玩师账户余额加钱
+				//1.查出陪玩师ID 和订单 价格 时长
+			$order_data = Db::table('hn_order')->field('acc_id,really_price,service,length_time')->where('id',$data['order_id'])->find();
+				//2.给陪玩师账户余额加钱   	陪玩师增加时长订单
+			$ras = Db::table('hn_user')->where('uid', $order_data['acc_id'])->setInc('cash',$order_data['really_price']); //加钱
+			//加接单时长
+			$length_time = $order_data['length_time']*60*60;
+			Db::table('hn_apply_project')->where(['uid' => $order_data['acc_id'] , 'project_name' => $order_data['service']])->setInc('length_time', $length_time);
 
 			if($ras){
 				//改变订单状态
-				$res = Db::table('hn_order')->where('id', $data['order_id'])->update(['status' => 4]);
+				$time = time(); //结束时间
+				$res = Db::table('hn_order')->where('id', $data['order_id'])->update(['status' => 4,'over_time' => $time]);
 
 				if($res){
 					return json(['code' => 5,'msg' => '订单结算成功，可以选择评论']);
@@ -771,8 +898,13 @@ class User extends Common
 		$id = $_SESSION['user']['user_info']['uid'];
 
 		//查询数据  注意  是送出的礼物
-						//这里需要用到多表联查   等礼物表完成后  完善这里
-		$gift_data = Db::table('hn_give_gift')->field('user_id,acc_id,gift_id,num,time')->where('user_id',$id)->order('id desc')->select();
+						
+		$gift_data = Db::table('hn_give_gift')
+					->alias('g')
+					->join('hn_user u', 'g.acc_id = u.uid')
+					->field('g.img_url,u.nickname,g.num,g.egg_num,g.time')->where('g.user_id',$id)->order('g.id desc')
+					->limit('15')
+					->select();
 
 		$this->assign(['gift_data' => $gift_data]);
 		return $this->fetch('User/gift');
@@ -810,9 +942,14 @@ class User extends Common
 		//获取到用户ID
 		$id = $_SESSION['user']['user_info']['uid'];
 
-		//查询数据  注意  是送出的礼物
-						//这里需要用到多表联查   等礼物表完成后  完善这里
-		$package_data = Db::table('hn_give_gift')->field('gift_id,num,time,egg_num')->where('user_id',$id)->order('id desc')->select();
+		//查询数据  注意  是收到的礼物
+		//->alias('u')->join('hn_accompany a','u.uid = a.user_id')	
+		$package_data = Db::table('hn_give_gift')
+						->alias('g')
+						->join('hn_user u', 'g.user_id = u.uid')
+						->field('g.img_url,u.nickname,g.num,g.time,g.egg_num')->where('g.acc_id',$id)->order('g.id desc')
+						->limit('15')
+						->select();
 
 		$this->assign(['package_data' => $package_data]);
 		
@@ -962,9 +1099,8 @@ class User extends Common
         $follow = \db('hn_follow');//关注表
         $follows1 = $follow->alias('f')->join('hn_user u','u.uid = f.followed_user')->join('hn_accompany a','a.user_id = f.followed_user')->where(['f.user_id'=>$uid,'f.status'=>1])->field('a.hot,f.id,u.sex,u.age,u.uid,u.nickname,u.head_img')->paginate(25);
         $page1 = $follows1->render();
-       // print_r($follows1);die;
-        //echo $follow->alias('f')->join('hn_user u','f.followed_user = u.uid')->join('hn_accompany a','a.user_id = f.followed_user')->where(['f.user_id'=>$uid,'f.status'=>1])->getLastSql();
-        if($_SESSION['user']['user_info']['type'] == 1){
+      
+      if($_SESSION['user']['user_info']['type'] == 1){
             $follows2 = $follow->alias('f')->join('hn_user u','f.user_id = u.uid')->where(['f.followed_user'=>$uid,'f.status'=>1])->field('f.id,u.sex,u.age,u.uid,u.nickname,u.head_img')->paginate(25);
             $page2 = $follows2->render();
 
@@ -1085,10 +1221,7 @@ class User extends Common
 				$data[0] = $v['pric'];
 
 				$apply_data[$k]['pric'] = $data;	
-
-
-				
-				
+		
 				
 			}else if($v['project'] == 2){
 				//查到项目初始的价格
@@ -1114,7 +1247,6 @@ class User extends Common
 			}
 
 		}
-		//var_dump($apply_data);die;
 
 
 		$this->assign(['apply_data' => $apply_data]);
@@ -1218,26 +1350,6 @@ class User extends Common
 
 	}
 
-	//申请服务项目Ajax
-	/*
-	public function service_ajax()
-	{
-	      echo 1;		die;
- 
-		$type = Request::instance()->param('type');
-		
-		//1为游戏
-		//2为娱乐
-		if($type == 1){ 
-			$data = Db::table('hn_game')->field('name,id')->select();
-		}else if($type == 2){
-			$data = Db::table('hn_joy')->field('name,id')->select();
-		}
-
-		return json($data);
-	}
-	*/
-
 
 	//开启服务
 	public function open_service()
@@ -1245,10 +1357,65 @@ class User extends Common
 		//获取用户ID
 		$uid = $_SESSION['user']['user_info']['uid'];
 		//查询实名认证字段
-		$real = Db::table('hn_accompany')->field('real')->where('user_id',$uid)->find();
+		$real = Db::table('hn_accompany')->field('real,up,down')->where('user_id',$uid)->find();
 		
 		$this->assign(['real' => $real]);
 		return $this->fetch('User/open_service');
+	}
+
+	//开启服务Ajax
+	public function open_service_ajax()
+	{
+		$data = Request::instance()->param();
+		
+		//获取用户ID
+		$uid = $_SESSION['user']['user_info']['uid'];
+
+		if($data['type'] == 1){
+			//线上服务
+			if($data['xianshang'] == 1){
+				//这里开启服务
+				$res = Db::table('hn_accompany')->where('user_id',$uid)->update(['up' => 2]);
+
+				if($res){
+					return json(['code' => 1 , 'msg' => '成功']);
+				}else{
+					return json(['code' => 2 , 'msg' => '操作失败，请重试']);
+				}
+
+			}else{
+				//这里关闭服务
+				$res = Db::table('hn_accompany')->where('user_id',$uid)->update(['up' => 1]);
+
+				if($res){
+					return json(['code' => 1 , 'msg' => '成功']);
+				}else{
+					return json(['code' => 2 , 'msg' => '操作失败，请重试']);
+				}
+
+			}
+		}else if($data['type'] == 2){
+				//线下服务
+			if($data['xianxia'] == 1){
+				//这里开启
+				$res = Db::table('hn_accompany')->where('user_id',$uid)->update(['down' => 2]);
+
+				if($res){
+					return json(['code' => 1 , 'msg' => '成功']);
+				}else{
+					return json(['code' => 2 , 'msg' => '操作失败，请重试']);
+				}
+			}else{
+				//这里关闭
+				$res = Db::table('hn_accompany')->where('user_id',$uid)->update(['down' => 1]);
+
+				if($res){
+					return json(['code' => 1 , 'msg' => '成功']);
+				}else{
+					return json(['code' => 2 , 'msg' => '操作失败，请重试']);
+				}
+			}
+		}
 	}
 	
 

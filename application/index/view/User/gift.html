@@ -16,6 +16,7 @@
             <span>礼物</span>
             <span>接收人</span>
             <span>数量</span>
+            <span>总值</span>
             <span>时间</span>
           </div>
 
@@ -29,9 +30,10 @@
          
             {foreach name="gift_data" item="v"}
               <div class="pai">
-                <span>{$v.user_id}</span>
-                <span>{$v.acc_id}</span>
-                <span>{$v.gift_id}</span>
+                <span><img src="{$v.img_url}"  style="widht:35px;height:35px"></span>
+                <span>{$v.nickname}</span>
+                <span>{$v.num}</span>
+                <span>{$v.egg_num}</span>
                 <span>{:date('Y-m-d H:i:s',$v.time)}</span>
               </div>
             {/foreach}

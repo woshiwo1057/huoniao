@@ -114,7 +114,6 @@
 							<!-- 一条 -->
 							{foreach name="new_data" item="v" key="k"}
 
-
 							<div class="swiper-slide">
 								<a href="{:url('Index/user',['id' => $v.uid])}">
 									<div class="new-pic-box">
@@ -128,11 +127,10 @@
 									<div class="new-name">{$v.nickname}</div>
 									<div class="new-tab-box">
 										<div class="new-age">♀{$v.age}</div>
-										<div class="new-path">重庆</div>
+										<div class="new-path">{$v.city}</div>
 									</div>
 								</a>
 							</div>
-
 
 							{/foreach}
 							<!-- 一条 -->

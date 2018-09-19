@@ -18,18 +18,33 @@
 				<div class="u-true-set-box">
 					<div class="miva-btn-box">
 						<span>线上接单</span>
-						<div id="line-up" class="mui-switch mui-active"   >
+						{if condition="$real['up'] == 1"}
+							<div id="line-up" class="mui-switch"  >
 							<div class="mui-switch-handle"></div>
-						</div>
+							</div>
+						{else /}
+							<div id="line-up" class="mui-switch mui-active"  >
+							<div class="mui-switch-handle"></div>
+							</div>
+						{/if}
+						
 					</div>
 				</div>
+				
+
 
 				<div class="u-true-set-box">
 					<div class="miva-btn-box">
 						<span>线下接单</span>
-						<div id="line-down" class="mui-switch ">
+						{if condition="$real['down'] == 1"}
+							<div id="line-down" class="mui-switch"  >
 							<div class="mui-switch-handle"></div>
-						</div>
+							</div>
+						{else /}
+							<div id="line-down" class="mui-switch mui-active"  >
+							<div class="mui-switch-handle"></div>
+							</div>
+						{/if}
 					</div>
 				</div>
 
@@ -151,19 +166,64 @@
 		</div>
 
 		<script type="text/javascript">
+				// 页面打开时 获取到状态
+				var xianshang = {$real['up']};
+				var xianxia = 	{$real['down']};
+
+
+
 			$(function() {
 				var zhengData = '';
+
+				//刷新
+				 function query(){
+				 	window.location.reload()
+				 }
+
+
 
 				$("#line-up").on("toggle", function(event) {
 					if(event.detail.isActive) {
 						console.log("你启动了线上");
-					} else {
+						var type = 1
+						$.post("{:url('User/open_service_ajax')}",{type:type,xianshang:xianshang},function(data){
+							if(data.code == 1){
+								layui.use('layer',function(){
+								layer.msg(data.msg)})
+								setInterval(query,1500);
+							}else if(data.code == 2){
+								layui.use('layer',function(){
+								layer.msg(data.msg)})
+								setInterval(query,1500);
+							}else{
+								layui.use('layer',function(){
+								layer.msg('未知错误')})
+							}
+
+						},'json')
+					}else{
 						console.log("你关闭了线上");
+						var type = 1
+						$.post("{:url('User/open_service_ajax')}",{type:type,xianshang:xianshang},function(data){
+							if(data.code == 1){
+								layui.use('layer',function(){
+								layer.msg(data.msg)})
+								window.location.reload()
+							}else if(data.code == 2){
+								layui.use('layer',function(){
+								layer.msg(data.msg)})
+								window.location.reload()
+							}else{
+								layui.use('layer',function(){
+								layer.msg('未知错误')})
+							}
+							
+						},'json')
 					}
 				})
 
 				$("#line-down").on("toggle", function(event) {
-					if(event.detail.isActive) {
+					if(event.detail.isActive){
 
 						console.log("你启动了线下");
 
@@ -200,11 +260,12 @@
 								btn1: function(index) {
 									layer.open({
 										type:1,
+										title:'实名认证',
 										resize:false,
 										content: real,
 										zIndex: 7489436491,
 										btn: ['提交认证', '取消'],
-										area: ['1100px', '600px'],
+										area: ['600px', '400px'],
 										success: function(layero, index) {
 											var zheng = $(layero.find('#zheng'));
 											var reader = new FileReader();
@@ -260,14 +321,50 @@
 									})
 								},
 								btn2: function(index) {
-									mui("#line-down").switch().toggle()
+									window.location.reload()
+									//mui("#line-down").switch().toggle()
 								}
 							})
 
 						})
+		}else{
+			var type = 2
+			$.post("{:url('User/open_service_ajax')}",{type:type,xianxia:xianxia},function(data){
+				if(data.code == 1){
+					layui.use('layer',function(){
+					layer.msg(data.msg)})
+					setInterval(query,1500);
+				}else if(data.code == 2){
+					layui.use('layer',function(){
+					layer.msg(data.msg)})
+					setInterval(query,1500);
+				}else{
+					layui.use('layer',function(){
+					layer.msg('未知错误')})
+				}
+
+			},'json')
 		}
+
+
 					} else {
 						console.log("你关闭了线下");
+						var type = 2
+						$.post("{:url('User/open_service_ajax')}",{type:type,xianxia:xianxia},function(data){
+							if(data.code == 1){
+								layui.use('layer',function(){
+								layer.msg(data.msg)})
+								setInterval(query,1500);
+							}else if(data.code == 2){
+								layui.use('layer',function(){
+								layer.msg(data.msg)})
+								setInterval(query,1500);
+							}else{
+								layui.use('layer',function(){
+								layer.msg('未知错误')})
+							}
+
+						},'json')
 					}
 				})
 

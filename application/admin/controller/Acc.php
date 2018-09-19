@@ -14,7 +14,7 @@ class Acc extends Common
 	//列表控制器
 	public function index()
 	{
-		$acc_data = Db::table('hn_accompany')->field('id,user_id,real_name,balance,pice,discount,convertible')->limit(20)->order('id desc')
+		$acc_data = Db::table('hn_accompany')->field('id,user_id,real_name,balance,pice,discount,convertible,gift_exchange')->limit(20)->order('id desc')
 				->select();
 
 		$this->assign(['acc_data' => $acc_data]);
@@ -56,7 +56,7 @@ class Acc extends Common
 		$acc_data =	Db::table('hn_accompany')
 						->alias('a')
 						->join('hn_user u','u.uid = a.user_id')
-						->field('u.uid,u.nickname,u.head_img,u.age,u.sex,u.penguin,u.account,a.real_name,a.table,a.discount,a.convertible,a.real')
+						->field('u.uid,u.nickname,u.head_img,u.age,u.sex,u.penguin,u.account,a.real_name,a.table,a.discount,a.convertible,a.real,a.gift_exchange')
 						->where('a.id',$id)
 						->find();
 						//var_dump($acc_data);die;
@@ -73,7 +73,6 @@ class Acc extends Common
 
 		if(isset($data['discount']))
 		{
-			//修改折扣
 			
 			$res = Db::table('hn_accompany')->where('user_id',$data['id'])->setField('discount', $data['discount']);
 			if($res){
@@ -83,15 +82,27 @@ class Acc extends Common
 			}
 			
 
-		}else{
-			//修改兑换比例
+		}else if(isset($data['convertible'])){
+			//修改订单金额兑换余额比例
 			$res = Db::table('hn_accompany')->where('user_id',$data['id'])->setField('convertible', $data['convertible']);
 			if($res){
 				return json(['code' => 1, 'msg' => '成功']);
 			}else{
 				return json(['code' => 2, 'msg' => '失败']);
 			}
-		}	
+		}else if(isset($data['gift_exchange'])){
+			//修改礼物金额兑换余额比例
+			$res = Db::table('hn_accompany')->where('user_id',$data['id'])->setField('gift_exchange', $data['gift_exchange']);
+
+			if($res){
+				return json(['code' => 1, 'msg' => '成功']);
+			}else{
+				return json(['code' => 2, 'msg' => '失败']);
+			}
+
+		}else{
+			return json(['code' => 3, 'msg' => '数据错误']);
+		}
 	}
 
 	//相册控制器

@@ -15,8 +15,8 @@
           <!-- 排序? -->
           <div class="pai">          
             <span>礼物</span>
+            <span>送礼人</span>
             <span>数量</span>
-            <span>单价</span>
             <span>总值</span>
             <span>赠送时间</span>
           </div>
@@ -26,9 +26,9 @@
             <img src="" alt="">
             {foreach name="package_data" item="v"}
               <div class="pai">
-                <span>{$v.gift_id}</span>
+                <span><img src="{$v.img_url}"  style="widht:35px;height:35px"></span>
+                <span>{$v.nickname}</span>
                 <span>{$v.num}</span>
-                <span>单价</span>
                 <span>{$v.egg_num}</span>
                 <span>{:date('Y-m-d H:i:s',$v.time)}</span>
               </div>

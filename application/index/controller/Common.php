@@ -93,6 +93,23 @@ class Common extends \think\Controller
 		return $data;
 	}
 
+    public function infinite_ranking($data,$type)
+    {
+
+        //开始进行2维数组根据数字排序从大到小
+        foreach ($data as $k => $v) 
+        {
+            $mogul_day[$k] = $v[$type];
+        }
+
+        array_multisort($mogul_day,SORT_DESC,$data);
+
+
+        //截取数组
+        $data = array_slice($data, 0);
+        return $data;
+    }
+
 //陪玩师价格计算方式    订单数  项目初始价格
     public function pric($order_num,$pric){
         if($order_num>=500){

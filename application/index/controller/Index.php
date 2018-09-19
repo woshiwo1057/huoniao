@@ -52,13 +52,16 @@ class Index  extends Common
    //     $acc_data  =Db::table('hn_accompany')->select();
    // var_dump($acc_data);die;
     	//优质新人  先注册的排前面（15天内）
-    	$new_data =	Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->field('u.uid,u.nickname,u.head_img,u.age')->where('a.new_people',1)->limit('15 ')->select();
+    	$new_data =	Db::table('hn_accompany')->alias('a')
+                        ->join('hn_user u','u.uid = a.user_id')
+                        ->join('hn_apply_acc p','p.user_id = a.user_id')
+                        ->field('u.uid,u.nickname,u.head_img,u.age,p.city')->where('a.new_people',1)->limit('15 ')->select();
     	
         //$adhwuhwad = $this->wechat_query();
         //var_dump($adhwuhwad);die;
 
 //*********************
-//*首页排行榜处未优化，上线后记得及时优化为Ajax
+//*首页排行榜
 //*********************
     	//首页排行榜
     		//1.陪玩师人气榜
@@ -431,30 +434,43 @@ class Index  extends Common
             return  json(['code' => 1,'msg' => '跳去登录']);
         }
       
+        
+        $gift_data = Request::instance()->param(); //gift_data['gift_id']礼物ID   gift_data['acc_id']该陪玩师ID   $gift_data['num']//一次性送出的礼物数量
+        //var_dump($gift_data);die;
+
         //获取到用户ID
         $user_id = $_SESSION['user']['user_info']['uid'];
-        $gift_data = Request::instance()->param(); //gift_data['gift_id']礼物ID   gift_data['acc_id']该陪玩师ID
 
-        //查询出该礼物的价格  判断用户的鸟蛋够不够    存表 完成
-        $pice = Db::table('hn_gift')->field('pice')->where('id',$gift_data['gift_id'])->find();
+        //查询出该礼物的价格与图片路径  判断用户的鸟蛋够不够    存表 完成
+        $pice = Db::table('hn_gift')->field('pice,img_url')->where('id',$gift_data['gift_id'])->find();
+        $pice['pice'] = $pice['pice']*$gift_data['num'];  //算出所需要的鸟蛋数    单价*数量
             //查询出用户的鸟蛋余额
         $currency = Db::table('hn_user')->field('currency')->where('uid',$user_id)->find();
 
         if($currency['currency']<$pice['pice']){
-            return  json(['code' => 2,'msg' => '剩余鸟蛋不足，请去充值']);
+            return  json(['code' => 2,'msg' => '剩余鸟蛋不足，充值后再来给心爱的陪玩师送礼哦']);
         }
+
         //组装数据填表
     
         $data['user_id'] =  $user_id; //送礼的人
         $data['acc_id'] = $gift_data['acc_id'];//得礼的人
         $data['gift_id'] =  $gift_data['gift_id'];//礼物ID
+        $data['img_url'] = $pice['img_url']; //礼物图片路径
+        $data['num'] = $gift_data['num'];//一次性赠送出去的礼物的数量
         $data['egg_num'] = $pice['pice'];  //一次性赠送出的鸟蛋的数量  这里就是送出一个的钱（单价）
         $data['time'] = time();
 
-        $ras = Db::table('hn_user')->where('uid',$user_id)->setDec('currency',$pice['pice']);
+        $ras = Db::table('hn_user')->where('uid',$user_id)->setDec('currency',$pice['pice']);//减去用户的鸟蛋余额
+        //增加陪玩师账户余额
+            //1.查出陪玩师礼物兑换比例
+            $gift_exchange = Db::table('hn_accompany')->field('gift_exchange')->where('user_id',$gift_data['acc_id'])->find();
+            //2.算出应该加给陪玩师的余额数      总鸟蛋数/10*$gift_exchange['gift_exchange']
+            $money = $pice['pice']/10*$gift_exchange['gift_exchange'];
+            //3.给陪玩师余额字段加值  查询用户表
+            Db::table('hn_user')->where('uid', $gift_data['acc_id'])->setInc('cash', $money);
         $res = Db::table('hn_give_gift')->insert($data);
 
-        
         if($ras&&$res){
             return  json(['code' => 3,'msg' => '赠送成功']);
         }else{
@@ -462,6 +478,7 @@ class Index  extends Common
         }
     }
 
+    //关注
     function follow_add(){
         $request = request();//think助手函数
         $data_get = $request->param();//获取get与post数据

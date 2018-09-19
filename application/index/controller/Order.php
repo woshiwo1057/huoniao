@@ -24,6 +24,7 @@ class Order extends Common
 
 	public function index()
 	{
+
 		//获取到陪玩师ID
 		$acc_id = Request::instance()->param('id');
 		//查询陪玩师数据 
@@ -36,6 +37,9 @@ class Order extends Common
 							
 		//获取到用户ID
 		$user_id = $_SESSION['user']['user_info']['uid'];
+		//查出用户的QQ与手机号
+		$user_data['phone'] = $_SESSION['user']['user_info']['phone'];
+		$user_data['qq'] = $_SESSION['user']['user_info']['penguin'];
 
 		$service_data = [];
 		 if($acc_data['project_id'] == 1){
@@ -48,7 +52,8 @@ class Order extends Common
              $acc_data['name'] = $service_data['name'];
         }
 	
-		$this->assign(['acc_data' => $acc_data]);
+		$this->assign(['acc_data' => $acc_data,
+						'user_data' => $user_data]);
 		return $this->fetch('Order/index');
 	}
 
@@ -60,6 +65,7 @@ class Order extends Common
 		$user_id = $_SESSION['user']['user_info']['uid']; 
 		$data = Request::instance()->param();
 		
+
 		//容错处理
 		empty($data['explain'])?'':$data['explain'];
 		empty($data['wechat'])?'':$data['wechat'];
@@ -83,7 +89,7 @@ class Order extends Common
 						return json(['code'=>5,'msg'=>'请完成之前的订单后再来下单，谢谢']);
 			}
 			//这里是微信支付  因为没有回调     所以 die
-			die;
+			echo '现在不能微信支付';die;
 			//价钱
 			$data['price'];
 			
@@ -136,7 +142,7 @@ class Order extends Common
 					return json(['code'=>5,'msg'=>'请完成之前的订单后再来下单，谢谢']);
 				}else{
 								
-					$res = Db::table('hn_user')->where('uid', $user_id)->setDec('cash', $data['money']);
+					$res = Db::table('hn_user')->where('uid', $user_id)->setDec('cash', $data['price']);
 					unset($data['money']);
 					unset($data['type']);
 					if($res){
@@ -147,6 +153,10 @@ class Order extends Common
 						$data['user_id'] = $user_id;
 						$data['time'] = time();
 						$data['status'] = 1;
+						/****************************/
+						$convertible = Db::table('hn_accompany')->fidle('convertible')->where('user_id',$data['acc_id'])->find(); //比例
+						/*****************************/
+						$data['really_price'] = $convertible['convertible']*$data['price'];//实际到达陪玩师账户的金钱数
 						//echo 1;die;
 						$ras = Db::table('hn_order')->insert($data);
 						if($ras){						
