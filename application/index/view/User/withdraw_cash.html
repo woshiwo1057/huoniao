@@ -1,0 +1,160 @@
+{include file="public/header"}
+
+<link rel="stylesheet" type="text/css" href="__INDEX__css/cropper.min.css">
+<script type="text/javascript" src="__INDEX__js/cropper.min.js"></script>
+	<body class="u-body">
+		<!-- 引入头部 -->
+		<div class="main u-main">
+		<!--导航放在这里-->
+{include file="public/nav"}
+			<div class="user-info-box u-page-body">
+				<div class="u-title">
+					<span>提现</span>
+				</div>
+				<!--主内容盒子-->
+				<div class="u-data-set-box">
+					<!--上傳頭像盒子-->
+					
+					<!--设置资料盒子-->
+					
+
+					<table align="center" class="set-user-box"  data-item="list">
+
+						<tr>
+							<td>支付宝账户:</td>
+							<td><input type="text"  value="" name="zfb" placeholder="您的支付宝账户"/></td>
+						</tr>
+						
+						<tr>
+							<td>真实姓名:</td>
+							<td><input type="text"  value="" name="real_name" placeholder="与支付宝账户不一致则不会通过" /></td>
+						</tr>
+
+						<tr>
+							<td>提取金额:</td>
+							<td><input type="text"  value="" name="money" placeholder="注：提现收取2元的手续费" /></td>
+						</tr>
+										
+						<tr>
+							<td>手机号码:</td>
+							<td><input type="text"  value="{$user_data['account']}" name="phone"  disabled /></td>
+						</tr>
+
+						<tr>			
+		
+							<!-- <td></td> -->
+							<td>验证码：</td>
+							<td class="xiaoshou"  style="width:50px">
+							<input type="text" name="code"  style="width:150px;margin-right:25px" />
+							<span class="code">发送验证码</span>
+							</td>
+						</tr>
+						
+						<tr>
+							<td colspan="2">
+								<div class="submit xiaoshou" type="1" >提交</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+				<script type="text/javascript">
+				$(function(){
+					//获取验证码
+
+					function jump(){
+						window.location.reload()
+					}
+						$('.code').click(function(){
+					
+							var phone = {$user_data['account']};
+
+							$.post("{:url('User/withdraw_code')}",{phone:phone},function(data){
+										if(data.code == 1){
+											layui.use('layer',function(){
+											layer.msg(data.msg)});
+										}else if(data.code == 2){
+											layui.use('layer',function(){
+											layer.msg(data.msg)})
+										}else{
+											layui.use('layer',function(){
+											layer.msg('未知错误')})
+										}
+							},'json')
+						})
+
+
+						$('.submit').click(function(){
+							var zfb = $('[name="zfb"]').val(); //支付宝账户
+							if(zfb == ''){
+								layui.use('layer',function(){
+								layer.msg('请输入支付宝账户')});
+								return false
+							}
+							var real_name = $('[name="real_name"]').val();//真实姓名
+							if(real_name == ''){
+								layui.use('layer',function(){
+								layer.msg('请输入真实姓名')});
+								return false
+							}
+
+							var money = parseInt($('[name="money"]').val())+2;//提取的钱数
+							//正则验证输入的金钱是否正确
+							var reg = /^\+?[1-9][0-9]*$/;
+							if(!reg.test(money))
+							{
+								layui.use('layer',function(){
+								layer.msg('请填写正整数')
+								})
+								return false
+							}
+
+							var cash = {$user_data['cash']}; //账户余额
+							if(money>cash){
+								layui.use('layer',function(){
+								layer.msg('余额不足')
+								})
+								return false
+							}
+							
+							var code = $('[name="code"]').val();//验证码
+							if(code == ''){
+								layui.use('layer',function(){
+								layer.msg('请填写短信验证码')});
+								return false
+							}
+
+							$.post("{:url('User/withdraw_cash')}",{zfb:zfb,real_name:real_name,money:money,code:code},function(data){
+									if(data.code == 1){
+										layui.use('layer',function(){
+										layer.msg(data.msg)});
+									}else if(data.code == 2){
+										layui.use('layer',function(){
+										layer.msg(data.msg)});
+										 setInterval(query,1500);
+
+									}else if(data.code == 3){
+										layui.use('layer',function(){
+										layer.msg(data.msg)});
+									}else if(data.code == 4){
+										layui.use('layer',function(){
+										layer.msg(data.msg)});
+									}else{
+										layui.use('layer',function(){
+										layer.msg('未知错误')});
+									}
+
+
+							},'json')
+							
+						})
+
+
+				})
+				</script>
+
+{include file="public/footer"}
+	</body>
+
+</html>

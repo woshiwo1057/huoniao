@@ -1,0 +1,69 @@
+{include file="public/header"}
+
+	<body class="u-body">
+		<!-- 引入头部 -->
+		<div class="main u-main">
+{include file="public/nav"}
+			<div class="user-info-box u-page-body">
+				<div class="u-title">
+					<span>我的接单</span>
+				</div>
+
+        <!-- 我的接单 -->
+        <div class="miva-receipt-box">
+          <!-- 筛选 -->
+          <div class="miva-search-box">
+          <!--
+            <div class="left">
+              <input type="text" name="" value="" placeholder="昵称">
+              <i class="miva-search-icon layui-icon layui-icon-search"></i>
+            </div>
+            <span class="active"><i class="miva-icon layui-icon layui-icon-align-right"></i>全部</span>
+            <span>进行中</span>
+            <span>已完成</span>
+            -->
+          </div>
+          <!-- 排序? -->
+          <div class="pai">
+            <span>优惠券</span>
+            <span>优惠金额</span>
+            <span>有效期</span>
+            <span>描述</span>
+            <span>状态</span>
+            
+          </div>
+          <!-- end -->
+          <!-- 如果没数据 -->
+          <div class="">
+            <img src="" alt="">
+            <div class="if-have">
+
+         
+           {foreach name="coupon_data" item="v"}
+              <div class="pai">
+                <span><img src="{$v.img_url}"></span>
+                <span>{$v.discount}元</span>
+                <span>{$v.validity}</span>
+                <span>{$v.explain}</span> 
+                {switch name="$v.status"}  
+                  {case value="1"}<span>未使用</span>{/case}
+                  {case value="2"}<span>已使用</span>{/case}
+                  {case value="3"}<span>已过期</span>{/case}
+                {/switch}
+              </div>
+            {/foreach}
+         </div>
+          </div>
+        </div>
+
+			</div>
+
+		</div>
+          
+         
+		<!-- 引入页脚 -->
+{include file="public/footer"}
+	</body>
+
+
+</html>

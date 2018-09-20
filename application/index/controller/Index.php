@@ -44,19 +44,18 @@ class Index  extends Common
        
 
     	//首页明星推荐
-    	$acc_data = Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num')->where('a.status',1)->limit('0,15')->select();
-   //  	 if($acc_data != NULL){          
-   //          $type = 'order_num';
-   //          $acc_data = $this->ranking($acc_data,$type);
-   //      }
-   //     $acc_data  =Db::table('hn_accompany')->select();
-   // var_dump($acc_data);die;
+    	$acc_data = Db::table('hn_user')
+                    ->alias('u')
+                    ->join('hn_accompany a','u.uid = a.user_id')
+                    ->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num')
+                    ->where('a.status',1)->limit('0,15')->select();
+
+  //var_dump($acc_data);die;
     	//优质新人  先注册的排前面（15天内）
     	$new_data =	Db::table('hn_accompany')->alias('a')
-                        ->join('hn_user u','u.uid = a.user_id')
-                        ->join('hn_apply_acc p','p.user_id = a.user_id')
-                        ->field('u.uid,u.nickname,u.head_img,u.age,p.city')->where('a.new_people',1)->limit('15 ')->select();
-    	
+                        ->join('hn_user u','u.uid = a.user_id')                  
+                        ->field('u.uid,u.nickname,u.head_img,u.age,a.city')->where('a.new_people',1)->limit('15')->select();
+    	//->join('hn_apply_acc p','p.user_id = a.user_id')
         //$adhwuhwad = $this->wechat_query();
         //var_dump($adhwuhwad);die;
 
@@ -212,7 +211,7 @@ class Index  extends Common
         $user_data = Db::table('hn_user')
                         ->alias('u')
                         ->join('hn_accompany a','u.uid = a.user_id')
-                        ->field('u.uid,u.nickname,u.head_img,u.age,a.table,a.status,a.hot,a.explain,a.height,a.weight,a.hobby,a.duty,a.pice,a.acc_time')
+                        ->field('u.uid,u.nickname,u.head_img,u.age,a.table,a.status,a.hot,a.explain,a.height,a.weight,a.hobby,a.duty,a.pice,a.acc_time,a.city,a.sexy')
                         ->where('user_id',$id)
                         ->find();
         //查询相册数据
@@ -237,7 +236,7 @@ class Index  extends Common
         }else{
             $service_data = null;
         }
-//var_dump($service_name);die;
+        //var_dump($service_data);die;
         //查询评论数据
         $comment_data = Db::table('hn_comment')
                         ->alias('c')
@@ -290,6 +289,10 @@ class Index  extends Common
              $is_follow = 2;
         }
       
+
+        //查询几条送礼物的数据去循环
+        //$song_data = Db::table('hn_give_gift')->->field('user_id,acc_id')->limit(10)->select();
+
         $this->assign([
             //陪玩师数据
             'user_data' => $user_data,
@@ -327,7 +330,7 @@ class Index  extends Common
            
             $service_data = Db::table('hn_apply_project')
                         ->field('project_grade,project_grade_name,pric,length_time,order_num')
-                        ->where(['status' => 1, 'type' => 1, 'project_id' => $data['project_id']])
+                        ->where(['status' => 1, 'type' => 1, 'project_id' => $data['project_id'], 'uid' => $data['acc_id']])
                         ->find();
             $service_data['project_img'] = $img['game_index_img'];
 
@@ -349,7 +352,7 @@ class Index  extends Common
            
             $service_data = Db::table('hn_apply_project')
                         ->field('project_grade,project_grade_name,pric,length_time,order_num')
-                        ->where(['status' => 1, 'type' => 1, 'project_id' => $data['project_id']])
+                        ->where(['status' => 1, 'type' => 1, 'project_id' => $data['project_id'], 'uid' => $data['acc_id']])
                         ->find();
             $service_data['project_img'] = $img['joy_logo_img'];
 
@@ -469,6 +472,9 @@ class Index  extends Common
             $money = $pice['pice']/10*$gift_exchange['gift_exchange'];
             //3.给陪玩师余额字段加值  查询用户表
             Db::table('hn_user')->where('uid', $gift_data['acc_id'])->setInc('cash', $money);
+            //4.给陪玩师增加魅力值
+            Db::table('hn_accompany')->where('user_id',$gift_data['acc_id'])->setInc('hot' , $pice['pice']);
+            Db::table('hn_accompany')->where('user_id',$gift_data['acc_id'])->setInc('hot_day' , $pice['pice']);
         $res = Db::table('hn_give_gift')->insert($data);
 
         if($ras&&$res){

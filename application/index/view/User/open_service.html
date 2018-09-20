@@ -1,6 +1,7 @@
 {include file="public/header"}
 
-
+<link href="https://cdn.bootcss.com/mui/3.7.1/css/mui.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="__INDEX__css/common.css" /> 
 		<!--<link rel="stylesheet" type="text/css" href="css/common.css" />-->
 <script src="https://cdn.bootcss.com/mui/3.7.1/js/mui.min.js"></script>
 		<title>网吧入驻申请</title>
@@ -320,9 +321,15 @@
 										}
 									})
 								},
+								
 								btn2: function(index) {
 									window.location.reload()
 									//mui("#line-down").switch().toggle()
+								},
+
+								cancel:function(index,layero){
+									console.log(123)
+									window.location.reload()
 								}
 							})
 

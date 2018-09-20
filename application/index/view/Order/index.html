@@ -8,7 +8,7 @@
         <span>订单信息</span>
         <table>
           <tr>
-            <td>陪玩</td>
+            <td>陪玩师</td>
             <td>昵称</td>
             <td>服务技能</td>
             <td>单位 (元/小时)</td>
@@ -18,8 +18,8 @@
           <tr>
             <td><img class="user-pic" src="{$acc_data.head_img}" alt=""></td>
             <td>{$acc_data.nickname}</td>
-            <td>{$acc_data.name}</td>
-            <td>￥{$acc_data.pice}</td>
+            <td>{$acc_data.project_name}</td>
+            <td>￥{$acc_data.pric}</td>
             <td>
               <div class="box buy-time-box">
     						<span style="cursor:pointer">-</span>
@@ -27,7 +27,7 @@
     						<span style="cursor:pointer">+</span>
     					</div>
             </td>
-            <td  data-price=total style="color:red; width:104px ">￥{$acc_data.pice}</td>
+            <td  data-price=total style="color:red; width:104px ">￥{$acc_data.pric}</td>
           </tr>
           <tr>
             <td colspan="6">
@@ -38,22 +38,22 @@
         <!-- 基本信息 -->
         <div class="contact-box">
 					<div>
-						<img src="" alt="图标">
+						<img src="__IMG__data_01.png" alt="图标">
 						手机
 					</div>
 					<input type="text" name="phone"  value="{$user_data['phone']}">
-					<span style="color:red">(必填)</span>
+					<span style="color:red; margin-left:-1px" >(必填)</span>
 
 					<div>
-						<img src="" alt="图标">
+						<img src="__IMG__ico_31.png" alt="图标">
 						QQ
 					</div>
 					<input type="text" name="qq"  value="{$user_data['qq']}">
-          <span style="color:red">(必填)</span>
+          <span style="color:red;  margin-left:-1px;">(必填)</span>
 					
 
 					<div>
-						<img src="" alt="图标">
+						<img src="__IMG__ico_32.png" alt="图标">
 						微信
 					</div>
 					<input type="text" name="wechat">
@@ -94,14 +94,20 @@
   				<span class="xiaoshou pay-act" payment="1"><img src="" alt="">余额支付</span>
   				<span class="xiaoshou" payment="2"><img src="" alt="">微信支付</span>
   			
-          <img src=""  style="height:200px;width:200px;margin-left:400px;" alt="打开微信扫描二维码支付" class="zhifu">
+          <img src=""  style="height:200px;width:200px;margin-left:400px;" alt="" class="zhifu">
   			</div>
       </div>
-      
+      {if condition="!empty($coupon_data)"}
+      <div style="margin-left:1000px;">已自动使用了<span style="color:red">{$coupon_data.name}</span></div>
+      {/if}
       <!-- 确认支付 -->
       <div class="payment">
         <div class="top">
-          实付金额: <span data-price=paytotal>￥{$acc_data.pice}</span>
+          {if condition="empty($coupon_data)"}
+          实付金额: <span data-price=paytotal>￥{$acc_data.pric}</span>
+          {else /}
+          实付金额: <span data-price=paytotal>￥{$acc_data.pric-$coupon_data.discount}</span>
+          {/if}
         </div>
         <div class="btm">
           <sub><i class="miva-icon layui-icon layui-icon-about"></i>温馨提示:提交订单后,待支付的订单有3分钟的付款时间,逾期自动取消订单</sub>
@@ -117,10 +123,10 @@
     <script>
     $(function(){
       var buyTime = 1;
-      var price = {$acc_data.pice};
+      var price = {$acc_data.pric};
       var paynum;
 
-      $('body').on('selectstart', function() { // 禁止选中
+      $('body').on('selectstart', function() { //禁止选中
         return false;
       });
       $('.buy-time-box').on('click', 'span', function() {
@@ -143,8 +149,14 @@
       });
 
       $('.submit').click(function(){
+
+        var coupon_type = 0;
+         {if condition="!empty($coupon_data)"}
+         var coupon_type = {$coupon_data.id};
+         {/if}
+
             var acc_id = '{$acc_data.uid}'
-            var service = '{$acc_data.name}'
+            var service = '{$acc_data.project_name}'
             var length_time = $('.length_time').val()
             if(length_time<1){
               layui.use('layer',function(){
@@ -166,14 +178,14 @@
             }
             var wechat = $('[name="wechat"]').val()
 
-            var money = '{$acc_data.pice}'
+            var money = '{$acc_data.pric}'
 
             //获取到支付方式 
             var type = $('.pay-act').attr('payment')
 
 
             
-            $.post("{:url('Order/confirm_order')}",{acc_id:acc_id,service:service,length_time:length_time,explain:explain,phone:phone,qq:qq,wechat:wechat,money:money,type:type},function(data){
+            $.post("{:url('Order/confirm_order')}",{acc_id:acc_id,service:service,length_time:length_time,explain:explain,phone:phone,qq:qq,wechat:wechat,money:money,type:type,coupon_type:coupon_type},function(data){
                       if(data.code == 1){
                         layui.use('layer',function(){
                         layer.msg(data.msg)})

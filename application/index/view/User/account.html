@@ -19,12 +19,13 @@
           <div class="account-top-btn">
             <span><a href="{:url('Recharge/index')}">充值</a></span>
             {if condition="$_SESSION['user']['user_info']['type'] == 1"}
-            <span onclick="alert('暂未开放')">提现</span>
+            <span onclick="alert('暂未开放')"><a href="{:url('User/withdraw_cash')}">提现</a></span>
             {/if}
           </div>
 
           <!-- 标签页 -->
           <div class="account-tab">
+          
             <span class="active" data-item="1" data-val=1>资金明细</span>
             <span  id="egg" data-item="1" data-val=2>鸟蛋明细</span>
 

@@ -107,7 +107,7 @@ class Acc extends Common
 							->join('hn_accompany a','u.uid = a.user_id')
 							->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num')
 							->where(['a.status'=> 1,'a.project' => $data['project'],'a.project_id' => $data['project_id']])
-							->limit('0,12')
+							->limit('0,15')
 							->select();
 						
 				// var_dump($acc_data);die;
@@ -120,7 +120,7 @@ class Acc extends Common
 							->join('hn_accompany a','u.uid = a.user_id')
 							->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num')
 							->where(['a.status'=> 1,'a.project' => $data['project'],'a.project_id' => $data['project_id'],'u.sex' => $data['sex']])
-							->limit('0,12')
+							->limit('0,15')
 							->select();
 						
 
@@ -137,7 +137,7 @@ class Acc extends Common
 							->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num')
 							->where(['a.status'=> 1,'a.project' => $data['project'],'a.project_id' => $data['project_id']])
 							->order('a.hot desc')
-							->limit('0,12')
+							->limit('0,15')
 							->select();
 						
 			
@@ -151,7 +151,7 @@ class Acc extends Common
 							->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num')
 							->where(['a.status'=> 1,'a.project' => $data['project'],'a.project_id' => $data['project_id'],'u.sex' => $data['sex']])
 							->order('a.hot desc')
-							->limit('0,12')
+							->limit('0,15')
 							->select();
 						
 
@@ -169,7 +169,7 @@ class Acc extends Common
 							->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num')
 							->where(['a.status'=> 1,'a.project' => $data['project'],'a.project_id' => $data['project_id']])
 							->order('a.pice desc')
-							->limit('0,12')
+							->limit('0,15')
 							->select();
 						
 			
@@ -183,7 +183,7 @@ class Acc extends Common
 							->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num')
 							->where(['a.status'=> 1,'a.project' => $data['project'],'a.project_id' => $data['project_id'],'u.sex' => $data['sex']])
 							->order('a.pice desc')
-							->limit('0,12')
+							->limit('0,15')
 							->select();
 						
 
@@ -194,14 +194,24 @@ class Acc extends Common
 			//线下  acc_type == 3
 			if($data['sex'] == 0){
 				//没有选择性别
-				$acc_data = Db::table('hn_user')
+				if($data['project'] == 1&&$data['project_id'] == 1){
+					$acc_data = Db::table('hn_user')
 							->alias('u')
 							->join('hn_accompany a','u.uid = a.user_id')
 							->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num')
-							->where(['a.status'=> 1,'a.project' => $data['project'],'a.project_id' => $data['project_id'],'a.acc_type' => 3])					
-							->limit('0,12')
+							->where(['a.status'=> 1,'a.acc_type' => 3])					
+							->limit('0,15')
 							->select();
-						
+
+				}else{
+					$acc_data = Db::table('hn_user')
+								->alias('u')
+								->join('hn_accompany a','u.uid = a.user_id')
+								->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num')
+								->where(['a.status'=> 1,'a.project' => $data['project'],'a.project_id' => $data['project_id'],'a.acc_type' => 3])					
+								->limit('0,15')
+								->select();
+				}	
 			
 				return json($acc_data);
 			}else{
@@ -212,7 +222,7 @@ class Acc extends Common
 							->join('hn_accompany a','u.uid = a.user_id')
 							->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num')
 							->where(['a.status'=> 1,'a.project' => $data['project'],'a.project_id' => $data['project_id'],'u.sex' => $data['sex'],'a.acc_type' => 3])
-							->limit('0,12')
+							->limit('0,15')
 							->select();
 	
 				

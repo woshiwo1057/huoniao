@@ -35,15 +35,19 @@ class Common extends \think\Controller
 	{
 		parent:: __construct(); //集成父级构造函数
 		session_start();
-        
-		
+        	
 		$menus_index = $this->menus_index();
+
+        if(isset($_SESSION['user'])){
+            $less_user_data = $this->user_data();
+
+            $this->assign(['less_user_data' => $less_user_data]);
+        }
         
-		//$foot_index = $this->foot_index();
+        
 		$index = 'index';
 		$this->assign([
 			'menus_index' =>  $menus_index,
-			//'foot_index'  =>  $foot_index
 			'index' => $index
 					]);
 		
@@ -52,6 +56,18 @@ class Common extends \think\Controller
 		define('C', Request::instance()->controller());
 		
 	}
+
+    //用户的基本信息
+    public function user_data()
+    {
+        //获取到用户ID
+        $id = $_SESSION['user']['user_info']['uid'];
+
+        //查出用户的 头像 昵称 ID   等级  余额  鸟蛋
+        $user_data = Db::table('hn_user')->field('uid,nickname,head_img,level,cash,currency')->where('uid',$id)->find();
+
+        return $user_data;
+    }
 
 	//公共前台首页输出信息（导航栏）
 	public function menus_index()

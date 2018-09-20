@@ -37,7 +37,7 @@ class Login extends \think\Controller
 			}
 
 			//判断账号是否正确
-			$res = Db::table('hn_admin')->field('account,password,nickname,id,power_id')->where('account',$data['account'])->find();
+			$res = Db::table('hn_admin')->field('account,password,nickname,id,power_id,acc_id')->where('account',$data['account'])->find();
 
 			if(!$res)
 			{

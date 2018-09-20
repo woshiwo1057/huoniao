@@ -1,6 +1,5 @@
 {include file="public/header"}
-<link href="https://cdn.bootcss.com/mui/3.7.1/css/mui.min.css" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="__INDEX__css/common.css" /> 
+
 	<body class="u-body">
 		<!-- 引入头部 -->
 		<div class="main u-main">
@@ -38,10 +37,7 @@
               <!-- 左 -->
               <div class="left">
                 <span class="order-num">{$v.number}</span>
-                {if condition="$v['status'] == 1"}
-                <span>等待时长：</span>
-                <span><?php  echo round((time()-$v['time'])/60);?>min</span>
-                {/if}
+                
               </div>
               <!-- 右 -->
               <div class="right">{:date('Y-m-d H:i:s',$v.time)}</div>
@@ -56,13 +52,21 @@
               <div></div>
               <div>时长:{$v.length_time}小时</div>
               <div><i class="layui-icon layui-icon-rmb miva-rmb"></i>{$v.price}</div>
-              {if condition="$v['status'] == 0"}
-              <div class="out xiaoshou" order_id="{$v.id}" type="2">取消订单</div>           
+             
+              {if condition="$v['status'] == 1"}
+                <span>等待时长：</span>
+                <span><?php  $time = round((time()-$v['time'])/60);
+                    echo $time; ?>min</span>
+                      <?php  if($time>480){?>
+                        <div class="out xiaoshou" order_id="{$v.id}" type="2">取消订单</div>
+                      <?php }?>
               {/if}
               {if condition="$v['status'] == 2"}
                <span class="out xiaoshou" order_id="{$v.id}" type="3">确认完成</span>
               {/if}
+
               <div class="jindu">订单进度<br><i class="layui-icon layui-icon-triangle-d"></i></div>
+
             </div>
             <!-- 訂單進度 -->
 

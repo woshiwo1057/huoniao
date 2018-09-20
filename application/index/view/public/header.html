@@ -88,10 +88,10 @@
       <div class="login-after">
         <!-- 用户头像 -->
         <a href="{:url('User/index')}" class="user-pic-box">
-          <?php if($_SESSION['user']['user_info']['head_img'] == ''){ ?>
+          <?php if($less_user_data['head_img'] == ''){ ?>
           <img class="user-pic" src="__IMG__default.jpg" alt="">
           <?php }else{?>
-          <img class="user-pic" src="<?php  echo $_SESSION['user']['user_info']['head_img'];?>" alt="">
+          <img class="user-pic" src="<?php  echo $less_user_data['head_img'];?>" alt="">
           <?php }?>
         </a>
         <!-- 弹出用户信息 -->
@@ -99,18 +99,18 @@
           <!-- 用户头像 -->
           <div class="user-pic-tan">
             <a href="{:url('User/index')}">
-            <?php if($_SESSION['user']['user_info']['head_img'] == ''){ ?>
+            <?php if($less_user_data['head_img'] == ''){ ?>
             <img class="user-pic" src="__IMG__default.jpg" alt="">
             <?php }else{?>
-            <img class="user-pic" src="<?php  echo $_SESSION['user']['user_info']['head_img'];?>" alt="">
+            <img class="user-pic" src="<?php  echo $less_user_data['head_img'];?>" alt="">
             <?php }?>
             </a>
           </div>
-          <div>{$_SESSION['user']['user_info']['nickname']}</div>
-          <div>ID:{$_SESSION['user']['user_info']['uid']}</div>
+          <div>{$less_user_data['nickname']}</div>
+          <div>ID:{$less_user_data['uid']}</div>
           <!-- 等级 -->
           <div class="user-lv">
-            <span>LV {$_SESSION['user']['user_info']['level']}</span>
+            <span>LV {$less_user_data['level']}</span>
             <div class="layui-progress miva-progress">
               <div class="layui-progress-bar" lay-percent="10%"></div>
             </div>
@@ -124,10 +124,10 @@
           </script>
           <!-- 账户 -->
           <div class="user-money">
-            <span>余额</span><span>{$_SESSION['user']['user_info']['cash']}</span>
+            <span>余额</span><span>{$less_user_data['cash']}</span>
           </div>
           <div class="user-money">
-            <span>鸟蛋</span><span>{$_SESSION['user']['user_info']['currency']}</span>
+            <span>鸟蛋</span><span>{$less_user_data['currency']}</span>
           </div>
           <!-- 功能 -->
           <table>

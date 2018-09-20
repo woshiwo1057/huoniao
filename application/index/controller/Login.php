@@ -125,6 +125,13 @@ class Login extends \think\Controller
 
 	Session::set('user_info',$res,'user');
 
+	//新注册的用户给加一个优惠券
+		//优惠券ID  用户ID  领取时间  OK
+	$coupon = [];
+	$coupon['uid'] = $res['uid'];
+	$coupon['cid'] = 1;
+	$coupon['time'] = time();
+	Db::table('hn_coupon_user')->insert($coupon);
 
 	return json(['code' => 4,'msg' => '注册成功，正在登录','url' => url('index/index')]);
 

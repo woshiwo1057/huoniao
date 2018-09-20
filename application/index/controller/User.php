@@ -389,7 +389,7 @@ class User extends Common
 			//获得
 				
 		$order_get = Db::table('hn_order')->field('time,really_price')->where('acc_id' , $id)->where('status','>',3)->order('id desc')->limit('9')->select();
-//var_dump($order_get);die;
+		//var_dump($order_get);die;
 		foreach ($order_get as $k => $v){
 			$order_get[$k]['type'] = '订单结算';
 			$order_get[$k]['money'] = $v['really_price'];
@@ -724,6 +724,73 @@ class User extends Common
 		}
 	}
 
+	//提现
+	public function withdraw_cash()
+	{
+
+		//var_dump($_SESSION['think']['withdraw_code']);die;
+		//获取用户ID
+		$id = $_SESSION['user']['user_info']['uid'];
+		//查出账号（手机号）与当前账户余额
+		$user_data = Db::table('hn_user')->field('account,cash')->where('uid',$id)->find();
+
+		if(Request::instance()->isPost()){
+			$data = Request::instance()->param();
+
+			//var_dump($data);die;
+			//判断验证码是否正确
+			if(!isset($_SESSION['think']['withdraw_code'])){
+				return json(['code' => 4 , 'msg' => '自己填的验证码不算']);
+			}
+			if($data['code'] != $_SESSION['think']['withdraw_code']){
+				return json(['code' => 1 , 'msg' => '验证码错误']);
+			}
+			//删除无用的数据  组装数据并填表  更新用户余额数据
+			unset($data['code']);
+			unset($_SESSION['think']['withdraw_code']);
+			$data['user_id'] = $id;
+			$data['time'] = time();
+
+				//1.更新用户账户数据
+			$ras = Db::table('hn_user')->where('uid', $id)->setDec('cash', $data['money']);
+				//2.填表
+			$data['money'] = $data['money']-2;  //减去扣除的手续费是用户真正提取的余额钱数
+			$res = Db::table('hn_withdraw_cash')->insert($data);
+
+			if($res&&$ras){
+				return json(['code' => 2 , 'msg' => '成功提交，请耐心等待审核']);
+			}else{
+				return json(['code' => 3 , 'msg' => '提交失败，请检查数据后重试']);
+			}
+		}
+
+		$this->assign('user_data' , $user_data);
+		return $this->fetch('User/withdraw_cash');
+	}
+
+	//提现短信验证码控制器
+	public function withdraw_code()
+	{
+		$phone = Request::instance()->param('phone');
+		
+		$code = rand(1000,9999);
+		//Session::set('real_code',$code);//将验证码存入Session
+		$_SESSION['think']['withdraw_code'] = $code;
+		
+		$sms = 'SMS_145591893';
+
+		$result = $this->sendSms($phone,$code,$sms);
+			//将回调对象转化为数组
+		$code_data = get_object_vars($result);
+
+		if($code_data['Code'] == 'OK')
+	    {	    	
+	        return json(['code' => 1,'msg' => '发送成功请注意查收']);
+	    }else{	    	
+	        return json(['code' => 2,'msg' => '失败']);
+	    }
+	}
+
 	//相册管理
 	public function album()
 	{
@@ -872,7 +939,8 @@ class User extends Common
 			//加接单时长
 			$length_time = $order_data['length_time']*60*60;
 			Db::table('hn_apply_project')->where(['uid' => $order_data['acc_id'] , 'project_name' => $order_data['service']])->setInc('length_time', $length_time);
-
+			//加订单数
+			Db::table('hn_apply_project')->where(['uid' => $order_data['acc_id'] , 'project_name' => $order_data['service']])->setInc('order_num', 1);
 			if($ras){
 				//改变订单状态
 				$time = time(); //结束时间
@@ -1422,7 +1490,22 @@ class User extends Common
 	//优惠券
 	public function coupon()
 	{
-		$this->error('暂未开放','User/index');
+		//获取用户ID
+		$uid = $_SESSION['user']['user_info']['uid'];
+
+		//查询用户优惠券表 
+			//需要 优惠券图片  优惠金额  有效期  描述  状态
+			$coupon_data = Db::table('hn_coupon_user')
+								->alias('cu')
+								->join('hn_coupon c' , 'cu.cid = c.id')
+								->field('c.img_url,c.discount,c.explain,cu.validity,cu.status')
+								->where('uid' , $uid)
+								->select();  
+
+			//var_dump($coupon_data);die;
+
+		$this->assign(['coupon_data' => $coupon_data]);
+		return $this->fetch('User/coupon');
 	}
 
 }
