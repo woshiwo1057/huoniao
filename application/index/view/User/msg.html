@@ -10,18 +10,25 @@
 				</div>
 
         <!-- 我的 消息 -->
-        <div class="miva-message-box">
+        <style type="text/css">
+          .user-pic-box {position: relative}.user-pic-box .tip {position: absolute;top: 0px;right: 0px;display: inline-block;background: red;width: 20px;height: 20px;border-radius: 50%}.msg-info {overflow: hidden;transition: all .5s;height: 70px}.miva-btn {position: absolute;top: 70%;right: 18px}.msg-colse {position: relative}.msg-colse::after {content: '...';position: absolute;top: 48px;right: 0}.miva-message-one {align-items: stretch !important}
+        </style>
+
+        <div class="miva-message-box miva-join-page">
           <!-- 一条 -->
-          {foreach name="msg_data" item="v"}
-          <div class="miva-message-one">
+          {foreach name="data_arr" item="v"}
+          <div style="position: relative" class="miva-message-one"  xiaoxi_id="{$v.id}">
+            <div class="user-pic-box">
             <img src="__IMG__logo.jpg" alt="">
-            <div class="msg-info">
+            </div>
+            <div class="msg-info msg-colse">
               <div class="">{$v.title}</div>
-              <p>{$v.content}</p>
+              {$v.text}
             </div>
             <div class="time">
               {:date('Y-m-d H:i:s',$v.time)}
             </div>
+            <span data-item="btn" class="miva-btn miva-btn-act xiaoshou">打开消息</span>
           </div>
           {/foreach}
           <!-- end -->
@@ -31,7 +38,38 @@
 		</div>
 {include file="public/footer"}
 		<!-- 引入页脚 -->
+  <script type="text/javascript">
+  $(function(){
+      $('.miva-message-one').on('click', function(){
+          var id = $(this).attr('xiaoxi_id')
 
+          $.post("{:url('User/change_msg')}",{id:id},function(data){
+              if(data == 1){
+                alert('已查看')
+              }
+
+          },'json')
+
+      })
+  })
+  </script>
+  <script type="text/javascript">
+      $(function() {
+
+        $('[data-item="btn" ]').on('click', function() {
+          var height = $(this).siblings('.msg-info').find('span').height();
+
+          if($(this).html() == '关闭消息') {
+            $(this).html('打开消息').siblings('.msg-info').css('height', '70px').addClass('msg-colse')
+          } else {
+            $('.miva-message-box').find('.msg-info').css('height', '70px').addClass('msg-colse')
+            $('.miva-message-box').find('[data-item="btn" ]').html('打开消息')
+            $(this).html('关闭消息').siblings('.msg-info').css('height', height+47).removeClass('msg-colse')
+
+          }
+        })
+      })
+    </script>
 	</body>
 
 

@@ -19,7 +19,7 @@
             <td><img class="user-pic" src="{$acc_data.head_img}" alt=""></td>
             <td>{$acc_data.nickname}</td>
             <td>{$acc_data.project_name}</td>
-            <td>￥{$acc_data.pric}</td>
+            <td>￥199</td>
             <td>
               <div class="box buy-time-box">
     						<span style="cursor:pointer">-</span>
@@ -27,7 +27,7 @@
     						<span style="cursor:pointer">+</span>
     					</div>
             </td>
-            <td  data-price=total style="color:red; width:104px ">￥{$acc_data.pric}</td>
+            <td  data-price=total style="color:red; width:104px ">￥199</td>
           </tr>
           <tr>
             <td colspan="6">
@@ -104,9 +104,9 @@
       <div class="payment">
         <div class="top">
           {if condition="empty($coupon_data)"}
-          实付金额: <span data-price=paytotal>￥{$acc_data.pric}</span>
+          实付金额: <span data-price=paytotal>￥199</span>
           {else /}
-          实付金额: <span data-price=paytotal>￥{$acc_data.pric-$coupon_data.discount}</span>
+          实付金额: <span data-price=paytotal>￥<?php echo 199-$coupon_data['discount']?></span>
           {/if}
         </div>
         <div class="btm">
@@ -123,7 +123,7 @@
     <script>
     $(function(){
       var buyTime = 1;
-      var price = {$acc_data.pric};
+      var price = 199;
       var paynum;
 
       $('body').on('selectstart', function() { //禁止选中
@@ -140,10 +140,7 @@
 
 
         paynum = price * buyTime;
-        var youhui = 0;
-        {if condition="isset($coupon_data['discount'])"}
-        youhui = {$coupon_data['discount']};
-        {/if}
+        var youhui = {$coupon_data['discount']} || 0;
         $('[data-price=total]').html('￥' + paynum);
         $('[data-price=paytotal]').html('￥' + (paynum - youhui));
       });
@@ -182,27 +179,13 @@
             }
             var wechat = $('[name="wechat"]').val()
 
-            var money = '{$acc_data.pric}'
+            var money = 199;
 
             //获取到支付方式 
             var type = $('.pay-act').attr('payment')
 
-            if(service = '声音鉴定'){
-            
-              $.post("{:url('Order/voice')}",{acc_id:acc_id,service:service,length_time:length_time,explain:explain,phone:phone,qq:qq,wechat:wechat,money:money,type:type,coupon_type:coupon_type},function(data){
-                  if(data.code == 1){
-                    alert(data.msg)
-                  }else if(data.code == 2){
-                    alert(data.msg)
-                  }else{
-                    alert('未知错误')
-                  }
 
-              },'json')
-              return false
-            }
-            
-            $.post("{:url('Order/confirm_order')}",{acc_id:acc_id,service:service,length_time:length_time,explain:explain,phone:phone,qq:qq,wechat:wechat,money:money,type:type,coupon_type:coupon_type},function(data){
+            $.post("{:url('Order/confirm_offline')}",{acc_id:acc_id,service:service,length_time:length_time,explain:explain,phone:phone,qq:qq,wechat:wechat,money:money,type:type,coupon_type:coupon_type},function(data){
                       if(data.code == 1){
                         layui.use('layer',function(){
                         layer.msg(data.msg)})

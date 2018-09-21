@@ -83,6 +83,11 @@ class User extends Common
 			//成功时删除数据库数据
 			$ras = Db::table('hn_head_examine')->where('uid',$uid)->delete();
 			if($ras){
+				$title = '头像审核';
+				$text = '您的头像审已经通过';
+				$send_id = 0;
+				$rec_id = $uid;
+				$this->message_add($title,$text,$send_id,$rec_id);
 				return json(['code' => 1,'msg'=> '成功']);
 			}else{
 				return json(['code' => 2,'msg'=> '失败，错误码002']);
@@ -106,6 +111,11 @@ class User extends Common
 		$res = Db::table('hn_head_examine')->where('uid',$uid)->delete();
 
 		if($res){
+			$title = '头像审核';
+			$text = '您的头像审核未通过，请重新上传';
+			$send_id = 0;
+			$rec_id = $uid;
+			$this->message_add($title,$text,$send_id,$rec_id);
 			return json(['code' => 1,'msg'=> '成功']);
 		}else{
 			return json(['code' => 2,'msg'=> '失败']);

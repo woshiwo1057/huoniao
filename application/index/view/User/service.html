@@ -57,7 +57,15 @@
                 </span>
                 {switch name="$v.status"}
                   {case value='0'}<span>待审核</span><span class="xiaoshou">删除</span><a href="#"></a>{/case}
-                  {case value='1'}<span>审核成功</span><span class="xiaoshou">下架服务</span><a href="#" attr_id="{$v.id}" class="edit">修改服务价格</a>{/case}
+                  {case value='1'}
+                  {if condition="$v['type'] == 1"}
+                  <span>审核成功</span><span class="xiaoshou lower" attr_id="{$v.id}"  type="2">下架服务</span>
+                  <a href="#" attr_id="{$v.id}" class="edit">修改服务价格</a>
+                  {else /}
+                   <span>审核成功</span><span class="xiaoshou lower" attr_id="{$v.id}"  type="1">上架服务</span>
+                  <a href="#" attr_id="{$v.id}" class="edit">修改服务价格</a>
+                  {/if}
+                  {/case}
                   {case value='2'}<span>审核失败</span><span class="xiaoshou">删除记录</span>{/case}
                 {/switch}
                 
@@ -71,6 +79,28 @@
 			</div>
 
 		</div>
+    <script type="text/javascript">
+      $(function(){
+        $('.lower').click(function(){
+          
+          var id = $(this).attr('attr_id');
+          var type = $(this).attr('type');
+
+          $.post("{:url('User/up_down')}",{id:id,type:type},function(data){
+
+            if(data.code == 1){
+              alert(data.msg)
+              window.location.reload()
+            }else if(data.code == 2){
+              alert(data.msg)
+            }else{
+              alert('未知错误')
+            }
+          },'json')
+        })
+
+      })
+    </script>
     <script type="text/javascript">
     $(function(){
         $('.if-have').on('click', '.edit', function(e){

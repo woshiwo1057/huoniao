@@ -1,0 +1,140 @@
+{include file="public/header"}
+<link href="/static/index/css/common.css" rel="stylesheet" />
+{include file="public/sidebar"}
+
+
+<style type="text/css">
+	.table-top {margin: 20px 0}.table-top td {padding: 15px}.table-top td:nth-child(even) {width: 200px}.card-box {display: flex}.card-box table td {padding: 10px}.jian-img-box {height: 500px;width: 500px;overflow: hidden}.jian-img-box img {width: 100%}h3.title {font-size: 20px;margin: 10px 0}.miva-btn {float: right;position: relative;left: -40%;top: -40px;padding: 8px 40px !important }
+	.order-main.miva-join-page input {
+		border: 1px solid #ccc;
+	}
+</style>
+
+<section class="Hui-article-box">
+	<div class="Hui-article">
+
+		<div style="margin-left: 15px" class="order-main miva-join-page">
+			<table style="width:800px" class="table-top" border="0" cellspacing="0" cellpadding="0">
+				<tr>
+					<td>订单编号:</td>
+					<td>{$data.order_id}</td>
+					<td>订单状态:</td>
+					<td>{switch name="$data.type"}
+						{case value="1"}进行中{/case}
+						{case value="2"}已完成{/case}
+						{/switch}
+					</td>
+				</tr>
+				<tr>
+					<td>昵称:</td>
+					<td>{$data.name}</td>
+					<td>下单时间:</td>
+					<td>{:date('Y-m-d H:i:s',$data.addtime)}</td>
+				</tr>
+				<tr>
+					<td>鉴定师昵称:</td>
+					<td>{$data.acc_name}</td>
+					<td>支付方式:</td>
+					<td>微信支付</td>
+				</tr>
+				<tr>
+					<td>服务项目:</td>
+					<td>{$data.identify}</td>
+					<td>服务价格:</td>
+					<td>{$data.price}</td>
+				</tr>
+				<tr>
+			</table>
+
+			<h3 class="title">生成鉴定卡: <span style="color: red;font-size: 12px;">(所有项都必填!)</span></h3>
+			<div class="card-box">
+				<form action="{:url('Identify/identify_add')}" method="post">
+				<table style="width: 800px" border="" cellspacing="0" cellpadding="0">
+					<tr>
+						<td>模板</td>
+						<td>
+							<span ><input type="radio" name="type" checked > &nbsp;&nbsp;&nbsp;&nbsp;男版</span>
+							<span ><input type="radio" name="type" > &nbsp;&nbsp;&nbsp;&nbsp;女版</span>
+						</td>
+					</tr>
+					<tr>
+						<td>昵称</td>
+						<td><input type="text" name="" value="{$data.name}" placeholder="请输入昵称" readonly="readonly" required="required"/></td>
+					</tr>
+					<tr>
+						<td>特长</td>
+						<td><input type="text" name="trait"  value="" placeholder="请输入特长" required="required"/></td>
+					</tr>
+					<tr>
+						<td>市场值</td>
+						<td><input type="text" name="value_1" required="required"></td>
+					</tr>
+					<tr>
+						<td>诱惑值</td>
+						<td><input type="text" name="value_2" required="required"></td>
+					</tr>
+					<tr>
+						<td>活跃值</td>
+						<td><input type="text" name="value_3" required="required"></td>
+					</tr>
+					<tr>
+						<td>心动值</td>
+						<td><input type="text" name="value_4" required="required"></td>
+					</tr>
+					<tr>
+						<td>主音色</td>
+						<td>
+							<div>
+								<input type="text" name="timbre_1"  value="" placeholder="请输入音色名" required="required"/>
+								<input type="text" name="timbre_val_1"  value="" placeholder="请输入音色值"required="required" />
+							</div>
+							<div>
+								<input type="text" name="timbre_2"  value="" placeholder="请输入音色名" required="required"/>
+								<input type="text" name="timbre_val_2" value="" placeholder="请输入音色值" required="required"/>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>辅音色</td>
+						<td>
+							<div>
+								<input type="text" name="tone_1"  value="" placeholder="请输入音色名" required="required"/>
+								<input type="text" name="tone_val_1"  value="" placeholder="请输入音色值" required="required"/>
+							</div>
+							<div>
+								<input type="text" name="tone_2"  value="" placeholder="请输入音色名" required="required"/>
+								<input type="text" name="tone_val_2"  value="" placeholder="请输入音色值" required="required"/>
+							</div>
+							<div>
+								<input type="text" name="tone_3"  value="" placeholder="请输入音色名" required="required"/>
+								<input type="text" name="tone_val_3"  value="" placeholder="请输入音色值" required="required"/>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>最佳伴侣</td>
+						<td><input type="text" name="mate" value="" placeholder="请输入最佳伴侣" required="required"/></td>
+					</tr>
+					<tr>
+						<td>音色总分</td>
+						<td><input type="text" name="timbre_value" value="" placeholder="请输入音色总分" required="required"/></td>
+					</tr>
+					<tr>
+						<td>鉴音师</td>
+						<td><input type="text" name="acc_name" id="" value="{$data.acc_name}" readonly="readonly" placeholder="请输入鉴音师" /></td>
+					</tr>
+				</table>
+					<br>
+					<br>
+					<br>
+					<input type="submit" value="生成" class="miva-btn miva-btn-act">
+				</form>
+				<div class="jian-img-box" style="margin-left: 5px;">
+					<img src="http://placehold.it/500x500" />
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+		{include file="public/footer"}

@@ -19,9 +19,15 @@
 				<!--在线状态--><span>下线</span>
 				{/if}
 
+
 			</div>
 				<!--用户信息-->
 			<div class="user-info"><span>{$user_data.nickname}</span>
+                {if condition="$user_data.down == 2"}
+                <span style="margin-left:100px;color:#FBC94C;">线下接单已开启</span>
+                {else /}
+                <span style="margin-left:100px;color:#FBC94C;">线下接单已关闭</span>
+                {/if}
 				<div class="user-id"><span>ID:{$user_data.uid}</span><span><i class="layui-icon layui-icon-fire"></i>{$user_data.hot}</span></div>
 				<div class="tab">个性签名:<span>{$user_data.table}</span></div>
 			</div>
@@ -29,13 +35,10 @@
 				<div style="height: 140px; width: 45%;" id="gift" class="swiper-container">
 					<div style="width: 100% !important" class="gift-msg swiper-wrapper">
 						<!--一条-->
-                        {foreach name="song_data" item="v"}
 						<div class="msg-box swiper-slide">
-							<div class="msg"><span class="time">{:date('H:s' , $v['time'])}</span><span class="body"><span>{$v.user_name}</span> 赠送给 
-                            <a href="{:url('Index/user',['id' => $v['acc_id']])}" style="color:red">{$v.acc_name}</a><span style="color:black">{$v.num}个{$v.name}</span></span>
+							<div class="msg"><span class="time"><?php echo rand(06,23)?>:<?php echo rand(0,59)?></span><span class="body"><span>蝴蝶为谁开~</span> 赠送给 无缘的缘分<span>1个小礼物 <img src="images/png/ea5cd4eeed76a59fac1f8184acc2c695.png"/></span></span>
 							</div>
 						</div>
-                        {/foreach}
 						<!--一条
 						<div class="msg-box swiper-slide">
 							<div class="msg"><span class="time"><?php //echo rand(06,23)?>:<?php //echo rand(0,59)?></span><span class="body"><span>N个网名用不完</span> 赠送给 冷月妖娆 ヽ由命<span>1个小礼物 <img src="images/png/ea5cd4eeed76a59fac1f8184acc2c695.png"/></span></span>
@@ -656,7 +659,6 @@
 
                             console.log(parseInt($('[data-main='+ id +']').find('[data-item=dan]').html()))
                         })
-
 						/*
 						$('.liwu').click(function(){
 							var gift_id = $(this).attr('gift_id')//礼物ID
@@ -911,12 +913,20 @@
 						<img class="user-pic one" src="__IMGS__php.jpg" alt="">
 						{/if}   
 						<div class="info-box">
-							<div class="money"><span>￥{$service_data.pric}</span>/小時</div>
+							<div class="money"><span>￥199</span>/小时</div>
 							<div class="tip-box"><span>{$service_data.project_grade_name}</span></div>
-							<div class="max-time"><img src="" alt=""><span>接单时长:{$service_data.length_time/3600} h</span></div>
+							<div class="max-time"><img src="" alt=""><span>接单时长:{$service_data.length_time/60} min</span></div>
 							<div class="audio-box"><img src="__IMG__icon-play.png" alt=""><span>0 S</span><audio src="" style="display:none"></audio><img src="__IMG__icon-auido.png" alt=""></div>
 						</div>
-						<a href="{:url('Order/index',['id' => $user_data['uid'],'project' => $service_data['project'],'project_id' => $service_data['project_id']])}"><span class="submit-btn">立即下单</span></a>
+                        {if condition="$user_data.down == 2"}
+						<a href="{:url('Order/offline',['id' => $user_data['uid'],'project' => $service_data['project'],'project_id' => $service_data['project_id']])}">
+                            
+                            <span class="submit-btn">立即下单</span>
+                         </a>
+                            {else /}
+                            <p class="submit-btn" style="background:#999999;">立即下单</p>
+                            {/if}
+                       
 					</div>
 					<script type="text/javascript">
 						$('.tab-title').on('click', 'span', function() {
@@ -930,18 +940,23 @@
 								
 								console.log(data)
 								var uid = "{$user_data['uid']}";
-								//https://csq.huoniaopeiwan.com/index/order/index/id/
-								var wow = 'http://localhost/huoniao/public/index.php/index/order/index/id/'+{$user_data['uid']}+'/project/'+project+'/project_id/'+project_id;
+								//http://localhost/huoniao/public/index.php/index/order/offline/id/
+								var wow = 'https://csq.huoniaopeiwan.com/index/order/offline/id/'+{$user_data['uid']}+'/project/'+project+'/project_id/'+project_id;
 								str += `
 										<img src="${data.project_img}" alt="">
 									
 										<div class="info-box">
-											<div class="money"><span>￥${data.pric}</span>/小時</div>
+											<div class="money"><span>￥199</span>/小時</div>
 											<div class="tip-box"><span>${data.project_grade_name}</span></div>
-											<div class="max-time"><img src="" alt=""><span>接单时长:${data.length_time/3600} h</span></div>
+											<div class="max-time"><img src="" alt=""><span>接单时长:${data.length_time/60} min</span></div>
 											<div class="audio-box"><img src="__IMG__icon-play.png" alt=""><span>0 S</span><audio src="" style="display:none"></audio><img src="__IMG__icon-auido.png" alt=""></div>
 										</div>
-										<a href="${wow}"><span class="submit-btn">立即下单</span></a>`
+                                        {if condition="$user_data.down == 2"}
+										<a href="${wow}"><span class="submit-btn">立即下单</span></a>
+                                        {else }
+                                        <p class="submit-btn" style="background:#999999;">立即下单</p>
+                                        {/if}
+                                        `
 
 								$('.order-info').html(str)
 

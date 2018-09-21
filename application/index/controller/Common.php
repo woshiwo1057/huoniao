@@ -38,17 +38,22 @@ class Common extends \think\Controller
         	
 		$menus_index = $this->menus_index();
 
+        $num = 0;
+
         if(isset($_SESSION['user'])){
             $less_user_data = $this->user_data();
+            $num = $this->is_new();
 
-            $this->assign(['less_user_data' => $less_user_data]);
+            $this->assign(['less_user_data' => $less_user_data,
+                            'num' => $num]);
         }
         
         
 		$index = 'index';
 		$this->assign([
 			'menus_index' =>  $menus_index,
-			'index' => $index
+			'index' => $index,
+            'num' => $num
 					]);
 		
 		
@@ -89,7 +94,72 @@ class Common extends \think\Controller
 
 	}
 
+    //去重
+    public function out_repeat($arr,$key){     
+            //建立一个目标数组  
+            $res = array();        
+            foreach ($arr as $value) {           
+               //查看有没有重复项  
+               if(isset($res[$value[$key]])){  
+                  unset($value[$key]);  //有：销毁  
+               }else{    
+                  $res[$value[$key]] = $value;  
+               }    
+            }  
+            return $res;  
+        }
 
+
+
+
+
+    /*******************************************************站内信开始************************************************************************/
+     
+    //是否有新消息(此方法在构造函数中调用)
+    function is_new(){
+        $id = $_SESSION['user']['user_info']['uid'];
+       // $users = Session::get('users');
+        $message = \db('hn_message');//个人消息表
+        $res= $message->where(['rec_id'=> $id,'status'=>2])->count();
+        return $res;
+    }
+
+    //普通站内信发送（一般只发送一个人）
+    /*
+     * $title:标题
+     * $text：内容
+     * $send_id：发送者id（系统发送时，此ID为0）
+     * $rec_id：接收者id
+     *
+     * */
+    function message_add($title,$text,$send_id,$rec_id){
+        $message = \db('hn_message');//个人消息表
+        $message_text = \db('hn_message_text');
+        $text_id = $this->text_add($title,$text);
+        $data = [
+            'text_id' => $text_id,
+            'send_id'   => $send_id,
+            'rec_id'    => $rec_id,
+            'addtime'=> time()
+        ];
+        $res = $message->insert($data);
+    }
+
+
+    //消息文本插入
+    function text_add($title,$text){
+        $message_text = \db('hn_message_text');
+
+        $data = [
+            'title'=> $title,
+            'text' => $text,
+            'time' => time()
+        ];
+        $res = $message_text->insertGetId($data);
+        return $res;
+    }
+
+    /*************************************************************站内信结束************************************************************/
 	// 截取前8  用于排行榜   
 			  //参数说明: 用户信息    排序字段
 	public function ranking($data,$type)
@@ -144,6 +214,32 @@ class Common extends \think\Controller
             return $pric;
         }
     }
+
+    //声音鉴定订单生成
+    public function voice_order($acc_id,$price){
+        $uid = $_SESSION['user']['user_info']['uid'];
+        //$request = request();//think助手函数
+       // $data_get = $request->param();//获取get与post数据
+
+        $identify = \db('hn_identify');
+
+        $data = [
+            'uid'=> $uid,
+            'order_id' => time().str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT),
+            'acc_id' => $acc_id,
+            'price' => $price,
+            'addtime' => time(),
+            'identify'=> '声音鉴定',
+            'status' => 1
+        ];
+        $res = $identify->insert($data);
+        if($res){
+            return 1;
+        }else{
+            return 2;
+        }
+    }
+
 
 
 	//手机验证码			手机号  验证码

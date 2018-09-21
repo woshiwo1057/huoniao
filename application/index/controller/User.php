@@ -422,7 +422,10 @@ class User extends Common
 		//合并数组  以时间排序
 		$detailed_data = array_merge($recharge_data,$order_data,$gift_data,$order_get,$gift_get);
 		$type = "time";
+		//var_dump($detailed_data);die;
+		if(!empty($detailed_data)){
 		$detailed_data = $this->infinite_ranking($detailed_data,$type);
+		}
 		//var_dump($detailed_data);die;
 		$this->assign([
 					'user_data' => $user_data,
@@ -910,10 +913,20 @@ class User extends Common
 	{
 		//获取到提交数据
 		$data = Request::instance()->param();
+		//获取到用户ID
+		$id = $_SESSION['user']['user_info']['uid'];
 		//$tata['type'] == 1;  接单
 		//$tata['type'] == 2;  取消订单（删除数据）
 		//$tata['type'] == 3;  完成订单（用户确认订单完成，给陪玩师账户打钱） 将status改为4
 		if($data['type'] == 1){
+
+			//判断陪玩师是否有订单为完结 查 hn_order 表
+			$order_acc = Db::table('hn_order')->field('status')->where('acc_id',$id)->where('status','<',4)->where('status','>',0)->find();
+			if($order_acc['status']<4&&$order_acc['status']>1){
+				
+				return json(['code'=>8,'msg'=>'您尚有订单未完成，暂时无法接单，完成后再来吧']);
+			}
+
 			//这里是接单 通过$data['order_id']来操作  将status变为2
 			$res = Db::table('hn_order')->where('id', $data['order_id'])->update(['status' => 2]);
 			if($res){
@@ -981,6 +994,7 @@ class User extends Common
 	//我的消息控制器
 	public function msg()
 	{
+		/*
 		//获取到用户ID
 		$id = $_SESSION['user']['user_info']['uid'];
 
@@ -989,8 +1003,54 @@ class User extends Common
 
 		//之后会有其他消息类型  完了数组合并
 		$this->assign(['msg_data' => $msg_data]);
+		*/
+		//获取到用户ID
+		$id = $_SESSION['user']['user_info']['uid'];
+
+		$request = request();//think助手函数
+        $data_get = $request->param();//获取get与post数据
+        
+        $message = \db('hn_message');//个人消息表
+        $where['m.is_del'] = 1;
+        $where['m.rec_id'] = $id;
+        $w = '';
+        if(isset($data_get['type'])&&$data_get['type']){
+            if($data_get['type'] ==1){
+                $where['m.status'] = 2;//未读
+            }elseif($data_get['type'] == 2){
+                $where['m.status'] = 1;//已读
+            }
+            $w = $data_get['type'];
+        }
+
+        $data_arr = $message->alias('m')->join('hn_message_text a','m.text_id = a.id')->field('m.id,m.status,a.time,a.text,a.title')->where($where)->order('m.id desc')->paginate(25)->appends($w);
+        $page = $data_arr->render();
+        $this->assign(
+            [
+                'data_arr' => $data_arr,
+                'page' => $page,
+                //'type' => $data_get['type']
+            ]
+        );
+
+       // var_dump($data_arr);die;
 		return $this->fetch('User/msg');
 	}
+
+	//改变消息状态Ajax
+	public function change_msg()
+	{
+		$msg_id = Request::instance()->param('id');
+		
+		$res = Db::table('hn_message')->where('id',$msg_id)->setField('status', 1);
+
+		if($res){
+			return 1;
+		}else{
+			return 2;
+		}
+	}
+	
 
 	//我的接单控制器
 	public function receipt()
@@ -1407,6 +1467,8 @@ class User extends Common
 		}
 		//修改数据
 		$res = Db::table('hn_apply_project')->where('id', $data['id'])->update(['pric' => $data['pric']]);
+			//修改陪玩师表数据
+		Db::table('hn_accompany')->where('user_id',$uid)->update(['pice' => $data['pric']]);
 
 		if($res){
 			return json(['code' => 2 , 'msg' => '修改成功']);
@@ -1414,9 +1476,22 @@ class User extends Common
 			return json(['code' => 3 , 'msg' => '操作失败']);
 		}
 
-
-
 	}
+
+	//下上架服务项目
+	public function up_down()
+	{
+		$data = Request::instance()->param();
+		
+		$res = Db::table('hn_apply_project')->where('id',$data['id'])->update(['type' => $data['type']]);
+
+		if($res){
+			return json(['code' => 1 , 'msg' => '成功']);
+		}else{
+			return json(['code' => 2 , 'msg' => '操作失败，请重试']);
+		}
+	}
+
 
 
 	//开启服务

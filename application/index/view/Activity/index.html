@@ -106,7 +106,7 @@
 				<div data-item="shaiBtn"  class="miva-screen-btn-admin xiaoshou" cheap="1">
 					<i class="layui-icon layui-icon-align-right"></i> 8元专区
 				</div>
-				<div data-item="shaiBtn" class="miva-screen-btn xiaoshou" cheap="2">折扣专区</div>
+				<!--<div data-item="shaiBtn" class="miva-screen-btn xiaoshou" cheap="2">折扣专区</div>-->
 			
 			</div>
 
@@ -222,13 +222,13 @@
 	
 		$('.miva-acc-tab-box').on('click','a',function(){
 
-			//筛选
+			//筛选   http://localhost/huoniao/public/index.php/index/index/user/id/${a.uid}
 			$.post("{:url('Activity/screen')}",{project:project,project_id:projectId,sex:sex,type:type},function(res){
 console.log(res)
 				var str = ''
 					for(a of res){
 						str += `<li>
-									<a href="" class="miva-star-items">
+									<a href="https://csq.huoniaopeiwan.com/index/index/user/id/${a.uid}" class="miva-star-items">
 										<div class="miva-star-pic">
 												<img src="${a.head_img || '__IMG__default.jpg'}" />
 										</div>
@@ -251,7 +251,7 @@ console.log(res)
 													<span>${a.hot}</span>
 												</td>
 												<td class="miva-star-info-right">
-													<span class="star-price">￥${a.pice}/小时</span>
+													<span class="star-price">￥${a.pric}/小时</span>
 												</td>
 											</tr>
 										</table>

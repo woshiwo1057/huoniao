@@ -47,9 +47,10 @@ class Index  extends Common
     	$acc_data = Db::table('hn_user')
                     ->alias('u')
                     ->join('hn_accompany a','u.uid = a.user_id')
-                    ->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num')
+                    ->join('hn_apply_project p' , 'a.project_id = p.project_id')
+                    ->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num,p.project_name,u.sex,a.city')
                     ->where('a.status',1)->limit('0,15')->select();
-
+            $acc_data = $this->out_repeat($acc_data,'nickname');
   //var_dump($acc_data);die;
     	//优质新人  先注册的排前面（15天内）
     	$new_data =	Db::table('hn_accompany')->alias('a')
@@ -291,8 +292,21 @@ class Index  extends Common
       
 
         //查询几条送礼物的数据去循环
-        //$song_data = Db::table('hn_give_gift')->->field('user_id,acc_id')->limit(10)->select();
+        $song_data = Db::table('hn_give_gift')
+                ->alias('g')
+                ->join('hn_user u', 'g.user_id = u.uid')
+                ->join('hn_gift f', 'f.id = g.gift_id')
+                ->field('g.user_id,g.acc_id,g.time,g.num,u.nickname user_name,f.name')
+                ->limit(7)
+                ->order('g.id desc')
+                ->select();
 
+        foreach ($song_data as $k => $v) {
+            $name = Db::table('hn_user')->field('nickname')->where('uid' ,$v['acc_id'])->find();
+            $song_data[$k]['acc_name'] = $name['nickname'];
+        }
+
+//var_dump($song_data);die;
         $this->assign([
             //陪玩师数据
             'user_data' => $user_data,
@@ -312,6 +326,8 @@ class Index  extends Common
             'comment_data' => $comment_data,
             'number' => $number,
             'is_follow' => $is_follow,
+            //送礼人与收礼人的数据
+            'song_data' => $song_data
 
             ]);
         return $this->fetch('Index/user');
@@ -523,6 +539,124 @@ class Index  extends Common
         }else{
             return ['code' => 3,'msg' => '操作失败，请重试'];
         }
+    }
+
+
+    //线下陪玩师详情 用户点进去看的地方  可以下线下单
+    public function offline_user()
+    {   
+        //获取到陪玩师ID
+        $id = Request::instance()->param('id');
+        //var_dump($id);die;
+        //查询陪玩师数据
+        $user_data = Db::table('hn_user')
+                        ->alias('u')
+                        ->join('hn_accompany a','u.uid = a.user_id')
+                        ->field('u.uid,u.nickname,u.head_img,u.age,a.table,a.status,a.hot,a.explain,a.height,a.weight,a.hobby,a.duty,a.acc_time,a.city,a.sexy,a.down')
+                        ->where('user_id',$id)
+                        ->find();
+        //查询相册数据
+        $album_data = Db::table('hn_user_album')->field('id,img_url')->where('user_id',$id)->limit(8)->select();
+        //查询礼物数据
+        $gift_data = Db::table('hn_gift')->field('id,name,pice,img_url')->select();
+        //查询服务项目(只查询第一个服务项目  其他的走Ajax)
+            //查出所有名字循环输出
+        $service_name = Db::table('hn_apply_project')->field('project_name,project_id,project')->where(['status' => 1, 'type' => 1,'uid' => $id,'project' =>1])->select();
+
+        $project_data = Db::table('hn_apply_project')->field('project,project_id,project_name,project_grade_name,pric,length_time')->where(['status' => 1, 'type' => 1,'uid' => $id])->find();
+        
+        if($project_data['project'] == 1){
+            //查游戏表
+            $game_data = Db::table('hn_game')->field('id,name,game_index_img')->where('id',$project_data['project_id'])->find();
+            $service_data = array_merge($project_data,$game_data);
+        }else if($project_data['project'] == 2){
+            //查娱乐表
+            $joy_data = Db::table('hn_joy')->field('id,name,joy_logo_img')->where('id',$project_data['project_id'])->find();
+            $service_data = array_merge($project_data,$joy_data);
+            $service_data['game_index_img'] = $joy_data['joy_logo_img']; //容错
+        }else{
+            $service_data = null;
+        }
+        //var_dump($service_data);die;
+        //查询评论数据
+        $comment_data = Db::table('hn_comment')
+                        ->alias('c')
+                        ->join('hn_user u','c.user_id = u.uid ')
+                        ->field('c.id,c.content,c.time,c.zan,u.nickname,u.head_img')
+                        ->where('acc_id',$id)
+                        ->order('id desc')
+                        ->limit(8)
+                        ->select();
+
+        //查询送礼人数据
+        $user_gift = Db::table('hn_give_gift')->field('user_id,egg_num')->where('acc_id',$id)->order('egg_num desc')->select();
+        $user_gift = $this->sort($user_gift);
+            
+        $sort_data = [];
+        foreach ($user_gift as $k => $v){
+           $user_header = Db::table('hn_user')->field('nickname,head_img')->where('uid',$k)->find();
+           $user_header['egg_num'] = $v;
+           $sort_data[] = $user_header;
+        }        
+       if($sort_data != NULL){
+            $sort_data =  $this->ranking($sort_data,$type='egg_num');
+        }
+       
+        //查询自己收到的礼物数据
+        $my_gift = Db::table('hn_give_gift')->field('gift_id,num')->where('acc_id',$id)->select(); 
+        $my_gift = $this->gift_sort($my_gift);
+        $sort_gift = [];
+      
+        foreach ($my_gift as $k => $v) {
+            $gift_header = Db::table('hn_gift')->field('img_url')->where('id',$k)->find();
+            $gift_header['num'] = $v;
+            $sort_gift[] =  $gift_header;
+        }
+
+        //统计此陪玩师关注数量  确定是否已关注
+        $follow = \db('hn_follow');
+        //获取到用户ID
+         $number = $follow->where('followed_user',$id)->count();
+        if(isset($_SESSION['user']['user_info']['uid'])){
+            $user_id = $_SESSION['user']['user_info']['uid'];
+           
+            $is_follow = $follow->where(['user_id'=>$user_id,'followed_user'=> $id,'status'=>1])->find();
+            if($is_follow){
+                $is_follow = 1;
+            }else{
+                $is_follow = 2;
+            }
+        }else{
+             $is_follow = 2;
+        }
+      
+
+        //查询几条送礼物的数据去循环
+        //$song_data = Db::table('hn_give_gift')->->field('user_id,acc_id')->limit(10)->select();
+
+        $this->assign([
+            //陪玩师数据
+            'user_data' => $user_data,
+            //相册数据
+            'album_data' => $album_data,
+            //礼物数据
+            'gift_data' => $gift_data,
+            //服务项目名
+            'service_name' => $service_name,
+            //服务项目（单个）
+            'service_data' => $service_data,
+            //礼物排序数据
+            'sort_data' => $sort_data,
+            //我的礼物数据
+            'sort_gift' => $sort_gift,
+            //评论数据
+            'comment_data' => $comment_data,
+            'number' => $number,
+            'is_follow' => $is_follow,
+
+            ]);
+        
+        return $this->fetch('Index/offline_user');
     }
 
 

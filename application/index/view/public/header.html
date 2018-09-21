@@ -76,9 +76,11 @@
         <a href="javascript:;"><i class="layui-icon layui-icon-layer"></i><span onclick="alert('暂未开放')">语音大厅</span></a>
         <a href="{:url('User/msg')}">
           <i class="layui-icon layui-icon-notice  "></i><span>消息</span>
-          <!-- 提示红点  
-           <i class="tip" style="display:none"></i>
-           -->
+            {if condition="$num != 0"}
+            <i class="tip" ></i>
+            {else /}
+            <i class="tip" style="display:none"></i>
+            {/if}
          
         </a>
       </div>

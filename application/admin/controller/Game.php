@@ -207,9 +207,11 @@ http://uploadimg-1257183241.piccd.myqcloud.com/2018-08-29/13d18d507c4cc89db8088e
 			for ($i=0; $i < $num ; $i++) { 
 
 				$data[$i]['type_name'] = $grade_data['type_name'][$i];
-				$data{$i}['game_id'] = $grade_data['id'];
+				$data[$i]['game_id'] = $grade_data['id'];
+				$data[$i]['pric'] = $grade_data['pric'][$i];
 			}
 
+			
 			$res = Db::name('hn_game_grade')->insertAll($data);
 
 			if($res){

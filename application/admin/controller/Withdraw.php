@@ -33,8 +33,14 @@ class Withdraw extends Common
 
 		//1.通过ID更改提现表对应字段
 		$res = Db::table('hn_withdraw_cash')->where('id',$data['id'])->update(['status' => 2,'admin_id' => $id]);
-	
+		//查出用户ID
+		$id = Db::table('hn_withdraw_cash')->field('user_id')->where('id',$data['id'])->find();
 		if($res){
+			$title = '提现审核成功';
+			$text = '金额已经到达您的账户，请注意查收，如有异常，请与工作人员联系';
+			$send_id = 0;
+			$rec_id = $id['user_id'];
+			$this->message_add($title,$text,$send_id,$rec_id);
 			return json(['code' => 1 , 'msg' => '操作成功']);
 		}else{
 			return json(['code' => 2 , 'msg' => '操作失败']);
@@ -60,6 +66,11 @@ class Withdraw extends Common
 		$res = Db::table('hn_withdraw_cash')->where('id',$data['id'])->update(['status' => 3,'admin_id' => $id]);
 
 		if($ras&&$res){
+			$title = '提现审核失败';
+			$text = '提现审核拒绝，金钱已经返还至您的余额里了，如有异常，请与工作人员联系';
+			$send_id = 0;
+			$rec_id = $withdraw_data['user_id'];
+			$this->message_add($title,$text,$send_id,$rec_id);
 			return json(['code' => 1 , 'msg' => '操作成功']);
 		}else{
 			return json(['code' => 2 , 'msg' => '操作失败']);

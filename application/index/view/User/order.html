@@ -55,9 +55,9 @@
              
               {if condition="$v['status'] == 1"}
                 <span>等待时长：</span>
-                <span><?php  $time = round((time()-$v['time'])/60);
+                <span><?php  $time = floor((time()-$v['time'])/60);
                     echo $time; ?>min</span>
-                      <?php  if($time>480){?>
+                      <?php  if($time>8){?>
                         <div class="out xiaoshou" order_id="{$v.id}" type="2">取消订单</div>
                       <?php }?>
               {/if}

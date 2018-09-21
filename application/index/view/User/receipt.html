@@ -57,11 +57,6 @@
                     <span  class="xiaoshou click" order_id="{$v.id}"  type="1">接单</span>
                   {/case}
                   
-                  {case value="2"}
-                    <span>订单进行中</span>
-                    <span class="xiaoshou click" order_id="{$v.id}" type="2">取消订单</span>
-                  {/case}
-                  
                   {case value="3"}
                     <span>等待用户点击订单完成</span>
                     <span>无操作</span>
@@ -107,7 +102,19 @@
                             layui.use('layer',function(){
                             layer.msg(data.msg)});
                             window.location.reload()
-                          }else if(data.msg == 4){
+                          }else if(data.code == 4){
+                            layui.use('layer',function(){
+                            layer.msg(data.msg)})
+                          }else if(data.code == 5){
+                            layui.use('layer',function(){
+                            layer.msg(data.msg)})
+                          }else if(data.code == 6){
+                            layui.use('layer',function(){
+                            layer.msg(data.msg)})
+                          }else if(data.code == 7){
+                            layui.use('layer',function(){
+                            layer.msg(data.msg)})
+                          }else if(data.code == 8){
                             layui.use('layer',function(){
                             layer.msg(data.msg)})
                           }else{

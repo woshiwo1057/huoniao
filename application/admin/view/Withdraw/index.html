@@ -86,8 +86,10 @@
 			$.post("{:url('Withdraw/ok')}",{id:id},function(data){
 				if(data.code == 1){
 					alert(data.msg)
+					window.location.reload()
 				}else if(data.code == 2){
 					alert(data.msg)
+					window.location.reload()
 				}else{
 					alert('未知错误')
 				}
@@ -104,8 +106,10 @@
 			$.post("{:url('Withdraw/no')}",{id:id},function(data){
 				if(data.code == 1){
 					alert(data.msg)
+					window.location.reload()
 				}else if(data.code == 2){
 					alert(data.msg)
+					window.location.reload()
 				}else{
 					alert('未知错误')
 				}

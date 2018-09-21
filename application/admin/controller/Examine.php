@@ -122,6 +122,11 @@ class Examine extends Common
 			//800 24*365 == 8760
 
 			if($rcs){
+				$title = '陪玩师审核成功';
+				$text = '您的陪玩师审核已经通过，快去接单吧';
+				$send_id = 0;
+				$rec_id = $data['user_id'];
+				$this->message_add($title,$text,$send_id,$rec_id);
 				Db::table('hn_apply_project')->insert($wow);
 				$this->success('成功','Examine/index');
 			}else{
@@ -170,6 +175,11 @@ class Examine extends Common
 				
 				
 				if($res){
+					$title = '服务项目审核成功';
+					$text = '您的服务项目已经通过，快去接单吧';
+					$send_id = 0;
+					$rec_id = $data['uid'];
+					$this->message_add($title,$text,$send_id,$rec_id);
 					return 1;
 				}else{
 					return 2;
@@ -178,6 +188,11 @@ class Examine extends Common
 				//审核不通过  改变状态  改变时间
 				$res = Db::table('hn_apply_project')->where('id', $data['id'])->update(['status' => 2,'time' => time()]);
 				if($res){
+					$title = '服务项目审核失败';
+					$text = '您的服务项目已审核失败，请重新检查资料再次上传';
+					$send_id = 0;
+					$rec_id = $data['uid'];
+					$this->message_add($title,$text,$send_id,$rec_id);
 					return 1;
 				}else{
 					return 2;
@@ -210,15 +225,25 @@ class Examine extends Common
 			$res = Db::table('hn_apply_acc')->where('user_id',$data['user_id'])->update(['real' => 3]);
 
 			if($res){
+				$title = '实名审核通过';
+				$text = '恭喜您的实名认证已经通过，可以开启线下接单服务了哦！';
+				$send_id = 0;
+				$rec_id = $data['user_id'];
+				$this->message_add($title,$text,$send_id,$rec_id);
 				return json(['code' => 1 , 'msg' => '操作成功']);
 			}else{
 				return json(['code' => 2 , 'msg' => '失败错误码002']);
 			}
 		}else{
 			//不同意 real 改为2
-			$res = Db::table('hn_apply_acc')->where('user_id',$data['user_id'])->update(['real' => 3]);
+			$res = Db::table('hn_apply_acc')->where('user_id',$data['user_id'])->update(['real' => 2]);
 
 			if($res){
+				$title = '实名审核失败';
+				$text = '请认真检查认证资料后再次上传';
+				$send_id = 0;
+				$rec_id = $data['user_id'];
+				$this->message_add($title,$text,$send_id,$rec_id);
 				return json(['code' => 1 , 'msg' => '操作成功']);
 			}else{
 				return json(['code' => 3 , 'msg' => '失败错误码003']);

@@ -33,7 +33,7 @@ class Joy extends Common
 				$url_data = $this->cos($file,$key);	
 				if($url_data['code'] == 0){
 					//成功
-					$joy_data['img_url'] = $this->img.$key; //将此路径存入表单
+					$joy_data['joy_logo_img'] = $this->img.$key; //将此路径存入表单
 				}
 			}
 
@@ -147,7 +147,8 @@ class Joy extends Common
 			for ($i=0; $i < $num ; $i++) { 
 
 				$data[$i]['type_name'] = $grade_data['type_name'][$i];
-				$data{$i}['joy_id'] = $grade_data['id'];
+				$data[$i]['joy_id'] = $grade_data['id'];
+				$data[$i]['pric'] = $grade_data['pric'][$i];
 			}
 
 			$res = Db::name('hn_joy_grade')->insertAll($data);
