@@ -49,14 +49,14 @@ class User extends Common
 		$id = $_SESSION['user']['user_info']['uid'];
 		
 		//查询用户数据
-		$user_data = Db::table('hn_user')->field('head_img,sex,nickname,penguin,table,account,change_name,type')->where('uid',$id)->find();
+		$user_data = Db::table('hn_user')->field('head_img,sex,nickname,penguin,table,account,change_name,type,neice')->where('uid',$id)->find();
 		//var_dump($user_data);die;
 		if($user_data['type'] == 1){
 			//用户是陪玩师
 			$user_data = Db::table('hn_user')
 								->alias('u')
 								->join('hn_accompany a','u.uid = a.user_id')       //详细地址 身高  体重  职业  爱好
-								->field('u.head_img,u.sex,u.nickname,u.penguin,u.table,u.account,u.change_name,u.type,a.address,a.height,a.weight,a.duty,a.hobby')
+								->field('u.head_img,u.sex,u.nickname,u.penguin,u.table,u.account,u.change_name,u.type,u.neice,a.address,a.height,a.weight,a.duty,a.hobby')
 								->where('uid',$id)
 								->find();
 		}
@@ -571,8 +571,10 @@ class User extends Common
 
 						//合并数组
 						$detailed_data = array_merge($recharge_data,$order_data,$gift_data,$order_get,$gift_get,$take_data);
+						if(!empty($detailed_data)){
 						$type = "time";
 						$detailed_data = $this->infinite_ranking($detailed_data,$type);
+						}
 						return json($detailed_data);
 
 			}else if($data['sonType'] == 2){
@@ -616,9 +618,15 @@ class User extends Common
 						}
 					}
 				//合并数据
+
 				$recharge_data = array_merge($recharge_data,$order_get,$gift_get);
-				$type = "time";
-				$recharge_data = $this->infinite_ranking($recharge_data,$type);
+
+				if(!empty($recharge_data)){
+					$type = "time";
+					$recharge_data = $this->infinite_ranking($recharge_data,$type);
+					
+				}
+
 				return json($recharge_data);
 			}else if($data['sonType'] == 3){
 				//资金支出
@@ -643,8 +651,10 @@ class User extends Common
 
 				//合并数组
 				$detailed_data = array_merge($order_data,$gift_data);
+				if(!empty($detailed_data)){
 				$type = "time";
 				$detailed_data = $this->infinite_ranking($detailed_data,$type);
+				}
 				return json($detailed_data);
 			}
 
@@ -682,14 +692,16 @@ class User extends Common
 
 				//合并数组
 				$egg_data = array_merge($diamond_data,$gift_data);
+				if(!empty($egg_data)){
 				$type = "time";
 				$egg_data = $this->infinite_ranking($egg_data,$type);
+				}
 				//var_dump($egg_data);die;
 				return json($egg_data);
 			}else if($data['sonType'] == 2){
 				//鸟蛋收入明细
 				//1.查询充值表
-				$diamond_data = Db::table('hn_recharge_diamond')->field('time,type,diamond')->where('user_id',$id)->order('id desc')->limit('9')->select();
+				$diamond_data = Db::table('hn_recharge_diamond')->field('time,type,diamond')->where(['user_id' => $id , 'status' => 1])->order('id desc')->limit('9')->select();
 				foreach ($diamond_data as $k => $v){
 					if($v['type'] == 0){
 						$diamond_data[$k]['type'] = '余额';
@@ -705,8 +717,10 @@ class User extends Common
 
 				}
 
+				if(!empty($diamond_data)){
 				$type = "time";
 				$diamond_data = $this->infinite_ranking($diamond_data,$type);
+				}
 				return json($diamond_data);
 
 			}else if($data['sonType'] == 3){
@@ -720,8 +734,10 @@ class User extends Common
 					$gift_data[$k]['time'] = $v['time'];
 				}
 
+				if(!empty($gift_data)){
 				$type = "time";
 				$gift_data = $this->infinite_ranking($gift_data,$type);
+				}
 				return json($gift_data);
 			}
 		}
@@ -1499,10 +1515,53 @@ class User extends Common
 	{
 		//获取用户ID
 		$uid = $_SESSION['user']['user_info']['uid'];
-		//查询实名认证字段
-		$real = Db::table('hn_accompany')->field('real,up,down')->where('user_id',$uid)->find();
+		//查询陪玩师必要信息
+		$real = Db::table('hn_accompany')->field('real,up,down,wb_list')->where('user_id',$uid)->find();
 		
-		$this->assign(['real' => $real]);
+		if($real['down'] == 2){
+			$longitude = Db::table('hn_accompany')->field('lng,lat')->where('user_id',$uid)->find();
+
+			$wb_id = explode(',', $real['wb_list']);
+
+			$wb_data = Db::table('hn_netbar')->where(['id' => ['in' , $wb_id] ,'status' => 1 , 'examine_type' => 2])->select();
+
+			$data = [];
+	        foreach ($wb_data as $k => $v){
+	        	$data[$k] = $v;
+	        			//$lat1, $lng1, $lat2, $lng2
+	        	$data[$k]['length'] = $this->calcDistance($longitude['lat'],$longitude['lng'],$v['lat'] ,$v['lng']);
+	        }
+			
+
+		}else{
+
+			//1.查询陪玩师的经纬度
+			$longitude = Db::table('hn_accompany')->field('lng,lat')->where('user_id',$uid)->find();
+
+
+				$array = $this->calcScope($longitude['lat'],$longitude['lng']);
+
+	        	$where['lat'] = array(array('egt',$array['minLat']),array('elt',$array['maxLat']),'and');
+	        	$where['lng'] = array(array('egt',$array['minLng']),array('elt',$array['maxLng']),'and');
+	        	
+	        	$where['status'] = 1;
+	        	$where['examine_type'] = 2;
+
+	        $wb_data = db('hn_netbar')->where($where)->select();
+
+	        $data = [];
+	        foreach ($wb_data as $k => $v){
+	        	$data[$k] = $v;
+	        			//$lat1, $lng1, $lat2, $lng2
+	        	$data[$k]['length'] = $this->calcDistance($longitude['lat'],$longitude['lng'],$v['lat'] ,$v['lng']);
+	        }
+	 
+	    }
+
+//var_dump($data);die;
+
+		$this->assign(['real' => $real,
+						'data' => $data]);
 		return $this->fetch('User/open_service');
 	}
 
@@ -1521,7 +1580,7 @@ class User extends Common
 				$res = Db::table('hn_accompany')->where('user_id',$uid)->update(['up' => 2]);
 
 				if($res){
-					return json(['code' => 1 , 'msg' => '成功']);
+					return json(['code' => 1 , 'msg' => '开启成功']);
 				}else{
 					return json(['code' => 2 , 'msg' => '操作失败，请重试']);
 				}
@@ -1531,29 +1590,35 @@ class User extends Common
 				$res = Db::table('hn_accompany')->where('user_id',$uid)->update(['up' => 1]);
 
 				if($res){
-					return json(['code' => 1 , 'msg' => '成功']);
+					return json(['code' => 1 , 'msg' => '关闭成功']);
 				}else{
 					return json(['code' => 2 , 'msg' => '操作失败，请重试']);
 				}
 
 			}
 		}else if($data['type'] == 2){
+
 				//线下服务
 			if($data['xianxia'] == 1){
+				//var_dump($data);die;
 				//这里开启
-				$res = Db::table('hn_accompany')->where('user_id',$uid)->update(['down' => 2]);
+				$list = implode(',' , $data['netBar']).',';
+
+
+				$res = Db::table('hn_accompany')->where('user_id',$uid)->update(['down' => 2,'wb_list' => $list]);
 
 				if($res){
-					return json(['code' => 1 , 'msg' => '成功']);
+					return json(['code' => 1 , 'msg' => '开启成功']);
 				}else{
 					return json(['code' => 2 , 'msg' => '操作失败，请重试']);
 				}
 			}else{
+				//var_dump($data);die;
 				//这里关闭
-				$res = Db::table('hn_accompany')->where('user_id',$uid)->update(['down' => 1]);
+				$res = Db::table('hn_accompany')->where('user_id',$uid)->update(['down' => 1,'wb_list' => '']);
 
 				if($res){
-					return json(['code' => 1 , 'msg' => '成功']);
+					return json(['code' => 1 , 'msg' => '关闭成功']);
 				}else{
 					return json(['code' => 2 , 'msg' => '操作失败，请重试']);
 				}

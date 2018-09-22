@@ -48,7 +48,7 @@ class Order extends Common
 					->join('hn_coupon c' , 'cu.cid = c.id')
 					->field('c.id,c.name,c.discount')
 					->where(['uid' => $user_id,'status' => 1])->find();
-		
+	
 		$this->assign([ 'acc_data' => $acc_data,
 					   'user_data' => $user_data,
 					 'coupon_data' => $coupon_data]);
@@ -88,15 +88,15 @@ class Order extends Common
 						return json(['code'=>5,'msg'=>'请完成之前的订单后再来下单，谢谢']);
 			}
 			//这里是微信支付  因为没有回调  所以 die
-			echo '现在不能微信支付';die;
+			//echo '现在不能微信支付';die;
 			//价钱
-				//1.判断是否使用了优惠券
+				/*1.判断是否使用了优惠券
 				if($data['coupon_type'] != 0){
 					//查出优惠券优惠额度，用总价减去
 					$discount = Db::table('hn_coupon')->field('discount')->where('id',$data['coupon_type'])->find();
 					$data['price'] = $data['price']-$discount['discount'];
 				}
-			//$data['price'];
+			*///$data['price'];
 			
 			//订单号
 			$data['number'] = time().str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT);
@@ -113,6 +113,15 @@ class Order extends Common
 				$data['user_id'] = $user_id;
 				$data['time'] = time();
 				$data['status'] = 0;
+
+				//判断是否在合作网吧
+				if(isset($_SESSION['think']['wb_id'])){
+					$data['wb_id'] = $_SESSION['think']['wb_id'];
+				}
+				
+
+				/************************************************
+				                                 这里放在回调里写，需要判断是否支付成功
 				//判断是否在合作网吧
 				if(isset($_SESSION['think']['wb_id'])){
 					$data['wb_id'] = $_SESSION['think']['wb_id'];
@@ -133,6 +142,7 @@ class Order extends Common
 					Db::table('hn_cybercafe')->where('id',$wb_data['id'])->setInc('extract',$wb_money);
 					Db::table('hn_cybercafe')->where('id',$wb_data['id'])->setInc('not_extract',$wb_money);
 				}
+				**************************************************/
 				$ras = Db::table('hn_order')->insert($data);
 				return json(['code' => 6,'msg' => $code]);
 			}else{
@@ -254,7 +264,7 @@ class Order extends Common
 		$user_id = $_SESSION['user']['user_info']['uid']; 
 		$data = Request::instance()->param();
 		
-
+		
 		//容错处理
 		empty($data['explain'])?'':$data['explain'];
 		empty($data['wechat'])?'':$data['wechat'];
@@ -262,6 +272,7 @@ class Order extends Common
 		
 
 		if($data['type'] == 2){
+
 			//判断陪玩师是否在线 $data['acc_id']   hn_accompany   status == 1 在线 
 			$status = Db::table('hn_accompany')->field('status')->where('user_id',$data['acc_id'])->find();
 			if($status['status'] != 1){
@@ -279,20 +290,21 @@ class Order extends Common
 						return json(['code'=>5,'msg'=>'请完成之前的订单后再来下单，谢谢']);
 			}
 			//这里是微信支付  因为没有回调  所以 die
-			echo '现在不能微信支付';die;
+			//echo '现在不能微信支付';die;
 			//价钱
-				//1.判断是否使用了优惠券
+				/*1.判断是否使用了优惠券
 				if($data['coupon_type'] != 0){
 					//查出优惠券优惠额度，用总价减去
 					$discount = Db::table('hn_coupon')->field('discount')->where('id',$data['coupon_type'])->find();
 					$data['price'] = $data['price']-$discount['discount'];
 				}
-			//$data['price'];
+			*///$data['price'];
 			
 			//订单号
 			$data['number'] = time().str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT);
 			//将订单号存入session  做查询跳转使用
 			$_SESSION['user']['user_info']['order_number'] = $data['number'];
+			//var_dump($_SESSION['user']['user_info']['order_number']);die;
 			$code = $this->wechat_pay($user_id,$data['number'],$data['price']);
 
 			
@@ -304,8 +316,13 @@ class Order extends Common
 				$data['user_id'] = $user_id;
 				$data['time'] = time();
 				$data['status'] = 0;
-				
-				
+
+				//判断是否在合作网吧
+				/*
+				if(isset($_SESSION['think']['wb_id'])){
+					$data['wb_id'] = $_SESSION['think']['wb_id'];
+				}
+				*/
 				$ras = Db::table('hn_order')->insert($data);
 				return json(['code' => 6,'msg' => $code]);
 			}else{
@@ -363,23 +380,33 @@ class Order extends Common
 
 					//用户实际付的钱
 					$data['price'] = $data['pric'];
+
+					//组装数据存入order表
 					
+					$wow = [];
+					$wow['number'] = time().str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT);//订单号
+					$wow['acc_id'] = $data['acc_id'];
+					$wow['user_id'] = $user_id;
+					$wow['service'] = $data['service'];
+					$wow['length_time'] = $data['length_time'];
+					$wow['explain'] = $data['explain'];
+					$wow['phone'] = $data['phone'];
+					$wow['qq'] = $data['qq'];
+					$wow['wechat'] = $data['wechat'];
+					$wow['price'] = $data['price'];
+					$wow['time'] = time();
+					$wow['status'] = 1;
+					Db::table('hn_order')->insert($wow);
+	
 
 				
-					$code = $this->voice_order($data['acc_id'],$data['price']);		
+					$code = $this->voice_order($data['acc_id'],$data['price']);	
 
 					
-
+					$qq = Db::table('hn_user')->field('penguin')->where('uid',$data['acc_id'])->find();
 					if($code == 1){
-						$title = '您有声鉴订单';
-						$text = '快去接单吧！！！！！！！';
-						$send_id = 0;
-						$rec_id = $data['acc_id'];
-						$this->message_add($title,$text,$send_id,$rec_id);
-						$qq = Db::table('hn_user')->field('penguin')->where('uid',$data['acc_id'])->find();
-
 						$mom = ['code' => '1',
-									'msg' => '联系陪玩师,qq:'.$qq['penguin']
+									'msg' => '支付成功，联系陪玩师,qq:'.$qq['penguin']
 								];
 						return json($mom);
 					}else{
@@ -457,15 +484,15 @@ class Order extends Common
 						return json(['code'=>5,'msg'=>'请完成之前的订单后再来下单，谢谢']);
 			}
 			//这里是微信支付  因为没有回调  所以 die
-			echo '现在不能微信支付';die;
+			//echo '现在不能微信支付';die;
 			//价钱
-				//1.判断是否使用了优惠券
+				/*1.判断是否使用了优惠券
 				if($data['coupon_type'] != 0){
 					//查出优惠券优惠额度，用总价减去
 					$discount = Db::table('hn_coupon')->field('discount')->where('id',$data['coupon_type'])->find();
 					$data['price'] = $data['price']-$discount['discount'];
 				}
-			//$data['price'];
+			*///$data['price'];
 			
 			//订单号
 			$data['number'] = time().str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT);
@@ -482,26 +509,12 @@ class Order extends Common
 				$data['user_id'] = $user_id;
 				$data['time'] = time();
 				$data['status'] = 0;
+
 				//判断是否在合作网吧
 				if(isset($_SESSION['think']['wb_id'])){
 					$data['wb_id'] = $_SESSION['think']['wb_id'];
-
-					//给网吧钱
-						//1.通过 $data['wb_id'] 查hn_netbar(网吧入驻表) 联查hn_cybercafe(网吧管理员表) 查ratio（分成比例） $data['price']*ratio
-					$wb_data = Db::table('hn_netbar')
-						->alias('n')
-						->join('hn_cybercafe c' , 'n.c_id = c.id')
-						->field('c.ratio,c.id')
-						->where(['n.id' => $data['wb_id']])
-						->find();
-
-					$wb_money = $data['price']*$wb_data['ratio'];
-						//2.给网吧表 extract 添值
-					Db::table('hn_netbar')->where('id',$data['wb_id'])->setInc('extract',$wb_money);
-						//3.给网吧管理员表 extract not_extract添值
-					Db::table('hn_cybercafe')->where('id',$wb_data['id'])->setInc('extract',$wb_money);
-					Db::table('hn_cybercafe')->where('id',$wb_data['id'])->setInc('not_extract',$wb_money);
 				}
+				
 				$ras = Db::table('hn_order')->insert($data);
 				return json(['code' => 6,'msg' => $code]);
 			}else{

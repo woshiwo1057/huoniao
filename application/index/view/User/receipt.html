@@ -54,7 +54,12 @@
                   
                   {case value="1"}
                     <span>是否接单</span>
-                    <span  class="xiaoshou click" order_id="{$v.id}"  type="1">接单</span>
+                    <span  class="xiaoshou click" order_id="{$v.id}"  type="1" style=" color:red; ">接单</span>
+                  {/case}
+
+                  {case value="2"}
+                   <span>订单进行中</span>
+                    <span >无操作</span>
                   {/case}
                   
                   {case value="3"}

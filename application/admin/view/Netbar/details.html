@@ -16,21 +16,16 @@
 
 
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>网吧名称</label>
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>网咖名称</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="{$netbar_data.name}岁" disabled >
+				<input type="text" class="input-text" value="{$netbar_data.name}" disabled >
 			</div>
 		</div>
 
-		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>网吧缩略图</label>
-			<div class="formControls col-xs-8 col-sm-9">
-			<img src="{$netbar_data.img}"  style="widht:700;height:500px">
-			</div>
-		</div>
+	
 
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>网吧法人</label>
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>网咖法人</label>
 			<div class="formControls col-xs-8 col-sm-9">
 				<input type="text" class="input-text" value="{$netbar_data.legal_person}" disabled>
 			</div>
@@ -44,7 +39,7 @@
 		</div>		
 
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>网吧地址</label>
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>网咖地址</label>
 			<div class="formControls col-xs-8 col-sm-9">
 				<input type="text" class="input-text" value="{$netbar_data.location}" disabled>
 			</div>
@@ -57,34 +52,18 @@
 			</div>
 		</div>
 
-		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>公网IP</label>
-			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="{$netbar_data.ip}元" disabled>
-			</div>
-		</div>
+	
 
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>网吧提成（提成合计）</label>
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>网咖提成（提成合计）</label>
 			<div class="formControls col-xs-8 col-sm-9">
 				<input type="text" class="input-text" value="{$netbar_data.extract}级" disabled>
 			</div>
 		</div>
 
 
-		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>纬度值</label>
-			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="{$netbar_data.lat}级" disabled>
-			</div>
-		</div>
+		
 
-		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>经度值</label>
-			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="{$netbar_data.lng}级" disabled>
-			</div>
-		</div>
 		
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>入驻时间</label>
@@ -94,7 +73,7 @@
 		</div>
 
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>网吧状态</label>
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>网咖状态</label>
 			<div class="formControls col-xs-8 col-sm-9">
 			{if condition="$netbar_data.status == 1"}
 				<input type="text" class="input-text" value="正在营业" disabled>

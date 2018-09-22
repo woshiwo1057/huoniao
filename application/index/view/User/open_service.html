@@ -50,100 +50,40 @@
 				</div>
 
 				<div style="padding: 20px;" class="">
-					<i class="mui-icon mui-icon-location"></i><span>高新三路财富中心二期B座</span> <span style="color: #FBC94C; margin: 0 5px;">修改</span><em style="color: red; font-size: 12px;">(*位置越准确越有利于你接单哦!)</em>
+					<i class="mui-icon mui-icon-location"></i>
+					<input value="高新三路财富中心二期B座" style="width:233px; height:20px; border:0;border-bottom:1px solid #ddd;position: relative;top: 7px;" type="text">
+					 <span style="color: #FBC94C; margin: 0 5px;">修改</span><em style="color: red; font-size: 12px;">(*位置越准确越有利于你接单哦!)</em>
 				</div>
 
 				<div class="u-title "><span>附近网咖供您选择</span></div>
 
 				<div class="netBar-list-box">
 					<ul>
+					{foreach name="data" item="v"}
 						<li>
 							<div class="item-box">
 								<div class="netbar-img-box">
-									<img src="//placehold.it/200x800" />
-									<i class="select-btn"></i>
+								
+									<i class="select-btn" ></i>
 								</div>
 								<div class="net-title">
-									<span class="">太平洋网咖</span>
+									<span class="">{$v.name}</span>
 									<!--<em>选择</em>-->
-									<i class="select-btn"></i>
+									{if condition="$real['down'] == 1"}
+									<i class="select-btn"  wb_id="56" ></i> 
+									{/if}
 								</div>
-								<div class="net-txt">
-									<i class="mui-icon mui-icon-location"></i>
-									<span>高新区距您1.2km</span>
+								<div class="net-txt" style="margin-bottom:9px">
+									
+									<span style="padding-left:10px;">距您{$v.length/1000}km</span>
+									<br/>
+									<span style="padding-left:10px;"><a href="javascript:void(0);" title="{$v.location}" >{$v.location}</a></span>
 								</div>
 							</div>
 						</li>
+					{/foreach}
 						<!---->
-						<li>
-							<div class="item-box">
-								<div class="netbar-img-box">
-									<img src="//placehold.it/200x800" />
-									<i class="select-btn active"></i>
-								</div>
-								<div class="net-title">
-									<span class="">太平洋网咖</span>
-									<!--<em>选择</em>-->
-									<i class="select-btn"></i>
-								</div>
-								<div class="net-txt">
-									<i class="mui-icon mui-icon-location"></i>
-									<span>高新区距您1.2km</span>
-								</div>
-							</div>
-						</li>
-						<li>
-							<div class="item-box">
-								<div class="netbar-img-box">
-									<img src="//placehold.it/200x800" />
-									<i class="select-btn active"></i>
-								</div>
-								<div class="net-title">
-									<span class="">太平洋网咖</span>
-									<!--<em>选择</em>-->
-									<i class="select-btn"></i>
-								</div>
-								<div class="net-txt">
-									<i class="mui-icon mui-icon-location"></i>
-									<span>高新区距您1.2km</span>
-								</div>
-							</div>
-						</li>
-						<li>
-							<div class="item-box">
-								<div class="netbar-img-box">
-									<img src="//placehold.it/200x800" />
-									<i class="select-btn active"></i>
-								</div>
-								<div class="net-title">
-									<span class="">太平洋网咖</span>
-									<!--<em>选择</em>-->
-									<i class="select-btn"></i>
-								</div>
-								<div class="net-txt">
-									<i class="mui-icon mui-icon-location"></i>
-									<span>高新区距您1.2km</span>
-								</div>
-							</div>
-						</li>
-						<li>
-							<div class="item-box">
-								<div class="netbar-img-box">
-									<img src="//placehold.it/200x800" />
-									<i class="select-btn active"></i>
-								</div>
-								<div class="net-title">
-									<span class="">太平洋网咖</span>
-									<!--<em>选择</em>-->
-									<i class="select-btn"></i>
-								</div>
-								<div class="net-txt">
-									<i class="mui-icon mui-icon-location"></i>
-									<span>高新区距您1.2km</span>
-								</div>
-							</div>
-						</li>
-						<!---->
+						
 					</ul>
 				</div>
 
@@ -171,6 +111,9 @@
 				var xianshang = {$real['up']};
 				var xianxia = 	{$real['down']};
 
+				var netBar = [];
+
+
 
 
 			$(function() {
@@ -191,11 +134,11 @@
 							if(data.code == 1){
 								layui.use('layer',function(){
 								layer.msg(data.msg)})
-								setInterval(query,1500);
+								setInterval(query,1200);
 							}else if(data.code == 2){
 								layui.use('layer',function(){
 								layer.msg(data.msg)})
-								setInterval(query,1500);
+								setInterval(query,1200);
 							}else{
 								layui.use('layer',function(){
 								layer.msg('未知错误')})
@@ -209,11 +152,11 @@
 							if(data.code == 1){
 								layui.use('layer',function(){
 								layer.msg(data.msg)})
-								window.location.reload()
+								setInterval(query,1200);
 							}else if(data.code == 2){
 								layui.use('layer',function(){
 								layer.msg(data.msg)})
-								window.location.reload()
+								setInterval(query,1200);
 							}else{
 								layui.use('layer',function(){
 								layer.msg('未知错误')})
@@ -227,6 +170,8 @@
 					if(event.detail.isActive){
 
 						console.log("你启动了线下");
+						
+						
 
 						var real = `<div class="u-true-set-box">
 										<table align="center">
@@ -322,7 +267,7 @@
 									})
 								},
 								
-								btn2: function(index) {
+								btn2: function(index){
 									window.location.reload()
 									//mui("#line-down").switch().toggle()
 								},
@@ -335,16 +280,23 @@
 
 						})
 		}else{
+
+			if(netBar.length == 0 ){
+				alert('请选择网吧')
+				window.location.reload()
+				return false;
+			}
+
 			var type = 2
-			$.post("{:url('User/open_service_ajax')}",{type:type,xianxia:xianxia},function(data){
+			$.post("{:url('User/open_service_ajax')}",{type:type,xianxia:xianxia,netBar:netBar},function(data){
 				if(data.code == 1){
 					layui.use('layer',function(){
 					layer.msg(data.msg)})
-					setInterval(query,1500);
+					setInterval(query,1200);
 				}else if(data.code == 2){
 					layui.use('layer',function(){
 					layer.msg(data.msg)})
-					setInterval(query,1500);
+					setInterval(query,1200);
 				}else{
 					layui.use('layer',function(){
 					layer.msg('未知错误')})
@@ -361,11 +313,11 @@
 							if(data.code == 1){
 								layui.use('layer',function(){
 								layer.msg(data.msg)})
-								setInterval(query,1500);
+								setInterval(query,1200);
 							}else if(data.code == 2){
 								layui.use('layer',function(){
 								layer.msg(data.msg)})
-								setInterval(query,1500);
+								setInterval(query,1200);
 							}else{
 								layui.use('layer',function(){
 								layer.msg('未知错误')})
@@ -376,10 +328,18 @@
 				})
 
 				$('.item-box').on('click', function() {
+					var thisID = $(this).find('[wb_id]').attr('wb_id')
 					if(!$(this).find('.active')[0]) {
 						$(this).find('.select-btn').addClass('active')
+						netBar.push(thisID)
+						console.log(netBar)
 					} else {
 						$(this).find('.select-btn').removeClass('active')
+						var path = netBar.indexOf(thisID)
+						if (path > -1) {
+							netBar.splice(path, 1)
+						};
+						console.log(netBar)
 					}
 				})
 			})

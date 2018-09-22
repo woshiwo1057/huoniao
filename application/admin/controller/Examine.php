@@ -33,7 +33,7 @@ class Examine extends Common
 						->alias('a')
 						->join('hn_user u','a.user_id = u.uid')
 						->join('hn_game g','a.project_id = g.id')
-						->field('a.id,a.user_id,a.head_img,u.nickname,u.sex,a.real_name,a.table,a.province,a.city,a.address,a.height,a.weight,a.duty,a.hobby,a.sexy,a.acc_type,a.project,a.project_id,g.name,a.data_url,a.explain,a.card_photo,a.card_num,a.project_grade')->where('a.id',$id)->find();
+						->field('a.id,a.user_id,a.head_img,u.nickname,u.sex,a.real_name,a.table,a.province,a.city,a.address,a.height,a.weight,a.duty,a.hobby,a.sexy,a.acc_type,a.project,a.project_id,g.name,a.data_url,a.explain,a.card_photo,a.card_num,a.project_grade,a.birthday')->where('a.id',$id)->find();
 		
 		$grade = Db::table('hn_game_grade')->field('type_name')->where('id',$judge['project_grade'])->find();
 		$examine_data['grade_name'] = $grade['type_name'];
@@ -44,7 +44,7 @@ class Examine extends Common
 						->alias('a')
 						->join('hn_user u','a.user_id = u.uid')
 						->join('hn_joy j','a.project_id = j.id')
-						->field('a.id,a.user_id,a.head_img,u.nickname,u.sex,a.real_name,a.table,a.province,a.city,a.address,a.height,a.weight,a.duty,a.hobby,a.sexy,a.acc_type,a.project,a.project_id,j.name,a.data_url,a.explain,a.card_photo,a.card_num,a.project_grade')
+						->field('a.id,a.user_id,a.head_img,u.nickname,u.sex,a.real_name,a.table,a.province,a.city,a.address,a.height,a.weight,a.duty,a.hobby,a.sexy,a.acc_type,a.project,a.project_id,j.name,a.data_url,a.explain,a.card_photo,a.card_num,a.project_grade,a.birthday')
 						->where('a.id',$id)
 						->find();
 
@@ -62,12 +62,12 @@ class Examine extends Common
 		return $this->fetch('Examine/details');
 	}
 
-	//申请通过
+	//陪玩师申请通过
 	public function ok()
 	{	
 		if(Request::instance()->isPost()){
 			$data = Request::instance()->param();
-			
+		
 			//修改陪玩师申请表字段
 			if($data['acc_type']){
 				
@@ -98,10 +98,21 @@ class Examine extends Common
 			}else{
 				$this->error('数据错误,请联系客服人员');
 			}
-		//更新用户头像
-
-		Db::table('hn_user')->where('uid', $data['user_id'])->update(['head_img' => $data['head_img']]);
+		//更新用户头像，与年龄
+			$age = substr($data['birthday'],0,4);
+			$num = date('Y',time());
+			$age = $num - $age ;
+			unset($data['birthday']);
+		Db::table('hn_user')->where('uid', $data['user_id'])->update(['head_img' => $data['head_img'],'age' => $age]);
 		unset($data['head_img']);
+
+		$location = $this->address($data['address']);
+
+		if($location){
+            $data['lat'] = $location['lat'];
+            $data['lng'] = $location['lng'];
+        }
+
 
 		$rcs = Db::table('hn_accompany')->insert($data); //填入陪玩师表
 			//组装数据填入服务项目表
@@ -135,6 +146,12 @@ class Examine extends Common
 
 		}
 		
+	}
+
+	//陪玩师申请拒绝
+	public function no()
+	{
+		echo 1;die;
 	}
 
 	//陪玩师服务项目管理列表
@@ -219,10 +236,11 @@ class Examine extends Common
 	{
 		$data = Request::instance()->param();
 
-		
+	
 		if($data['status'] == 'ok'){
 			//同意 real 改为3
 			$res = Db::table('hn_apply_acc')->where('user_id',$data['user_id'])->update(['real' => 3]);
+			$res = Db::table('hn_accompany')->where('user_id',$data['user_id'])->update(['real' => 3]);
 
 			if($res){
 				$title = '实名审核通过';
@@ -237,6 +255,7 @@ class Examine extends Common
 		}else{
 			//不同意 real 改为2
 			$res = Db::table('hn_apply_acc')->where('user_id',$data['user_id'])->update(['real' => 2]);
+			$res = Db::table('hn_accompany')->where('user_id',$data['user_id'])->update(['real' => 2]);
 
 			if($res){
 				$title = '实名审核失败';

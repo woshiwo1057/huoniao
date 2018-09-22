@@ -103,7 +103,7 @@ class MicroPay
 		try{
 			$result = WxPayApi::orderQuery($config, $queryOrderInput);
 			
-			var_dump($result);die;
+			//var_dump($result);die;
 
 		} catch(Exception $e) {
 			Log::ERROR(json_encode($e));

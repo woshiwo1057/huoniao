@@ -14,7 +14,7 @@ class Netbar extends Common
 	//网吧列表
 	public function index()
 	{
-		$netbar_data = Db::table('hn_netbar')->field('id,c_id,name,img,legal_person,phone,addtime,status,examine_type')->select();
+		$netbar_data = Db::table('hn_netbar')->field('id,c_id,name,legal_person,phone,addtime,status,examine_type')->select();
 
 
 		$this->assign(['netbar_data' => $netbar_data]);
@@ -87,7 +87,7 @@ class Netbar extends Common
 	{
 
 		$id = Request::instance()->param('id');
-		$netbar_data = Db::table('hn_netbar')->field('id,c_id,name,img,legal_person,phone,location,business_license,ip,extract,lat,lng,addtime,status,examine_type')->where('id',$id)->find();
+		$netbar_data = Db::table('hn_netbar')->field('id,c_id,name,legal_person,phone,location,business_license,extract,addtime,status,examine_type')->where('id',$id)->find();
 
 		$this->assign(['netbar_data' => $netbar_data]);
 		return $this->fetch('Netbar/details');

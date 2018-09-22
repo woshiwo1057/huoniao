@@ -8,7 +8,7 @@
 				<div class="miva-header">
 					<!--<a data-go=zhanghu>账户充值</a>
 					|-->
-					<a >钻石充值</a>
+					<a >鸟蛋充值</a>
 				</div>
 				<!-- 账户充值 -
 				<table id='' class="miva-recharge">
@@ -50,23 +50,23 @@
 						</td>
 					</tr>
 				</table>-->
-				<!-- 钻石充值 -->
+				<!-- 鸟蛋充值 -->
 				<table id='zhanghu' class="miva-recharge">
 					<tr>
 						<td valign=top>账户余额:</td>
-						<td>{$user_data.currency} 钻石</td>
+						<td>{$user_data.currency} 鸟蛋</td>
 					</tr>
 					<tr>
 						<td valign=top>充值金额:</td>
 						<td>
 							<div class="miva-check-box">
 								<span class="check active">请选择充值额度</span>
-								<span class="check" data-val="5">50钻石</span>
-								<span class="check" data-val="10">100钻石</span>
-								<span class="check" data-val="50">500钻石</span>
-								<span class="check" data-val="100">1000钻石</span>
-								<span class="check" data-val="150">1500钻石</span>
-								<span class="check" data-val="200">2000钻石</span>
+								<span class="check" data-val="5">50鸟蛋</span>
+								<span class="check" data-val="10">100鸟蛋</span>
+								<span class="check" data-val="50">500鸟蛋</span>
+								<span class="check" data-val="100">1000鸟蛋</span>
+								<span class="check" data-val="150">1500鸟蛋</span>
+								<span class="check" data-val="200">2000鸟蛋</span>
 							</div>
 							<!-- 输入金额
 							<div class="miva-write">
@@ -266,15 +266,31 @@
 								return false
 							}
 						}
-						var recharge = $(this).attr('recharge')   //1:余额充值   2:钻石充值
+						var recharge = $(this).attr('recharge')   //1:余额充值   2:鸟蛋充值
 						$.post("{:url('Recharge/recharge')}",{price:price,type:type,recharge:recharge},function(data){
 								if(data.code == 1){
 									layui.use('layer',function(){
 									layer.msg(data.msg)})
 								}else if(data.code == 2){
+									//
 			                        var str = 'https://www.baifubao.com/o2o/0/qrcode?size=10&text='
 			                        str += data.msg
 			                        $('.zhifu').attr('src',str)
+
+			                        function query(){
+			                        
+			                         $.post("{:url('Pay/recharge')}",{},function(data){
+			                                if(data.code == 'Ok'){
+			                                    layui.use('layer',function(){
+												layer.msg(data.msg)})
+			                                    window.location.href="{:url('User/account')}";
+			                                    return false
+
+			                                 }
+			                        },'json')
+			                    }
+                            //seTimeOut('query()',2000);
+                    setInterval(query,2000);
 			                    }else if(data.code == 3){
 			                    	layui.use('layer',function(){
 									layer.msg(data.msg)})

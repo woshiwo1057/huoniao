@@ -140,7 +140,10 @@
 
 
         paynum = price * buyTime;
-        var youhui = {$coupon_data['discount']} || 0;
+        var youhui = 0;
+        {if condition="isset($coupon_data['discount'])"}
+        youhui = {$coupon_data['discount']};
+        {/if}
         $('[data-price=total]').html('￥' + paynum);
         $('[data-price=paytotal]').html('￥' + (paynum - youhui));
       });
@@ -204,8 +207,23 @@
                         layer.msg(data.msg)})
                       }else if(data.code == 6){
                         var str = 'https://www.baifubao.com/o2o/0/qrcode?size=10&text='
+
                         str += data.msg
                         $('.zhifu').attr('src',str)
+
+                        function query(){
+                        //{:url('Pay/query')};
+                         $.post("{:url('Pay/pt_order')}",{},function(data){
+                                if(data.code == 'Ok'){
+                                    alert('支付成功');
+                                    window.location.href="{:url('User/order')}"
+                                    return false
+                                 }
+                        },'json')
+                    }
+                            //seTimeOut('query()',2000);
+                    setInterval(query,2000);
+
                       }else if(data.code == 7){
                         layui.use('layer',function(){
                         layer.msg(data.msg)})

@@ -169,6 +169,41 @@ class Common extends \think\Controller
 
     /*************************************************************站内信结束************************************************************/
 
+    /*
+     *
+     *
+     *地图位置检索
+     * query:地理位置
+     * region：所在地区
+     *
+     */
+    function suggestion(){
+        $request = request();//think助手函数
+        $data_get = $request->param();//获取get与post数据
+        $query = urlencode($data_get['query']);
+        $region = urlencode($data_get['region']);
+        $url = 'http://api.map.baidu.com/place/v2/suggestion?query='.$query.'&region='.$region.'&city_limit=true&output=json&ak='._AK_;
+        $data = curlGet($url);
+        return $data;
+    }
+
+    
+     
+    //地理编码,返回所在的经纬度  
+    function address($address){
+        $address = urlencode($address);
+        $url = 'http://api.map.baidu.com/geocoder/v2/?address='.$address.'&output=json&ak='._AK_;
+        $data = curlGet($url);
+        $data = json_decode($data,true);
+        if($data['status']==0){
+            $location = $data['result']['location'];
+        }else{
+            $location = null;
+        }
+        return $location;
+    }
+
+
 
 	//图片上传（单图）
 	public function uploadimg()

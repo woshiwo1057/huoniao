@@ -138,6 +138,9 @@
                                                         layui.use('layer',function(){
                                                             layer.msg(data.msg)});
                                                         $(body.find('#miva')).attr('src',src+'&'+Math.random())
+                                                    }else if(data.code == 5){
+                                                        layui.use('layer',function(){
+                                                        layer.msg(data.msg)});
                                                     }
 
                                                 },'json')
@@ -405,12 +408,12 @@
 
 				<div class="left-box">
 					<!-- 照片展示 -->
-					{if condition="!empty($album_data)"}
+				{if condition="!empty($album_data)"}
 				<div class="photo-show-box">
 					<div class="photo-box"><img src="{$album_data[0]['img_url']}" alt="" class="photo-big"></div>
 					<!-- 照片选择 -->
 					<div class="photo-select">
-						<!-- 左箭头 --><span style="background-image: url('./images/png/right.png')" class="jt-left"></span>
+						<!-- 左箭头 --><span style="background-image: url('__IMG__right.png')" class="jt-left"></span>
 						<!-- 中间的可选项 -->
 						<div class="middle-box">
 							<div class="middle-img-box">
@@ -419,7 +422,7 @@
 							{/foreach}
 							</div>
 						</div>
-						<!-- 右箭头 --><span style="background-image: url('./images/png/right.png')" class="jt-right"></span></div>
+						<!-- 右箭头 --><span style="background-image: url('__IMG__right.png')" class="jt-right"></span></div>
 				</div>
 				{else /}
 				<div class="photo-show-box">

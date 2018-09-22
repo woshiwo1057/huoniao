@@ -187,20 +187,59 @@
             //获取到支付方式 
             var type = $('.pay-act').attr('payment')
 
-            if(service = '声音鉴定'){
+            if(service == '声音鉴定'){
             
               $.post("{:url('Order/voice')}",{acc_id:acc_id,service:service,length_time:length_time,explain:explain,phone:phone,qq:qq,wechat:wechat,money:money,type:type,coupon_type:coupon_type},function(data){
                   if(data.code == 1){
                     alert(data.msg)
                   }else if(data.code == 2){
-                    alert(data.msg)
-                  }else{
+                        layui.use('layer',function(){
+                        layer.msg(data.msg)})
+                      }else if(data.code == 3){
+                        layui.use('layer',function(){
+                        layer.msg(data.msg)})
+                      }else if(data.code == 4){
+                        layui.use('layer',function(){
+                        layer.msg(data.msg)})
+                        window.location.href="{:url('User/order')}"
+                      }else if(data.code == 5){
+                        layui.use('layer',function(){
+                        layer.msg(data.msg)})
+                      }else if(data.code == 6){
+                        var str = 'https://www.baifubao.com/o2o/0/qrcode?size=10&text='
+                        str += data.msg
+                        $('.zhifu').attr('src',str)
+
+                        function query(){
+                        //{:url('Pay/query')};
+                         $.post("{:url('Pay/sj_order')}",{},function(data){
+                                if(data.code == 'Ok'){
+                                    alert(data.msg);
+                                    window.location.href="{:url('User/order')}"
+                                    return false
+                                 }
+                        },'json')
+                    }
+                            //seTimeOut('query()',2000);
+                    setInterval(query,2000);
+
+                      }else if(data.code == 7){
+                        layui.use('layer',function(){
+                        layer.msg(data.msg)})
+                      }else if(data.code == 8){
+                        layui.use('layer',function(){
+                        layer.msg(data.msg)})
+                      }else if(data.code == 9){
+                        layui.use('layer',function(){
+                        layer.msg(data.msg)})
+                      }else{
                     alert('未知错误')
                   }
 
               },'json')
               return false
             }
+
             
             $.post("{:url('Order/confirm_order')}",{acc_id:acc_id,service:service,length_time:length_time,explain:explain,phone:phone,qq:qq,wechat:wechat,money:money,type:type,coupon_type:coupon_type},function(data){
                       if(data.code == 1){
@@ -223,6 +262,20 @@
                         var str = 'https://www.baifubao.com/o2o/0/qrcode?size=10&text='
                         str += data.msg
                         $('.zhifu').attr('src',str)
+
+                        function query(){
+                        //{:url('Pay/query')};
+                         $.post("{:url('Pay/pt_order')}",{},function(data){
+                                if(data.code == 'Ok'){
+                                    alert('支付成功');
+                                    window.location.href="{:url('User/order')}"
+                                    return false
+                                 }
+                        },'json')
+                    }
+                            //seTimeOut('query()',2000);
+                    setInterval(query,2000);
+
                       }else if(data.code == 7){
                         layui.use('layer',function(){
                         layer.msg(data.msg)})

@@ -1548,3 +1548,43 @@
 	</body>
 
 </html>
+
+
+
+{if condition="isset($_SESSION['think']['wb_id'])"}
+<div id="post" style="display:none;text-align: center; position: fixed;width:100%;top: 0;z-index: 9999999999999;background: #FDD118;" class="">
+  <div style="display: inline-block;position: relative;" class="">
+    <img style="margin: auto;" src="__IMG__wangba.gif" alt="">
+    <span style="background: #fdd118;color: #FC5665;position: absolute;top: 50%;font-size: 25px;font-weight: bold;letter-spacing: 5px;right: 725px;direction: ltr;">{$name}</span>
+  </div>
+</div>
+{/if}
+<script type="text/javascript">
+  $(function() {
+
+    var isOpen = false;
+
+    {if condition="isset($_SESSION['think']['wb_id'])"}
+    	isOpen = true;
+    {/if}
+
+
+
+    if (isOpen) setTimeout(function() {
+      $('#post').show()
+      $('header').css('top', 150 + 'px')
+      $('body').css('position', 'relative')
+      $('body').css('top', 150 + 'px')
+
+      $(window).on('scroll', function() {
+      	if($(document).scrollTop() > 300){
+      		$('#post').hide()
+       		$('header').css('top', 0)
+        	$('body').css('top', 0)
+      	}
+      });
+    }, 1000);
+
+  })
+</script>
+

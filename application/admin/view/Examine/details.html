@@ -41,6 +41,13 @@
 		</div>
 
 		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>出生日期：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$examine_data.birthday}" name="birthday">
+			</div>
+		</div>
+
+		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>个性签名</label>
 			<div class="formControls col-xs-8 col-sm-9">
 				<input type="text" class="input-text" value="{$examine_data.table}"  name="table"  >
@@ -181,9 +188,9 @@
 
 
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>说明：</label>
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>个人介绍：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="{$examine_data.explain}" >
+				<input type="text" class="input-text" value="{$examine_data.explain}"   name="explain" >
 			</div>
 		</div>
 
@@ -218,7 +225,7 @@
 		
 		<div class="row cl">
 			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
-				<button class="btn btn-primary radius" ><i class="Hui-iconfont">&#xe632;</i>新添加陪玩师</button>
+				<button class="btn btn-primary radius" ><i class="Hui-iconfont">&#xe632;</i>审核通过</button>
 			</div>
 		</div>
 	</form>

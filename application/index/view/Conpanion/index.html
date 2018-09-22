@@ -102,7 +102,7 @@
 					<td class="up-title">所在城市:</td>
 					<td>
 						<div class="miva-game-box layui-form">
-							<div class="miva-select layui-form-item"><select class="city" lay-filter='city' id="city" lay-verify='' name="city"><option value="">请选择省份</option></select></div>
+							<div class="miva-select layui-form-item"><select class="city" lay-filter='city' id="city" lay-verify='' name="city"><option value="">请选择</option></select></div>
 						</div>
 					</td>
 				</tr>
@@ -114,11 +114,11 @@
 				</tr>
 				<tr>
 					<td class="up-title">身高:</td>
-					<td><input class="miva-input" type="text" name="height" id="" value="" placeholder="厘米为单位" /></td>
+					<td><input class="miva-input" type="text" name="height" id="" value="" placeholder="" /></td>
 				</tr>
 				<tr>
 					<td class="up-title">体重:</td>
-					<td><input class="miva-input" type="text" name="weight" id="" value="" placeholder="千克为单位"/></td>
+					<td><input class="miva-input" type="text" name="weight" id="" value="" placeholder=""/></td>
 				</tr>
 				<tr>
 					<td class="up-title">职业:</td>
@@ -182,14 +182,14 @@
 		<div class="miva-join-title">认证资料照</div>
 		<div class="miva-box miva-data-box">
 			<label for="duanwei"><img style="border:none;" class="miva-up-data-pic" src="" alt="">
-				<div class="up-data-tip"><span>点击上传您的游戏段位(等级)截图,<br>并填写游戏相关说明补充<br>(包含游戏ID)</span></div><br>
+				<div class="up-data-tip"><span  class="text">点击上传您的游戏段位(等级)截图,<br>并填写游戏相关说明补充<br>(包含游戏ID)</span></div><br>
 				<div class="miva-btn mia-up-btn">点击上传</div>
 			</label>
 			<input style="display:none" type="file" id="duanwei">
 
 			<span class="miva-li">示例:</span>
 			<img style="border:none;" src="__IMG__example.png" alt="" class="style-picture"></div>
-		<div class="miva-join-title">说明</div>
+		<div class="miva-join-title">自我介绍</div>
 		<div class="miva-box miva-info-box"><textarea name="explain" class="txt-box" placeholder="可以写自己喜欢的游戏,喜欢的玩法和打法......"></textarea></div>
 		<!--<div class="miva-join-title">语音介绍</div><div class="miva-box miva-audio-box"><div class="audio-box-f"><div class="audio-box"><div class="audio-btn"><i class="layui-icon layui-icon-voice"></i><span>点击上传</span></div></div><audio src="" controls></audio></div><span class="tip">上传录音可供游客试听,请自行上传录音 格式为:MP3 大小:2MB<span>支持格式:MP3,ogg,mav,m4a</span></span></div>-->
 		<div class="check-box"><input id="check" type="checkbox"> <label for="check">我已阅读并同意<a href="{:url('Conpanion/agreement')}" target="__blnk"><<陪玩申请入驻协议>></a></label></div>
@@ -441,6 +441,7 @@ var sex
 				var game_id = $(this).attr('attr_id')
 				console.log(type)
 				console.log(game_id)
+				//更换图片
 				if(type == 2){
 					if(game_id == 2){
 						$('.style-picture').attr('src','__IMG__gedan.jpg')
@@ -450,6 +451,47 @@ var sex
 					$('.style-picture').attr('src','__IMG__shengjian.jpg')
 				}else{
 					$('.style-picture').attr('src','__IMG__example.png')
+				}
+
+				//更换文本内容
+				if(type == 1){
+					if(game_id == 4){
+						//绝地求生
+						$('.text').html('请上传《绝地求生：大逃杀》个人数据截图，等待考核<br>排名要求：男生（1万名以内）；女生（游戏时长50+）<br>考核要求:服务器1万名以内无论男女都需要考核')
+					}else if(game_id == 8){
+						//刺激战场
+						$('.text').html('请上传《刺激战场》个人数据截图，等待考核<br>申请要求：游戏时长10小时以上<br>请上传《全军出击》个人数据截图，等待考核')
+					}else if(game_id == 11){
+						//英雄联盟
+						$('.text').html('请上传您的段位截图（需包含个人ID）<br>男段位要求：电一钻Ⅰ以上，其他区大师王者；<br>女段位要求：黄金以上')
+					}else if(game_id == 17){
+						//王者荣耀
+						$('.text').html('请上传您的段位截图（需包含个人ID）<br>男段位要求：王者/星耀Ⅰ以上，其他区大师王者；<br>女段位要求：钻石以上')
+					}else if(game_id == 18){
+						//全军出击
+						$('.text').html('请上传《全军出击》个人数据截图，等待考核<br>申请要求：游戏时长10小时以上')
+					}else if(game_id == 19){
+						//荒野行动
+						$('.text').html('请上传《荒野行动》个人数据截图，等待考核<br>申请要求：游戏时长10小时以上')
+					}else if(game_id == 20){
+						//第五人格
+						$('.text').html('请上传您的段位截图（需包含个人ID）,并填写第五人格相关的描述')
+					}else{
+						$('.text').html('点击上传您的游戏段位(等级)截图,<br>并填写游戏相关说明补充<br>(包含游戏ID)')
+					}
+				}else if(type == 2){
+					if(game_id == 1){
+						//哄睡觉
+						$('.text').html('服务内容包含叫醒、哄睡、聊天、游戏、视频等,<br>请上传真人正面清晰照作为该服务封面图，等待考核<br>请在平台进行声鉴后上传平台电竞音色卡')
+					}else if(game_id == 2){
+						//唱歌
+						$('.text').html('请上传真人正面清晰照作为该服务封面图，等待考核<br>请上传你的歌单')
+					}else if(game_id == 3){
+						//聊天
+						$('.text').html('请上传您的【声鉴卡】一张，<br>如没有【声鉴卡】，<a href="https://csq.huoniaopeiwan.com/index/acc/index.html">请点击获取。获取声鉴卡</a>')
+					}else{
+						$('.text').html('点击上传您的游戏段位(等级)截图,<br>并填写游戏相关说明补充<br>(包含游戏ID)')
+					}
 				}
 				
 				$.post("{:url('Conpanion/project_grade')}",{type:type,game_id:game_id},function(res){
@@ -466,7 +508,7 @@ var sex
 			})
 
 			form.on('select(province)', function(result) { // 请选择省份
-				$('#city').html('<option value="">请选择城市</option>');
+				$('#city').html('<option value="">请选择</option>');
 
 				$.post("{:url('Conpanion/city_ajax')}", {
 					province: result.value
@@ -722,7 +764,7 @@ if({$user_data['sex']} == 0){
 					})
 				}else{
 					layui.use('layer', function() {
-					layer.msg('位置错误')
+					layer.msg('未知错误')
 					})
 				}
 			}, 'json')

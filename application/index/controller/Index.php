@@ -29,6 +29,7 @@ class Index  extends Common
                 $data = db('hn_netbar')->where('id',$wb_id)->field('id,name')->find();
                 $name = $data['name'];
                 echo "<script>alert('$name'+'欢迎您');</script>";
+                $this->assign([ 'name' => $name ]);
             }
         }
     	//Session::delete('think'); 
@@ -50,8 +51,9 @@ class Index  extends Common
                     ->join('hn_apply_project p' , 'a.project_id = p.project_id')
                     ->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num,p.project_name,u.sex,a.city')
                     ->where('a.status',1)->limit('0,15')->select();
-            $acc_data = $this->out_repeat($acc_data,'nickname');
-  //var_dump($acc_data);die;
+                    
+        $acc_data = $this->out_repeat($acc_data,'nickname');
+  
     	//优质新人  先注册的排前面（15天内）
     	$new_data =	Db::table('hn_accompany')->alias('a')
                         ->join('hn_user u','u.uid = a.user_id')                  
@@ -460,11 +462,11 @@ class Index  extends Common
         //获取到用户ID
         $user_id = $_SESSION['user']['user_info']['uid'];
 
-        //查询出该礼物的价格与图片路径  判断用户的鸟蛋够不够    存表 完成
-        $pice = Db::table('hn_gift')->field('pice,img_url')->where('id',$gift_data['gift_id'])->find();
+        //查询出该礼物的价格与图片路径和名字  判断用户的鸟蛋够不够    存表 完成
+        $pice = Db::table('hn_gift')->field('pice,img_url,name')->where('id',$gift_data['gift_id'])->find();
         $pice['pice'] = $pice['pice']*$gift_data['num'];  //算出所需要的鸟蛋数    单价*数量
             //查询出用户的鸟蛋余额
-        $currency = Db::table('hn_user')->field('currency')->where('uid',$user_id)->find();
+        $currency = Db::table('hn_user')->field('currency,nickname')->where('uid',$user_id)->find();
 
         if($currency['currency']<$pice['pice']){
             return  json(['code' => 2,'msg' => '剩余鸟蛋不足，充值后再来给心爱的陪玩师送礼哦']);
@@ -494,6 +496,14 @@ class Index  extends Common
         $res = Db::table('hn_give_gift')->insert($data);
 
         if($ras&&$res){
+            //谁给您送了几个什么
+            //$currency['nickname']  给您送了$data['num']个$pice['name']
+            $title = '收礼物啦';
+            $text = $currency['nickname'].'给您送了'.$data['num'].'个'.$pice['name'];
+            $send_id = 0;
+            $rec_id = $data['acc_id'];
+            $this->message_add($title,$text,$send_id,$rec_id);
+
             return  json(['code' => 3,'msg' => '赠送成功']);
         }else{
             return  json(['code' => 4,'msg' => '赠送失败，错误码004']);
@@ -509,13 +519,18 @@ class Index  extends Common
         if(!isset($_SESSION['user']['user_info']['uid'])){
             return ['code' => 4,'msg' => '您还未登录，请先登录'];exit;
         }
+
         $uid = $_SESSION['user']['user_info']['uid'];
+        if($uid == $data_get['followed_user']){
+            return ['code' => 5,'msg' => '不能关注自己哦'];exit;
+        }
         $res = $follow->where(['user_id'=>$uid,'followed_user'=>$data_get['followed_user']])->find();
         if($res){
             if($res['status'] == 1){
                 $data = [
                     'status'=>2
                 ];
+              
                 $aa = ['code' => 2,'msg' => '操作成功'];
             }else{
                 $data = [

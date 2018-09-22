@@ -51,16 +51,16 @@ class Recharge extends Common
 	public function recharge()
 	{
 		$data = Request::instance()->param();
-		//var_dump($data);die;
+		
 		if($data['price'] == ''){
-			return json(['code' => 1,'msg' =>'参数错误']);
+			return json(['code' => 1,'msg' =>'输入错误']);
 		}	
 		//获取到用户ID
 		$id = $_SESSION['user']['user_info']['uid'];
 		if($data['recharge'] == 1){
-			//余额充值   只能是微信充值   因为没有回调    所以 die
+			//余额充值   只能是微信充值   因为没有回调    所以 die    
 			die;
-			$data['number'] = time().str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT);	 //订单号		
+			$data['number'] = time().str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT);//订单号
 			$data['price'] ; //微信的钱数
 			$data['user_id'] = $id;
 
@@ -80,7 +80,7 @@ class Recharge extends Common
 			if($data['type'] == 0){
 							//余额支付    $data['price']与人民币比例为 1:1
 
-							//查询用户余额
+				//查询用户余额
 				$user_balance  = Db::table('hn_user')->field('cash,currency,mogul_day,mogul')->where('uid',$id)->find();
 
 				if($data['price']>$user_balance['cash']){
@@ -93,6 +93,7 @@ class Recharge extends Common
 				$data['diamond'] = $data['price']*10; //充值的鸟蛋数
 				$data['user_id'] = $id;  //充值的用户ID
 				$data['time'] = time();
+				$data['status'] = 1;
 				//删除无用数据
 				unset($data['recharge']);				
 				
@@ -117,17 +118,36 @@ class Recharge extends Common
 
 			}else if($data['type'] = 2){
 							//微信支付
-				$data['number'] = time().str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT);	 //订单号		
-				$data['price'] = $data['price']*100; //微信的钱数
-				$data['user_id'] = $id;
 
-				//调用微信扫码支付
-				$code = $this->wechat_pay($data['user_id'],$data['number'],$data['price']);
+				$wow['number'] = time().str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT);//订单号	
+				//将验证码存入session  回调使用
+				$_SESSION['user']['user_info']['order_number'] = $wow['number'];
 
-				if($code){
-					return json(['code' => 2, 'msg' => $code]);
+				$wow['money'] = $data['price']; //充值的钱数
+				$wow['diamond'] = $data['price']*10; //充值的鸟蛋数
+				$wow['user_id'] = $id;  //充值的用户ID
+				$wow['time'] = time();
+				$wow['status'] = 2;
+				
+				//存入数据库（鸟蛋充值表）
+				$res = Db::name('hn_recharge_diamond')->insert($wow);
+				
+
+				if($res){
+					
+					$data['user_id'] = $id;
+	
+					//调用微信扫码支付
+					$code = $this->wechat_pay($data['user_id'],$wow['number'],$data['price']);
+
+					if($code){
+						return json(['code' => 2 , 'msg' => $code]);
+					}else{
+						return json(['code' => 3 , 'msg' => '获取二维码失败']);
+					}
+
 				}else{
-					return json(['code' => 3, 'msg' => '获取二维码失败']);
+					return json(['code' => 4 , 'msg' => '获取二维码失败，请重试']);
 				}
 
 			}
@@ -135,4 +155,5 @@ class Recharge extends Common
 
 						
 	}
+
 } 

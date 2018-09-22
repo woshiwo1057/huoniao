@@ -93,7 +93,7 @@ class Conpanion extends Common
 		$id = $_SESSION['user']['user_info']['uid'];
 			
 			$data = Request::instance()->param();
-	
+
 			$data['user_id'] = $_SESSION['user']['user_info']['uid'];
 			
 			//判断是否有提交
