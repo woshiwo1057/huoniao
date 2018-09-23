@@ -16,18 +16,14 @@ class Identify extends Common
     public function index(){
         $acc_id = $_SESSION['admin']['admin_info']['acc_id'];
         $identify = \db('hn_identify');
-        $data = $identify->alias('i')
-                ->join('hn_user u','i.uid = u.uid')
-                ->where(['i.acc_id'=>$acc_id])
-                ->field('i.id,i.order_id,i.uid,i.acc_id,i.addtime,i.identify,i.status,i.price,u.nickname')
-                ->paginate(25);
+        //$res = $identify->where(['acc_id'=>$acc_id])->paginate(10);
+        $data = $identify->alias('i')->join('hn_user u','i.uid = u.uid')->where('i.acc_id',$acc_id)->field('i.id,i.order_id,i.uid,i.acc_id,i.addtime,i.identify,i.status,i.price,u.nickname')->paginate(25);
+        //print_r($data);die;
         $page = $data->render();
-     
         $this->assign([
             'data'=>$data,
             'page'=>$page,
         ]);
-
         return $this->fetch('Identify/index');
     }
     //鉴定订单列表
@@ -98,30 +94,6 @@ class Identify extends Common
         $data_get = $request->param();//获取get与post数据
         $identify = \db('hn_identify');
         $data_arr = $data_get;
-        /*$data_arr = [
-            'head_img' => '/uploads/index/touxiang.png',
-            'name' => '赵顺超',
-            'type' => '1',
-            'trait' => '少女音',
-            'acc_name' => '月月',
-            'timbre_value' => '60%',//音色总分
-            'timbre_1' => '少女',//主音色1
-            'timbre_2' => '萝莉',//主音色2
-            'timbre_val_1' => '60%',//主音色1总分
-            'timbre_val_2' => '40%',//主音色2总分
-                'tone_1' => '磁性迷人沙哑音',//辅音色1
-            'tone_2' => '举步轻盈风铃音',//辅音色2
-            'tone_3' => '玫瑰性感女神音',//辅音色3
-            'tone_val_1' => '10%',//辅音色1总分
-            'tone_val_2' => '20%',//辅音色2总分
-            'tone_val_3' => '10%',//辅音色3总分
-            'mate' => '大叔',//最佳伴侣
-            'value_1' => '9',//市场值
-            'value_2' => '9',//诱惑值
-            'value_3' => '9',//活跃值
-            'value_4' => '8',//心动值
-        ];*/
-
         $img = $this->identify_card($data_arr);//鉴定卡生成
         $file = $img;
         $key = date('Y-m-d').'/'.md5(microtime()).'.jpg'; //路径
@@ -140,6 +112,26 @@ class Identify extends Common
             }
         }else{
             $this->success('生成失败，请重试');
+        }
+
+    }
+
+    function yulan(){
+        $request = request();//think助手函数
+        $data_get = $request->param();//获取get与post数据
+
+        $identify = \db('hn_identify');
+        $data_arr = $data_get['data'];
+        //print_r($data_arr['head_img']);
+        $img = $this->identify_card($data_arr);//鉴定卡生成
+        $file = $img;
+        $key = date('Y-m-d').'/'.md5(microtime()).'.jpg'; //路径
+        $data = $this->coss($file,$key);
+        if($data['code']==0){
+            $url = $this->img.$key;
+            return ['code'=>1,'msg'=>'生成成功','url'=>$url];
+        }else{
+            return ['code'=>2,'msg'=>'生成失败'];
         }
 
     }

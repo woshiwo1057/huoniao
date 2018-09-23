@@ -124,6 +124,15 @@ class Pay extends Common
 
 				Db::table('hn_user')->where('uid', $status['user_id'])->setInc('mogul_day', $status['money']);//加当天土豪值
 
+				//2.判断用户充值的等级
+				$mogul = Db::table('hn_user')->field('mogul,level,nickname')->where('uid', $status['user_id'])->find();
+
+				$level = Db::table('hn_recharge_level')->field('level')->where('money','>',$mogul['mogul'])->select();
+				$level = $level['0']['level']-1;
+				if($mogul['level'] !=  $level){
+					Db::table('hn_user')->where('uid',$status['user_id'])->setField('level', $level);
+				}
+
 				return json(['code' => 'Ok' , 'msg' => '支付成功']);
 			}else{
 
@@ -193,8 +202,9 @@ class Pay extends Common
 				$text = '快去接单吧！！！！！！！';
 				$send_id = 0;
 				$rec_id = $status['acc_id'];
-				$this->message_add($title,$text,$send_id,$rec_id);	
-/*
+				$this->message_add($title,$text,$send_id,$rec_id);
+
+				/*
 				//5.给陪玩师发短信
 				$phone ='13186119291';
 		        $data = [
@@ -204,7 +214,8 @@ class Pay extends Common
 		            'location' =>'',
 		        ];
 		        $this->sendCms($phone,$data,6);
-*/
+				*/
+				
 				//4.改变订单状态	
 				Db::table('hn_order')->where('number', $order_num)->update(['status' => 1]);
 				unset($_SESSION['user']['user_info']['order_number']);
@@ -279,7 +290,7 @@ class Pay extends Common
 				$rec_id = $status['acc_id'];
 				$this->message_add($title,$text,$send_id,$rec_id);	
 				//5.改变订单状态	
-				Db::table('hn_order')->where('number', $order_num)->update(['status' => 1]);
+				Db::table('hn_order')->where('number', $order_num)->update(['status' => 4]);
 				unset($_SESSION['user']['user_info']['order_number']);
 
 

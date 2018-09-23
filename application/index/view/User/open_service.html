@@ -51,8 +51,8 @@
 
 				<div style="padding: 20px;" class="">
 					<i class="mui-icon mui-icon-location"></i>
-					<input value="高新三路财富中心二期B座" style="width:233px; height:20px; border:0;border-bottom:1px solid #ddd;position: relative;top: 7px;" type="text">
-					 <span style="color: #FBC94C; margin: 0 5px;">修改</span><em style="color: red; font-size: 12px;">(*位置越准确越有利于你接单哦!)</em>
+					<input value="{$real.address}" style="width:233px; height:20px; border:0;border-bottom:1px solid #ddd;position: relative;top: 7px;" type="text"  name="address">
+					 <span style="color: #FBC94C; margin: 0 5px;" class="xiugai  xiaoshou">修改</span><em style="color: red; font-size: 12px;">(*位置越准确越有利于你接单哦!)</em>
 				</div>
 
 				<div class="u-title "><span>附近网咖供您选择</span></div>
@@ -87,24 +87,50 @@
 					</ul>
 				</div>
 
-				<div class="peiwan-info ">
-					<div class="bottom-box">
-						<div class="user-eval">
-							<!-- 分页器 -->
-							<div class="page-cut-box">
-								<div class="page-cut">
-									<div class="page-up">上一页</div>
-									<div class="page-before">首页</div><span class="active">1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>...</span>
-									<div class="page-last">尾页</div>
-									<div class="page-down">下一页</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
+				
 				
 			</div>
 		</div>
+		<script>
+
+			$(function(){
+
+				function query(){
+				 	window.location.reload()
+				}
+
+				$('.xiugai').click(function(){
+
+					var address = $('[name ="address"]').val();
+
+					$.post("{:url('User/address_edit')}",{address:address},function(data){
+
+						if(data.code == 1){
+
+							layui.use('layer',function(){
+							layer.msg(data.msg)})
+							setInterval(query,800);
+
+						}else if(data.code == 2){
+
+							layui.use('layer',function(){
+							layer.msg(data.msg)})
+							setInterval(query,800);
+
+						}else{
+
+							layui.use('layer',function(){
+							layer.msg('未知错误')})
+							setInterval(query,800);
+
+						}
+
+
+					},'json')
+				})
+
+			})
+		</script>
 
 		<script type="text/javascript">
 				// 页面打开时 获取到状态

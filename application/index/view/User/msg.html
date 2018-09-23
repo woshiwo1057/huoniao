@@ -20,6 +20,9 @@
           <div style="position: relative" class="miva-message-one"  xiaoxi_id="{$v.id}">
             <div class="user-pic-box">
             <img src="__IMG__logo.jpg" alt="">
+            {if condition="$v.status == 0"}
+            <i class="tip"></i>
+            {/if}
             </div>
             <div class="msg-info msg-colse">
               <div class="">{$v.title}</div>
@@ -45,7 +48,7 @@
 
           $.post("{:url('User/change_msg')}",{id:id},function(data){
               if(data == 1){
-                alert('已查看')
+                $('.tip').css('display','none')
               }
 
           },'json')

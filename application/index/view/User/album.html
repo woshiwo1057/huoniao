@@ -103,6 +103,7 @@
 			</div>
 		
 			<script type="text/javascript">
+			/*
 			$(function() {
 				var files = $("#photo");
 				var btn = $('[data-item=upbtn]');
@@ -149,7 +150,83 @@
 								photoBox.append(photoItem);
 
 								
-								 $.post("{:url('User/album_add')}",{option:option},function(data){
+								 
+
+								// img.attr('src', base64url);
+								layer.closeAll();
+							}
+							})
+						})	
+
+					};
+					// 重置input[type=file];
+					files.val('');
+				});
+
+			});
+*/
+		</script>
+			
+		</div>
+
+		<!-- 引入页脚 -->
+{include file="public/footer"}
+	</body>
+
+
+</html>
+<script>
+var files = $('#user-pic');
+		// var btn = $('[data-item=upbtn]');
+		var files = $("#photo");
+		var btn = $('[data-item=upbtn]');
+		// var img = $('[data-item=img]');
+	
+
+		var reader = new FileReader();
+		var fileBuffer;
+		var zoomNum = 1;
+		var base64url;
+		var imgbox;
+		var alertHTML = '<div style="width:70%;height:100%"><img id="newMiva" src=""/></div>';
+		alertHTML += '<div class="yulan"><div><img alt="小" src="__IMG__default.jpg" alt="" /></div><div><img alt="中" src="__IMG__default.jpg" alt="" /></div><div><img alt="大" src="__IMG__default.jpg" alt="" /></div></div>'
+		// 图片预览
+		files.on('change', function() {
+			reader.readAsDataURL(files.prop('files')[0]);
+			reader.onload = function(e) {
+				// 获取file里的内容
+				fileBuffer = e.target.result;
+				layui.use('layer', function() {
+					layer.open({
+						type: 1,
+						title: false,
+						content: alertHTML,
+						scrollbar: false,
+						resize: false,
+						zIndex: 7489436491,
+						btn: ['确认', '放大', '缩小', '预览'],
+						area: ['1000px', '600px'],
+						success: function(layero, index) {
+							imgbox = layero.find("#newMiva");
+							imgbox.attr('src', fileBuffer);
+							imgbox.cropper({
+								aspectRatio: 1 / 1,
+								dragMode: 'move', // 设置为  ‘move’: 只可以移动模式
+								dragCrop: false, // 设置为禁止移除当前的剪裁框，并通过拖动来新建一个剪裁框区域。
+								toggleDragModeOnDblclick: false, // 禁止双击切换模式
+								background: false,
+								// movable: false,
+							});
+						},
+						yes: function(index, layero) {
+							var imgbox = layero.find("#newMiva");
+							var cas = imgbox.cropper('getCroppedCanvas');
+							base64url = cas.toDataURL('image/jpeg');
+
+							var option = base64url; //上传图片的内容
+							$('#user-pic-img').attr('src', option);
+
+							$.post("{:url('User/album_add')}",{option:option},function(data){
 								 			if(data.code == 0){
 								 				layui.use('layer',function(){
 												layer.msg(data.msg)})
@@ -168,26 +245,37 @@
 								 			}
 
 								 },'json')
+							
+							
 
-								// img.attr('src', base64url);
-								layer.closeAll();
-							}
-							})
-						})	
+							layer.closeAll();
+						},
+						btn2: function(index, layero) {
+							var imgbox = layero.find("#newMiva");
+							zoomNum -= 0.1;
+							imgbox.cropper('zoom', 0.1);
+							console.log(zoomNum)
+							return false;
+						},
+						btn3: function(index, layero) {
+							var imgbox = layero.find("#newMiva");
+							zoomNum += 0.1;
+							imgbox.cropper('zoom', -0.1);
+							console.log(zoomNum)
+							return false;
+						},
+						btn4: function(index, layero) {
+							var cas = imgbox.cropper('getCroppedCanvas');
+							base64url = cas.toDataURL('image/jpeg');
+							console.log($(layero.find('.yulan')))
+							$(layero.find('.yulan')).find(layero.find('img')).attr('src', base64url)
+							return false;
+						}
+					})
+				})
 
-					};
-					// 重置input[type=file];
-					files.val('');
-				});
-
-			});
-		</script>
-			
-		</div>
-
-		<!-- 引入页脚 -->
-{include file="public/footer"}
-	</body>
-
-
-</html>
+			};
+			// 重置input[type=file];
+			files.val('');
+		});
+</script>

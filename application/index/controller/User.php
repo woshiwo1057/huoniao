@@ -68,21 +68,22 @@ class User extends Common
 			//$user_edit['uid'] = $id;
 
 
-			//组装数据 该去用户表的去用户表  该去陪玩师表的去陪玩师 
-			$acc_data['address'] = $user_edit['address'];
-			$acc_data['height'] = $user_edit['height'];
-			$acc_data['weight'] = $user_edit['weight'];
-			$acc_data['duty'] = $user_edit['duty'];
-			$acc_data['hobby'] = $user_edit['hobby'];
-			unset($user_edit['address']);
-			unset($user_edit['height']);
-			unset($user_edit['weight']);
-			unset($user_edit['duty']);
-			unset($user_edit['hobby']);
+			
 
 
 		
 			if($user_edit['type'] == 1){
+				//组装数据 该去用户表的去用户表  该去陪玩师表的去陪玩师 
+				$acc_data['address'] = $user_edit['address'];
+				$acc_data['height'] = $user_edit['height'];
+				$acc_data['weight'] = $user_edit['weight'];
+				$acc_data['duty'] = $user_edit['duty'];
+				$acc_data['hobby'] = $user_edit['hobby'];
+				unset($user_edit['address']);
+				unset($user_edit['height']);
+				unset($user_edit['weight']);
+				unset($user_edit['duty']);
+				unset($user_edit['hobby']);
 				//判断是否改了名字  提交的数据  与原数据对比
 				if($user_edit['nickname'] != $user_data['nickname']){
 
@@ -1340,6 +1341,7 @@ class User extends Common
         $data_get = $request->param();//获取get与post数据
         $follow = \db('hn_follow');//关注表
         $uid = $_SESSION['user']['user_info']['uid'];
+        $nickname = $_SESSION['user']['user_info']['nickname'];
         $res = $follow->where(['user_id'=>$uid,'followed_user'=>$data_get['followed_user']])->find();
         if($res){
             if($res['status'] == 1){
@@ -1352,6 +1354,12 @@ class User extends Common
                     'status'=>1
                 ];
                 $aa = ['code' => 1,'msg' => '操作成功'];
+
+	            $title = '有人关注了你';
+				$text = $nickname.'关注了你';
+				$send_id = 0;
+				$rec_id = $data_get['followed_user'];
+				$this->message_add($title,$text,$send_id,$rec_id);
             }
             $red = $follow->where(['user_id'=>$uid,'followed_user'=>$data_get['followed_user']])->update($data);
 
@@ -1361,8 +1369,16 @@ class User extends Common
                 'followed_user'=> $data_get['followed_user'],
                 'status'=>1
             ];
+
+            //Db::table('hn_user')->field('nickname')->where('uid',$uid)->find();
             $red = $follow->insert($data);
             $aa = ['code' => 1,'msg' => '操作成功'];
+            
+            $title = '有人关注了你';
+			$text = $nickname.'关注了你';
+			$send_id = 0;
+			$rec_id = $data_get['followed_user'];
+			$this->message_add($title,$text,$send_id,$rec_id);
         }
         if($red){
             return $aa;
@@ -1556,7 +1572,7 @@ class User extends Common
 		//获取用户ID
 		$uid = $_SESSION['user']['user_info']['uid'];
 		//查询陪玩师必要信息
-		$real = Db::table('hn_accompany')->field('real,up,down,wb_list')->where('user_id',$uid)->find();
+		$real = Db::table('hn_accompany')->field('real,up,down,wb_list,address')->where('user_id',$uid)->find();
 		
 		if($real['down'] == 2){
 			$longitude = Db::table('hn_accompany')->field('lng,lat')->where('user_id',$uid)->find();
@@ -1664,6 +1680,38 @@ class User extends Common
 				}
 			}
 		}
+	}
+
+
+	//地址修改
+	public function address_edit()
+	{
+
+		$data = Request::instance()->param();
+
+		//获取用户ID
+		$uid = $_SESSION['user']['user_info']['uid'];
+
+		$city = Db::table('hn_accompany')->field('city')->where('user_id',$uid)->find();
+
+
+		$location = $this->address($city['city'].$data['address']);
+
+
+		if($location){
+            $data['lat'] = $location['lat'];
+            $data['lng'] = $location['lng'];
+        }
+
+        $res = Db::table('hn_accompany')->where('user_id',$uid)->update($data);
+
+        if($res){
+        	return json(['code' => 1 , 'msg' => '修改成功']);
+        }else{
+        	return json(['code' => 2 , 'msg' => '修改失败']); 
+        }
+		
+        
 	}
 	
 

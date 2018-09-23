@@ -67,7 +67,7 @@ class Examine extends Common
 	{	
 		if(Request::instance()->isPost()){
 			$data = Request::instance()->param();
-		
+
 			//修改陪玩师申请表字段
 			if($data['acc_type']){
 				
@@ -106,7 +106,7 @@ class Examine extends Common
 		Db::table('hn_user')->where('uid', $data['user_id'])->update(['head_img' => $data['head_img'],'age' => $age]);
 		unset($data['head_img']);
 
-		$location = $this->address($data['address']);
+		$location = $this->address($data['city'].$data['address']);
 
 		if($location){
             $data['lat'] = $location['lat'];
@@ -139,6 +139,17 @@ class Examine extends Common
 				$rec_id = $data['user_id'];
 				$this->message_add($title,$text,$send_id,$rec_id);
 				Db::table('hn_apply_project')->insert($wow);
+				//5.给陪玩师发短信
+					//查出他的手机号和昵称 $data['user_id']
+				$mom = Db::table('hn_user')->field('account,nickname')->where('uid',$data['user_id'])->find();
+				$phone = $mom['account'];
+		        $data = [
+		            'player' =>'', //玩家
+		            'name' =>$mom['nickname'],		//陪玩师
+		            'time' =>'',		//
+		            'location' =>'',
+		        ];
+		        $this->sendCms($phone,$data,3);
 				$this->success('成功','Examine/index');
 			}else{
 				$this->error('失败');
@@ -164,6 +175,9 @@ class Examine extends Common
 			$send_id = 0;
 			$rec_id = $id;
 			$this->message_add($title,$text,$send_id,$rec_id);
+
+
+
 			return json(['code' => 1 , 'msg' => '操作成功']);
 		}else{
 			return json(['code' => 2 , 'msg' => '操作失败']);
@@ -187,7 +201,7 @@ class Examine extends Common
 	{	
 		$id = Request::instance()->param('id');
 		$apply_data = Db::table('hn_apply_project')->field('id,uid,project,project_id,project_name,project_grade_name,img_url,explain,time')->where('id',$id)->find();
-
+		//var_dump($apply_data);die;
 		if(Request::instance()->isPost())
 		{
 			$data = Request::instance()->param();
@@ -195,6 +209,7 @@ class Examine extends Common
 			if($data['type'] == 1){
 				//审核通过    改变状态   改变time   
 					//注意  重复的项目去更新  覆盖    
+				
 				$judge = Db::table('hn_apply_project')->field('id')->where(['project' => $data['project'], 'project_id' => $data['project_id'], 'uid' => $data['uid'],'status' => 1])->find();
 
 				if($judge){

@@ -37,6 +37,7 @@
 		}
 
 	</style>
+	
 			<div class="user-info-box u-page-body">
 				<div class="u-title">
 					<span>个人中心</span>
@@ -105,12 +106,12 @@
 						</tr>
 						<tr>
 							<td>QQ:</td>
-							<td><input type="text" name="penguin" value="{$user_data['penguin']}" /></td>
+							<td><input type="text" name="penguin" value="{$user_data['penguin']}" oninput="value=value.replace(/[^\d]/g,'')"/></td>
 						</tr>
 						<tr>
 							<td>账号/手机号:</td>
-							<td><input type="text"  value="{$user_data['account']}"  disabled/></td>
-							<td><a href="{:url('User/change_account')}" style="color:red">重新绑定手机号</a></td>
+							<td><input type="text"  value="{$user_data['account']}"  disabled oninput="value=value.replace(/[^\d]/g,'')"/></td>
+							<td><a href="{:url('User/change_account')}" style="color:red"> &nbsp;&nbsp;重新绑定手机号</a></td>
 						</tr>
 						<tr>
 							<td>个性签名:</td>
@@ -188,6 +189,12 @@
 				var phone = $('[name = "phone"]').val()
 				var table = $('[name = "table"]').val()
 				var type = {$user_data['type']};
+				if(!nickname){
+					layui.use('layer',function(){
+							layer.msg('昵称不能为空')
+							})
+					return
+				}
 				
 				if(type == 1){
 					var address = $('[name="address"]').val()

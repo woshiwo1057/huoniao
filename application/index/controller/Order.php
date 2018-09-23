@@ -83,7 +83,7 @@ class Order extends Common
 						return json(['code'=>9,'msg'=>'该陪玩师尚有订单未完成，暂时无法接单，稍后再来吧']);
 			}
 			//判断之前是否有未完成的订单   status < 4
-			$order_data = Db::table('hn_order')->field('status')->where(['user_id' => $user_id])->where('status','<',4)->find();
+			$order_data = Db::table('hn_order')->field('status')->where(['user_id' => $user_id])->where('status','<',4)->where('status','>',0)->find();
 			if($order_data != ''){
 						return json(['code'=>5,'msg'=>'请完成之前的订单后再来下单，谢谢']);
 			}
@@ -182,7 +182,7 @@ class Order extends Common
 				return json(['code'=>1,'msg'=>'余额不足，请更换支付方式']);
 			}
 			//判断之前是否有未完成的订单   status < 4
-			$order_data = Db::table('hn_order')->field('status')->where(['user_id' => $user_id])->where('status','<',4)->find();
+			$order_data = Db::table('hn_order')->field('status')->where(['user_id' => $user_id])->where('status','<',4)->where('status','>',0)->find();
 			//var_dump($order_data);die;
 			if($order_data != ''){
 				return json(['code'=>5,'msg'=>'请完成之前的订单后再来下单，谢谢']);
@@ -285,7 +285,7 @@ class Order extends Common
 						return json(['code'=>9,'msg'=>'该陪玩师尚有订单未完成，暂时无法接单，稍后再来吧']);
 			}
 			//判断之前是否有未完成的订单   status < 4
-			$order_data = Db::table('hn_order')->field('status')->where(['user_id' => $user_id])->where('status','<',4)->find();
+			$order_data = Db::table('hn_order')->field('status')->where(['user_id' => $user_id])->where('status','<',4)->where('status','>',0)->find();
 			if($order_data != ''){
 						return json(['code'=>5,'msg'=>'请完成之前的订单后再来下单，谢谢']);
 			}
@@ -363,7 +363,7 @@ class Order extends Common
 				return json(['code'=>1,'msg'=>'余额不足，请更换支付方式']);
 			}
 			//判断之前是否有未完成的订单   status < 4
-			$order_data = Db::table('hn_order')->field('status')->where(['user_id' => $user_id])->where('status','<',4)->find();
+			$order_data = Db::table('hn_order')->field('status')->where(['user_id' => $user_id])->where('status','<',4)->where('status','>',0)->find();
 			//var_dump($order_data);die;
 			if($order_data != ''){
 				return json(['code'=>5,'msg'=>'请完成之前的订单后再来下单，谢谢']);
@@ -479,7 +479,7 @@ class Order extends Common
 						return json(['code'=>9,'msg'=>'该陪玩师尚有订单未完成，暂时无法接单，稍后再来吧']);
 			}
 			//判断之前是否有未完成的订单   status < 4
-			$order_data = Db::table('hn_order')->field('status')->where(['user_id' => $user_id])->where('status','<',4)->find();
+			$order_data = Db::table('hn_order')->field('status')->where(['user_id' => $user_id])->where('status','<',4)->where('status','>',0)->find();
 			if($order_data != ''){
 						return json(['code'=>5,'msg'=>'请完成之前的订单后再来下单，谢谢']);
 			}
@@ -554,7 +554,7 @@ class Order extends Common
 				return json(['code'=>1,'msg'=>'余额不足，请更换支付方式']);
 			}
 			//判断之前是否有未完成的订单   status < 4
-			$order_data = Db::table('hn_order')->field('status')->where(['user_id' => $user_id])->where('status','<',4)->find();
+			$order_data = Db::table('hn_order')->field('status')->where(['user_id' => $user_id])->where('status','<',4)->where('status','>',0)->find();
 			//var_dump($order_data);die;
 			if($order_data != ''){
 				return json(['code'=>5,'msg'=>'请完成之前的订单后再来下单，谢谢']);

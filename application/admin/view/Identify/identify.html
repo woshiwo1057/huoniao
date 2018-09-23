@@ -129,9 +129,9 @@
 					<br>
 					<br>
 					<br>
-					{if condition="$data.status eq 1"}
-					<input type="submit" value="生成" class="miva-btn miva-btn-act">
-					{/if}
+					
+					<input type="submit" value="提交" class="miva-btn miva-btn-act">
+				
 				</form>
 				<div class="jian-img-box" style="margin-left: 5px;">
 					{if condition="$data.identify_card neq ''"}
@@ -140,9 +140,33 @@
 					<img src="http://placehold.it/500x500" />
 					{/if}
 				</div>
+
 			</div>
+			
+			<span class="miva-btn miva-btn-act" onclick="shengcheng()" style="margin-top: -80px">预览</span>
+			
 		</div>
 	</div>
 </section>
 
 		{include file="public/footer"}
+
+<script>
+	function shengcheng(){
+            var d = {};
+            var t = $('form').serializeArray();
+            //t的值为[{name: "a1", value: "xx"},
+            //{name: "a2", value: "xx"}...]
+            $.each(t, function() {
+                d[this.name] = this.value;
+            });
+        $.post("{:url('Identify/yulan')}",{data:d},function(data){
+            if(data.code == 1){
+				$('.jian-img-box>img').attr('src',data.url);
+
+            }else{
+                alert(data.msg)
+            }
+        },'json')
+	}
+</script>

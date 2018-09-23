@@ -108,7 +108,7 @@
 				</tr>
 				<tr>
 					<td class="up-bottom">居住地址:</td>
-					<td colspan="2"><input class="miva-input path-input" type="text" placeholder="请输入您的常用地址" name="address">
+					<td colspan="2"><input class="miva-input path-input" type="text" placeholder="请输入您的常用地址：省/市/县/街道" name="address" >
 						<div class="tip">备注:精确的位置有助于您更好的接受线下约玩单</div>
 					</td>
 				</tr>
@@ -137,7 +137,7 @@
 					<td id="xian" colspan="2">
 						<!--<span class="miva-btn miva-btn-act" acc_type="1">线上</span>-->
 						
-						<span class="miva-btn" acc_type="2"  data-item="xiaxian" >开通</span>
+						<span class="miva-btn" acc_type="2" style="position:initial"  data-item="xiaxian" >开通</span>
 						<!--<span class="tip">备注:线上线下可同时选择</span>--></td>
 				</tr>
 			</table>
@@ -717,7 +717,7 @@ if({$user_data['sex']} == 0){
 			}
 
 
-			
+			var mom = option & cityVal &  
 			$.post("{:url('Conpanion/apply')}", {
 				//前往用户表的数据
 				nickname:nickname,  //姓名

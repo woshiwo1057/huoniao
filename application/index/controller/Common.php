@@ -142,7 +142,7 @@ class Common extends \think\Controller
             'rec_id'    => $rec_id,
             'addtime'=> time()
         ];
-        $res = $message->insert($data);
+       return  $res = $message->insert($data);
     }
 
 

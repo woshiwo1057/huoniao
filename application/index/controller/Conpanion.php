@@ -140,13 +140,14 @@ class Conpanion extends Common
 					$img_head_data = $this->cos($file_head,$key_a);
 
 					$data['head_img'] = $this->img.$key_a;
+					unset($data['option']);
 				}else{
 					//不存在  意为用原来的头像
 					$head_img = Db::table('hn_user')->field('head_img')->where('uid',$id)->find();
 					$data['head_img'] = $head_img['head_img'];
 				}
 				//这是申请资料图片
-				$key = date('Y-m-d').'/'.md5(microtime()).'.jpg'; //路径
+				$key = date('Y-m-d').'/'.md5(microtime()).'.jpg';  //路径
 				$file = $data['img_data'];
 				//3.时间戳
 				$data['time'] = time();

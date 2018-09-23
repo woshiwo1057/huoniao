@@ -79,7 +79,7 @@
 			var project = {$apply_data.project};
 			var project_id = {$apply_data.project_id};
 
-			$.post("{:url('Examine/inspect')}",{type:type,id:id,uid:uid,project,project_id},function(data){
+			$.post("{:url('Examine/inspect')}",{type:type,id:id,uid:uid,project:project,project_id:project_id},function(data){
 					if(data == 1){
 						alert('成功')
 						window.location.href="{:url('Examine/service')}"

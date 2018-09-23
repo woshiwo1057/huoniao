@@ -23,7 +23,7 @@ use \Qcloud\Cos\Client;
 
 class Common extends \think\Controller
 {
-
+    static $acsClient = null;
 	public $img = 'https://hn-001-1256760691.picbj.myqcloud.com/'; //腾讯云路径
     public $Intercept = 45; //cos路径截取长度
     

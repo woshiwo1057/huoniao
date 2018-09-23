@@ -53,6 +53,7 @@ class Index  extends Common
                     ->where('a.status',1)->limit('0,15')->select();
                     
         $acc_data = $this->out_repeat($acc_data,'nickname');
+        //var_dump($acc_data);die;
   
     	//优质新人  先注册的排前面（15天内）
     	$new_data =	Db::table('hn_accompany')->alias('a')
@@ -60,7 +61,7 @@ class Index  extends Common
                         ->field('u.uid,u.nickname,u.head_img,u.age,a.city')->where('a.new_people',1)->limit('15')->select();
     	//->join('hn_apply_acc p','p.user_id = a.user_id')
         //$adhwuhwad = $this->wechat_query();
-        //var_dump($adhwuhwad);die;
+        //var_dump($new_data);die;
 
 //*********************
 //*首页排行榜
@@ -521,6 +522,8 @@ class Index  extends Common
         }
 
         $uid = $_SESSION['user']['user_info']['uid'];
+        $nickname = $_SESSION['user']['user_info']['nickname'];
+        
         if($uid == $data_get['followed_user']){
             return ['code' => 5,'msg' => '不能关注自己哦'];exit;
         }
@@ -537,6 +540,12 @@ class Index  extends Common
                     'status'=>1
                 ];
                 $aa = ['code' => 1,'msg' => '操作成功'];
+
+                $title = '有人关注了你';
+                $text = $nickname.'关注了你';
+                $send_id = 0;
+                $rec_id = $data_get['followed_user'];
+                $this->message_add($title,$text,$send_id,$rec_id);
             }
             $red = $follow->where(['user_id'=>$uid,'followed_user'=>$data_get['followed_user']])->update($data);
 
@@ -548,6 +557,12 @@ class Index  extends Common
             ];
             $red = $follow->insert($data);
             $aa = ['code' => 1,'msg' => '操作成功'];
+
+            $title = '有人关注了你';
+            $text = $nickname.'关注了你';
+            $send_id = 0;
+            $rec_id = $data_get['followed_user'];
+            $this->message_add($title,$text,$send_id,$rec_id);
         }
         if($red){
             return $aa;
