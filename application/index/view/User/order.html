@@ -65,6 +65,10 @@
                <span class="out xiaoshou" order_id="{$v.id}" type="3">确认完成</span>
               {/if}
 
+              {if condition="$v['status'] == 4"}
+               <span class="xiaoshou pingjia" order_id="{$v.id}"  acc_id="{$v.uid}">点击评价</span>
+              {/if}
+
               <div class="jindu">订单进度<br><i class="layui-icon layui-icon-triangle-d"></i></div>
 
             </div>
@@ -334,6 +338,63 @@
     })
   })
 </script>
+<script type="text/javascript">
+    $('.pingjia').click(function(){
+      var order_id = $(this).attr('order_id')
+      var acc_id = $(this).attr('acc_id')
+      function jump(){
+          window.location.reload();
+      }
+
+        layui.use('layer', function() {
+          layer.open({
+            type: 2,
+
+            title: false,
+
+            maxmin: false,
+            scrollbar: false,
+            skin: 'layui-layer-bai',
+            shadeClose: false, //点击遮罩关闭层
+
+            area: ['400px', '400px'],
+            content: 'comment.html',
+            success: function(layero, index) {
+              var body = layer.getChildFrame('body', index);
+              var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+
+              $(body.find('input[type="submit"]')).on('click', function(e) {
+                e.preventDefault()
+                var content = $(body.find('[data-item=content]')).val()
+                
+
+                console.log(content)
+                console.log(acc_id)
+                console.log(order_id)
+                $.post("{:url('User/comment')}",{acc_id:acc_id,order_id:order_id,content:content},function(data){
+                    if(data.code == 1){
+                      layui.use('layer',function(){
+                      layer.msg(data.msg)})
+                      setInterval(jump,1500);
+                    }else if(data.code == 2){
+                      layui.use('layer',function(){
+                      layer.msg(data.msg)})
+                    }else{
+                      layui.use('layer',function(){
+                      layer.msg('未知错误')})
+                    }
+
+                },'json')
+
+              })
+              
+              
+            }
+          });
+        });
+    })
+</script>
+
 	</body>
 
 

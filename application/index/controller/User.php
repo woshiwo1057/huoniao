@@ -66,6 +66,21 @@ class User extends Common
 		{
 			$user_edit = Request::instance()->param();
 			//$user_edit['uid'] = $id;
+
+
+			//组装数据 该去用户表的去用户表  该去陪玩师表的去陪玩师 
+			$acc_data['address'] = $user_edit['address'];
+			$acc_data['height'] = $user_edit['height'];
+			$acc_data['weight'] = $user_edit['weight'];
+			$acc_data['duty'] = $user_edit['duty'];
+			$acc_data['hobby'] = $user_edit['hobby'];
+			unset($user_edit['address']);
+			unset($user_edit['height']);
+			unset($user_edit['weight']);
+			unset($user_edit['duty']);
+			unset($user_edit['hobby']);
+
+
 		
 			if($user_edit['type'] == 1){
 				//判断是否改了名字  提交的数据  与原数据对比
@@ -86,18 +101,16 @@ class User extends Common
 					}
 				}
 
-				//组装数据 该去用户表的去用户表  该去陪玩师表的去陪玩师 
+				
+				
 				$users_data['sex'] = $user_edit['sex'];
 				$users_data['table'] = $user_edit['table'];
 				$users_data['penguin'] = $user_edit['penguin'];
 				$users_data['nickname'] = $user_edit['nickname'];
 				$res = Db::table('hn_user')->where('uid',$id)->update($users_data);
 
-				$acc_data['address'] = $user_edit['address'];
-				$acc_data['height'] = $user_edit['height'];
-				$acc_data['weight'] = $user_edit['weight'];
-				$acc_data['duty'] = $user_edit['duty'];
-				$acc_data['hobby'] = $user_edit['hobby'];
+			
+				
 				$ras = Db::table('hn_accompany')->where('user_id',$id)->update($acc_data);
 				if($res||$ras){
 					return json(['code' => 1,'msg' => '成功']);
@@ -917,7 +930,7 @@ class User extends Common
 		$order_data = Db::table('hn_order')
 						->alias('o')
 						->join('hn_user u','o.acc_id = u.uid')
-						->field('o.id,o.number,o.service,o.length_time,o.time,o.status,o.price,u.nickname,u.head_img')
+						->field('o.id,o.number,o.service,o.length_time,o.time,o.status,o.price,u.nickname,u.head_img,u.uid uid')
 						->where('o.user_id',$id)->limit('8')->order('id desc')->select();
 		//var_dump($order_data);die;
 		$this->assign(['order_data' => $order_data]);
@@ -986,6 +999,33 @@ class User extends Common
 			}
 					
 		}
+	}
+
+	//评论页面
+	public function comment()
+	{
+		if(Request::instance()->isPost())
+		{
+			$data = Request::instance()->param();
+			
+
+			//1.通过订单ID改变订单状态后删除
+			$ras = Db::table('hn_order')->where('id',$data['order_id'])->update(['status' => 5]);
+			unset($data['order_id']);
+			//2.给评论表添加评论
+				//获取到用户ID
+			$data['user_id'] = $_SESSION['user']['user_info']['uid'];
+			$data['time'] = time();
+
+			$res = Db::table('hn_comment')->insert($data);
+			if($res&&$ras){
+				return json(['code' => 1,'msg' => '评论成功']);
+			}else{
+				return json(['code' => 2,'msg' => '评论失败']);
+			}
+
+		}
+		return $this->fetch('User/comment');
 	}
 
 	//送出礼物详情控制器

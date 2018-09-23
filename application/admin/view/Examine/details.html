@@ -228,17 +228,45 @@
 				<button class="btn btn-primary radius" ><i class="Hui-iconfont">&#xe632;</i>审核通过</button>
 			</div>
 		</div>
+
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+				<a class="btn btn-primary radius  no" ><i class="Hui-iconfont">&#xe632;</i>审核不通过</a>
+			</div>
+		</div>
+
 	</form>
+
 
 </div>
 </div>
 <script>
 	$(function(){
 		$('.radius').click(function(){
-			var a = confirm("真的要同意吗？")
+			var a = confirm("真的要确定吗？")
 			if (a != true){
 				return false
 			}
+		})
+
+
+		$('.no').click(function(){
+
+			var id = {$examine_data.id};
+
+			$.post("{:url('Examine/no')}",{id:id},function(data){
+					if(data.code == 1){
+						alert(data.msg)
+						window.location.href="{:url('Examine/index')}"
+					}else if(data.code == 2){
+						alert(data.msg)
+					}else{
+						alert('未知错误')
+					}
+
+			},'json')
+
+
 		})
 
 	})

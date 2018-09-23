@@ -69,7 +69,7 @@ class Common extends \think\Controller
         $id = $_SESSION['user']['user_info']['uid'];
 
         //查出用户的 头像 昵称 ID   等级  余额  鸟蛋
-        $user_data = Db::table('hn_user')->field('uid,nickname,head_img,level,cash,currency')->where('uid',$id)->find();
+        $user_data = Db::table('hn_user')->field('uid,nickname,head_img,level,cash,currency,neice')->where('uid',$id)->find();
 
         return $user_data;
     }
@@ -489,13 +489,13 @@ class Common extends \think\Controller
        
             $logHandler= new \CLogFileHandler(EXTEND_PATH.'wechatpay/example/log.php'.date('Y-m-d').'.log');
             $log = \Log::Init($logHandler, 15);
-
+            //$pice*100
             $notify = new \NativePay();
             $input = new \WxPayUnifiedOrder();
             $input->SetBody("充值使我快乐");    //设置商品或支付单简要描述
             $input->SetAttach($user_id);   //设置附加数据，在查询API和支付通知中原样返回，该字段主要用于商户携带订单的自定义数据  我这里设置成用户ID？
             $input->SetOut_trade_no($number);  //设置商户系统内部的订单号,32个字符内、可包含字母, 其他说明见商户订单号
-            $input->SetTotal_fee($pice*100);  //设置订单总金额，只能为整数，详见支付金额
+            $input->SetTotal_fee(1);  //设置订单总金额，只能为整数，详见支付金额
             $input->SetTime_start(date("YmdHi"));  //设置订单生成时间，格式为yyyyMMddHHmmss，如2009年12月25日9点10分10秒表示为20091225091010。其他详见时间规则
             $input->SetTime_expire(date("YmdHis", time() + 180));  //设置订单失效时间，格式为yyyyMMddHHmmss，如2009年12月27日9点10分10秒表示为20091227091010。其他详见时间规则
             //$input->SetGoods_tag("test");  //设置商品标记，代金券或立减优惠功能的参数，说明详见代金券或立减优惠

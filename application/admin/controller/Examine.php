@@ -151,7 +151,25 @@ class Examine extends Common
 	//陪玩师申请拒绝
 	public function no()
 	{
-		echo 1;die;
+		//陪玩师申请表ID
+		$id = Request::instance()->param('id');
+
+		$res = Db::table('hn_apply_acc')->delete($id);
+
+		//$res = Db::table('hn_apply_acc')->where('id',$id)->setField('status', 2);
+
+		if($res){
+			$title = '陪玩师审核失败';
+			$text = '陪玩师审核失败，请检查资料重新申请';
+			$send_id = 0;
+			$rec_id = $id;
+			$this->message_add($title,$text,$send_id,$rec_id);
+			return json(['code' => 1 , 'msg' => '操作成功']);
+		}else{
+			return json(['code' => 2 , 'msg' => '操作失败']);
+		}
+
+
 	}
 
 	//陪玩师服务项目管理列表

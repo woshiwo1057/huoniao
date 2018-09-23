@@ -214,7 +214,7 @@ class Index  extends Common
         $user_data = Db::table('hn_user')
                         ->alias('u')
                         ->join('hn_accompany a','u.uid = a.user_id')
-                        ->field('u.uid,u.nickname,u.head_img,u.age,a.table,a.status,a.hot,a.explain,a.height,a.weight,a.hobby,a.duty,a.pice,a.acc_time,a.city,a.sexy')
+                        ->field('u.uid,u.nickname,u.head_img,u.age,u.neice,a.table,a.status,a.hot,a.explain,a.height,a.weight,a.hobby,a.duty,a.pice,a.acc_time,a.city,a.sexy')
                         ->where('user_id',$id)
                         ->find();
         //查询相册数据
@@ -567,7 +567,7 @@ class Index  extends Common
         $user_data = Db::table('hn_user')
                         ->alias('u')
                         ->join('hn_accompany a','u.uid = a.user_id')
-                        ->field('u.uid,u.nickname,u.head_img,u.age,a.table,a.status,a.hot,a.explain,a.height,a.weight,a.hobby,a.duty,a.acc_time,a.city,a.sexy,a.down')
+                        ->field('u.uid,u.nickname,u.head_img,u.age,u.neice,a.table,a.status,a.hot,a.explain,a.height,a.weight,a.hobby,a.duty,a.acc_time,a.city,a.sexy,a.down')
                         ->where('user_id',$id)
                         ->find();
         //查询相册数据

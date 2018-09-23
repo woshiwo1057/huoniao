@@ -10,6 +10,14 @@ use \think\Session;
 use \think\Db;
 use \think\File;
 
+//短信验证码引入阿里云短信命名空间
+use Aliyun\Core\Config;
+use Aliyun\Core\Profile\DefaultProfile;
+use Aliyun\Core\DefaultAcsClient;
+use Aliyun\Api\Sms\Request\V20170525\SendSmsRequest;
+use Aliyun\Api\Sms\Request\V20170525\SendBatchSmsRequest;
+use Aliyun\Api\Sms\Request\V20170525\QuerySendDetailsRequest;
+
 //引入腾讯对象存储
 use \Qcloud\Cos\Client;
 
@@ -468,6 +476,88 @@ class Common extends \think\Controller
         $image_data_base64 = "data:image/png;base64,". base64_encode ($image_data);
         return( $image_data_base64);exit;
 
+    }
+
+    //手机验证码              手机号  参数数组      模板
+    public function  sendSmss($phone,$templateParam,$sms)
+    {
+        /*
+        *   短信接口
+        *   作者：YG
+        *   时间：20187.24
+        */
+
+        require_once EXTEND_PATH.'alisms/vendor/autoload.php';  //载入阿里云文件
+
+        Config::load();
+
+        //产品名称:云通信流量服务API产品,开发者无需替换
+        $product = "Dysmsapi";
+
+        //产品域名,开发者无需替换
+        $domain = "dysmsapi.aliyuncs.com";
+
+        //设置自己的信息
+        $accessKeyId = "LTAIUTctPQIcLx5d";
+
+        $accessKeySecret = "kWXlikz4MGlJDpeWBaQs9uVnwCRMSF";
+
+        //官方说暂时不支持其他地区的  只有这一个
+        $region = 'cn-hangzhou';
+
+        //服务节点
+        $endPointName = 'cn-hangzhou';
+
+        if(static::$acsClient == null)
+        {
+            //初始化acsClient,暂不支持region化
+            $profile = DefaultProfile::getProfile($region, $accessKeyId, $accessKeySecret);
+
+            //增加服务节点
+            DefaultProfile::addEndpoint($endPointName,$region,$product,$domain);
+
+            //初始化AcsClient用于发送请求
+            static::$acsClient = new DefaultAcsClient($profile);
+        }
+
+
+
+        // 初始化SendSmsRequest实例用于设置发送短信的参数
+        $request = new SendSmsRequest();
+
+        //可选-启用https协议
+        //$request->setProtocol("https");
+
+        //设置接收短信的号码
+        $request->setPhoneNumbers($phone);
+        //设置签名名称
+        $request->setSignName("火鸟陪玩");
+        //设置模板CODE
+        $request->setTemplateCode($sms);
+
+        //设置验证码
+        if($templateParam) {
+            $request->setTemplateParam(json_encode($templateParam));
+        }
+
+        //设置流水号  可写可不写
+        //$request->setOutId('');
+
+
+        //发起访问请求
+        $acsResponse = static::$acsClient->getAcsResponse($request);
+
+        return $acsResponse;
+
+    }
+
+    //发送通知短信 $type  ：1：提醒用户陪玩师接单通知  2：提醒陪玩师已接取线下订单  3：提醒陪玩师通过审核 4：用户订单超时提醒  5：陪玩师订单超时提醒  6：陪玩师有新订单提醒
+    function sendCms($phone,$data,$type){
+        $sms_arr = ['SMS_145593533','SMS_145593493','SMS_145593448','SMS_145598482','SMS_145598470','SMS_145598411'];
+
+       $res =  $this->sendSmss($phone,$data,$sms_arr[$type-1]);
+       return $res;
+        exit;
     }
 
 }

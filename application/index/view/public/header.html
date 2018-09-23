@@ -99,12 +99,15 @@
         <!-- 弹出用户信息 -->
         <div class="user-info-tan">
           <!-- 用户头像 -->
-          <div class="user-pic-tan">
+          <div  style="width: 80px;height: 80px;margin: auto;" class="new-pic-box">
             <a href="{:url('User/index')}">
             <?php if($less_user_data['head_img'] == ''){ ?>
             <img class="user-pic" src="__IMG__default.jpg" alt="">
             <?php }else{?>
-            <img class="user-pic" src="<?php  echo $less_user_data['head_img'];?>" alt="">
+              <?php if($less_user_data['neice'] == 1){?>
+              <img class="kuang" src="__IMG__kuang.png" />
+              <?php  }?>
+            <img class="new-pic" src="<?php  echo $less_user_data['head_img'];?>" />
             <?php }?>
             </a>
           </div>

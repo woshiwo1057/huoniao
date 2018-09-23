@@ -180,7 +180,7 @@ class Pay extends Common
 				Db::table('hn_user')->where('uid', $status['user_id'])->setInc('mogul_day', $status['price']);//加当天土豪值
 
 				//3.判断用户充值的等级
-				$mogul = Db::table('hn_user')->field('mogul,level')->where('uid', $status['user_id'])->find();
+				$mogul = Db::table('hn_user')->field('mogul,level,nickname')->where('uid', $status['user_id'])->find();
 
 				$level = Db::table('hn_recharge_level')->field('level')->where('money','>',$mogul['mogul'])->select();
 				$level = $level['0']['level']-1;
@@ -194,6 +194,17 @@ class Pay extends Common
 				$send_id = 0;
 				$rec_id = $status['acc_id'];
 				$this->message_add($title,$text,$send_id,$rec_id);	
+/*
+				//5.给陪玩师发短信
+				$phone ='13186119291';
+		        $data = [
+		            'player' =>'', //玩家
+		            'name' =>'孙浩',		//陪玩师
+		            'time' =>'8',		//
+		            'location' =>'',
+		        ];
+		        $this->sendCms($phone,$data,6);
+*/
 				//4.改变订单状态	
 				Db::table('hn_order')->where('number', $order_num)->update(['status' => 1]);
 				unset($_SESSION['user']['user_info']['order_number']);
