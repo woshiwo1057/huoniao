@@ -143,6 +143,10 @@ class Order extends Common
 					Db::table('hn_cybercafe')->where('id',$wb_data['id'])->setInc('not_extract',$wb_money);
 				}
 				**************************************************/
+				//查出陪玩师订单分成比例，计算陪玩师应得的钱数
+				$convertible = Db::table('hn_accompany')->field('convertible')->where('user_id',$data['acc_id'])->find(); //比例
+				$data['really_price'] = $convertible['convertible']*$data['price'];//实际到达陪玩师账户的金钱数
+
 				$ras = Db::table('hn_order')->insert($data);
 				return json(['code' => 6,'msg' => $code]);
 			}else{
@@ -323,6 +327,11 @@ class Order extends Common
 					$data['wb_id'] = $_SESSION['think']['wb_id'];
 				}
 				*/
+
+				//查出陪玩师订单分成比例，计算陪玩师应得的钱数
+				$convertible = Db::table('hn_accompany')->field('convertible')->where('user_id',$data['acc_id'])->find(); //比例
+				$data['really_price'] = $convertible['convertible']*$data['price'];//实际到达陪玩师账户的金钱数
+				
 				$ras = Db::table('hn_order')->insert($data);
 				return json(['code' => 6,'msg' => $code]);
 			}else{

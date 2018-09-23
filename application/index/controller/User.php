@@ -978,6 +978,7 @@ class User extends Common
 				//1.查出陪玩师ID 和订单 价格 时长
 			$order_data = Db::table('hn_order')->field('acc_id,really_price,service,length_time')->where('id',$data['order_id'])->find();
 				//2.给陪玩师账户余额加钱   	陪玩师增加时长订单
+			var_dump($order_data);die;
 			$ras = Db::table('hn_user')->where('uid', $order_data['acc_id'])->setInc('cash',$order_data['really_price']); //加钱
 			//加接单时长
 			$length_time = $order_data['length_time']*60*60;
