@@ -160,29 +160,31 @@ class Pay extends Common
 			$status = Db::table('hn_order')->field('status,acc_id,user_id,price,wb_id')->where('number',$order_num)->find();
 
 			if($status['status'] == 0)
-			{	
+			{
 
 			
 				//订单提交并未支付的时候
+				/*  		这里去确认订单完成哪里去添加
 				//1.给网吧钱
 				if($status['wb_id'] != 0){
 
-					//①.通过 $data['wb_id'] 查hn_netbar(网吧入驻表) 联查hn_cybercafe(网吧管理员表) 查ratio（分成比例） $status['price']*ratio
+					//①.通过 $status['wb_id'] 查hn_netbar(网吧入驻表) 联查hn_cybercafe(网吧管理员表) 查ratio（分成比例） $status['price']*ratio
 					$wb_data = Db::table('hn_netbar')
 						->alias('n')
 						->join('hn_cybercafe c' , 'n.c_id = c.id')
 						->field('c.ratio,c.id')
-						->where(['n.id' => $data['wb_id']])
+						->where(['n.id' => $status['wb_id']])
 						->find();
 
-						$wb_money = $data['price']*$wb_data['ratio']; //给的钱数
+						$wb_money = $status['price']*$wb_data['ratio']; //给的钱数
 						//②给网吧表 extract 添值
-						Db::table('hn_netbar')->where('id',$data['wb_id'])->setInc('extract',$wb_money);
+						Db::table('hn_netbar')->where('id',$status['wb_id'])->setInc('extract',$wb_money);
 						//③.给网吧管理员表 extract not_extract添值
 						Db::table('hn_cybercafe')->where('id',$wb_data['id'])->setInc('extract',$wb_money);
 						Db::table('hn_cybercafe')->where('id',$wb_data['id'])->setInc('not_extract',$wb_money);
 
 				}
+				*/
 				//2.给用户添加土豪值
 				Db::table('hn_user')->where('uid', $status['user_id'])->setInc('mogul', $status['price']);//加总土豪值
 
@@ -288,14 +290,14 @@ class Pay extends Common
 				$text = '您有新的声音鉴定订单，快去接单吧！！！！！！！';
 				$send_id = 0;
 				$rec_id = $status['acc_id'];
-				$this->message_add($title,$text,$send_id,$rec_id);	
+				$this->message_add($title,$text,$send_id,$rec_id);
 				//5.改变订单状态	
 				Db::table('hn_order')->where('number', $order_num)->update(['status' => 4]);
 				unset($_SESSION['user']['user_info']['order_number']);
 
 
 				//6.给声鉴表添加声鉴订单
-				$code = $this->voice_order($status['acc_id'],$status['price']);		
+				$code = $this->voice_order($status['acc_id'],$status['price']);
 				$qq = Db::table('hn_user')->field('penguin')->where('uid',$status['acc_id'])->find();
 					if($code == 1){
 						$mom = ['code' => 'Ok',

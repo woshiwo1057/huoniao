@@ -122,7 +122,7 @@ class MicroPay
 				return false;
 			}
 		}
-		
+		die;
 		//如果返回错误码为“此交易订单号不存在”则直接认定失败
 		if($result["err_code"] == "ORDERNOTEXIST")
 		{

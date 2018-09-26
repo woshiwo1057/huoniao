@@ -15,8 +15,8 @@ class Invtiation extends Common
 	public function index()
 	{
 
-		$this->error('正在施工中','Index/index');
-		//return $this->fetch('Invtiation/index');
+		//$this->error('正在施工中','Index/index');
+		return $this->fetch('Invtiation/index');
 		//
 
 

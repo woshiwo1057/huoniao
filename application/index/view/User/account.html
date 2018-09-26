@@ -18,7 +18,7 @@
           <!-- 俩按钮 -->
           <div class="account-top-btn">
             <span><a href="{:url('Recharge/index')}">充值</a></span>
-            {if condition="$_SESSION['user']['user_info']['type'] == 1"}
+            {if condition="$less_user_data['type'] == 1"}
             <span><a href="{:url('User/withdraw_cash')}">提现</a></span>
             {/if}
           </div>

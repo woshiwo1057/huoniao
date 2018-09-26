@@ -958,7 +958,7 @@ class User extends Common
 			}
 
 			//这里是接单 通过$data['order_id']来操作  将status变为2
-			$res = Db::table('hn_order')->where('id', $data['order_id'])->update(['status' => 2]);
+			$res = Db::table('hn_order')->where('id', $data['order_id'])->update(['status' => 2,'single_time' => time()]);
 			if($res){
 				return json(['code' => 1,'msg' => '成功接单']);
 			}else{
@@ -976,15 +976,33 @@ class User extends Common
 		}else if($data['type'] == 3){
 			//确认完成 通过订单ID查出订单详情 给陪玩师账户余额加钱
 				//1.查出陪玩师ID 和订单 价格 时长
-			$order_data = Db::table('hn_order')->field('acc_id,really_price,service,length_time')->where('id',$data['order_id'])->find();
+			$order_data = Db::table('hn_order')->field('wb_id,acc_id,really_price,service,length_time')->where('id',$data['order_id'])->find();
 				//2.给陪玩师账户余额加钱   	陪玩师增加时长订单
-			var_dump($order_data);die;
+			
 			$ras = Db::table('hn_user')->where('uid', $order_data['acc_id'])->setInc('cash',$order_data['really_price']); //加钱
 			//加接单时长
 			$length_time = $order_data['length_time']*60*60;
 			Db::table('hn_apply_project')->where(['uid' => $order_data['acc_id'] , 'project_name' => $order_data['service']])->setInc('length_time', $length_time);
 			//加订单数
 			Db::table('hn_apply_project')->where(['uid' => $order_data['acc_id'] , 'project_name' => $order_data['service']])->setInc('order_num', 1);
+
+			//给网吧钱
+			if($order_data['wb_id'] != 0){
+				//①.通过 $order_data['wb_id'] 查hn_netbar(网吧入驻表) 联查hn_cybercafe(网吧管理员表) 查ratio（分成比例） $status['price']*ratio
+					$wb_data = Db::table('hn_netbar')
+						->alias('n')
+						->join('hn_cybercafe c' , 'n.c_id = c.id')
+						->field('c.ratio,c.id')
+						->where(['n.id' => $order_data['wb_id']])
+						->find();
+
+						$wb_money = $order_data['price']*$wb_data['ratio']; //给的钱数
+						//②给网吧表 extract 添值
+						Db::table('hn_netbar')->where('id',$order_data['wb_id'])->setInc('extract',$wb_money);
+						//③.给网吧管理员表 extract not_extract添值
+						Db::table('hn_cybercafe')->where('id',$wb_data['id'])->setInc('extract',$wb_money);
+						Db::table('hn_cybercafe')->where('id',$wb_data['id'])->setInc('not_extract',$wb_money);
+			}
 			if($ras){
 				//改变订单状态
 				$time = time(); //结束时间
@@ -1349,12 +1367,12 @@ class User extends Common
                 $data = [
                     'status'=>2
                 ];
-                $aa = ['code' => 2,'msg' => '操作成功'];
+                $aa = ['code' => 2,'msg' => '关注成功'];
             }else{
                 $data = [
                     'status'=>1
                 ];
-                $aa = ['code' => 1,'msg' => '操作成功'];
+                $aa = ['code' => 1,'msg' => '关注成功'];
 
 	            $title = '有人关注了你';
 				$text = $nickname.'关注了你';
@@ -1373,7 +1391,7 @@ class User extends Common
 
             //Db::table('hn_user')->field('nickname')->where('uid',$uid)->find();
             $red = $follow->insert($data);
-            $aa = ['code' => 1,'msg' => '操作成功'];
+            $aa = ['code' => 1,'msg' => '关注成功'];
             
             $title = '有人关注了你';
 			$text = $nickname.'关注了你';
@@ -1419,7 +1437,7 @@ class User extends Common
 					}
 				
 
-				$data[0] = $v['pric'];
+				$data[0] = 8;//$v['pric'];
 
 				$apply_data[$k]['pric'] = $data;	
 		
@@ -1534,14 +1552,19 @@ class User extends Common
 		$uid = $_SESSION['user']['user_info']['uid'];
 
 		//容错  防止他人修改
-		$id = Db::table('hn_apply_project')->field('uid')->where('id',$data['id'])->find();
+		$id = Db::table('hn_apply_project')->field('uid,project,project_id')->where('id',$data['id'])->find();
+	
 		if($uid != $id['uid']){
 			return json(['code' => 1 , 'msg' => '非法操作']);
 		}
 		//修改数据
 		$res = Db::table('hn_apply_project')->where('id', $data['id'])->update(['pric' => $data['pric']]);
-			//修改陪玩师表数据
-		Db::table('hn_accompany')->where('user_id',$uid)->update(['pice' => $data['pric']]);
+
+		//修改陪玩师表数据  不是第一次添加的项目则不给修改
+		$service = Db::table('hn_accompany')->field('project,project_id')->where('user_id',$uid)->find();
+		if($service['project'] == $id['project']&&$service['project_id'] == $id['project_id']){
+			$res = Db::table('hn_accompany')->where('user_id',$uid)->update(['pice' => $data['pric']]);
+		}
 
 		if($res){
 			return json(['code' => 2 , 'msg' => '修改成功']);
@@ -1736,6 +1759,50 @@ class User extends Common
 		$this->assign(['coupon_data' => $coupon_data]);
 		return $this->fetch('User/coupon');
 	}
+
+	//定时修改订单状态，并分成
+	function order_but(){
+        $order = db('hn_order');
+
+        $where['status'] = 3;
+        $time = 60*60*2;
+        $where['single_time'] = array('lt',time()-$time);
+        $res = $order->where($where)->field('id,id')->select();
+        foreach ($res as $v){
+            //1.查出陪玩师ID 和订单 价格 时长
+            $order_data = db('hn_order')->field('wb_id,acc_id,really_price,service,length_time')->where('id',$v['id'])->find();
+            //2.给陪玩师账户余额加钱   	陪玩师增加时长订单
+
+            $ras = db('hn_user')->where('uid', $order_data['acc_id'])->setInc('cash',$order_data['really_price']); //加钱
+            //加接单时长
+            $length_time = $order_data['length_time']*60*60;
+            db('hn_apply_project')->where(['uid' => $order_data['acc_id'] , 'project_name' => $order_data['service']])->setInc('length_time', $length_time);
+            //加订单数
+            db('hn_apply_project')->where(['uid' => $order_data['acc_id'] , 'project_name' => $order_data['service']])->setInc('order_num', 1);
+
+            //给网吧钱
+            if($order_data['wb_id'] != 0){
+                //①.通过 $order_data['wb_id'] 查hn_netbar(网吧入驻表) 联查hn_cybercafe(网吧管理员表) 查ratio（分成比例） $status['price']*ratio
+                $wb_data = db('hn_netbar')
+                    ->alias('n')
+                    ->join('hn_cybercafe c' , 'n.c_id = c.id')
+                    ->field('c.ratio,c.id')
+                    ->where(['n.id' => $order_data['wb_id']])
+                    ->find();
+
+                $wb_money = $order_data['price']*$wb_data['ratio']; //给的钱数
+                //②给网吧表 extract 添值
+                db('hn_netbar')->where('id',$order_data['wb_id'])->setInc('extract',$wb_money);
+                //③.给网吧管理员表 extract not_extract添值
+                db('hn_cybercafe')->where('id',$wb_data['id'])->setInc('extract',$wb_money);
+                db('hn_cybercafe')->where('id',$wb_data['id'])->setInc('not_extract',$wb_money);
+                
+            }
+            db('hn_order')->where('id', $v['id'])->update(['status' => 4,'over_time' => time()]);
+        }
+
+    }
+
 
 }
 

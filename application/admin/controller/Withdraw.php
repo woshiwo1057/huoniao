@@ -29,7 +29,7 @@ class Withdraw extends Common
 		$data = Request::instance()->param();
 
 		//管理员ID
-		$id = $_SESSION['user']['user_info']['uid'];
+		$id = $_SESSION['admin']['admin_info']['id'];
 
 		//1.通过ID更改提现表对应字段
 		$res = Db::table('hn_withdraw_cash')->where('id',$data['id'])->update(['status' => 2,'admin_id' => $id]);
@@ -54,7 +54,7 @@ class Withdraw extends Common
 		$data = Request::instance()->param();
 
 		//管理员ID
-		$id = $_SESSION['user']['user_info']['uid'];
+		$id = $_SESSION['admin']['admin_info']['id'];
 
 		//1.查出表单详情
 		$withdraw_data = Db::table('hn_withdraw_cash')->field('user_id,money')->where('id',$data['id'])->find();

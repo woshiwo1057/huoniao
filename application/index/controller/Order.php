@@ -117,7 +117,9 @@ class Order extends Common
 				//判断是否在合作网吧
 				if(isset($_SESSION['think']['wb_id'])){
 					$data['wb_id'] = $_SESSION['think']['wb_id'];
+				
 				}
+				
 				
 
 				/************************************************
@@ -212,7 +214,10 @@ class Order extends Common
 					if($data['price'] != $data['pric']){
 						Db::table('hn_coupon_user')->where(['uid' => $user_id , 'cid' => $data['coupon_type']])->delete();
 					}
-					
+					if(isset($_SESSION['think']['wb_id'])){
+						$data['wb_id'] = $_SESSION['think']['wb_id'];
+					}
+					/*
 					//判断是否在合作网吧
 					if(isset($_SESSION['think']['wb_id'])){
 						$data['wb_id'] = $_SESSION['think']['wb_id'];
@@ -232,7 +237,7 @@ class Order extends Common
 							//3.给网吧管理员表 extract not_extract添值
 						Db::table('hn_cybercafe')->where('id',$wb_data['id'])->setInc('extract',$wb_money);
 						Db::table('hn_cybercafe')->where('id',$wb_data['id'])->setInc('not_extract',$wb_money);
-					}
+					}*/
 
 					//用户实际付的钱
 					$data['price'] = $data['pric'];
@@ -391,7 +396,9 @@ class Order extends Common
 					$data['price'] = $data['pric'];
 
 					//组装数据存入order表
-					
+					//查出陪玩师订单分成比例，计算陪玩师应得的钱数
+					$convertible = Db::table('hn_accompany')->field('convertible')->where('user_id',$data['acc_id'])->find(); //比例
+					$wow['really_price'] = $convertible['convertible']*$data['price'];//实际到达陪玩师账户的金钱数
 					$wow = [];
 					$wow['number'] = time().str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT);//订单号
 					$wow['acc_id'] = $data['acc_id'];
@@ -509,7 +516,9 @@ class Order extends Common
 			$_SESSION['user']['user_info']['order_number'] = $data['number'];
 			$code = $this->wechat_pay($user_id,$data['number'],$data['price']);
 
-			
+			//查出陪玩师订单分成比例，计算陪玩师应得的钱数
+			$convertible = Db::table('hn_accompany')->field('convertible')->where('user_id',$data['acc_id'])->find(); //比例
+			$data['really_price'] = $convertible['convertible']*$data['price'];//实际到达陪玩师账户的金钱数
 
 			if($code){
 				//填表
@@ -590,6 +599,10 @@ class Order extends Common
 						Db::table('hn_coupon_user')->where(['uid' => $user_id , 'cid' => $data['coupon_type']])->delete();
 					}
 					
+					if(isset($_SESSION['think']['wb_id'])){
+						$data['wb_id'] = $_SESSION['think']['wb_id'];
+					}
+					/*
 					//判断是否在合作网吧
 					if(isset($_SESSION['think']['wb_id'])){
 						$data['wb_id'] = $_SESSION['think']['wb_id'];
@@ -610,6 +623,8 @@ class Order extends Common
 						Db::table('hn_cybercafe')->where('id',$wb_data['id'])->setInc('extract',$wb_money);
 						Db::table('hn_cybercafe')->where('id',$wb_data['id'])->setInc('not_extract',$wb_money);
 					}
+					*/
+					
 
 					//用户实际付的钱
 					$data['price'] = $data['pric'];

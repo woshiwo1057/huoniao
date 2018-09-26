@@ -1,0 +1,119 @@
+﻿{include file="public/header"}
+{include file="public/sidebar"}
+<!--/_menu 作为公共模版分离出去-->
+
+<section class="Hui-article-box">
+	<div class="Hui-article">
+		<article class="cl pd-20">
+			
+			
+			<div class="mt-20">
+				<table class="table table-border table-bordered table-bg table-hover table-sort">
+					<thead>
+						<tr class="text-c">
+							<th >提现订单ID</th>
+							<th >支付宝姓名</th>
+							<th >支付宝账号</th>
+							<th >提取现金金额</th>
+							<th >后台审核人员ID</th>
+							<th >申请时间</th>
+							<th >状态</th>
+							<th >操作</th>
+						</tr>
+					</thead>
+					<tbody>
+					{foreach name="wthdraw_data" item="v"}
+						<tr class="text-c">
+							<td>{$v.id}</td>
+							<td>{$v.name}</td>
+							<td>{$v.alipay}</td>
+							<td>{$v.money}</td>
+							<td>{$v.admin_id}</td>
+							
+							<td>{:date('Y-m-d H:i:s',$v.addtime)}</td>
+
+							<td>
+							{switch name="$v.type"}
+							{case value="1"}审核成功{/case}
+							{case value="2"}待审核{/case}
+							{case value="3"}审核失败{/case}
+							{/switch}
+							</td>
+
+							<td class="td-manage">
+							{if condition="$v['type'] == 2"}
+								<a  href="{:url('Wbwithdraw/details',['id' => $v['id']])}"  style="text-decoration:none" class="ml-5"  title="查看详情">
+									<i class="Hui-iconfont">&#xe6df;</i>
+								</a> 
+							
+							{/if}
+							</td>
+						</tr>
+					{/foreach}
+					</tbody>				
+						
+				</table>
+			</div>
+		</article>
+	</div>
+</section>
+
+
+{include file="public/footer"}
+<script>
+	$(function(){
+		$('.ml-5').click(function(){
+			var a = confirm("操作前请确认")
+			if (a != true){
+				return false
+			}
+		})
+/*
+		$('[data-item-ok]').click(function(){
+	
+			var id = $(this).attr('data-item-ok')
+			
+			$.post("{:url('Withdraw/ok')}",{id:id},function(data){
+				if(data.code == 1){
+					alert(data.msg)
+					window.location.reload()
+				}else if(data.code == 2){
+					alert(data.msg)
+					window.location.reload()
+				}else{
+					alert('未知错误')
+				}
+
+			},'json')
+
+
+		})
+
+		$('[data-item-no]').click(function(){
+
+			var id = $(this).attr('data-item-no')
+
+			$.post("{:url('Withdraw/no')}",{id:id},function(data){
+				if(data.code == 1){
+					alert(data.msg)
+					window.location.reload()
+				}else if(data.code == 2){
+					alert(data.msg)
+					window.location.reload()
+				}else{
+					alert('未知错误')
+				}
+				
+			},'json')
+
+
+			
+		})
+*/
+	})	
+</script>
+
+<!--/请在下方写此页面业务相关的脚本-->
+
+</body>
+</html>

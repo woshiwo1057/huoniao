@@ -69,8 +69,11 @@ class Common extends \think\Controller
         $id = $_SESSION['user']['user_info']['uid'];
 
         //查出用户的 头像 昵称 ID   等级  余额  鸟蛋
-        $user_data = Db::table('hn_user')->field('uid,nickname,head_img,level,cash,currency,neice')->where('uid',$id)->find();
+        $user_data = Db::table('hn_user')->field('uid,nickname,head_img,level,cash,currency,neice,type')->where('uid',$id)->find();
 
+       /* if($user_data['type'] == 1){
+            Db::table('hn_accompany')->fidle('')
+        }*/
         return $user_data;
     }
 
@@ -621,7 +624,7 @@ class Common extends \think\Controller
      * @return Array 范围数组
      */
     public function calcScope($lat, $lng) {
-        $radius = 3000;
+        $radius = 5000;
         $PI = 3.14159265;
         $degree = (24901*1609)/360.0;
         $dpmLat = 1/$degree;

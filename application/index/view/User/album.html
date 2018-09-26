@@ -222,6 +222,11 @@ var files = $('#user-pic');
 							var imgbox = layero.find("#newMiva");
 							var cas = imgbox.cropper('getCroppedCanvas');
 							base64url = cas.toDataURL('image/jpeg');
+							var photoBox = $('.album-body');
+
+								var photoItem = ` <li><img src="${base64url}" /></li>`;
+
+								photoBox.prepend(photoItem);
 
 							var option = base64url; //上传图片的内容
 							$('#user-pic-img').attr('src', option);

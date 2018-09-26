@@ -16,7 +16,7 @@
                     {/if}
                 <img class="new-pic" src="{$user_data.head_img}" />
 				{/if}
-				{if condition="$user_data.status == 1" }
+				{if condition="$user_data.status == 1"}
 				<!--在线状态-->
                 <span style="display: inline-block;background: #A9F9C3;color: #fff;padding: 3px 20px;border-radius: 5px;position: absolute;bottom: 0;left: 50%;z-index: 9999;-webkit-transform: translate(-50%);transform: translate(-50%);">在线</span>
 
@@ -436,14 +436,14 @@
 					<div class="photo-box"><img src="{$user_data.head_img}" alt="" class="photo-big"></div>
 					<!-- 照片选择 -->
 					<div class="photo-select">
-						<!-- 左箭头 --><span style="background-image: url('./images/png/right.png')" class="jt-left"></span>
+						<!-- 左箭头 --><span style="background-image: url('__IMG__right.png')" class="jt-left"></span>
 						<!-- 中间的可选项 -->
 						<div class="middle-box">
 						
 						<img src="{$user_data.head_img}" alt="">
 						
 						</div>
-						<!-- 右箭头 --><span style="background-image: url('./images/png/right.png')" class="jt-right"></span></div>
+						<!-- 右箭头 --><span style="background-image: url('__IMG__right.png')" class="jt-right"></span></div>
 				</div>
 				{/if}
 					<script type="text/javascript">
@@ -564,37 +564,37 @@
 									<div class="biajie">
 										<ul>
 											<li>
-												<div class="liwu" gift_id="{$v.id}" num="1" >
+												<div class="liwu" gift_id="{$v.id}" num="1" egg="{$v.pice}" >
 													<div>1</div>
 													<span>一心一意</span>
 												</div>
 											</li>
 											<li>
-												<div class="liwu" gift_id="{$v.id}"  num="10" >
+												<div class="liwu" gift_id="{$v.id}"  num="10"  egg="{$v.pice}" >
 													<div>10</div>
 													<span>十全十美</span>
 												</div>
 											</li>
 											<li>
-												<div class="liwu" gift_id="{$v.id}" num="30"  >
+												<div class="liwu" gift_id="{$v.id}" num="30"   egg="{$v.pice}" >
 													<div>30</div>
 													<span>情不自禁</span>
 												</div>
 											</li>
 											<li>
-												<div class="liwu" gift_id="{$v.id}" num="66"  >
+												<div class="liwu" gift_id="{$v.id}" num="66"   egg="{$v.pice}" >
 													<div>66</div>
 													<span>六六大顺</span>
 												</div>
 											</li>
 											<li>
-												<div class="liwu" gift_id="{$v.id}" num="520"  >
+												<div class="liwu" gift_id="{$v.id}" num="520"  egg="{$v.pice}"  >
 													<div>520</div>
 													<span>情有独钟</span>
 												</div>
 											</li>
 											<li>
-												<div class="liwu" gift_id="{$v.id}" num="1314"  >
+												<div class="liwu" gift_id="{$v.id}" num="1314"  egg="{$v.pice}"  >
 													<div>1314</div>
 													<span>一生一世</span>
 												</div>
@@ -650,10 +650,11 @@
 						$('.biajie').on('click', '.liwu', function(){
 							var num =  $(this).attr('num')
                             var id = $(this).attr('gift_id')
+                            var egg = $(this).attr('egg')
 
                             $('[data-main='+ id +']').find('[data-id=mimiva]').val(num)
 
-                            var price = num * 10;
+                            var price = num *egg ;
                             $('[data-main='+ id +']').find('[data-item=dan]').html('需要鸟蛋:'+price)
 
 
@@ -926,7 +927,14 @@
 							<div class="max-time"><img src="" alt=""><span>接单时长:{$service_data.length_time/3600} h</span></div>
 							<div class="audio-box"><img src="__IMG__icon-play.png" alt=""><span>0 S</span><audio src="" style="display:none"></audio><img src="__IMG__icon-auido.png" alt=""></div>
 						</div>
-						<a href="{:url('Order/index',['id' => $user_data['uid'],'project' => $service_data['project'],'project_id' => $service_data['project_id']])}"><span class="submit-btn">立即下单</span></a>
+						{if condition="$user_data.up == 2"}
+                        <a href="{:url('Order/index',['id' => $user_data['uid'],'project' => $service_data['project'],'project_id' => $service_data['project_id']])}">
+                            
+                            <span class="submit-btn">立即下单</span>
+                         </a>
+                            {else /}
+                            <p class="submit-btn" style="background:#999999;">立即下单</p>
+                            {/if}
 					</div>
 					<script type="text/javascript">
 						$('.tab-title').on('click', 'span', function() {
@@ -940,8 +948,8 @@
 								
 								console.log(data)
 								var uid = "{$user_data['uid']}";
-								//https://csq.huoniaopeiwan.com/index/order/index/id/
-								var wow = 'http://localhost/huoniao/public/index.php/index/order/index/id/'+{$user_data['uid']}+'/project/'+project+'/project_id/'+project_id;
+								//http://localhost/huoniao/public/index.php/index/order/index/id/
+								var wow = 'https://csq.huoniaopeiwan.com/index/order/index/id/'+{$user_data['uid']}+'/project/'+project+'/project_id/'+project_id;
 								str += `
 										<img src="${data.project_img}" alt="">
 									
@@ -951,7 +959,11 @@
 											<div class="max-time"><img src="" alt=""><span>接单时长:${data.length_time/3600} h</span></div>
 											<div class="audio-box"><img src="__IMG__icon-play.png" alt=""><span>0 S</span><audio src="" style="display:none"></audio><img src="__IMG__icon-auido.png" alt=""></div>
 										</div>
-										<a href="${wow}"><span class="submit-btn">立即下单</span></a>`
+										{if condition="$user_data.up == 2"}
+                                        <a href="${wow}"><span class="submit-btn">立即下单</span></a>
+                                        {else }
+                                        <p class="submit-btn" style="background:#999999;">立即下单</p>
+                                        {/if}`
 
 								$('.order-info').html(str)
 

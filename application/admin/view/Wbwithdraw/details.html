@@ -1,0 +1,76 @@
+{include file="public/header"}
+<link href="__ADMIN__lib/webuploader/0.1.5/webuploader.css" rel="stylesheet" type="text/css" />
+{include file="public/sidebar"}
+
+<body>
+<div class="page-container">
+	<form class="form form-horizontal" id="form-article-add" enctype="multipart/form-data" action="{:url('Wbwithdraw/ok')}"  method="post">
+	
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>支付宝姓名：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="hidden" class="input-text" value="{$wthdraw_data.id}"  name="id">
+				<input type="text" class="input-text" value="{$wthdraw_data.name}"  >
+			</div>
+		</div>
+
+		
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>支付宝账户：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$wthdraw_data.alipay}"  >
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>提现金额</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$wthdraw_data.money}" >
+			</div>
+		</div>
+		
+
+		
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+				<button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i>同意</button>
+			</div>
+		</div>
+
+
+		
+
+
+		
+	</form>
+	<form  class="form form-horizontal" id="form-article-add" enctype="multipart/form-data" action="{:url('Wbwithdraw/no')}"  method="post">
+	<div class="row cl">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red"></span></label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="hidden" class="input-text" value="{$wthdraw_data.c_id}"  name="c_id">
+				<input type="hidden" class="input-text" value="{$wthdraw_data.money}"  name="money">
+			
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>拒绝请写说明</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text"  name="content">
+			</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+				<button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i>拒绝</button>
+			</div>
+		</div>
+	</form>
+
+</div>
+</div>
+<!--_footer 作为公共模版分离出去-->
+{include file="public/footer"}
+<!--/_footer /作为公共模版分离出去-->
+
+
+</body>
+</html>

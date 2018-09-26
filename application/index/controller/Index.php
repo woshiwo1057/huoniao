@@ -28,7 +28,7 @@ class Index  extends Common
             if(isset($wb_id)&&$wb_id){
                 $data = db('hn_netbar')->where('id',$wb_id)->field('id,name')->find();
                 $name = $data['name'];
-                echo "<script>alert('$name'+'欢迎您');</script>";
+            
                 $this->assign([ 'name' => $name ]);
             }
         }
@@ -215,7 +215,7 @@ class Index  extends Common
         $user_data = Db::table('hn_user')
                         ->alias('u')
                         ->join('hn_accompany a','u.uid = a.user_id')
-                        ->field('u.uid,u.nickname,u.head_img,u.age,u.neice,a.table,a.status,a.hot,a.explain,a.height,a.weight,a.hobby,a.duty,a.pice,a.acc_time,a.city,a.sexy')
+                        ->field('u.uid,u.nickname,u.head_img,u.age,u.neice,a.table,a.status,a.hot,a.explain,a.height,a.weight,a.hobby,a.duty,a.pice,a.acc_time,a.city,a.sexy,a.down,a.up')
                         ->where('user_id',$id)
                         ->find();
         //查询相册数据
@@ -225,7 +225,7 @@ class Index  extends Common
         //查询服务项目(只查询第一个服务项目  其他的走Ajax)
             //查出所有名字循环输出
         $service_name = Db::table('hn_apply_project')->field('project_name,project_id,project')->where(['status' => 1, 'type' => 1,'uid' => $id])->select();
-
+//var_dump($service_name);die;
         $project_data = Db::table('hn_apply_project')->field('project,project_id,project_name,project_grade_name,pric,length_time')->where(['status' => 1, 'type' => 1,'uid' => $id])->find();
         
         if($project_data['project'] == 1){
@@ -354,6 +354,7 @@ class Index  extends Common
             $service_data['project_img'] = $img['game_index_img'];
 
             //算出一个正确的价钱  $service_data['pric']
+            /*
             if($service_data['order_num']>=1){
                 $pric = Db::table('hn_game_grade')->field('pric')->where('id',$service_data['project_grade'])->find(); //项目初始价格
 
@@ -361,7 +362,7 @@ class Index  extends Common
                 $service_data['pric'] = $this->pric($service_data['order_num'],$pric['pric']);
 
             }
-
+            */
            
 
             return json($service_data);
@@ -374,13 +375,15 @@ class Index  extends Common
                         ->where(['status' => 1, 'type' => 1, 'project_id' => $data['project_id'], 'uid' => $data['acc_id']])
                         ->find();
             $service_data['project_img'] = $img['joy_logo_img'];
-
+ //var_dump($service_data);die;
             //算出一个正确的价钱  $service_data['pric']
+ /*
             if($service_data['order_num']>=2){
                 $pric = Db::table('hn_game_grade')->field('pric')->where('id',$service_data['project_grade'])->find(); //项目初始价格
 
                 $service_data['pric'] = $this->pric($service_data['order_num'],$pric['pric']);
             }
+           */
             return json($service_data);
         }
 
