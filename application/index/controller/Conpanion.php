@@ -33,6 +33,15 @@ class Conpanion extends Common
 	{	
 		//获取到用户ID
 		$id = $_SESSION['user']['user_info']['uid'];
+		//查询该用户是否已提交数据去审核
+		$status = Db::table('hn_apply_acc')->field('status')->where('user_id' , $id)->find();
+
+		if($status){
+			$this->assign(['status' => $status]);
+		}else{
+			$status['status'] == 4;
+			$this->assign(['status' => $status]);
+		}
 		//查询到用户数据
 		$user_data = Db::table('hn_user')->field('nickname,head_img,sex,penguin,change_name')->where('uid',$id)->find();
 		//查省份表
@@ -163,7 +172,7 @@ class Conpanion extends Common
 					$res = Db::table('hn_apply_acc')->insert($data);
 
 					if($res){
-						return json(['code' => 1,'msg'=>'提交成功,等待审核']);
+						return json(['code' => 1,'msg'=>'提交成功,等待审核。加审核群：123456789']);
 					}else{
 						return json(['code' => 2,'msg'=>'提交失败，错误码002']);
 					}

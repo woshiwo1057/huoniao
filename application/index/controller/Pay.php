@@ -157,7 +157,7 @@ class Pay extends Common
 		if($data['trade_state_desc'] == '支付成功'){
 			
 			//查询订单状态  是否已经支付成功
-			$status = Db::table('hn_order')->field('status,acc_id,user_id,price,wb_id')->where('number',$order_num)->find();
+			$status = Db::table('hn_order')->field('status,acc_id,user_id,price,wb_id,length_time')->where('number',$order_num)->find();
 
 			if($status['status'] == 0)
 			{
@@ -208,16 +208,36 @@ class Pay extends Common
 
 				/*
 				//5.给陪玩师发短信
-				$phone ='13186119291';
-		        $data = [
-		            'player' =>'', //玩家
-		            'name' =>'孙浩',		//陪玩师
-		            'time' =>'8',		//
-		            'location' =>'',
-		        ];
-		        $this->sendCms($phone,$data,6);
 				*/
-				
+				//1.判断是线上的单子还是线下了  订单总金额/订单时长 == 199
+				if($status['price']/$status['length_time'] == 199){
+					//线下的单子
+					//给陪玩师发短信
+					//1.陪玩师电话  2.短信内容  网吧地址 3. 6
+					$phone = Db::table('hn_user')->field('account,nickname')->where('uid' , $status['acc_id'])->find();
+					$location = Db::table('hn_netbar')->field('location')->where('id' , $status['wb_id'])->find();
+					$dat = [
+			           
+			            'name' => $phone['nickname'],
+			            'time' =>'8',
+			            'location'  =>	$location['location']
+			        ];
+					
+					$this->sendCms($phone['account'],$dat,6);
+
+				}else{
+					//线上的单子
+					//给陪玩师发短信
+					//1.陪玩师电话  2.短信内容  3. 6
+					$phone = Db::table('hn_user')->field('account,nickname')->where('uid' , $status['acc_id'])->find();
+					$dat = [
+			           	'time' =>'8',
+			            'name' => $phone['nickname']
+			            	           
+			        ];
+					
+					$this->sendCms($phone['account'],$dat,6);
+				}
 				//4.改变订单状态	
 				Db::table('hn_order')->where('number', $order_num)->update(['status' => 1]);
 				unset($_SESSION['user']['user_info']['order_number']);
@@ -300,6 +320,17 @@ class Pay extends Common
 				$code = $this->voice_order($status['acc_id'],$status['price']);
 				$qq = Db::table('hn_user')->field('penguin')->where('uid',$status['acc_id'])->find();
 					if($code == 1){
+						//给陪玩师发短信
+						//1.陪玩师电话  2.短信内容  3. 6
+						$phone = Db::table('hn_user')->field('account,nickname')->where('uid' , $status['acc_id'])->find();
+						$dat = [
+				           	'time' =>'8',
+				            'name' => $phone['nickname']
+				            	           
+				        ];
+						
+						$this->sendCms($phone['account'],$dat,6);
+
 						$mom = ['code' => 'Ok',
 									'msg' => '支付成功，联系陪玩师,qq:'.$qq['penguin']
 								];

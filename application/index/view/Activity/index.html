@@ -214,7 +214,7 @@
 						$('.txt-active').trigger('click')
 					})
 
-		$('.miva-acc-tab-box').on('click', '.miva-txt-box', function() {
+		$('.miva-acc-tab-box').on('click', '.miva-txt-box', function(){
 			$(this).addClass('txt-active').siblings().removeClass('txt-active');
 			if ($(this).attr('porjectLv')) porjectLv = $(this).attr('porjectLv');
 			if ($(this).attr('sex')) sex = $(this).attr('sex');
@@ -222,7 +222,7 @@
 	
 		$('.miva-acc-tab-box').on('click','a',function(){
 
-			//筛选   http://localhost/huoniao/public/index.php/index/index/user/id/${a.uid}
+			//筛选   http://localhost/huoniao/public/index.php/index/index/user/id/${a.uid}   https://www.huoniaopeiwan.com/
 			$.post("{:url('Activity/screen')}",{project:project,project_id:projectId,sex:sex,type:type},function(res){
 console.log(res)
 				var str = ''

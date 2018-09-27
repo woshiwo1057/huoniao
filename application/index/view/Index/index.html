@@ -62,7 +62,7 @@
 			<div class="miva-floor-box ">
 				<div class="miva-title">
 					<span class="miva-title-icon"><img src="__IMG__title (1).gif" alt=""></span> 明星推荐
-					<a class="miva-moer" href="#">更多</a>
+					<a class="miva-moer" href="{:url('Acc/index')}">更多</a>
 				</div>
 				<ul class="miva-star-box"  style="width:1420px;">
 					<!-- 一条 -->
@@ -126,7 +126,7 @@
 									</div>
 									<div class="new-name">{$v.nickname}</div>
 									<div class="new-tab-box">
-										<div class="new-age">♀{$v.age}</div>
+										<div {if condition="$v['sex'] == 1"}class="if-man new-age" {else /}class="new-age" {/if}>♀{$v.age}</div>
 										<div class="new-path">{$v.city}</div>
 									</div>
 								</a>
@@ -149,7 +149,7 @@
 			<!-- 今日排行榜 -->
 			<div class="miva-floor-box ">
 				<div class="miva-title">
-					<span class="miva-title-icon"><img src="__IMG__title (3).gif" alt=""></span> 今日排行榜
+					<span class="miva-title-icon"><img src="__IMG__title (3).gif" alt=""></span> 排行榜
 				</div>
 				<!--开始榜-->
 				<div class="miva-rank-box">
@@ -196,7 +196,7 @@
 										{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
 										{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
 										{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-									
+										{default /}<img src="__IMG__icon1-0.gif" alt="" />
 										{/switch}
 									<!--用户分数-->
 									<div class="score-box">
@@ -254,7 +254,7 @@
 										{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
 										{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
 										{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-									
+										{default /}<img src="__IMG__icon1-0.gif" alt="" />
 										{/switch}
 									<!--用户分数-->
 									<div class="score-box">
@@ -307,7 +307,7 @@
 										{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
 										{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
 										{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-										
+										{default /}<img src="__IMG__icon1-0.gif" alt="" />
 										{/switch}
 									<!--用户分数-->
 									<div class="score-box">
@@ -367,7 +367,7 @@
 											{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
 											{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
 											{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-											
+											{default /}<img src="__IMG__icon1-0.gif" alt="" />
 											{/switch}
 										</div>
 										<!-- 得分数值 -->
@@ -407,7 +407,7 @@
 										{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
 										{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
 										{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-										
+										{default /}<img src="__IMG__icon1-0.gif" alt="" />
 										{/switch}
 									<!--用户分数-->
 									<div class="score-box">
@@ -465,11 +465,11 @@
 										{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
 										{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
 										{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-									
+										{default /}<img src="__IMG__icon1-0.gif" alt="" />
 										{/switch}
 									<!--用户分数-->
 									<div class="score-box">
-										<img src="__IMG__qian.png"/>
+										<img src="__IMG__renqi.png"/>
 										<span class="score-txt">{$hot_data[1]['hot']}</span>
 									</div>
 									</div>
@@ -518,7 +518,7 @@
 										{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
 										{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
 										{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-										
+										{default /}<img src="__IMG__icon1-0.gif" alt="" />
 										{/switch}
 									<!--用户分数-->
 									<div class="score-box">
@@ -578,7 +578,7 @@
 											{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
 											{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
 											{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-										
+											{default /}<img src="__IMG__icon1-0.gif" alt="" />
 											{/switch}
 										</div>
 										<!-- 得分数值 -->
@@ -608,7 +608,7 @@
 							</div>
 
 							<!--tab-->
-							<div data-box=2+ class="tab-rank">
+							<div data-box=2 class="tab-rank">
 								<span class="active" data-rank="1">日榜</span>
 								<span  data-rank="2">总榜</span>
 							</div>
@@ -643,7 +643,7 @@
 										{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
 										{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
 										{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-									
+										{default /}<img src="__IMG__icon1-0.gif" alt="" />
 										{/switch}
 									<!--用户分数-->
 									<div class="score-box">
@@ -695,7 +695,7 @@
 										{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
 										{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
 										{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-										
+										{default /}<img src="__IMG__icon1-0.gif" alt="" />
 										{/switch}
 									<!--用户分数-->
 									<div class="score-box">
@@ -747,7 +747,7 @@
 										{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
 										{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
 										{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-									
+										{default /}<img src="__IMG__icon1-0.gif" alt="" />
 										{/switch}
 									<!--用户分数-->
 									<div class="score-box">
@@ -804,12 +804,12 @@
 												{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
 												{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
 												{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-												{default /}暂无等级
+												{default /}<img src="__IMG__icon1-0.gif" alt="" />
 												{/switch}
 											</div>
 											<!-- 得分数值 -->
 											<div class="score-box">
-												大神系数: <span>{$v.okami_day}</span>
+												大神指数: <span>{$v.okami_day}</span>
 											</div>
 										</li>
 									{/if}
@@ -847,7 +847,7 @@
 										{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
 										{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
 										{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-										
+										{default /}<img src="__IMG__icon1-0.gif" alt="" />
 										{/switch}
 									<!--用户分数-->
 									<div class="score-box">
@@ -905,7 +905,7 @@
 										{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
 										{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
 										{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-							
+										{default /}<img src="__IMG__icon1-0.gif" alt="" />
 										{/switch}
 									<!--用户分数-->
 									<div class="score-box">
@@ -958,7 +958,7 @@
 										{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
 										{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
 										{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-										
+										{default /}<img src="__IMG__icon1-0.gif" alt="" />
 										{/switch}
 									<!--用户分数-->
 									<div class="score-box">
@@ -1018,12 +1018,12 @@
 											{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
 											{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
 											{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-											
+											{default /}<img src="__IMG__icon1-0.gif" alt="" />
 											{/switch}
 										</div>
 										<!-- 得分数值 -->
 										<div class="score-box">
-											魅力: <span>{$v.okami}</span>
+											大神指数: <span>{$v.okami}</span>
 										</div>
 									</li>
 									{/if}
@@ -1239,7 +1239,7 @@
 												{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
 												{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
 												{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-												{default /}暂无等级
+												{default /}<img src="__IMG__icon1-0.gif" alt="" />
 											{/switch}
 										</div>
 										<!-- 得分数值 -->
@@ -1453,7 +1453,7 @@
 												{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
 												{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
 												{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-												{default /}暂无等级
+												{default /}<img src="__IMG__icon1-0.gif" alt="" />
 												{/switch}
 											</div>
 											<!-- 得分数值 -->

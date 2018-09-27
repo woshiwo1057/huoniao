@@ -49,14 +49,14 @@ class User extends Common
 		$id = $_SESSION['user']['user_info']['uid'];
 		
 		//查询用户数据
-		$user_data = Db::table('hn_user')->field('head_img,sex,nickname,penguin,table,account,change_name,type,neice')->where('uid',$id)->find();
+		$user_data = Db::table('hn_user')->field('uid,head_img,sex,nickname,penguin,table,account,change_name,type,neice')->where('uid',$id)->find();
 		//var_dump($user_data);die;
 		if($user_data['type'] == 1){
 			//用户是陪玩师
 			$user_data = Db::table('hn_user')
 								->alias('u')
 								->join('hn_accompany a','u.uid = a.user_id')       //详细地址 身高  体重  职业  爱好
-								->field('u.head_img,u.sex,u.nickname,u.penguin,u.table,u.account,u.change_name,u.type,u.neice,a.address,a.height,a.weight,a.duty,a.hobby')
+								->field('u.uid,u.head_img,u.sex,u.nickname,u.penguin,u.table,u.account,u.change_name,u.type,u.neice,a.address,a.height,a.weight,a.duty,a.hobby')
 								->where('uid',$id)
 								->find();
 		}
@@ -956,7 +956,9 @@ class User extends Common
 				
 				return json(['code'=>8,'msg'=>'您尚有订单未完成，暂时无法接单，完成后再来吧']);
 			}
-
+			//增加一次陪玩师的接单量（陪玩师表）
+			Db::table('hn_accompany')->where('user_id' , $id)->setInc('okami');//（总接单数）
+			Db::table('hn_accompany')->where('user_id' , $id)->setInc('okami_day'); //(当天接单数)
 			//这里是接单 通过$data['order_id']来操作  将status变为2
 			$res = Db::table('hn_order')->where('id', $data['order_id'])->update(['status' => 2,'single_time' => time()]);
 			if($res){
@@ -1009,6 +1011,9 @@ class User extends Common
 				$res = Db::table('hn_order')->where('id', $data['order_id'])->update(['status' => 4,'over_time' => $time]);
 
 				if($res){
+					//给陪玩师发结算成功短信
+					//
+
 					return json(['code' => 5,'msg' => '订单结算成功，可以选择评论']);
 				}else{
 					return json(['code' => 6,'msg' => '失败，错误码006']);
@@ -1082,6 +1087,9 @@ class User extends Common
 		*/
 		//获取到用户ID
 		$id = $_SESSION['user']['user_info']['uid'];
+
+
+		Db::table('hn_message')->where('rec_id',$id)->update(['status' => 1]);
 
 		$request = request();//think助手函数
         $data_get = $request->param();//获取get与post数据
@@ -1801,6 +1809,20 @@ class User extends Common
             db('hn_order')->where('id', $v['id'])->update(['status' => 4,'over_time' => time()]);
         }
 
+    }
+
+
+    //声鉴卡
+    public function sound_card()
+    {
+
+    	//获取用户ID
+		$uid = $_SESSION['user']['user_info']['uid'];
+
+		$sound_card = Db::table('hn_identify')->field('identify_card')->where(['status' => 2 , 'uid' => $uid])->find();
+		//var_dump($sound_card);die;
+    	$this->assign(['sound_card' => $sound_card]);
+    	return $this->fetch('User/sound_card');
     }
 
 

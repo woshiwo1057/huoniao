@@ -8,6 +8,7 @@
 			<div class="top-user-info">
 				<!--头像-->
 				<div class="new-pic-box" style="margin-right: 30px">
+             
 				{if condition="empty($user_data['head_img'])"}
 				<img src="__IMG__default.jpg" />
 				{else /}
@@ -16,6 +17,7 @@
                     {/if}
                 <img class="new-pic" src="{$user_data.head_img}" />
 				{/if}
+     
 				{if condition="$user_data.status == 1"}
 				<!--在线状态-->
                 <span style="display: inline-block;background: #A9F9C3;color: #fff;padding: 3px 20px;border-radius: 5px;position: absolute;bottom: 0;left: 50%;z-index: 9999;-webkit-transform: translate(-50%);transform: translate(-50%);">在线</span>

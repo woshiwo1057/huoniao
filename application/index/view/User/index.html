@@ -47,13 +47,26 @@
 					<!--上傳頭像盒子-->
 					<div class="u-up-pic">
 						<label class="new-pic-box" style="margin-right: 30px;">
-						{if condition="empty($user_data.head_img)"}
-							<img id="user-pic-img"  style="border:none" src="__IMG__default.jpg" />
-						{else /}
-							{if condition="$user_data.neice == 1"}
-							<img id="user-pic-img" class="kuang" src="__IMG__kuang.png"/>
+						{if condition="$user_data['type'] == 1"}
+							<a href="{:url('Index/user',['id' => $user_data['uid']])}">
+							{if condition="empty($user_data.head_img)"}
+								<img id="user-pic-img"  style="border:none" src="__IMG__default.jpg" />
+							{else /}
+								{if condition="$user_data.neice == 1"}
+								<img id="user-pic-img" class="kuang" src="__IMG__kuang.png"/>
+								{/if}
+	  						<img class="new-pic" src="{$user_data.head_img}" />
 							{/if}
-  						<img class="new-pic" src="{$user_data.head_img}" />
+							</a>
+						{else /}
+							{if condition="empty($user_data.head_img)"}
+								<img id="user-pic-img"  style="border:none" src="__IMG__default.jpg" />
+							{else /}
+								{if condition="$user_data.neice == 1"}
+								<img id="user-pic-img" class="kuang" src="__IMG__kuang.png"/>
+								{/if}
+	  						<img class="new-pic" src="{$user_data.head_img}" />
+							{/if}
 						{/if}
 						</label>
 						<div>

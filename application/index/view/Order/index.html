@@ -191,7 +191,8 @@
             
               $.post("{:url('Order/voice')}",{acc_id:acc_id,service:service,length_time:length_time,explain:explain,phone:phone,qq:qq,wechat:wechat,money:money,type:type,coupon_type:coupon_type},function(data){
                   if(data.code == 1){
-                    alert(data.msg)
+                    alert(data.msg);
+                    window.location.href="{:url('User/order')}";
                   }else if(data.code == 2){
                         layui.use('layer',function(){
                         layer.msg(data.msg)})

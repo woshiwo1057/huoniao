@@ -72,21 +72,37 @@ class Order extends Common
 			
 		if($data['type'] == 2){
 			//判断陪玩师是否在线 $data['acc_id']   hn_accompany   status == 1 在线 
-			$status = Db::table('hn_accompany')->field('status')->where('user_id',$data['acc_id'])->find();
+			$status = Db::table('hn_accompany')->field('status,up')->where('user_id',$data['acc_id'])->find();
 			if($status['status'] != 1){
 				return json(['code'=>8,'msg'=>'陪玩师未在线，请稍后再来']);
 			}
 
-			//判断陪玩师是否有订单为完结 查 hn_order 表
-			$order_acc = Db::table('hn_order')->field('status')->where('acc_id',$data['acc_id'])->where('status','<',4)->where('status','>',0)->find();
-			if($order_acc['status']<4&&$order_acc['status']>1){
+			if($status['up'] == 1){
+				return json(['code'=>5,'msg'=>'该陪玩师尚未开启线上接单']);
+			}
+
+			//判断陪玩师是否有订单为完结 查 hn_order 表     当前时间戳 > (接单时间+订单时长*60*60)
+			$order_acc = Db::table('hn_order')->field('status,length_time,single_time,price')->where('acc_id',$data['acc_id'])->where('status','<',4)->where('status','>',1)->find();
+
+			if($order_acc){
+				if($order_acc['price']==8){
+					if (time()-$order_acc['single_time']<=300) {
 						return json(['code'=>9,'msg'=>'该陪玩师尚有订单未完成，暂时无法接单，稍后再来吧']);
+					}
+				}else{
+					if (time()>$order_acc['length_time']*60*60+$order_acc['single_time']) {
+						return json(['code'=>9,'msg'=>'该陪玩师尚有订单未完成，暂时无法接单，稍后再来吧']);
+					}
+				}
+					
 			}
 			//判断之前是否有未完成的订单   status < 4
+			/*
 			$order_data = Db::table('hn_order')->field('status')->where(['user_id' => $user_id])->where('status','<',4)->where('status','>',0)->find();
 			if($order_data != ''){
 						return json(['code'=>5,'msg'=>'请完成之前的订单后再来下单，谢谢']);
 			}
+			*/
 			//这里是微信支付  因为没有回调  所以 die
 			//echo '现在不能微信支付';die;
 			//价钱
@@ -159,15 +175,29 @@ class Order extends Common
 			
 		}else{
 			//判断陪玩师是否在线 $data['acc_id']   hn_accompany   status == 1 在线 
-			$status = Db::table('hn_accompany')->field('status')->where('user_id',$data['acc_id'])->find();
+			$status = Db::table('hn_accompany')->field('status,up')->where('user_id',$data['acc_id'])->find();
 			if($status['status'] != 1){
 				return json(['code'=>8,'msg'=>'陪玩师未在线，请稍后再来']);
 			}
 
+			if($status['up'] == 1){
+				return json(['code'=>5,'msg'=>'该陪玩师尚未开启线上接单']);
+			}
+
 			//判断陪玩师是否有订单为完结 查 hn_order 表
-			$order_acc = Db::table('hn_order')->field('status')->where('acc_id',$data['acc_id'])->where('status','<',4)->where('status','>',0)->find();
-			if($order_acc != ''){
+			$order_acc = Db::table('hn_order')->field('status,length_time,single_time,price')->where('acc_id',$data['acc_id'])->where('status','<',4)->where('status','>',1)->find();
+
+			if($order_acc){
+				if($order_acc['price']==8){
+					if (time()-$order_acc['single_time']<=300) {
 						return json(['code'=>9,'msg'=>'该陪玩师尚有订单未完成，暂时无法接单，稍后再来吧']);
+					}
+				}else{
+					if (time()>$order_acc['length_time']*60*60+$order_acc['single_time']) {
+						return json(['code'=>9,'msg'=>'该陪玩师尚有订单未完成，暂时无法接单，稍后再来吧']);
+					}
+				}
+					
 			}
 		
 			//获取到用户数据   在这里要判断一下  是不是来自余额的支付方式  扣除账户余额
@@ -188,8 +218,9 @@ class Order extends Common
 				return json(['code'=>1,'msg'=>'余额不足，请更换支付方式']);
 			}
 			//判断之前是否有未完成的订单   status < 4
-			$order_data = Db::table('hn_order')->field('status')->where(['user_id' => $user_id])->where('status','<',4)->where('status','>',0)->find();
+			//$order_data = Db::table('hn_order')->field('status')->where(['user_id' => $user_id])->where('status','<',4)->where('status','>',0)->find();
 			//var_dump($order_data);die;
+			$order_data = 1;
 			if($order_data != ''){
 				return json(['code'=>5,'msg'=>'请完成之前的订单后再来下单，谢谢']);
 			}else{
@@ -250,6 +281,18 @@ class Order extends Common
 						$send_id = 0;
 						$rec_id = $data['acc_id'];
 						$this->message_add($title,$text,$send_id,$rec_id);
+
+						//给陪玩师发短信
+						//1.陪玩师电话  2.短信内容  3. 6
+						$phone = Db::table('hn_user')->field('account,nickname')->where('uid' , $data['acc_id'])->find();
+						$dat = [
+				           	'time' =>'8',
+				            'name' => $phone['nickname']
+				            	           
+				        ];
+						
+						$this->sendCms($phone['account'],$dat,6);
+
 						return 	json(['code' => 4 ,'msg'=>'成功']);
 					}else{
 						return 	json(['code' => 3 ,'msg'=>'支付失败，错误码003']);
@@ -283,21 +326,29 @@ class Order extends Common
 		if($data['type'] == 2){
 
 			//判断陪玩师是否在线 $data['acc_id']   hn_accompany   status == 1 在线 
-			$status = Db::table('hn_accompany')->field('status')->where('user_id',$data['acc_id'])->find();
+			$status = Db::table('hn_accompany')->field('status,up')->where('user_id',$data['acc_id'])->find();
 			if($status['status'] != 1){
 				return json(['code'=>8,'msg'=>'陪玩师未在线，请稍后再来']);
 			}
 
+			if($status['up'] == 1){
+				return json(['code'=>5,'msg'=>'该陪玩师尚未开启线上接单']);
+			}
+
 			//判断陪玩师是否有订单为完结 查 hn_order 表
-			$order_acc = Db::table('hn_order')->field('status')->where('acc_id',$data['acc_id'])->where('status','<',4)->where('status','>',0)->find();
+			/*
+			$order_acc = Db::table('hn_order')->field('status')->where('acc_id',$data['acc_id'])->where('status','<',4)->where('status','>',1)->find();
 			if($order_acc['status']<4&&$order_acc['status']>1){
 						return json(['code'=>9,'msg'=>'该陪玩师尚有订单未完成，暂时无法接单，稍后再来吧']);
 			}
+			*/
 			//判断之前是否有未完成的订单   status < 4
+			/*
 			$order_data = Db::table('hn_order')->field('status')->where(['user_id' => $user_id])->where('status','<',4)->where('status','>',0)->find();
 			if($order_data != ''){
 						return json(['code'=>5,'msg'=>'请完成之前的订单后再来下单，谢谢']);
 			}
+			*/
 			//这里是微信支付  因为没有回调  所以 die
 			//echo '现在不能微信支付';die;
 			//价钱
@@ -348,17 +399,22 @@ class Order extends Common
 		}else{
 
 			//判断陪玩师是否在线 $data['acc_id']   hn_accompany   status == 1 在线 
-			$status = Db::table('hn_accompany')->field('status')->where('user_id',$data['acc_id'])->find();
+			$status = Db::table('hn_accompany')->field('status,up')->where('user_id',$data['acc_id'])->find();
 			if($status['status'] != 1){
 				return json(['code'=>8,'msg'=>'陪玩师未在线，请稍后再来']);
 			}
 
+			if($status['up'] == 1){
+				return json(['code'=>5,'msg'=>'该陪玩师尚未开启线上接单']);
+			}
+
 			//判断陪玩师是否有订单为完结 查 hn_order 表
-			$order_acc = Db::table('hn_order')->field('status')->where('acc_id',$data['acc_id'])->where('status','<',4)->where('status','>',0)->find();
+			/*
+			$order_acc = Db::table('hn_order')->field('status')->where('acc_id',$data['acc_id'])->where('status','<',4)->where('status','>',1)->find();
 			if($order_acc != ''){
 						return json(['code'=>9,'msg'=>'该陪玩师尚有订单未完成，暂时无法接单，稍后再来吧']);
 			}
-		
+			*/
 			//获取到用户数据   在这里要判断一下  是不是来自余额的支付方式  扣除账户余额
 			$user_data = Db::table('hn_user')->field('cash')->where('uid',$user_id)->find();
 
@@ -377,8 +433,9 @@ class Order extends Common
 				return json(['code'=>1,'msg'=>'余额不足，请更换支付方式']);
 			}
 			//判断之前是否有未完成的订单   status < 4
-			$order_data = Db::table('hn_order')->field('status')->where(['user_id' => $user_id])->where('status','<',4)->where('status','>',0)->find();
+			//$order_data = Db::table('hn_order')->field('status')->where(['user_id' => $user_id])->where('status','<',4)->where('status','>',0)->find();
 			//var_dump($order_data);die;
+			$order_data = 1;
 			if($order_data != ''){
 				return json(['code'=>5,'msg'=>'请完成之前的订单后再来下单，谢谢']);
 			}else{
@@ -397,9 +454,9 @@ class Order extends Common
 
 					//组装数据存入order表
 					//查出陪玩师订单分成比例，计算陪玩师应得的钱数
+					$wow = [];
 					$convertible = Db::table('hn_accompany')->field('convertible')->where('user_id',$data['acc_id'])->find(); //比例
 					$wow['really_price'] = $convertible['convertible']*$data['price'];//实际到达陪玩师账户的金钱数
-					$wow = [];
 					$wow['number'] = time().str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT);//订单号
 					$wow['acc_id'] = $data['acc_id'];
 					$wow['user_id'] = $user_id;
@@ -421,6 +478,17 @@ class Order extends Common
 					
 					$qq = Db::table('hn_user')->field('penguin')->where('uid',$data['acc_id'])->find();
 					if($code == 1){
+						//给陪玩师发短信
+						//1.陪玩师电话  2.短信内容  3. 6
+						$phone = Db::table('hn_user')->field('account,nickname')->where('uid' , $data['acc_id'])->find();
+						$dat = [
+				           	'time' =>'8',
+				            'name' => $phone['nickname']
+				            	           
+				        ];
+						
+						$this->sendCms($phone['account'],$dat,6);
+
 						$mom = ['code' => '1',
 									'msg' => '支付成功，联系陪玩师,qq:'.$qq['penguin']
 								];
@@ -484,21 +552,28 @@ class Order extends Common
 			
 		if($data['type'] == 2){
 			//判断陪玩师是否在线 $data['acc_id']   hn_accompany   status == 1 在线 
-			$status = Db::table('hn_accompany')->field('status')->where('user_id',$data['acc_id'])->find();
+			$status = Db::table('hn_accompany')->field('status,down')->where('user_id',$data['acc_id'])->find();
 			if($status['status'] != 1){
 				return json(['code'=>8,'msg'=>'陪玩师未在线，请稍后再来']);
 			}
 
+			if($status['down'] == 1){
+				return json(['code'=>5,'msg'=>'该陪玩师尚未开启线下接单']);
+			}
+
+
 			//判断陪玩师是否有订单为完结 查 hn_order 表
-			$order_acc = Db::table('hn_order')->field('status')->where('acc_id',$data['acc_id'])->where('status','<',4)->where('status','>',0)->find();
+			$order_acc = Db::table('hn_order')->field('status')->where('acc_id',$data['acc_id'])->where('status','<',4)->where('status','>',1)->find();
 			if($order_acc['status']<4&&$order_acc['status']>1){
 						return json(['code'=>9,'msg'=>'该陪玩师尚有订单未完成，暂时无法接单，稍后再来吧']);
 			}
 			//判断之前是否有未完成的订单   status < 4
+			/*
 			$order_data = Db::table('hn_order')->field('status')->where(['user_id' => $user_id])->where('status','<',4)->where('status','>',0)->find();
 			if($order_data != ''){
 						return json(['code'=>5,'msg'=>'请完成之前的订单后再来下单，谢谢']);
 			}
+			*/
 			//这里是微信支付  因为没有回调  所以 die
 			//echo '现在不能微信支付';die;
 			//价钱
@@ -543,13 +618,17 @@ class Order extends Common
 			
 		}else{
 			//判断陪玩师是否在线 $data['acc_id']   hn_accompany   status == 1 在线 
-			$status = Db::table('hn_accompany')->field('status')->where('user_id',$data['acc_id'])->find();
+			$status = Db::table('hn_accompany')->field('status，down')->where('user_id',$data['acc_id'])->find();
 			if($status['status'] != 1){
 				return json(['code'=>8,'msg'=>'陪玩师未在线，请稍后再来']);
 			}
 
+			if($status['down'] == 1){
+				return json(['code'=>5,'msg'=>'该陪玩师尚未开启线下接单']);
+			}
+
 			//判断陪玩师是否有订单为完结 查 hn_order 表
-			$order_acc = Db::table('hn_order')->field('status')->where('acc_id',$data['acc_id'])->where('status','<',4)->where('status','>',0)->find();
+			$order_acc = Db::table('hn_order')->field('status')->where('acc_id',$data['acc_id'])->where('status','<',4)->where('status','>',1)->find();
 			if($order_acc != ''){
 						return json(['code'=>9,'msg'=>'该陪玩师尚有订单未完成，暂时无法接单，稍后再来吧']);
 			}
@@ -572,8 +651,9 @@ class Order extends Common
 				return json(['code'=>1,'msg'=>'余额不足，请更换支付方式']);
 			}
 			//判断之前是否有未完成的订单   status < 4
-			$order_data = Db::table('hn_order')->field('status')->where(['user_id' => $user_id])->where('status','<',4)->where('status','>',0)->find();
+			//$order_data = Db::table('hn_order')->field('status')->where(['user_id' => $user_id])->where('status','<',4)->where('status','>',0)->find();
 			//var_dump($order_data);die;
+			$order_data = 1;
 			if($order_data != ''){
 				return json(['code'=>5,'msg'=>'请完成之前的订单后再来下单，谢谢']);
 			}else{
@@ -637,6 +717,20 @@ class Order extends Common
 						$send_id = 0;
 						$rec_id = $data['acc_id'];
 						$this->message_add($title,$text,$send_id,$rec_id);
+
+						//给陪玩师发短信
+						//1.陪玩师电话  2.短信内容  网吧地址 3. 6
+						$phone = Db::table('hn_user')->field('account,nickname')->where('uid' , $data['acc_id'])->find();
+						$location = Db::table('hn_netbar')->field('location')->where('id' , $data['wb_id'])->find();
+						$dat = [
+				           
+				            'name' => $phone['nickname'],
+				            'time' =>'8',
+				            'location'  =>	$location['location']
+				        ];
+						
+						$this->sendCms($phone['account'],$dat,6);
+
 						return 	json(['code' => 4 ,'msg'=>'成功']);
 					}else{
 						return 	json(['code' => 3 ,'msg'=>'支付失败，错误码003']);

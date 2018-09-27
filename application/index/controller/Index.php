@@ -50,7 +50,7 @@ class Index  extends Common
                     ->join('hn_accompany a','u.uid = a.user_id')
                     ->join('hn_apply_project p' , 'a.project_id = p.project_id')
                     ->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num,p.project_name,u.sex,a.city')
-                    ->where('a.status',1)->limit('0,15')->select();
+                    ->where('a.status',1)->order('a.okami desc')->limit('0,15')->select();
                     
         $acc_data = $this->out_repeat($acc_data,'nickname');
         //var_dump($acc_data);die;
@@ -58,7 +58,7 @@ class Index  extends Common
     	//优质新人  先注册的排前面（15天内）
     	$new_data =	Db::table('hn_accompany')->alias('a')
                         ->join('hn_user u','u.uid = a.user_id')                  
-                        ->field('u.uid,u.nickname,u.head_img,u.age,a.city')->where('a.new_people',1)->limit('15')->select();
+                        ->field('u.uid,u.nickname,u.head_img,u.age,u.sex,a.city')->where('a.new_people',1)->limit('15')->select();
     	//->join('hn_apply_acc p','p.user_id = a.user_id')
         //$adhwuhwad = $this->wechat_query();
         //var_dump($new_data);die;
@@ -97,6 +97,7 @@ class Index  extends Common
                     $type = 'okami';
                     $okami_data = $this->ranking($okami_data,$type);
                 }
+                //var_dump($okami_data[0]['okami']);die;
               
     		//3.用户贡献榜
     			//①日榜
@@ -225,7 +226,7 @@ class Index  extends Common
         //查询服务项目(只查询第一个服务项目  其他的走Ajax)
             //查出所有名字循环输出
         $service_name = Db::table('hn_apply_project')->field('project_name,project_id,project')->where(['status' => 1, 'type' => 1,'uid' => $id])->select();
-//var_dump($service_name);die;
+        //var_dump($service_name);die;
         $project_data = Db::table('hn_apply_project')->field('project,project_id,project_name,project_grade_name,pric,length_time')->where(['status' => 1, 'type' => 1,'uid' => $id])->find();
         
         if($project_data['project'] == 1){
@@ -309,7 +310,7 @@ class Index  extends Common
             $song_data[$k]['acc_name'] = $name['nickname'];
         }
 
-//var_dump($song_data);die;
+        //var_dump($song_data);die;
         $this->assign([
             //陪玩师数据
             'user_data' => $user_data,
@@ -375,9 +376,9 @@ class Index  extends Common
                         ->where(['status' => 1, 'type' => 1, 'project_id' => $data['project_id'], 'uid' => $data['acc_id']])
                         ->find();
             $service_data['project_img'] = $img['joy_logo_img'];
- //var_dump($service_data);die;
+            //var_dump($service_data);die;
             //算出一个正确的价钱  $service_data['pric']
- /*
+            /*
             if($service_data['order_num']>=2){
                 $pric = Db::table('hn_game_grade')->field('pric')->where('id',$service_data['project_grade'])->find(); //项目初始价格
 

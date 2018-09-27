@@ -1,5 +1,26 @@
 {include file="public/header"} {include file="public/sidebar"}
+<script>
+	$(function(){
 
+		if({$status['status']} == 0){
+			layui.use('layer', function() {
+				layer.open({type:0,content:'等待审核,审核加群：123456789',btn:false})
+			})
+			return false
+		}else if({$status['status']} == 1){
+			layui.use('layer', function() {
+				layer.open({type:0,content:'您已通过审核',btn:false})
+			})
+			return false
+		}else if({$status['status']} == 2){
+			layui.use('layer', function() {
+				layer.open({type:0,content:'您审核未通过，请重新填写申请',btn:false})
+			})
+			return false
+		}
+
+	})
+</script>
 <link rel="stylesheet" type="text/css" href="__INDEX__css/cropper.min.css">
 <script type="text/javascript" src="__INDEX__js/cropper.min.js"></script>
 
@@ -489,6 +510,12 @@ var sex
 					}else if(game_id == 3){
 						//聊天
 						$('.text').html('请上传您的【声鉴卡】一张，<br>如没有【声鉴卡】，<a href="https://csq.huoniaopeiwan.com/index/acc/index.html">请点击获取。获取声鉴卡</a>')
+					}else if(game_id == 5){
+						//声鉴师
+						$('.text').html('普通玩家/陪玩师  不具备申请声鉴师的能力，请与后台工作人员联系')
+					}else if(game_id == 6){
+						//叫醒
+						$('.text').html('请上传您的【声鉴卡】一张，<br>如没有【声鉴卡】，<a href="https://csq.huoniaopeiwan.com/index/acc/index.html">请点击获取。获取声鉴卡</a>')
 					}else{
 						$('.text').html('点击上传您的游戏段位(等级)截图,<br>并填写游戏相关说明补充<br>(包含游戏ID)')
 					}
@@ -747,8 +774,9 @@ if({$user_data['sex']} == 0){
 				card_num:card_num
 			}, function(data){
 				if(data.code == 1){
+					//alert('提交成功,等待审核')
 					layui.use('layer', function() {
-					layer.msg(data.msg)
+					layer.open({type:0,content:data.msg,btn:false,title:'提交成功'})
 					})
 				}else if(data.code == 2){
 					layui.use('layer', function() {

@@ -748,6 +748,7 @@ class Common extends \think\Controller
 
     //发送通知短信 $type  ：1：提醒用户陪玩师接单通知  2：提醒陪玩师已接取线下订单  3：提醒陪玩师通过审核 4：用户订单超时提醒  5：陪玩师订单超时提醒  6：陪玩师有新订单提醒
     function sendCms($phone,$data,$type){
+
         $sms_arr = ['SMS_145593533','SMS_145593493','SMS_145593448','SMS_145598482','SMS_145598470','SMS_145598411'];
 
        $res =  $this->sendSmss($phone,$data,$sms_arr[$type-1]);
@@ -760,7 +761,7 @@ class Common extends \think\Controller
             'player' =>'围棋少年',
             'players' =>'围棋少年',
             'name' =>'孙浩',
-            'time' =>'30',
+            'time' =>'8',
             'location' =>'老板的家里',
         ];
 

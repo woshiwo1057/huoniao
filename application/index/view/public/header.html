@@ -17,7 +17,9 @@
     <script src="__INDEX__js/jquery-3.3.1.js" type="text/javascript" charset="utf-8"></script>
     <script src="__INDEX__layui/layui.js" type="text/javascript" charset="utf-8"></script>
 
-    
+    <title>火鸟陪玩—陪你开心陪你玩 提供真人美女线上、线下网咖游戏陪玩、约玩服务。王者荣耀陪玩 LOL陪玩 同城陪玩</title>
+    <meta name="keywords" content="火鸟陪玩，火鸟约玩，游戏陪玩，网咖陪玩，网吧陪玩，美女陪玩，帅哥陪玩，吃鸡陪玩，lol陪玩，英雄联盟陪玩，绝地求生陪玩，刺激战场陪玩，王者荣耀陪玩，线下陪玩，同城陪玩，线上陪玩，美女线下陪玩，陪玩服务">
+    <meta name="description" content="火鸟陪玩是国内首家为网咖提供同城线上、线下游戏陪玩、约玩服务平台。平台包含线上、线下真人美女游戏陪玩、约玩服务、同城LOL陪玩、王者荣耀陪玩、语音聊天、哄睡叫醒服务，多样的服务类型，海量的美女帅哥，陪你开心陪你玩">
 
 
   </head>
@@ -175,13 +177,14 @@
             layui.use('layer', function() {
               layer.open({
                 type: 2,
-                title: '登录/注册',
+                title: false,
+                closeBtn:false,
                 maxmin: false,
                 scrollbar: false,
                 skin: 'layui-layer-bai',
                 shadeClose: true, //点击遮罩关闭层
-                area: ['460px', '610px'],
-     //           zIndex:99999999,
+                area: ['460px', '560px'],
+                zIndex:99999999,
                 content: "{:url('Login/login')}",
                 success: function(layero, index) {
 
@@ -206,20 +209,20 @@
                       $.post("{:url('Login/login')}",{account:account,password:password,captcha_code:captcha_code},function(data){
                             if(data.code == 1){
                               layui.use('layer',function(){
-                              layer.msg(data.msg)})
+                              layer.msg(data.msg,{zIndex:999999999})})
                               $(body.find('#miva')).attr('src',src+'&'+Math.random())
                             }else if(data.code == 2){
                               layui.use('layer',function(){
-                              layer.msg(data.msg)})
+                              layer.msg(data.msg,{zIndex:999999999})})
                                $(body.find('#miva')).attr('src',src+'&'+Math.random())
                             }else if(data.code == 3){
                               layui.use('layer',function(){
-                              layer.msg(data.msg)})
+                              layer.msg(data.msg,{zIndex:999999999})})
                               layer.closeAll();
                               window.location.href=data.url
                             }else if(data.code == 4){
                               layui.use('layer',function(){
-                              layer.msg(data.msg)});
+                              layer.msg(data.msg,{zIndex:999999999})});
                               $(body.find('#miva')).attr('src',src+'&'+Math.random())
                             }
 
@@ -243,7 +246,7 @@
                if(!mobile.test(phone)){
               
                 layui.use('layer',function(){
-                layer.msg('手机号输入错误')})
+                layer.msg('手机号输入错误',{zIndex:999999999})})
                   return false
               }
 
@@ -265,7 +268,7 @@
 
                     if(data.code == 1){
                       layui.use('layer',function(){
-                      layer.msg(data.msg)});
+                      layer.msg(data.msg,{zIndex:999999999})});
 
 
                        timer = setInterval(function(e) {
@@ -283,13 +286,13 @@
 
                     }else if(data.code == 2){
                       layui.use('layer',function(){
-                      layer.msg(data.msg)})
+                      layer.msg(data.msg,{zIndex:999999999})})
                     }else if(data.code == 3){
                       layui.use('layer',function(){
-                      layer.msg(data.msg)})
+                      layer.msg(data.msg,{zIndex:999999999})})
                     }else{
                       layui.use('layer',function(){
-                      layer.msg('未知错误')})
+                      layer.msg('未知错误',{zIndex:999999999})})
                     }
               },'json')
               return false
@@ -312,19 +315,19 @@
               var passwor = $(body.find('[data-item=pwd]')).val()
               if(code == ''){
                 layui.use('layer',function(){
-                layer.msg('验证码不能为空')})              
+                layer.msg('验证码不能为空',{zIndex:999999999})})              
                 return false
               }
               if(passwor == ''){
                 layui.use('layer',function(){
-                layer.msg('密码不能为空')})                     
+                layer.msg('密码不能为空',{zIndex:999999999})})                     
                 return false
               }
               var repea =  $(body.find('[data-item=repeat]')).val()
             
               if(passwor != repea){
                 layui.use('layer',function(){
-                layer.msg('2次密码输入不一致，请重新输入')})
+                layer.msg('2次密码输入不一致，请重新输入',{zIndex:999999999})})
                 return false
               }
 
@@ -332,16 +335,16 @@
               $.post("{:url('Login/register')}",{account:phone,password:passwor,code:code},function(data){
                     if(data.code == 1){
                       layui.use('layer',function(){
-                      layer.msg(data.msg)})
+                      layer.msg(data.msg,{zIndex:999999999})})
                     }else if(data.code == 2){
                       layui.use('layer',function(){
-                      layer.msg(data.msg)})
+                      layer.msg(data.msg,{zIndex:999999999})})
                     }else if(data.code == 3){
                       layui.use('layer',function(){
-                      layer.msg(data.msg)})
+                      layer.msg(data.msg,{zIndex:999999999})})
                     }else if(data.code == 4){
                       layui.use('layer',function(){
-                      layer.msg(data.msg)})
+                      layer.msg(data.msg,{zIndex:999999999})})
                       layer.closeAll();
 
                       function jump(){
@@ -353,7 +356,7 @@
                                            
                     }else if(data.code == 5){
                       layui.use('layer',function(){
-                      layer.msg(data.msg)})
+                      layer.msg(data.msg,{zIndex:999999999})})
                     }
 
               },'json')
@@ -371,7 +374,7 @@
 
                 if(!mobile.test(phone)){  
                   layui.use('layer',function(){
-                  layer.msg('手机号输入错误，请重新输入')})
+                  layer.msg('手机号输入错误，请重新输入',{zIndex:999999999})})
                   return false
                 }
 
@@ -381,7 +384,7 @@
 
                       if(data.code == 1){
                         layui.use('layer',function(){
-                        layer.msg('发送成功，请注意查收')})
+                        layer.msg('发送成功，请注意查收',{zIndex:999999999})})
 
                         timer = setInterval(function(e){
                           $(_this).html('发送验证码(' + num + ')')
@@ -397,14 +400,14 @@
 
                       }else if(data.code == 2){
                         layui.use('layer',function(){
-                        layer.msg('发送失败，错误码002')})
+                        layer.msg('发送失败，错误码002',{zIndex:999999999})})
                     
                       }else if(data.code == 3){
                         layui.use('layer',function(){
-                        layer.msg(data.msg)})
+                        layer.msg(data.msg,{zIndex:999999999})})
                       }else{
                         layui.use('layer',function(){
-                        layer.msg('未知错误，请检查后重新尝试发送')})
+                        layer.msg('未知错误，请检查后重新尝试发送',{zIndex:999999999})})
                       }
                 },'json')
                 return false
@@ -418,35 +421,35 @@
                   var repeat =  $(body.find('[name="forget_repeat"]')).val()
                   if(password == ''){
                       layui.use('layer',function(){
-                      layer.msg('密码不能为空')})
+                      layer.msg('密码不能为空',{zIndex:999999999})})
                       return false
                   }
 
                   if(password != repeat){
                       layui.use('layer',function(){
-                      layer.msg('新密码输入不一致，请重新输入')})
+                      layer.msg('新密码输入不一致，请重新输入',{zIndex:999999999})})
                       return false
                   }
 
                   $.post("{:url('Login/forget')}",{phone:phone,code:code,password:password},function(data){
                         if(data.code == 1){
                           layui.use('layer',function(){
-                          layer.msg('自己填的验证码不算')})                         
+                          layer.msg('自己填的验证码不算',{zIndex:999999999})})                  
                         }else if(data.code ==2){
                           layui.use('layer',function(){
-                          layer.msg('验证码不能为空')})                    
+                          layer.msg('验证码不能为空',{zIndex:999999999})})                    
                         }else if(data.code == 3){
                           layui.use('layer',function(){
-                          layer.msg('验证码输入错误，请重新填写，或重新发送验证码')})           
+                          layer.msg('验证码输入错误，请重新填写，或重新发送验证码',{zIndex:999999999})})           
                         }else if(data.code == 4){
                           layui.use('layer',function(){
-                          layer.msg('重置成功，请去登录界面登录')})                         
+                          layer.msg('重置成功，请去登录界面登录',{zIndex:999999999})})                         
                         }else if(data.code ==5){
                           layui.use('layer',function(){
-                          layer.msg('重置失败，错误码005')})                         
+                          layer.msg('重置失败，错误码005',{zIndex:999999999})})                         
                         }else{
                           layui.use('layer',function(){
-                          layer.msg('未知错误，请检查后重新尝试发送')})                       
+                          layer.msg('未知错误，请检查后重新尝试发送',{zIndex:999999999})})                       
                         }
 
                   },'json')
