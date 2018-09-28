@@ -124,11 +124,11 @@ class Examine extends Common
 			$wow['project'] = $data['project']; //项目类型  1：游戏  2：娱乐
 			$wow['project_id'] = $data['project_id']; //服务内容（具体服务项目）
 			$wow['project_name'] = $project_name['name']; //服务名字
-			$wow['explain'] = '第一次开通'; //简介
+			$wow['explain'] = $data['explain']; //简介 explain
 			$wow['status'] = 1; //状态  成功
 			$wow['time'] = time(); //时间
 			//var_dump($wow['project_grade_name']);die;
-			//$wow['pric']  默认为8 
+			//$wow['pric']  默认为8
 			//需要游戏 单价/小时  需要订单总数  需要订单总时间吗？
 			//800 24*365 == 8760
 

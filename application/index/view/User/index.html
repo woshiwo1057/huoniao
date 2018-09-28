@@ -100,11 +100,20 @@
 										<span class="radio active" sex="2">女</span>
 									{/case}
 									{default /}
-									<span  style="color:red">只有一次选择性别的机会，请慎重</span>
+									
 									<span class="radio"  sex="1">男</span>
 									<span class="radio" sex="2">女</span>
 
-								{/switch}
+
+								
+							</td>
+							<td>
+							<span  style="color:red">只有一次选择性别的机会，请慎重</span>
+							</td>
+							{/switch}
+							</td>
+							<td>
+							
 							</td>
 						</tr>
 						<tr>
@@ -124,7 +133,7 @@
 						<tr>
 							<td>账号/手机号:</td>
 							<td><input type="text"  value="{$user_data['account']}"  disabled oninput="value=value.replace(/[^\d]/g,'')"/></td>
-							<td><a href="{:url('User/change_account')}" style="color:red"> &nbsp;&nbsp;重新绑定手机号</a></td>
+							<td style="text-align:left!important;"><a href="{:url('User/change_account')}" style="color:red;"> &nbsp;&nbsp;重新绑定手机号</a></td>
 						</tr>
 						<tr>
 							<td>个性签名:</td>

@@ -56,7 +56,28 @@
 			<img style="border:none;" src="__IMG__example.png" alt="" class="style-picture"></div>
 		<div class="miva-join-title">说明</div>
 		<div class="miva-box miva-info-box"><textarea name="explain" class="txt-box" placeholder="可以写自己喜欢的游戏,喜欢的玩法和打法......"></textarea></div>
-		<!--<div class="miva-join-title">语音介绍</div><div class="miva-box miva-audio-box"><div class="audio-box-f"><div class="audio-box"><div class="audio-btn"><i class="layui-icon layui-icon-voice"></i><span>点击上传</span></div></div><audio src="" controls></audio></div><span class="tip">上传录音可供游客试听,请自行上传录音 格式为:MP3 大小:2MB<span>支持格式:MP3,ogg,mav,m4a</span></span></div>-->
+
+
+		<div class="miva-join-title">语音介绍</div>
+		<div class="miva-box miva-audio-box">
+			<div class="audio-box-f">
+				<div class="audio-box">
+					<div class="audio-btn" >
+						<i class="layui-icon layui-icon-voice"></i>
+						<input  type="file"   style="opacity:0;width:80px;"  >
+						<span>点击上传</span>
+					</div>
+				</div>
+
+				<audio  id="audio" src="https://mov-1256760691.cos.ap-shanghai.myqcloud.com/%E9%83%81%E5%8F%AF%E5%94%AF%20-%20%E6%88%91%E6%9B%BE%E7%94%A8%E5%BF%83%E7%88%B1%E7%9D%80%E4%BD%A0%20(Live)%20%5Bmqms2%5D.mp3" controls ></audio>
+
+			</div>
+			<span class="tip">上传录音可供老板试听,请自行上传录音 格式为:MP3 大小:2MB
+				<span>支持格式:MP3,ogg,mav,m4a</span>
+			</span>
+		</div>
+
+
 		<div class="check-box"><input id="check" type="checkbox"> <label for="check">我已阅读并同意<a href="{:url('Conpanion/agreement')}" target="__blnk"><<陪玩申请入驻协议>></a></label></div>
 		<button style="color:#FFF;position:initial!important" disabled=true class="miva-btn xiaoshou submit">提交入驻申请</button>
 	</div>
@@ -156,7 +177,7 @@ var sex
 						zIndex: 7489436491,
 						btn: ['确认', '放大', '缩小', '预览'],
 						area: ['1000px', '600px'],
-						success: function(layero, index) {
+						success: function(layero, index){
 							imgbox = layero.find("#newMiva");
 							imgbox.attr('src', fileBuffer);
 							imgbox.cropper({

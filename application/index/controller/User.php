@@ -37,6 +37,7 @@ class User extends Common
 			$nav_data = Db::table('hn_user_nav')->field('name,action')->select();
 		}
 		
+		//$this->assign(['type' => $type]);
 		$this->assign(['nav_data' =>$nav_data]);
 		$this->assign(['user_' =>$_SESSION['user']['user_info']]);
 
@@ -157,9 +158,9 @@ class User extends Common
 	{	
 		//获取到用户ID
 		$id = $_SESSION['user']['user_info']['uid'];
-		$type = $_SESSION['user']['user_info']['type'];
-
-		if($type == 1){
+		$type = Db::table('hn_user')->field('type')->where('uid',$id)->find();
+		//var_dump($nav_data);die;
+		if($type['type'] == 1){
 			//判断是否有尚未审核过的数据
 			$data = Db::table('hn_head_examine')->field('id')->where(['uid' => $id,'status' => 1])->find();
 			if($data){
@@ -969,16 +970,35 @@ class User extends Common
 		}else if($data['type'] == 2){		
 			//这里是取消订单 通过$data['order_id']来操作  删除该订单
 				//主键删除
-			$res = Db::table('hn_order')->delete($data['order_id']);
+			$order_data = Db::table('hn_order')->field('user_id,price,status,')->where('id' , $data['order_id'])->find();
+			if($order_data['status'] != 2){
+			 	return json(['code' => 2,'msg' => 'SB']);
+			 }
+
+			$res = Db::table('hn_user')->where('uid', $order_data['user_id'])->setInc('cash', $order_data['price']);
+
 			if($res){
+				Db::table('hn_order')->where('id' , $order_data['user_id'])->delete($data['order_id']);
+
+				$title = '订单信息';
+				$text = '您的订单陪玩师没有接单，系统已为您删除，余额返回到了您的账户，如有误请与工作人员联系';
+				$send_id = 0;
+				$rec_id = $order_data['user_id'];
+				$this->message_add($title,$text,$send_id,$rec_id);
+
 				return json(['code' => 3,'msg' => '成功取消订单']);
 			}else{
 				return json(['code' => 4,'msg' => '失败，错误码004']);
 			}
+
+			
 		}else if($data['type'] == 3){
 			//确认完成 通过订单ID查出订单详情 给陪玩师账户余额加钱
 				//1.查出陪玩师ID 和订单 价格 时长
-			$order_data = Db::table('hn_order')->field('wb_id,acc_id,really_price,service,length_time')->where('id',$data['order_id'])->find();
+			$order_data = Db::table('hn_order')->field('wb_id,acc_id,really_price,service,length_time,price,status')->where('id',$data['order_id'])->find();
+			 if($order_data['status'] != 2){
+			 	return json(['code' => 2,'msg' => 'SB']);
+			 }
 				//2.给陪玩师账户余额加钱   	陪玩师增加时长订单
 			
 			$ras = Db::table('hn_user')->where('uid', $order_data['acc_id'])->setInc('cash',$order_data['really_price']); //加钱
@@ -1024,6 +1044,58 @@ class User extends Common
 			}
 					
 		}
+	}
+
+
+	//超出8分钟订单删除  3分钟订单提醒
+	public function order_delete()
+	{
+		
+		$data = Request::instance()->param();
+
+		//1.给用户把钱返余额   2.删除订单   3.给陪玩师发短信      $data['order_id'] 订单ID
+
+		if($data['type'] == 1){
+			//提醒接单 1.给陪玩师发短信
+			$acc_data = Db::table('hn_order')
+							->alias('o')
+							->join('hn_user u' , 'o.acc_id  = u.uid')
+							->field('u.account,u.nickname')
+							->where('o.id' , $data['order_id'])
+							->find();
+
+
+			$phone = $acc_data['account'];
+			$data = [
+            
+            'name' =>$acc_data['nickname'],
+            'time' =>'3',
+            
+        	];
+		$this->sendCms($phone,$data,5);
+		return 1;
+
+		}else if($data['type'] == 2){
+			//删除订单  1.给用户把钱返余额   2.删除订单
+			$order_data = Db::table('hn_order')->field('user_id,price')->where('id' , $data['order_id'])->find();
+			if($order_data['status'] != 2){
+			 	return json(['code' => 2,'msg' => 'SB']);
+			 }
+			 
+			$res = Db::table('hn_user')->where('uid', $order_data['user_id'])->setInc('cash', $order_data['price']);
+
+			if($res){
+				Db::table('hn_order')->where('id' , $order_data['user_id'])->delete($data['order_id']);
+
+				$title = '订单信息';
+				$text = '您的订单陪玩师没有接单，系统已为您删除，余额返回到了您的账户，如有误请与工作人员联系';
+				$send_id = 0;
+				$rec_id = $order_data['user_id'];
+				$this->message_add($title,$text,$send_id,$rec_id);
+			}
+
+		}	
+
 	}
 
 	//评论页面

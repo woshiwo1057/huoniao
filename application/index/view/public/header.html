@@ -67,7 +67,7 @@
     <div class="top-right-box">
       <div class="msg-box">
         {if condition="isset($_SESSION['user']['user_info']['type'])"}
-          {if condition="$_SESSION['user']['user_info']['type'] == 1"}
+          {if condition="$less_user_data['type'] == 1"}
           <span class="xiaoshou start" ><a href="{:url('User/open_service')}">开始服务</a></span>
           {else /}
           <span class="xiaoshou start" ><a href="{:url('Conpanion/index')}">陪玩入驻</a></span>
@@ -362,6 +362,49 @@
               },'json')
               return false
             })
+            
+            body = layer.getChildFrame('body', index);
+                            $(body.find('.bind')).click(function(){
+                                var code = $(body.find('[name="code1"]')).val()
+                                var phone = $(body.find('[name="call"]')).val()
+                                alert(123)
+                                if(code == ''){
+                                    layui.use('layer',function(){
+                                        layer.msg('验证码不能为空')})
+                                    return false
+                                }
+                                if(phone == ''){
+                                    layui.use('layer',function(){
+                                        layer.msg('手机号不能为空')})
+                                    return false
+                                }
+
+                                // alert(code,phone,password)
+                                $.post("{:url('Login/bind_add')}",{account:phone,code:code},function(data){
+                                    if(data.code == 1){
+                                        layui.use('layer',function(){
+                                            layer.msg(data.msg)})
+                                    }else if(data.code == 2){
+                                        layui.use('layer',function(){
+                                            layer.msg(data.msg)})
+                                    }else if(data.code == 3){
+                                        layui.use('layer',function(){
+                                            layer.msg(data.msg)})
+                                    }else if(data.code == 4){
+                                        layui.use('layer',function(){
+                                            layer.msg(data.msg)})
+
+                                        setTimeout(function(){
+                                            layer.closeAll();
+                                            window.location.href=data.url
+                                        },1000)
+
+                                    }
+
+                                },'json')
+                                return false
+                            })
+
   
                 //忘记密码
                 $(body.find('[send="forget"]')).click(function(){

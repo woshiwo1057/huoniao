@@ -9,6 +9,7 @@ use \think\Controller;
 use \think\Session;
 use \think\Request;
 use \think\Db;
+use \think\File;
 
 //引入腾讯对象存储
 use \Qcloud\Cos\Client;
@@ -32,7 +33,7 @@ class Index  extends Common
                 $this->assign([ 'name' => $name ]);
             }
         }
-    	//Session::delete('think'); 
+    	//Session::delete('think');
     	//var_dump($_SESSION);die;
 
     	//公共前台首页输出信息（导航栏）   完后删除
@@ -50,8 +51,8 @@ class Index  extends Common
                     ->join('hn_accompany a','u.uid = a.user_id')
                     ->join('hn_apply_project p' , 'a.project_id = p.project_id')
                     ->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num,p.project_name,u.sex,a.city')
-                    ->where('a.status',1)->order('a.okami desc')->limit('0,15')->select();
-                    
+                    ->order('a.okami desc')->limit('0,15')->select();
+                    //->where('a.status',1)
         $acc_data = $this->out_repeat($acc_data,'nickname');
         //var_dump($acc_data);die;
   
@@ -222,7 +223,7 @@ class Index  extends Common
         //查询相册数据
         $album_data = Db::table('hn_user_album')->field('id,img_url')->where('user_id',$id)->limit(8)->select();
         //查询礼物数据
-        $gift_data = Db::table('hn_gift')->field('id,name,pice,img_url')->select();
+        $gift_data = Db::table('hn_gift')->field('id,name,pice,img_url')->order('pice asc')->select();
         //查询服务项目(只查询第一个服务项目  其他的走Ajax)
             //查出所有名字循环输出
         $service_name = Db::table('hn_apply_project')->field('project_name,project_id,project')->where(['status' => 1, 'type' => 1,'uid' => $id])->select();
@@ -692,6 +693,51 @@ class Index  extends Common
         
         return $this->fetch('Index/offline_user');
     }
+
+    public function wow()
+    {   
+        if(Request::instance()->isPost()){
+
+            $data = Request::instance()->param();
+            $file =  request()->file('video');
+            var_dump($file);die;
+            //var_dump($_FILES['video']);die;
+
+            $key = 'zhaochunchao'.'.mp3'; //路径
+
+            $data = $this->cos($file,$key);
+
+            if($data['code'] == 0){
+                echo $this->audio.$key;
+            }else{
+                echo '1';
+            }
+
+        }
+        return $this->fetch();
+    }
+
+    public function mom()
+    {
+        $data = Request::instance()->param();
+        //var_dump($data);die; //base64
+
+        $file = $data['base64'];
+
+        $num = rand(0 ,100);
+        $key = 'zhaochunchao'.$num.'.mp3'; //路径
+
+        $data = $this->cos($file,$key);
+
+        if($data['code'] == 0){
+
+                return 1;
+
+        }else{
+                return 2;
+        }
+
+    } 
 
 
 }

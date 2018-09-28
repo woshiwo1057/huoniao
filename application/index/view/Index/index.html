@@ -175,15 +175,19 @@
 							{if condition="isset($hot_day_data[0])"}
 								<div class="the-first">
 									<!--头像框?-->
-									<div class="pic-box">
-										<img src="__IMG__crown_01.gif"/>
-										{if condition="$hot_day_data[0]['head_img'] == ''"}
-										<img class="pic" src="__IMG__default.jpg" />
-										{else /}
-										<!--图片路径不为空的时候，应为用户头像路径-->
-										<img class="pic" src="{$hot_day_data[0]['head_img']}" alt="">
-										{/if}
-									</div>
+									<a href="{:url('Index/user' , ['id' => $hot_day_data[0]['uid']])}">
+										<div class="pic-box">
+											<img src="__IMG__crown_01.gif"/>
+											
+											{if condition="$hot_day_data[0]['head_img'] == ''"}
+											<img class="pic" src="__IMG__default.jpg" />
+											{else /}
+											<!--图片路径不为空的时候，应为用户头像路径-->
+											<img class="pic" src="{$hot_day_data[0]['head_img']}" alt="">
+											{/if}
+											
+										</div>
+									</a>
 									<!--用户名字-->
 									<div class="u-name">
 										{$hot_day_data[0]['nickname']}
@@ -233,6 +237,7 @@
 							{if condition="isset($hot_day_data[1])"}
 								<div class="">
 									<!--头像框?-->
+									<a href="{:url('Index/user' , ['id' => $hot_day_data[1]['uid']])}">
 									<div class="pic-box">
 										<img src="__IMG__crown.gif"/>
 										{if condition="$hot_day_data[1]['head_img'] == ''"}
@@ -242,6 +247,7 @@
 										<img class="pic" src="{$hot_day_data[1]['head_img']}" alt="">
 										{/if}
 									</div>
+									</a>
 									<!--用户名字-->
 									<div class="u-name">
 										{$hot_day_data[1]['nickname']}
@@ -286,6 +292,7 @@
 							{if condition="isset($hot_day_data[2])"}
 								<div class="">
 									<!--头像框?-->
+									<a href="{:url('Index/user' , ['id' => $hot_day_data[2]['uid']])}">
 									<div class="pic-box">
 										<img src="__IMG__首页-恢复的_18.gif"/>
 										{if condition="$hot_day_data[2]['head_img'] == ''"}
@@ -295,6 +302,7 @@
 										<img class="pic" src="{$hot_day_data[2]['head_img']}" alt="">
 										{/if}
 									</div>
+									</a>
 									<!--用户名字-->
 									<div class="u-name">
 										{$hot_day_data[2]['nickname']}
@@ -344,10 +352,12 @@
 								<!-- 一条 -->
 								{foreach name="hot_day_data" item="v" key="k"}
 									{if condition="$k>2"}
+									<a href="{:url('Index/user' , ['id' => $v['uid']])}">
 									<li>
 										<!-- 排名 -->
 										<span>{$k+1}</span>
 										<!-- 用户头像 -->
+
 										{if condition="$v.head_img==''"}
 										<img src="__IMG__default.jpg" alt="">
 										{else  /}
@@ -375,6 +385,7 @@
 											魅力: <span>{$v.hot_day}</span>
 										</div>
 									</li>
+									</a>
 									{/if}
 								{/foreach}
 								<!-- end -->
@@ -386,6 +397,7 @@
 							{if condition="isset($hot_data[0])"}
 								<div class="the-first">
 									<!--头像框?-->
+									<a href="{:url('Index/user' , ['id' => $hot_data[0]['uid']])}">
 									<div class="pic-box">
 										<img src="__IMG__crown_01.gif"/>
 										{if condition="$hot_data[0]['head_img'] == ''"}
@@ -395,6 +407,7 @@
 										<img class="pic" src="{$hot_data[0]['head_img']}" alt="">
 										{/if}
 									</div>
+									</a>
 									<!--用户名字-->
 									<div class="u-name">
 										{$hot_data[0]['nickname']}
@@ -444,6 +457,7 @@
 							{if condition="isset($hot_data[1])"}
 								<div class="">
 									<!--头像框?-->
+									<a href="{:url('Index/user' , ['id' => $hot_data[1]['uid']])}">
 									<div class="pic-box">
 										<img src="__IMG__crown.gif"/>
 										{if condition="$hot_data[1]['head_img'] == ''"}
@@ -453,6 +467,7 @@
 										<img class="pic" src="{$hot_data[1]['head_img']}" alt="">
 										{/if}
 									</div>
+									</a>
 									<!--用户名字-->
 									<div class="u-name">
 										{$hot_data[1]['nickname']}
@@ -497,6 +512,7 @@
 							{if condition="isset($hot_data[2])"}
 								<div class="">
 									<!--头像框?-->
+									<a href="{:url('Index/user' , ['id' => $hot_data[2]['uid']])}">
 									<div class="pic-box">
 										<img src="__IMG__首页-恢复的_18.gif"/>
 										{if condition="$hot_data[2]['head_img'] == ''"}
@@ -506,6 +522,7 @@
 										<img class="pic" src="{$hot_data[2]['head_img']}" alt="">
 										{/if}
 									</div>
+									</a>
 									<!--用户名字-->
 									<div class="u-name">
 										{$hot_data[2]['nickname']}
@@ -555,6 +572,7 @@
 								<!-- 一条 -->
 								{foreach name="hot_data" item="v" key="k"}
 									{if condition="$k>2"}
+									<a href="{:url('Index/user' , ['id' => $v['uid']])}">
 									<li>
 										<!-- 排名 -->
 										<span>{$k+1}</span>
@@ -586,6 +604,7 @@
 											魅力: <span>{$v.hot}</span>
 										</div>
 									</li>
+									</a>
 									{/if}
 								{/foreach}
 								<!-- end -->
@@ -622,6 +641,7 @@
 								{if condition="isset($okami_day_data[0])"}
 								<div class="the-first">
 									<!--头像框?-->
+									<a href="{:url('Index/user' , ['id' => $okami_day_data[0]['uid']])}">
 									<div class="pic-box">
 										<img src="__IMG__crown_01.gif"/>
 										{if condition="$okami_day_data[0]['head_img'] == ''"}
@@ -631,6 +651,7 @@
 										<img class="pic" src="{$okami_day_data[0]['head_img']}" alt="">
 										{/if}
 									</div>
+									</a>
 									<!--用户名字-->
 									<div class="u-name">
 										{$okami_day_data[0]['nickname']}
@@ -674,6 +695,7 @@
 								{if condition="isset($okami_day_data[1])"}
 								<div class="">
 									<!--头像框?-->
+									<a href="{:url('Index/user' , ['id' => $okami_day_data[1]['uid']])}">
 									<div class="pic-box">
 										<img src="__IMG__crown.gif"/>
 										{if condition="$okami_day_data[1]['head_img'] == ''"}
@@ -683,6 +705,7 @@
 										<img class="pic" src="{$okami_day_data[1]['head_img']}" alt="">
 										{/if}
 									</div>
+									</a>
 									<!--用户名字-->
 									<div class="u-name">
 										{$okami_day_data[1]['nickname']}
@@ -726,6 +749,7 @@
 								{if condition="isset($okami_day_data[2])"}
 								<div class="">
 									<!--头像框?-->
+									<a href="{:url('Index/user' , ['id' => $okami_day_data[2]['uid']])}">
 									<div class="pic-box">
 										<img src="__IMG__首页-恢复的_18.gif"/>
 										{if condition="$okami_day_data[2]['head_img'] == ''"}
@@ -735,6 +759,7 @@
 										<img class="pic" src="{$okami_day_data[2]['head_img']}" alt="">
 										{/if}
 									</div>
+									</a>
 									<!--用户名字-->
 									<div class="u-name">
 										{$okami_day_data[2]['nickname']}
@@ -781,6 +806,7 @@
 								<!-- 一条 -->
 								{foreach name="okami_day_data" item="v" key="k"}
 									{if condition="$k>2"}
+										<a href="{:url('Index/user' , ['id' => $v['uid']])}">
 										<li>
 											<!-- 排名 -->
 											<span>{$k+1}</span>
@@ -812,6 +838,7 @@
 												大神指数: <span>{$v.okami_day}</span>
 											</div>
 										</li>
+										</a>
 									{/if}
 								{/foreach}
 								<!-- end -->
@@ -826,6 +853,7 @@
 							{if condition="isset($okami_data[0])"}
 								<div class="the-first">
 									<!--头像框?-->
+									<a href="{:url('Index/user' , ['id' => $okami_data[0]['uid']])}">
 									<div class="pic-box">
 										<img src="__IMG__crown_01.gif"/>
 										{if condition="$okami_data[0]['head_img'] == ''"}
@@ -835,6 +863,7 @@
 										<img class="pic" src="{$okami_data[0]['head_img']}" alt="">
 										{/if}
 									</div>
+									</a>
 									<!--用户名字-->
 									<div class="u-name">
 										{$okami_data[0]['nickname']}
@@ -884,6 +913,7 @@
 							{if condition="isset($okami_data[1])"}
 								<div class="">
 									<!--头像框?-->
+									<a href="{:url('Index/user' , ['id' => $okami_data[1]['uid']])}">
 									<div class="pic-box">
 										<img src="__IMG__crown.gif"/>
 										{if condition="$okami_data[1]['head_img'] == ''"}
@@ -893,6 +923,7 @@
 										<img class="pic" src="{$okami_data[1]['head_img']}" alt="">
 										{/if}
 									</div>
+									</a>
 									<!--用户名字-->
 									<div class="u-name">
 										{$okami_data[1]['nickname']}
@@ -937,6 +968,7 @@
 							{if condition="isset($okami_data[2])"}
 								<div class="">
 									<!--头像框?-->
+									<a href="{:url('Index/user' , ['id' => $okami_data[2]['uid']])}">
 									<div class="pic-box">
 										<img src="__IMG__首页-恢复的_18.gif"/>
 										{if condition="$okami_data[2]['head_img'] == ''"}
@@ -946,6 +978,7 @@
 										<img class="pic" src="{$okami_data[2]['head_img']}" alt="">
 										{/if}
 									</div>
+									</a>
 									<!--用户名字-->
 									<div class="u-name">
 										{$okami_data[2]['nickname']}
@@ -995,6 +1028,7 @@
 								<!-- 一条 -->
 								{foreach name="okami_data" item="v" key="k"}
 									{if condition="$k>2"}
+									<a href="{:url('Index/user' , ['id' => $v['uid']])}">
 									<li>
 										<!-- 排名 -->
 										<span>{$k+1}</span>
@@ -1026,6 +1060,7 @@
 											大神指数: <span>{$v.okami}</span>
 										</div>
 									</li>
+									</a>
 									{/if}
 								{/foreach}
 								<!-- end -->

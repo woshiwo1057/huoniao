@@ -221,8 +221,8 @@ class Order extends Common
 			//$order_data = Db::table('hn_order')->field('status')->where(['user_id' => $user_id])->where('status','<',4)->where('status','>',0)->find();
 			//var_dump($order_data);die;
 			$order_data = 1;
-			if($order_data != ''){
-				return json(['code'=>5,'msg'=>'请完成之前的订单后再来下单，谢谢']);
+			if($order_data != 1){
+				return json(['code'=>5,'msg'=>'请完成之前的订单后再来下单，谢谢，错误码999']);
 			}else{
 
 				//减去用户余额
@@ -436,8 +436,8 @@ class Order extends Common
 			//$order_data = Db::table('hn_order')->field('status')->where(['user_id' => $user_id])->where('status','<',4)->where('status','>',0)->find();
 			//var_dump($order_data);die;
 			$order_data = 1;
-			if($order_data != ''){
-				return json(['code'=>5,'msg'=>'请完成之前的订单后再来下单，谢谢']);
+			if($order_data != 1){
+				return json(['code'=>5,'msg'=>'请完成之前的订单后再来下单，谢谢，错误码999']);
 			}else{
 
 				//减去用户余额
@@ -618,7 +618,7 @@ class Order extends Common
 			
 		}else{
 			//判断陪玩师是否在线 $data['acc_id']   hn_accompany   status == 1 在线 
-			$status = Db::table('hn_accompany')->field('status，down')->where('user_id',$data['acc_id'])->find();
+			$status = Db::table('hn_accompany')->field('status,down')->where('user_id',$data['acc_id'])->find();
 			if($status['status'] != 1){
 				return json(['code'=>8,'msg'=>'陪玩师未在线，请稍后再来']);
 			}
@@ -654,8 +654,8 @@ class Order extends Common
 			//$order_data = Db::table('hn_order')->field('status')->where(['user_id' => $user_id])->where('status','<',4)->where('status','>',0)->find();
 			//var_dump($order_data);die;
 			$order_data = 1;
-			if($order_data != ''){
-				return json(['code'=>5,'msg'=>'请完成之前的订单后再来下单，谢谢']);
+			if($order_data != 1){
+				return json(['code'=>5,'msg'=>'请完成之前的订单后再来下单，谢谢,错误码999']);
 			}else{
 
 				//减去用户余额

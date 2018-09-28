@@ -54,13 +54,52 @@
               <div><i class="layui-icon layui-icon-rmb miva-rmb"></i>{$v.price}</div>
              
               {if condition="$v['status'] == 1"}
-                <span>等待时长：</span>
-                <span><?php  $time = floor((time()-$v['time'])/60);
-                    echo $time; ?>min</span>
-                      <?php  if($time>8){?>
+             <!--<span>等待时长：</span>
+                <span><?php //  $time = floor((time()-$v['time'])/60);
+                     //echo $time; ?>min</span>
+                      <?php   //if($time>8){?>
                         <div class="out xiaoshou" order_id="{$v.id}" type="2">取消订单</div>
-                      <?php }?>
+                      <?php //  }?>-->
+                      <div class="out xiaoshou" order_id="{$v.id}" type="2">取消订单</div>
+                      剩余: <span id="m">0</span>分<span id="s"></span>
+              <script type="text/javascript">
+                  var num = 1 
+                  var time = {$v['time']+480-time()}; // 秒
+                  var timer = setInterval(function() {
+                    time--;
+                    $('#m').html(parseInt(time/60))
+                    $('#s').html(parseInt(time % 60))
+                    if (time < 180){ 
+                      //通知接单
+                      if(num == 1){
+                         num--
+                        var type = 1
+                        var order_id = {$v['id']};
+                        $.post("{:url('User/order_delete')}",{order_id:order_id,type:type},function(data){
+                              if(data == 1){
+                                  // window.location.reload()
+                              }
+
+                        },'json')
+                      }
+
+                    }
+                    if (time < 1){ clearInterval(timer)
+                      //删除订单
+                      var type = 2
+                      var order_id = {$v['id']};
+                      $.post("{:url('User/order_delete')}",{order_id:order_id,type:type},function(data){
+
+
+                      },'json')
+
+                    }
+
+                  }, 1000)
+              </script>
+
               {/if}
+             
               {if condition="$v['status'] == 2"}
                <span class="out xiaoshou" order_id="{$v.id}" type="3">确认完成</span>
               {/if}

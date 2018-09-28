@@ -26,7 +26,8 @@ class Common extends \think\Controller
 {
 
 	static $acsClient = null;
-    public $img = 'https://hn-001-1256760691.picbj.myqcloud.com/'; //腾讯云路径
+    public $img = 'https://hn-001-1256760691.picbj.myqcloud.com/'; //腾讯云图片路径
+    public $audio = 'https://mov-1256760691.cos.ap-shanghai.myqcloud.com/';
     public $Intercept = 45; //cos路径截取长度
 	 
 
@@ -402,7 +403,7 @@ class Common extends \think\Controller
                         [
                             'Bucket' => $bucket,  //桶名
                             'Key'   => $key,      //上传至服务器，服务器上的路径
-                            // 'Body'  => fopen($file->getInfo()['tmp_name'],'rb')
+                            //'Body'  => fopen($file->getInfo()['tmp_name'],'rb')
                             'Body'  => fopen($file,'rb')
                         ]
                     );
@@ -440,7 +441,7 @@ class Common extends \think\Controller
         
     }
 
-    //还有一个cos图片删除的方法  cos图片存储删除控制器
+    //还有一个cos文件删除的方法  cos文件存储删除控制器
     public function cos_delete($key)
     {
         /*

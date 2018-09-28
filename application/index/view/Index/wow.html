@@ -1,0 +1,57 @@
+{include file="public/header"}
+<body>
+<div  style="margin-top:200px;">
+	<form action=""  method="post" enctype="multipart/form-data" >
+		<input type="file"  name="video" id="newMiva">
+
+
+		<input type="submit" value="上传"  class="submit" /> 
+	</form>
+</div>
+</body>
+</html>
+
+
+<script type="text/javascript">
+
+	$(function(){
+
+		var num = 1
+
+		var reader = new FileReader();
+		$('#newMiva').on('change', function(){
+			reader.readAsDataURL($(this).prop('files')[0]);
+			reader.onload = function(e) {
+				base64 = e.target.result
+
+				console.log(base64)
+			}
+		})
+		
+		
+		//var cas = imgbox.cropper('getCroppedCanvas');
+		//base64url = imgbox.toDataURL('audio/mpeg');
+
+		$('.submit').click(function(){
+			num --
+			if(num <1){
+				base64 = '';
+			}
+			$('#newMiva').val('');
+
+			$.post("{:url('Index/mom')}",{base64:base64},function(data){
+
+				if(data == 1){
+					alert('OK')
+				}else if(data == 2){
+					alert('NO')
+				}else{
+					alert('未知错误')
+				}
+
+			},'json')
+			return false
+		})
+	})
+
+</script>
