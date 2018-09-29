@@ -48,12 +48,15 @@ class Index  extends Common
     	//首页明星推荐
     	$acc_data = Db::table('hn_user')
                     ->alias('u')
-                    ->join('hn_accompany a','u.uid = a.user_id')
-                    ->join('hn_apply_project p' , 'a.project_id = p.project_id')
+                    ->join('hn_accompany a','u.uid = a.user_id','LEFT')
+                    ->join('hn_apply_project p' , 'a.project_id = p.project_id' , 'LEFT')
+                    ->group('u.uid')
                     ->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num,p.project_name,u.sex,a.city')
+                    ->where('a.up',2)
                     ->order('a.okami desc')->limit('0,15')->select();
-                    //->where('a.status',1)
-        $acc_data = $this->out_repeat($acc_data,'nickname');
+
+
+        //$acc_data = $this->out_repeat($acc_data,'nickname');
         //var_dump($acc_data);die;
   
     	//优质新人  先注册的排前面（15天内）
@@ -228,8 +231,8 @@ class Index  extends Common
             //查出所有名字循环输出
         $service_name = Db::table('hn_apply_project')->field('project_name,project_id,project')->where(['status' => 1, 'type' => 1,'uid' => $id])->select();
         //var_dump($service_name);die;
-        $project_data = Db::table('hn_apply_project')->field('project,project_id,project_name,project_grade_name,pric,length_time')->where(['status' => 1, 'type' => 1,'uid' => $id])->find();
-        
+        $project_data = Db::table('hn_apply_project')->field('project,project_id,project_name,project_grade_name,pric,length_time,video_url')->where(['status' => 1, 'type' => 1,'uid' => $id])->find();
+        //var_dump($project_data);die;
         if($project_data['project'] == 1){
             //查游戏表
             $game_data = Db::table('hn_game')->field('id,name,game_index_img')->where('id',$project_data['project_id'])->find();
@@ -277,6 +280,7 @@ class Index  extends Common
             $gift_header['num'] = $v;
             $sort_gift[] =  $gift_header;
         }
+        $sort_gift = array_slice($sort_gift ,0,6);
 
         //统计此陪玩师关注数量  确定是否已关注
         $follow = \db('hn_follow');
@@ -350,7 +354,7 @@ class Index  extends Common
             $img = Db::table('hn_game')->field('game_index_img')->where('id',$data['project_id'])->find();
            
             $service_data = Db::table('hn_apply_project')
-                        ->field('project_grade,project_grade_name,pric,length_time,order_num')
+                        ->field('project_grade,project_grade_name,pric,length_time,order_num,video_url,explain')
                         ->where(['status' => 1, 'type' => 1, 'project_id' => $data['project_id'], 'uid' => $data['acc_id']])
                         ->find();
             $service_data['project_img'] = $img['game_index_img'];
@@ -373,7 +377,7 @@ class Index  extends Common
             $img = Db::table('hn_joy')->field('joy_logo_img')->where('id',$data['project_id'])->find();
            
             $service_data = Db::table('hn_apply_project')
-                        ->field('project_grade,project_grade_name,pric,length_time,order_num')
+                        ->field('project_grade,project_grade_name,pric,length_time,order_num,video_url,explain')
                         ->where(['status' => 1, 'type' => 1, 'project_id' => $data['project_id'], 'uid' => $data['acc_id']])
                         ->find();
             $service_data['project_img'] = $img['joy_logo_img'];
@@ -633,6 +637,7 @@ class Index  extends Common
            $user_header['egg_num'] = $v;
            $sort_data[] = $user_header;
         }        
+
        if($sort_data != NULL){
             $sort_data =  $this->ranking($sort_data,$type='egg_num');
         }
@@ -647,6 +652,7 @@ class Index  extends Common
             $gift_header['num'] = $v;
             $sort_gift[] =  $gift_header;
         }
+        $sort_gift = array_slice($sort_gift ,0,6);
 
         //统计此陪玩师关注数量  确定是否已关注
         $follow = \db('hn_follow');
@@ -703,12 +709,12 @@ class Index  extends Common
             var_dump($file);die;
             //var_dump($_FILES['video']);die;
 
-            $key = 'zhaochunchao'.'.mp3'; //路径
+            $key = '10052'.'/'.md5(microtime()).'.mp3';  //路径
 
             $data = $this->cos($file,$key);
 
             if($data['code'] == 0){
-                echo $this->audio.$key;
+                echo $this->img.$key;
             }else{
                 echo '1';
             }
@@ -720,18 +726,18 @@ class Index  extends Common
     public function mom()
     {
         $data = Request::instance()->param();
+        //
         //var_dump($data);die; //base64
 
-        $file = $data['base64'];
+        $file = $data['video'];
 
-        $num = rand(0 ,100);
-        $key = 'zhaochunchao'.$num.'.mp3'; //路径
+        $key = '10042'.'/'.md5(microtime()).'.mp3';  //路径
 
         $data = $this->cos($file,$key);
 
         if($data['code'] == 0){
 
-                return 1;
+                echo $this->img.$key;
 
         }else{
                 return 2;

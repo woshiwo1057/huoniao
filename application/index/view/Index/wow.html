@@ -18,13 +18,15 @@
 
 		var num = 1
 
+		var video = '';
+		var video_big;
 		var reader = new FileReader();
 		$('#newMiva').on('change', function(){
+			
 			reader.readAsDataURL($(this).prop('files')[0]);
 			reader.onload = function(e) {
-				base64 = e.target.result
+				video = e.target.result
 
-				console.log(base64)
 			}
 		})
 		
@@ -39,7 +41,7 @@
 			}
 			$('#newMiva').val('');
 
-			$.post("{:url('Index/mom')}",{base64:base64},function(data){
+			$.post("{:url('Index/mom')}",{video:video},function(data){
 
 				if(data == 1){
 					alert('OK')

@@ -18,7 +18,7 @@ require_once EXTEND_PATH.'wechatpay/example/WxPay.JsApiPay.php'; //载入微信�
 require_once EXTEND_PATH.'wechatpay/example/log.php'; //载入微信支付相关文件
 */
 
-//扫二维码进行支付 
+//扫二维码进行支付 s
 require_once EXTEND_PATH.'wechatpay/lib/WxPay.Api.php'; //载入微信支付相关文件
 require_once EXTEND_PATH.'wechatpay/example/WxPay.NativePay.php'; //载入微信支付相关文件
 require_once EXTEND_PATH.'wechatpay/example/log.php';//载入微信支付相关文件
@@ -70,7 +70,7 @@ class Pay extends Common
 			$input->SetTime_start(date("YmdHis"));  //设置订单生成时间，格式为yyyyMMddHHmmss，如2009年12月25日9点10分10秒表示为20091225091010。其他详见时间规则
 			$input->SetTime_expire(date("YmdHis", time() + 180));  //设置订单失效时间，格式为yyyyMMddHHmmss，如2009年12月27日9点10分10秒表示为20091227091010。其他详见时间规则
 			//$input->SetGoods_tag("test");  //设置商品标记，代金券或立减优惠功能的参数，说明详见代金券或立减优惠
-			$input->SetNotify_url("https://csq.huoniaopeiwan.com/");   //设置接收微信支付异步通知回调地址
+			$input->SetNotify_url("https://www.huoniaopeiwan.com/");   //设置接收微信支付异步通知回调地址
 			$input->SetTrade_type("NATIVE"); //设置取值如下：JSAPI，NATIVE，APP，详细说明见参数规定
 			$input->SetProduct_id("6"); //设置trade_type=NATIVE，此参数必传。此id为二维码中包含的商品ID，商户自行定义。
 				//http://localhost/huoniao/public/index.php/index/pay/wechat

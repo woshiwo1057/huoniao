@@ -44,7 +44,12 @@ class Recharge extends Common
 		//查询出用户的账户余额和钻石余额
 		$user_data = Db::table('hn_user')->field('cash,currency')->where('uid',$id)->find();
 
-		$this->assign(['user_data' => $user_data]);
+		//查出充值等级排名
+		$recharge_data = Db::table('hn_recharge_level')->field('money')->select();
+
+		$this->assign(['user_data' => $user_data,
+						'recharge_data' => $recharge_data
+						]);
 		return $this->fetch('Recharge/index');
 	}
 

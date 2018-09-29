@@ -922,8 +922,12 @@
 							<div class="money"><span>￥199</span>/小时</div>
 							<div class="tip-box"><span>{$service_data.project_grade_name}</span></div>
 							<div class="max-time"><img src="" alt=""><span>接单时长:{$service_data.length_time/60} min</span></div>
-							<div class="audio-box"><img src="__IMG__icon-play.png" alt=""><span>0 S</span><audio src="" style="display:none"></audio><img src="__IMG__icon-auido.png" alt=""></div>
-						</div>
+							<div class="audio-box xiaoshou">
+                                <img src="__IMG__icon-play.png" alt="" style="width: 22px;height: 22px" class="play">
+                                <span data-time="" id="audioTime">0</span><img src="__IMG__icon-auido.png" alt="">
+                            </div>
+                        </div>
+                        <audio  id="audio" src="{$service_data.video_url}" ></audio>
                         {if condition="$user_data.down == 2"}
 						<a href="{:url('Order/offline',['id' => $user_data['uid'],'project' => $service_data['project'],'project_id' => $service_data['project_id']])}">
                             
@@ -955,8 +959,12 @@
 											<div class="money"><span>￥199</span>/小時</div>
 											<div class="tip-box"><span>${data.project_grade_name}</span></div>
 											<div class="max-time"><img src="" alt=""><span>接单时长:${data.length_time/60} min</span></div>
-											<div class="audio-box"><img src="__IMG__icon-play.png" alt=""><span>0 S</span><audio src="" style="display:none"></audio><img src="__IMG__icon-auido.png" alt=""></div>
-										</div>
+											<div class="audio-box xiaoshou">
+                                                <img src="__IMG__icon-play.png" alt="" style="width: 22px;height: 22px" class="play">
+                                                <span data-time="" id="audioTime">0</span><img src="__IMG__icon-auido.png" alt="">
+                                            </div>
+
+                                            <audio  id="audio" src="${data.video_url}" ></audio>
                                         {if condition="$user_data.down == 2"}
 										<a href="${wow}"><span class="submit-btn">立即下单</span></a>
                                         {else }
@@ -964,17 +972,101 @@
                                         {/if}
                                         `
 
-								$('.order-info').html(str)
+								var explain = `<p>${data.explain}</p>`
+
+                                $('.order-info').html(str)
+
+                                $('.explain').html(explain)
+
+                                var isPlay = false; // 播放器开关
+
+                            function getaudioTime() {
+                                setTimeout(function() { // 获取音频时间
+                                    var audio =  document.querySelector('#audio')
+                                    $('#audioTime').html(parseInt(audio.duration)).attr('data-time', parseInt(audio.duration))
+                                },300)
+                            }
+                            getaudioTime();
+                            $('.audio-box').unbind()
+                            $('.audio-box').on('click', function() {
+                                var audio =  document.querySelector('#audio')
+                                var shen;
+                                var timer;
+                                clearInterval(timer)
+                                timer = setInterval(function() { // 显示剩余时间
+                                    shen = parseInt($('#audioTime').attr('data-time')) - audio.currentTime;
+                                    shen = parseInt(shen)
+                                    if (shen > 0) {
+                                        $('#audioTime').html(shen)
+                                    }else {
+                                        clearInterval(timer)
+                                        getaudioTime()
+                                    }
+                                }, 1000)
+
+
+                                isPlay = !isPlay
+                                if (isPlay) {
+                                    $('.play').attr("src","__IMG__icon-play1.png");
+                                    audio.play() // 点击播放音频
+                                }else {
+                                    $('.play').attr("src","__IMG__icon-play.png");
+                                    audio.pause() //点击暂停音频
+                                }
+                            })
+
+
+                            },'json')
 
 
 							},'json')
 
+
 						});
 					</script>
-					
+					<script>
+                        $(function() {
+                            var isPlay = false; // 播放器开关
+
+                            function getaudioTime() {
+                                setTimeout(function() { // 获取音频时间
+                                    var audio =  document.querySelector('#audio')
+                                    $('#audioTime').html(parseInt(audio.duration)).attr('data-time', parseInt(audio.duration))
+                                },300)
+                            }
+                            getaudioTime();
+
+                            $('.audio-box').on('click', function() {
+                                var audio =  document.querySelector('#audio')
+                                var shen;
+                                var timer;
+                                clearInterval(timer)
+                                timer = setInterval(function() { // 显示剩余时间
+                                    shen = parseInt($('#audioTime').attr('data-time')) - audio.currentTime;
+                                    shen = parseInt(shen)
+                                    if (shen > 0) {
+                                        $('#audioTime').html(shen)
+                                    }else {
+                                        clearInterval(timer)
+                                        getaudioTime()
+                                    }
+                                }, 1000)
+
+
+                                isPlay = !isPlay
+                                if (isPlay) {
+                                    $('.play').attr("src","__IMG__icon-play1.png");
+                                    audio.play() // 点击播放音频
+                                }else {
+                                    $('.play').attr("src","__IMG__icon-play.png");
+                                    audio.pause() //点击暂停音频
+                                }
+                            })
+                        })
+                    </script>
 					<div class="about-user">
 						<div class="title-user"><span>自我</span>介绍</div>
-						<p>{$user_data.explain}~</p>
+						<p class="explain">{$user_data.explain}~</p>
 					</div>
 					</div>
 					<!-- 3.用户评价 -->

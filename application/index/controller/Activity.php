@@ -21,7 +21,17 @@ class Activity extends Common
 		$joy_data = Db::table('hn_joy')->field('id,name,joy_logo_img')->select();
 						
 		//查询一哈陪玩师列表  然后输出
-		$acc_data = Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num,a.city')->where('a.pice',8)->limit('0,12')->select();
+		//$acc_data = Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')
+		//		->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num,a.city')->where(['a.pice' => 8 , 'a.up' => 2])->limit('0,12')->select();
+
+		$acc_data = Db::table('hn_user')
+                    ->alias('u')
+                    ->join('hn_accompany a','u.uid = a.user_id')
+                    ->join('hn_apply_project p' , 'a.project_id = p.project_id')
+                    ->group('u.uid')
+                    ->field('u.uid,u.nickname,u.head_img,a.table,a.hot,p.pric pice,a.order_num,a.city')
+                    ->where(['p.pric' => 8 , 'a.up' => 2])
+                    ->limit('0,15')->select();
 		
 		$this->assign([
 				'game_data' => $game_data,

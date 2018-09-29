@@ -64,12 +64,12 @@
 				<div class="audio-box">
 					<div class="audio-btn" >
 						<i class="layui-icon layui-icon-voice"></i>
-						<input  type="file"   style="opacity:0;width:80px;"  >
-						<span>点击上传</span>
+						<input  type="file"   style="opacity:0;width:80px;"    name="video" id="newMiva" >
+						<span class="video" >点击上传</span>
 					</div>
 				</div>
 
-				<audio  id="audio" src="https://mov-1256760691.cos.ap-shanghai.myqcloud.com/%E9%83%81%E5%8F%AF%E5%94%AF%20-%20%E6%88%91%E6%9B%BE%E7%94%A8%E5%BF%83%E7%88%B1%E7%9D%80%E4%BD%A0%20(Live)%20%5Bmqms2%5D.mp3" controls ></audio>
+				<!--<audio  id="audio" src="" controls ></audio>-->
 
 			</div>
 			<span class="tip">上传录音可供老板试听,请自行上传录音 格式为:MP3 大小:2MB
@@ -325,7 +325,7 @@ var sex
 			$('.miva-selected-box').on('click', '[data-floor=floor1]', function(){
 				// type  1:游戏项目hn_game_grade  2：娱乐 hn_game_grade
 				var game_id = $(this).attr('attr_id')
-
+				/*
 				if(type == 2){
 
 					if(game_id == 2){
@@ -337,49 +337,66 @@ var sex
 				}else{
 					$('.style-picture').attr('src','__IMG__example.png')
 				}
-
+				*/
 				//更换文本内容
 				if(type == 1){
 					if(game_id == 4){
 						//绝地求生
-						$('.text').html('请上传《绝地求生：大逃杀》个人数据截图，等待考核<br>排名要求：男生（1万名以内）；女生（游戏时长50+）<br>考核要求:服务器1万名以内无论男女都需要考核')
+						$('.text').html('审核要求：请上传您清晰的段位截图（包含游戏ID）<br>萌新：1800分以下<br>中级：1801至2400之间<br>大神：2400+')
+						$('.style-picture').attr('src','__IMG__pubg.jpg')
 					}else if(game_id == 8){
 						//刺激战场
-						$('.text').html('请上传《刺激战场》个人数据截图，等待考核<br>申请要求：游戏时长10小时以上<br>请上传《全军出击》个人数据截图，等待考核')
+						$('.text').html('审核要求：请上传您清晰的段位截图（包含游戏ID）<br>萌新：热血青铜、不屈白银、英勇黄金<br>中级：坚韧铂金、不朽星钻、荣耀皇冠<br>大神：超级王牌、无敌战神')
+						$('.style-picture').attr('src','__IMG__cjzc.jpg')
 					}else if(game_id == 11){
 						//英雄联盟
-						$('.text').html('请上传您的段位截图（需包含个人ID）<br>男段位要求：电一钻Ⅰ以上，其他区大师王者；<br>女段位要求：黄金以上')
+						$('.text').html('审核要求：请上传您清晰的段位截图（包含游戏ID）<br>荣耀黄金、华贵铂金、璀璨钻石、<br>超凡大师、最强王者')
+						$('.style-picture').attr('src','__IMG__lol.jpg')
 					}else if(game_id == 17){
 						//王者荣耀
-						$('.text').html('请上传您的段位截图（需包含个人ID）<br>男段位要求：王者/星耀Ⅰ以上，其他区大师王者；<br>女段位要求：钻石以上')
+						$('.text').html('审核要求：请上传您清晰的段位截图（包含游戏ID）<br>荣耀黄金、尊贵铂金、永恒钻石、<br>至尊星耀、最强王者')
+						$('.style-picture').attr('src','__IMG__wzry.jpg')
 					}else if(game_id == 18){
 						//全军出击
-						$('.text').html('请上传《全军出击》个人数据截图，等待考核<br>申请要求：游戏时长10小时以上')
+						$('.text').html('审核要求：请上传您清晰的段位截图（包含游戏ID）<br>萌新：坚韧青铜、冲锋白银<br>中级：凯旋黄金、灭世铂金<br>大神：永恒钻石、最强王者')
+						$('.style-picture').attr('src','__IMG__qjcj.jpg')
 					}else if(game_id == 19){
 						//荒野行动
-						$('.text').html('请上传《荒野行动》个人数据截图，等待考核<br>申请要求：游戏时长10小时以上')
+						$('.text').html('审核要求：请上传您清晰的段位截图（包含游戏ID）<br>萌新：顽强列兵、精英军士<br>中级：英勇少尉、坚毅中校<br>大神：荣耀少将、光辉上将')
+						$('.style-picture').attr('src','__IMG__hyxd.jpg')
 					}else if(game_id == 20){
 						//第五人格
-						$('.text').html('请上传您的段位截图（需包含个人ID）,并填写第五人格相关的描述')
-					}else{
-						$('.text').html('点击上传您的游戏段位(等级)截图,<br>并填写游戏相关说明补充<br>(包含游戏ID)')
+						$('.text').html('审核要求：请上传您清晰的段位截图（包含游戏ID）<br>萌新：一阶、二阶<br>中级：三阶、四阶<br>大神：五阶、六阶')
+						$('.style-picture').attr('src','__IMG__durg.jpg')
+					}else if(game_id == 23){
+						//穿越火线
+						$('.text').html('审核要求：请上传您清晰的段位截图（包含游戏ID）<br>萌新：新锐、精英、专家<br>中级：大师、宗师<br>大神：枪王、枪王之王')
+						$('.style-picture').attr('src','__IMG__cf.jpg')
+					}else if(game_id == 25){
+						//无限法则
+						$('.text').html('审核要求：请上传您清晰的段位截图（包含游戏ID）专业')
+						$('.style-picture').attr('src','__IMG__wxfz.jpg')
 					}
 				}else if(type == 2){
 					if(game_id == 1){
 						//哄睡觉
 						$('.text').html('服务内容包含叫醒、哄睡、聊天、游戏、视频等,<br>请上传真人正面清晰照作为该服务封面图，等待考核<br>请在平台进行声鉴后上传平台电竞音色卡')
+						$('.style-picture').attr('src','__IMG__shengjian.jpg')
 					}else if(game_id == 2){
 						//唱歌
 						$('.text').html('请上传真人正面清晰照作为该服务封面图，等待考核<br>请上传你的歌单')
+						$('.style-picture').attr('src','__IMG__gedan.jpg')
 					}else if(game_id == 3){
 						//聊天
-						$('.text').html('请上传您的【声鉴卡】一张，<br>如没有【声鉴卡】，<a href="https://csq.huoniaopeiwan.com/index/acc/index.html">请点击获取。获取声鉴卡</a>')
+						$('.text').html('请上传您的【声鉴卡】一张，<br>如没有【声鉴卡】，<a href="https://www.huoniaopeiwan.com/index/acc/index.html">请点击获取。获取声鉴卡</a>')
+						$('.style-picture').attr('src','__IMG__shengjian.jpg')
 					}else if(game_id == 5){
 						//声鉴师
 						$('.text').html('普通玩家/陪玩师  不具备申请声鉴师的能力，请与后台工作人员联系')
 					}else if(game_id == 6){
 						//叫醒
-						$('.text').html('请上传您的【声鉴卡】一张，<br>如没有【声鉴卡】，<a href="https://csq.huoniaopeiwan.com/index/acc/index.html">请点击获取。获取声鉴卡</a>')
+						$('.text').html('请上传您的【声鉴卡】一张，<br>如没有【声鉴卡】，<a href="https://www.huoniaopeiwan.com/index/acc/index.html">请点击获取。获取声鉴卡</a>')
+						$('.style-picture').attr('src','__IMG__shengjian.jpg')
 					}else{
 						$('.text').html('点击上传您的游戏段位(等级)截图,<br>并填写游戏相关说明补充<br>(包含游戏ID)')
 					}
@@ -445,12 +462,32 @@ $('.check-box').on('change','input', function() {
 	}
 })
 
+//音频
+var video = '';
+var video_big;
+var upload_type;
+var video_type = 'audio/mpeg';
+var reader = new FileReader();
+$('#newMiva').on('change', function(){
+	upload_type = $(this).prop('files')[0]['type']
+	console.log(upload_type)
+	video_big = $(this).prop('files')[0]['size']
+	reader.readAsDataURL($(this).prop('files')[0]);
+	reader.onload = function(e) {
+		video = e.target.result
+
+		
+
+		$('.video').html('已上传')
+	}
+})
+
 
 
 		$('.submit').click(function() { 
 				//	alert(num);   这一项有2个值  1：没有选择线下    3：选择了线下 所以需要判断填写的东西是否存在  
 
-
+				
 			var project_id = $('.service-act').attr('attr_id') //游戏ID
 
 			if(!project_id){
@@ -481,43 +518,81 @@ $('.check-box').on('change','input', function() {
 				}) 
 				return false
 			}
-			
 
-			
-
-			
-			$.post("{:url('User/service_add')}", {
-				//前往用户表的数据
-				project:type,
-				img_url:img_data,  //认证图片
-				project_id:project_id,
-				project_grade:project_grade,
-				explain:explain,
-			
-			}, function(data){
-				if(data.code == 1){
-					layui.use('layer', function() {
-					layer.msg(data.msg)
-					})
-				}else if(data.code == 2){
-					layui.use('layer', function() {
-					layer.msg(data.msg)
-					})
-				}else if(data.code == 3){
-					layui.use('layer', function() {
-					layer.msg(data.msg)
-					})
-				}else if(data.code == 4){
-					layui.use('layer', function() {
-					layer.msg(data.msg)
-					})
-				}else{
-					layui.use('layer', function() {
-					layer.msg('位置错误')
-					})
+			if(video != ''){
+				if(video_big>2100){
+					layui.use('layer', function(){
+					layer.msg('文件上传过大，请重新上传')
+					}) 
+				return false
 				}
-			}, 'json')
-			return false
+
+				if(video_type != upload_type){
+					layui.use('layer', function(){
+						layer.msg('请上传mp3格式的音频')
+					}) 
+					return false
+				}
+			}
+			
+
+			
+			layui.use(['layer'], function(){
+
+				var htmlEl = '<div><i style="font-size:30px; margin:auto; margin-left:15px" class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop"></i></div> <div style=" margin:auto">正在上传，请等待</div>'
+					layer.open({
+						type:1,
+						title: false,
+						closeBtn: false,
+						area: ['200px', '50px'],
+						content: htmlEl,
+						success: function() {
+			
+							$.post("{:url('User/service_add')}", {
+								//前往用户表的数据
+								project:type,
+								img_url:img_data,  //认证图片
+								project_id:project_id,
+								project_grade:project_grade,
+								explain:explain,
+								video:video  //音频base64
+							
+							}, function(data){
+								if(data.code == 1){
+									layer.closeAll()
+									//alert('提交成功,等待审核')
+									layui.use('layer', function() {
+									layer.open({type:0,content:data.msg,btn:false,title:'提交成功'})
+									})
+								}else if(data.code == 2){
+									layer.closeAll()
+									layui.use('layer', function() {
+									layer.msg(data.msg)
+									})
+								}else if(data.code == 3){
+									layer.closeAll()
+									layui.use('layer', function() {
+									layer.msg(data.msg)
+									})
+								}else if(data.code == 4){
+									layer.closeAll()
+									layui.use('layer', function() {
+									layer.msg(data.msg)
+									})
+								}else{
+									layer.closeAll()
+									layui.use('layer', function() {
+									layer.msg('未知错误')
+									})
+								}
+							}, 'json')
+							return false
+						}
+					})
+				})
+
+
+
 		})
 	</script>
 

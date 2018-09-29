@@ -128,17 +128,13 @@
 						<td><img src="__IMG__icon1-8_01.gif"/></td>
 						<td><img src="__IMG__icon1-9.gif"/></td>
 						<td><img src="__IMG__icon1-10.gif"/></td>
+						<td><img src="__IMG__icon1-10.gif"/></td>
 					</tr>
 					<tr class="miva-sum">
 						<td>累计消费( 元 )</td>
-						<td>&gt;100</td>
-						<td>&gt;500</td>
-						<td>&gt;1000</td>
-						<td>&gt;1500</td>
-						<td>&gt;2000</td>
-						<td>&gt;2500</td>
-						<td>&gt;3000</td>
-						<td>&gt;3500</td>
+						{foreach name="recharge_data"  item="v"}
+						<td>&gt;{$v.money}</td>
+						{/foreach}
 					</tr>
 					<tr>
 						<td>温馨提示</td>

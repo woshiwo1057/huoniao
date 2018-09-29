@@ -15,7 +15,7 @@ class Order extends Common
 	public function index()
 	{
 
-		$order_data = Db::table('hn_order')->field('id,number,acc_id,user_id,service,length_time,time,over_time,status,price')->order('id desc')->select();
+		$order_data = Db::table('hn_order')->field('id,number,acc_id,user_id,service,length_time,time,over_time,status,price')->where('status' ,'>' , '0')->order('id desc')->select();
 
 		foreach ($order_data as $k => $v) {
 			//用户

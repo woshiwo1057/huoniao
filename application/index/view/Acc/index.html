@@ -29,14 +29,14 @@
 							<!-- 一条 -->
 							{foreach name="game_data" item="v"}
 							<a>
-								<div class="miva-iocn-box" project="1"  project_id="{$v.id}" dawdawdawd>
+								<div class="miva-iocn-box {if condition=" $game_id eq $v.id"}icon-active{/if}" project="1"  project_id="{$v.id}" dawdawdawd>
 								{if condition="$v.game_logo_img == ''"}
 									<img src="__IMG__default.jpg" alt="1">
 								{else /}
 									<img src="{$v.game_logo_img}" alt="">
 								{/if}
 								</div>
-								<span>{$v.name}</span>
+								<span {if condition=" $game_id eq $v.id"}style="color:#f5b105"{/if}>{$v.name}</span>
 							</a>
 							{/foreach}
 							
@@ -187,7 +187,7 @@
 			$('.miva-screen-btn-admin').addClass('btn-admin-act');
 		
 			$.post("{:url('Acc/screen')}",{project:project,project_id:projectId,sex:sex,type:type,porjectLv:porjectLv},function(res){ // 用作筛选的ajax
-				//https://csq.huoniaopeiwan.com/index/index/offline_user/id/${a.uid}
+				//https://www.huoniaopeiwan.com/index/index/offline_user/id/${a.uid}
 				//http://localhost/huoniao/public/index.php/index/index/offline_user/id/${a.uid}
 				//https://www.huoniaopeiwan.com/index/index/offline_user/id/${a.uid}
 				var aa = new Array();
@@ -195,7 +195,6 @@
     				aa.push(v);
 				});
 
-console.log(aa)
 			if(type == 4){
 				var str = ''
 					for(a of aa){
@@ -299,7 +298,6 @@ console.log(aa)
 				$.each(res,function(k,v){
     				aa.push(v);
 				});
-console.log(res)
 			if(type == 4){
 				var str = ''
 					for(a of aa){
@@ -382,14 +380,35 @@ if(type == 4){
 			},'json')
 		})
 
+        $('.miva-acc-tab-box').on('mouseover', 'span', function() {
+            $(this).siblings().find('img').css('transform', 'translateY(-36.6px)');
+		})
+        $('.miva-acc-tab-box').on('mouseout', 'span', function() {
+            $(this).siblings().find('img').css('transform', '');
+        })
 
-
-		$('.miva-acc-tab-box').on('click', '.miva-iocn-box', function() {			
+		$('.miva-acc-tab-box').on('click', '.miva-iocn-box, span', function() {
 			$('.miva-acc-tab-box').find('.miva-iocn-box').removeClass('icon-active')
+			$('.miva-acc-tab-box').find('.miva-iocn-box').css('color','');
 			$(this).addClass('icon-active');
-			projectId = $(this).attr('project_id');
+
+			// projectId = $(this).attr('project_id');
 			project = $(this).attr('project');
 			porjectLv = 0;
+            $('.miva-acc-tab-box').find('span').css('color','');
+            if( !($(this).attr('project_id')) ) { // 如果他没有project_id 就拿他兄弟的 project_id  如果有 就拿他自己的 project_id
+                projectId = $(this).siblings().attr('project_id')
+                project = $(this).siblings().attr('project');
+                $(this).siblings().addClass('icon-active');
+
+                $(this).css('color','#f5b105');//#f5b105
+            }else {
+
+                $(this).siblings('span').css('color','#f5b105');
+                projectId = $(this).attr('project_id')
+            }
+
+            console.log(projectId)
 			//post请求  携带参数访问控制器    通过参数查询出数据并 return json($data)回来   这里是取到项目的等级信息
 			$.post("{:url('Acc/garde_ajax')}",{project:project,project_id:projectId},function(res){
 				//组装数据

@@ -113,6 +113,15 @@ class Login extends \think\Controller
 	Session::delete('code');
 	unset($register_data['code']);
 
+	if(Session::has('user_arr')){
+        $arr = Session::get('user_arr');
+        $register_data['nickname'] = $arr['nickname'];
+        $register_data['head_img'] = $arr['head_img'];
+        $register_data['wx_openid'] = isset($arr['wx_openid'])?$arr['wx_openid']:'';
+        $register_data['qq_openid'] = isset($arr['qq_openid'])?$arr['qq_openid']:'';
+        Session::delete('user_arr');
+    }
+
 	//注册时间
 	$register_data['time'] = time();
 	//加密密码
@@ -137,6 +146,49 @@ class Login extends \think\Controller
 	return json(['code' => 4,'msg' => '注册成功，正在登录','url' => url('index/index')]);
 
 	}
+
+	//第三方登录账号绑定页面控制器
+	function bind()
+    {
+      return  $this->fetch('Login/bind');
+    }
+
+    //第三方登录账号绑定控制器
+    function bind_add(){
+        $register_data = Request::instance()->param();
+
+        //从session里取出code验证码
+        $code = Session::get('code','think');
+        if(!isset($code)){
+            return  json(['code' => 1,'msg' => '自己填的验证码不算']);
+        }
+
+        if(empty($register_data['code'])){
+            return json(['code' => 2,'msg' => '验证码不能为空']);
+        }
+
+
+        if($code != $register_data['code']){
+            return json(['code' => 3,'msg' => '验证码输入错误']);
+
+        }
+
+        $arr = Session::get('user_arr');
+        $data['wx_openid'] = isset($arr['wx_openid'])?$arr['wx_openid']:'';
+        $data['qq_openid'] = isset($arr['qq_openid'])?$arr['qq_openid']:'';
+        Session::delete('user_arr');
+
+        $res = \db('hn_user')->where('account',$register_data['account'])->update($data);
+        if($res){
+            $users = \db('hn_user')->where('account',$register_data['account'])->find();
+            Session::set('user_info',$users,'user');
+            return json(['code' => 4,'msg' => '绑定成功，正在登录','url' => url('index/index')]);
+        }else{
+            return json(['code' => 1,'msg' => '绑定失败，请重试']);
+        }
+
+
+    }
 
 	//退出登录
 	public function loginOut()

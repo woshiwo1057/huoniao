@@ -933,7 +933,7 @@ class User extends Common
 						->alias('o')
 						->join('hn_user u','o.acc_id = u.uid')
 						->field('o.id,o.number,o.service,o.length_time,o.time,o.status,o.price,u.nickname,u.head_img,u.uid uid')
-						->where('o.user_id',$id)->limit('8')->order('id desc')->select();
+						->where('o.user_id',$id)->where('status' , '>' ,'0')->limit('8')->order('id desc')->select();
 		//var_dump($order_data);die;
 		$this->assign(['order_data' => $order_data]);
 		return $this->fetch('User/order');
@@ -1214,7 +1214,7 @@ class User extends Common
 		//获取到用户ID
 		$id = $_SESSION['user']['user_info']['uid'];
 		//查订单表 查出自己的接单
-		$order_data = Db::table('hn_order')->field('id,number,price,length_time,service,status')->where('acc_id',$id)->limit(10)->order('id desc')->select();
+		$order_data = Db::table('hn_order')->field('id,number,price,length_time,service,status')->where('acc_id',$id)->where('status' , '>' , '0')->limit(10)->order('id desc')->select();
 
 		$this->assign(['order_data' => $order_data]);
 		return $this->fetch('User/receipt');
@@ -1574,6 +1574,19 @@ class User extends Common
 			//$head_img = $this->img.$key; //将此路径存入表单
 			$status = $this->cos($file,$key);
 
+
+			//3.处理音频	
+			if($data['video'] != ''){
+				$file_video = $data['video'];
+				$key_video = $uid.'/'.md5(microtime()).'.mp3';  //路径
+				$video_data = $this->cos($file_video,$key_video);
+
+				if($video_data['code'] == 0){
+
+					$data['video_url'] = $this->img.$key_video;
+				}
+			}
+
 			if($status['code'] == 0){
 				//组装数据
 					//1.图片路径
@@ -1604,13 +1617,14 @@ class User extends Common
 				$data['time'] = time();
 					
 
-				
+				//删除无用的数据
+				unset($data['video']);
 				
 				//填表
 				$res = Db::table('hn_apply_project')->insert($data);
 
 				if($res){
-					return json(['code' => 1 , 'msg' => '成功']);
+					return json(['code' => 1 , 'msg'=>'提交成功,等待审核。加审核群：783816869']);
 				}else{
 					return json(['code' => 2 , 'msg' => '失败']);
 				}

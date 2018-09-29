@@ -26,16 +26,25 @@ class Acc extends Common
 		$game_id = Request::instance()->param('game_id');
 		
 		if($game_id){
-			$acc_data = Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num,a.city')->where(['a.status'=>1,'a.project_id' => $game_id , 'a.up' => 2])->limit('0,12')->select();
+			$acc_data = Db::table('hn_user')->alias('u')
+                ->join('hn_accompany a','u.uid = a.user_id')
+                -> group('u.uid')
+                ->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num,a.city')
+                ->where(['a.project_id' => $game_id , 'a.up' => 2])
+                ->limit('0,12')
+                ->select();
 		}else{
 			//查询一哈陪玩师列表  然后输出
-			$acc_data = Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num,a.city')->where(['a.status' => 1 , 'a.up' => 2])->limit('0,12')->select();
+            $game_id = 0;
+			$acc_data = Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num,a.city')->where([ 'a.up' => 2])->limit('0,12')->select();
 		}
 //var_dump($acc_data);die;
 		$this->assign([
 				'game_data' => $game_data,
 				'joy_data' => $joy_data,
-				'acc_data' => $acc_data
+				'acc_data' => $acc_data,
+				'game_id' => $game_id,
+
 			]);
 		return $this->fetch('Acc/index');
 	}
@@ -97,6 +106,7 @@ class Acc extends Common
 	
 		$data = Request::instance()->param();
 		//var_dump($data);die;
+		//var_dump($data);die;
 		//$data['project'];    $data['type'] == 1全部  $data['type'] == 2魅力  $data['type'] == 3价格  $data['type'] == 4线下 
 		//$data['project_id'];
 		if($data['type'] == 1){
@@ -110,31 +120,13 @@ class Acc extends Common
 								->alias('u')
 								->join('hn_accompany a','u.uid = a.user_id')
 								->join('hn_apply_project p','u.uid = p.uid')
+                                 -> group('u.uid')
 								->field('u.uid,u.nickname,u.head_img,a.table,a.hot,p.pric,a.order_num,a.city')
-								->where(['a.status'=> 1,'a.up' => 2,])
+								->where(['a.up' => 2,])
 								->limit('0,15')
 								->select();
-							
-					// var_dump($acc_data);die;
-								/*
-					if(!empty($acc_data)){
-						$key = 'nickname';
-						$acc_data = $this->out_repeat($acc_data,$key);
-					}
-						*/
-					
-					$data_arr = [];
-					$aa = [];
-					foreach ($acc_data as $k => $v){
-						if(in_array($v['uid'], $aa)){
-							continue;
-						}
-						$data_arr[$k] = $v;
-						$aa[] = $v['uid'];
-					}
 
-						//var_dump($data_arr);die;      //continue跳出本次循环
-					return json($data_arr);
+					return json($acc_data);
 				}else{
 					//选择了性别
 					
@@ -142,24 +134,13 @@ class Acc extends Common
 								->alias('u')
 								->join('hn_accompany a','u.uid = a.user_id')
 								->join('hn_apply_project p','u.uid = p.uid')
+                                 -> group('u.uid')
 								->field('u.uid,u.nickname,u.head_img,a.table,a.hot,p.pric,a.order_num,a.city')
-								->where(['a.status'=> 1,'a.up' => 2,'u.sex' => $data['sex']])
+								->where(['a.up' => 2,'u.sex' => $data['sex']])
 								->limit('0,15')
 								->select();
 
-
-
-					$data_arr = [];
-					$aa = [];
-					foreach ($acc_data as $k => $v){
-						if(in_array($v['uid'], $aa)){
-							continue;
-						}
-						$data_arr[$k] = $v;
-						$aa[] = $v['uid'];
-					}		
-
-					return json($data_arr);
+					return json($acc_data);
 				}
 
 			}else{
@@ -172,24 +153,13 @@ class Acc extends Common
 									->alias('u')
 									->join('hn_accompany a','u.uid = a.user_id')
 									->join('hn_apply_project p','u.uid = p.uid')
+                                     -> group('u.uid')
 									->field('u.uid,u.nickname,u.head_img,a.table,a.hot,p.pric,a.order_num,a.city')
-									->where(['a.status'=> 1,'a.up' => 2,'p.project' => $data['project'],'p.project_id' => $data['project_id']])
+									->where(['a.up' => 2,'p.project' => $data['project'],'p.project_id' => $data['project_id']])
 									->limit('0,15')
 									->select();
 
-
-						$data_arr = [];
-						$aa = [];
-						foreach ($acc_data as $k => $v){
-							if(in_array($v['uid'], $aa)){
-								continue;
-							}
-							$data_arr[$k] = $v;
-							$aa[] = $v['uid'];
-						}
-
-						//var_dump($data_arr);die;      //continue跳出本次循环
-						return json($data_arr);		
+						return json($acc_data);
 					
 					}else{
 						//选择了性别
@@ -198,24 +168,13 @@ class Acc extends Common
 									->alias('u')
 									->join('hn_accompany a','u.uid = a.user_id')
 									->join('hn_apply_project p','u.uid = p.uid')
+                                    -> group('u.uid')
 									->field('u.uid,u.nickname,u.head_img,a.table,a.hot,p.pric,a.order_num,a.city')
-									->where(['a.status'=> 1,'a.up' => 2,'p.project' => $data['project'],'p.project_id' => $data['project_id'],'u.sex' => $data['sex']])
+									->where(['a.up' => 2,'p.project' => $data['project'],'p.project_id' => $data['project_id'],'u.sex' => $data['sex']])
 									->limit('0,15')
 									->select();
-										
-						
-						$data_arr = [];
-						$aa = [];
-						foreach ($acc_data as $k => $v){
-							if(in_array($v['uid'], $aa)){
-								continue;
-							}
-							$data_arr[$k] = $v;
-							$aa[] = $v['uid'];
-						}
 
-						//var_dump($data_arr);die;      //continue跳出本次循环
-						return json($data_arr);	
+						return json($acc_data);
 					}
 
 				}else{
@@ -226,24 +185,15 @@ class Acc extends Common
 									->alias('u')
 									->join('hn_accompany a','u.uid = a.user_id')
 									->join('hn_apply_project p','u.uid = p.uid')
+                                    -> group('u.uid')
 									->field('u.uid,u.nickname,u.head_img,a.table,a.hot,p.pric,a.order_num,a.city')
-									->where(['a.status'=> 1,'a.up' => 2,'p.project' => $data['project'],'p.project_id' => $data['project_id'],'p.project_grade' => $data['porjectLv']])
+									->where(['a.up' => 2,'p.project' => $data['project'],'p.project_id' => $data['project_id'],'p.project_grade' => $data['porjectLv']])
 									->limit('0,15')
 									->select();
 								
 						
-						$data_arr = [];
-						$aa = [];
-						foreach ($acc_data as $k => $v){
-							if(in_array($v['uid'], $aa)){
-								continue;
-							}
-							$data_arr[$k] = $v;
-							$aa[] = $v['uid'];
-						}
 
-						//var_dump($data_arr);die;      //continue跳出本次循环
-						return json($data_arr);	
+						return json($acc_data);
 					}else{
 						//选择了性别
 						
@@ -251,24 +201,13 @@ class Acc extends Common
 									->alias('u')
 									->join('hn_accompany a','u.uid = a.user_id')
 									->join('hn_apply_project p','u.uid = p.uid')
+                                     -> group('u.uid')
 									->field('u.uid,u.nickname,u.head_img,a.table,a.hot,p.pric,a.order_num,a.city')
-									->where(['a.status'=> 1,'a.up' => 2,'p.project' => $data['project'],'p.project_id' => $data['project_id'],'p.project_grade' => $data['porjectLv'] ,'u.sex' => $data['sex']])
+									->where(['a.up' => 2,'p.project' => $data['project'],'p.project_id' => $data['project_id'],'p.project_grade' => $data['porjectLv'] ,'u.sex' => $data['sex']])
 									->limit('0,15')
 									->select();
-										
-						
-						$data_arr = [];
-						$aa = [];
-						foreach ($acc_data as $k => $v){
-							if(in_array($v['uid'], $aa)){
-								continue;
-							}
-							$data_arr[$k] = $v;
-							$aa[] = $v['uid'];
-						}
 
-						//var_dump($data_arr);die;      //continue跳出本次循环
-						return json($data_arr);	
+						return json($acc_data);
 					}
 				}
 				
@@ -286,24 +225,15 @@ class Acc extends Common
 									->alias('u')
 									->join('hn_accompany a','u.uid = a.user_id')
 									->join('hn_apply_project p','u.uid = p.uid')
+                                     -> group('u.uid')
 									->field('u.uid,u.nickname,u.head_img,a.table,a.hot,p.pric,a.order_num,a.city')
-									->where(['a.status'=> 1,'a.up' => 2])
+									->where(['a.up' => 2])
 									->order('a.hot desc')
 									->limit('0,15')
 									->select();
-								
-						
-						$data_arr = [];
-						$aa = [];
-						foreach ($acc_data as $k => $v){
-							if(in_array($v['uid'], $aa)){
-								continue;
-							}
-							$data_arr[$k] = $v;
-							$aa[] = $v['uid'];
-						}
 
-						return json($data_arr);
+
+						return json($acc_data);
 					}else{
 						//选择了性别
 						
@@ -311,24 +241,14 @@ class Acc extends Common
 									->alias('u')
 									->join('hn_accompany a','u.uid = a.user_id')
 									->join('hn_apply_project p','u.uid = p.uid')
+                                    -> group('u.uid')
 									->field('u.uid,u.nickname,u.head_img,a.table,a.hot,p.pric,a.order_num,a.city')
-									->where(['a.status'=> 1,'a.up' => 2,'u.sex' => $data['sex']])
+									->where(['a.up' => 2,'u.sex' => $data['sex']])
 									->order('a.hot desc')
 									->limit('0,15')
 									->select();
-								
-						
-						$data_arr = [];
-						$aa = [];
-						foreach ($acc_data as $k => $v){
-							if(in_array($v['uid'], $aa)){
-								continue;
-							}
-							$data_arr[$k] = $v;
-							$aa[] = $v['uid'];
-						}
-					
-						return json($data_arr);
+
+						return json($acc_data);
 					}
 
 			}else{
@@ -341,25 +261,14 @@ class Acc extends Common
 									->alias('u')
 									->join('hn_accompany a','u.uid = a.user_id')
 									->join('hn_apply_project p','u.uid = p.uid')
+                                    -> group('u.uid')
 									->field('u.uid,u.nickname,u.head_img,a.table,a.hot,p.pric,a.order_num,a.city')
-									->where(['a.status'=> 1,'a.up' => 2,'p.project' => $data['project'],'p.project_id' => $data['project_id']])
+									->where(['a.up' => 2,'p.project' => $data['project'],'p.project_id' => $data['project_id']])
 									->order('a.hot desc')
 									->limit('0,15')
 									->select();
-								
-						
-						$data_arr = [];
-						$aa = [];
-						foreach ($acc_data as $k => $v){
-							if(in_array($v['uid'], $aa)){
-								continue;
-							}
-							$data_arr[$k] = $v;
-							$aa[] = $v['uid'];
-						}
 
-						//var_dump($data_arr);die;      //continue跳出本次循环
-						return json($data_arr);	
+						return json($acc_data);
 					}else{
 						//选择了性别
 						
@@ -367,24 +276,14 @@ class Acc extends Common
 									->alias('u')
 									->join('hn_accompany a','u.uid = a.user_id')
 									->join('hn_apply_project p','u.uid = p.uid')
+                                    -> group('u.uid')
 									->field('u.uid,u.nickname,u.head_img,a.table,a.hot,p.pric,a.order_num,a.city')
-									->where(['a.status'=> 1,'a.up' => 2,'p.project' => $data['project'],'p.project_id' => $data['project_id'],'u.sex' => $data['sex']])
+									->where(['a.up' => 2,'p.project' => $data['project'],'p.project_id' => $data['project_id'],'u.sex' => $data['sex']])
 									->order('a.hot desc')
 									->limit('0,15')
 									->select();
-								
-						
-						$data_arr = [];
-						$aa = [];
-						foreach ($acc_data as $k => $v){
-							if(in_array($v['uid'], $aa)){
-								continue;
-							}
-							$data_arr[$k] = $v;
-							$aa[] = $v['uid'];
-						}
-					
-						return json($data_arr);
+
+						return json($acc_data);
 					}
 
 				}else{
@@ -395,25 +294,14 @@ class Acc extends Common
 									->alias('u')
 									->join('hn_accompany a','u.uid = a.user_id')
 									->join('hn_apply_project p','u.uid = p.uid')
+                                    -> group('u.uid')
 									->field('u.uid,u.nickname,u.head_img,a.table,a.hot,p.pric,a.order_num,a.city')
-									->where(['a.status'=> 1,'a.up' => 2,'p.project' => $data['project'],'p.project_id' => $data['project_id'],'p.project_grade' => $data['porjectLv']])
+									->where(['a.up' => 2,'p.project' => $data['project'],'p.project_id' => $data['project_id'],'p.project_grade' => $data['porjectLv']])
 									->order('a.hot desc')
 									->limit('0,15')
 									->select();
-								
-						
-						$data_arr = [];
-						$aa = [];
-						foreach ($acc_data as $k => $v){
-							if(in_array($v['uid'], $aa)){
-								continue;
-							}
-							$data_arr[$k] = $v;
-							$aa[] = $v['uid'];
-						}
 
-						//var_dump($data_arr);die;      //continue跳出本次循环
-						return json($data_arr);	
+						return json($acc_data);
 					}else{
 						//选择了性别
 						
@@ -421,26 +309,14 @@ class Acc extends Common
 									->alias('u')
 									->join('hn_accompany a','u.uid = a.user_id')
 									->join('hn_apply_project p','u.uid = p.uid')
+                                    -> group('u.uid')
 									->field('u.uid,u.nickname,u.head_img,a.table,a.hot,p.pric,a.order_num,a.city')
-									->where(['a.status'=> 1,'a.up' => 2,'p.project' => $data['project'],'p.project_id' => $data['project_id'],'p.project_grade' => $data['porjectLv'],'u.sex' => $data['sex']])
+									->where(['a.up' => 2,'p.project' => $data['project'],'p.project_id' => $data['project_id'],'p.project_grade' => $data['porjectLv'],'u.sex' => $data['sex']])
 									->order('a.hot desc')
 									->limit('0,15')
 									->select();
-								
-
-						
-						$data_arr = [];
-						$aa = [];
-						foreach ($acc_data as $k => $v){
-							if(in_array($v['uid'], $aa)){
-								continue;
-							}
-							$data_arr[$k] = $v;
-							$aa[] = $v['uid'];
-						}
-
-						//var_dump($data_arr);die;      //continue跳出本次循环
-						return json($data_arr);	
+					//var_dump($data_arr);die;      //continue跳出本次循环
+						return json($acc_data);
 					}
 
 
@@ -457,23 +333,13 @@ class Acc extends Common
 								->alias('u')
 								->join('hn_accompany a','u.uid = a.user_id')
 								->join('hn_apply_project p','u.uid = p.uid')
+                                -> group('u.uid')
 								->field('u.uid,u.nickname,u.head_img,a.table,a.hot,p.pric,a.order_num,a.city')
-								->where(['a.status'=> 1,'a.up' => 2])
+								->where(['a.up' => 2])
 								->order('p.pric asc')
 								->limit('0,15')
 								->select();
-					
-					$data_arr = [];
-						$aa = [];
-						foreach ($acc_data as $k => $v){
-							if(in_array($v['uid'], $aa)){
-								continue;
-							}
-							$data_arr[$k] = $v;
-							$aa[] = $v['uid'];
-						}
-					
-						return json($data_arr);
+					return json($acc_data);
 				}else{
 					//选择了性别
 					
@@ -481,25 +347,13 @@ class Acc extends Common
 								->alias('u')
 								->join('hn_accompany a','u.uid = a.user_id')
 								->join('hn_apply_project p','u.uid = p.uid')
+                                -> group('u.uid')
 								->field('u.uid,u.nickname,u.head_img,a.table,a.hot,p.pric,a.order_num,a.city')
-								->where(['a.status'=> 1,'a.up' => 2 ,'u.sex' => $data['sex']])
+								->where(['a.up' => 2 ,'u.sex' => $data['sex']])
 								->order('p.pric asc')
 								->limit('0,15')
 								->select();
-							
-
-					
-					$data_arr = [];
-						$aa = [];
-						foreach ($acc_data as $k => $v){
-							if(in_array($v['uid'], $aa)){
-								continue;
-							}
-							$data_arr[$k] = $v;
-							$aa[] = $v['uid'];
-						}
-					
-						return json($data_arr);
+						return json($acc_data);
 				}
 
 			}else{
@@ -511,25 +365,14 @@ class Acc extends Common
 									->alias('u')
 									->join('hn_accompany a','u.uid = a.user_id')
 									->join('hn_apply_project p','u.uid = p.uid')
+                                    -> group('u.uid')
 									->field('u.uid,u.nickname,u.head_img,a.table,a.hot,p.pric,a.order_num,a.city')
-									->where(['a.status'=> 1,'a.up' => 2,'p.project' => $data['project'],'p.project_id' => $data['project_id']])
+									->where(['a.up' => 2,'p.project' => $data['project'],'p.project_id' => $data['project_id']])
 									->order('p.pric asc')
 									->limit('0,15')
 									->select();
-								
-						
-						$data_arr = [];
-						$aa = [];
-						foreach ($acc_data as $k => $v){
-							if(in_array($v['uid'], $aa)){
-								continue;
-							}
-							$data_arr[$k] = $v;
-							$aa[] = $v['uid'];
-						}
-
-						//var_dump($data_arr);die;      //continue跳出本次循环
-						return json($data_arr);	
+					//var_dump($data_arr);die;      //continue跳出本次循环
+						return json($acc_data);
 					}else{
 						//选择了性别
 						
@@ -537,26 +380,14 @@ class Acc extends Common
 									->alias('u')
 									->join('hn_accompany a','u.uid = a.user_id')
 									->join('hn_apply_project p','u.uid = p.uid')
+                                    -> group('u.uid')
 									->field('u.uid,u.nickname,u.head_img,a.table,a.hot,p.pric,a.order_num,a.city')
-									->where(['a.status'=> 1,'a.up' => 2,'p.project' => $data['project'],'p.project_id' => $data['project_id'],'u.sex' => $data['sex']])
+									->where(['a.up' => 2,'p.project' => $data['project'],'p.project_id' => $data['project_id'],'u.sex' => $data['sex']])
 									->order('p.pric asc')
 									->limit('0,15')
 									->select();
-								
-
-						
-						$data_arr = [];
-						$aa = [];
-						foreach ($acc_data as $k => $v){
-							if(in_array($v['uid'], $aa)){
-								continue;
-							}
-							$data_arr[$k] = $v;
-							$aa[] = $v['uid'];
-						}
-
-						//var_dump($data_arr);die;      //continue跳出本次循环
-						return json($data_arr);	
+					//var_dump($data_arr);die;      //continue跳出本次循环
+						return json($acc_data);
 					}
 
 				}else{
@@ -567,25 +398,14 @@ class Acc extends Common
 									->alias('u')
 									->join('hn_accompany a','u.uid = a.user_id')
 									->join('hn_apply_project p','u.uid = p.uid')
+                                    -> group('u.uid')
 									->field('u.uid,u.nickname,u.head_img,a.table,a.hot,p.pric,a.order_num,a.city')
-									->where(['a.status'=> 1,'a.up' => 2,'p.project' => $data['project'],'p.project_id' => $data['project_id'],'p.project_grade' => $data['porjectLv']])
+									->where(['a.up' => 2,'p.project' => $data['project'],'p.project_id' => $data['project_id'],'p.project_grade' => $data['porjectLv']])
 									->order('p.pric asc')
 									->limit('0,15')
 									->select();
-								
-						
-						$data_arr = [];
-						$aa = [];
-						foreach ($acc_data as $k => $v){
-							if(in_array($v['uid'], $aa)){
-								continue;
-							}
-							$data_arr[$k] = $v;
-							$aa[] = $v['uid'];
-						}
-
 						//var_dump($data_arr);die;      //continue跳出本次循环
-						return json($data_arr);	
+						return json($acc_data);
 					}else{
 						//选择了性别
 						
@@ -593,26 +413,15 @@ class Acc extends Common
 									->alias('u')
 									->join('hn_accompany a','u.uid = a.user_id')
 									->join('hn_apply_project p','u.uid = p.uid')
+                                    -> group('u.uid')
 									->field('u.uid,u.nickname,u.head_img,a.table,a.hot,p.pric,a.order_num,a.city')
-									->where(['a.status'=> 1,'a.up' => 2,'p.project' => $data['project'],'p.project_id' => $data['project_id'],'p.project_grade' => $data['porjectLv'],'u.sex' => $data['sex']])
+									->where(['a.up' => 2,'p.project' => $data['project'],'p.project_id' => $data['project_id'],'p.project_grade' => $data['porjectLv'],'u.sex' => $data['sex']])
 									->order('p.pric asc')
 									->limit('0,15')
 									->select();
-								
-
-						
-						$data_arr = [];
-						$aa = [];
-						foreach ($acc_data as $k => $v){
-							if(in_array($v['uid'], $aa)){
-								continue;
-							}
-							$data_arr[$k] = $v;
-							$aa[] = $v['uid'];
-						}
 
 						//var_dump($data_arr);die;      //continue跳出本次循环
-						return json($data_arr);	
+						return json($acc_data);
 					}
 				}
 
@@ -632,8 +441,9 @@ class Acc extends Common
 										->alias('u')
 										->join('hn_accompany a','u.uid = a.user_id')
 										->join('hn_apply_project p','u.uid = p.uid')
+                                        -> group('u.uid')
 										->field('u.uid,u.nickname,u.head_img,a.table,a.hot,p.pric,a.order_num,a.city')
-										->where(['a.status'=> 1,'a.down' => 2,'a.acc_type' => 3])
+										->where(['a.down' => 2,'a.acc_type' => 3])
 										->where(['a.wb_list' => ['like',"%$wb_id%"]])
 										->limit('0,15')
 										->select();
@@ -643,26 +453,15 @@ class Acc extends Common
 											->alias('u')
 											->join('hn_accompany a','u.uid = a.user_id')
 											->join('hn_apply_project p','u.uid = p.uid')
+                                            -> group('u.uid')
 											->field('u.uid,u.nickname,u.head_img,a.table,a.hot,p.pric,a.order_num,a.city')
-											->where(['a.status'=> 1,'a.down' => 2,'p.project_id' => $data['project_id'],'a.acc_type' => 3])
+											->where(['a.down' => 2,'p.project_id' => $data['project_id'],'a.acc_type' => 3])
 											->where(['a.wb_list' => ['like',"%$wb_id%"]])					
 											->limit('0,15')
 											->select();
 							}	
-							
-								
-								$data_arr = [];
-								$aa = [];
-								foreach ($acc_data as $k => $v){
-									if(in_array($v['uid'], $aa)){
-										continue;
-									}
-									$data_arr[$k] = $v;
-									$aa[] = $v['uid'];
-								}
-
-								//var_dump($data_arr);die;      //continue跳出本次循环
-								return json($data_arr);	
+							//var_dump($data_arr);die;      //continue跳出本次循环
+								return json($acc_data);
 						}else{
 							//选择了性别
 							if($data['projectLV'] == 0){
@@ -670,58 +469,32 @@ class Acc extends Common
 											->alias('u')
 											->join('hn_accompany a','u.uid = a.user_id')
 											->join('hn_apply_project p','u.uid = p.uid')
+                                            -> group('u.uid')
 											->field('u.uid,u.nickname,u.head_img,a.table,a.hot,p.pric,a.order_num,a.city')
-											->where(['a.status'=> 1,'a.down' => 2,'p.project_id' => $data['project_id'],'u.sex' => $data['sex'],'a.acc_type' => 3])
+											->where(['a.down' => 2,'p.project_id' => $data['project_id'],'u.sex' => $data['sex'],'a.acc_type' => 3])
 											->where(['a.wb_list' => ['like',"%$wb_id%"]])
 											->limit('0,15')
 											->select();
-					
-							
-								$data_arr = [];
-								$aa = [];
-								foreach ($acc_data as $k => $v){
-									if(in_array($v['uid'], $aa)){
-										continue;
-									}
-									$data_arr[$k] = $v;
-									$aa[] = $v['uid'];
-								}
-
 								//var_dump($data_arr);die;      //continue跳出本次循环
-								return json($data_arr);	
+								return json($acc_data);
 							}else{
 								$acc_data = Db::table('hn_user')
 											->alias('u')
 											->join('hn_accompany a','u.uid = a.user_id')
 											->join('hn_apply_project p','u.uid = p.uid')
+                                            -> group('u.uid')
 											->field('u.uid,u.nickname,u.head_img,a.table,a.hot,p.pric,a.order_num,a.city')
-											->where(['a.status'=> 1,'a.down' => 2,'p.project_id' => $data['project_id'],'u.sex' => $data['sex'],'a.acc_type' => 3])
+											->where(['a.down' => 2,'p.project_id' => $data['project_id'],'u.sex' => $data['sex'],'a.acc_type' => 3])
 											->where(['a.wb_list' => ['like',"%$wb_id%"]])
 											->limit('0,15')
 											->select();
-					
-							
-								$data_arr = [];
-								$aa = [];
-								foreach ($acc_data as $k => $v){
-									if(in_array($v['uid'], $aa)){
-										continue;
-									}
-									$data_arr[$k] = $v;
-									$aa[] = $v['uid'];
-								}
-
 								//var_dump($data_arr);die;      //continue跳出本次循环
-								return json($data_arr);	
+								return json($acc_data);
 
 
 							}
 						}
 					}
-
-
-
-
 
 			}else{
 			//线下  acc_type == 3  这里写的已经没用了  因为不在网吧  无法看到下线按钮
@@ -733,8 +506,9 @@ class Acc extends Common
 									->alias('u')
 									->join('hn_accompany a','u.uid = a.user_id')
 									->join('hn_apply_project p','u.uid = p.uid')
+                                    -> group('u.uid')
 									->field('u.uid,u.nickname,u.head_img,a.table,a.hot,p.pric,a.order_num,a.city')
-									->where(['a.status'=> 1,'a.down' => 2,'a.acc_type' => 3,'p.project' => 1])
+									->where(['a.down' => 2,'a.acc_type' => 3,'p.project' => 1])
 											
 									->limit('0,15')
 									->select();
@@ -744,24 +518,15 @@ class Acc extends Common
 										->alias('u')
 										->join('hn_accompany a','u.uid = a.user_id')
 										->join('hn_apply_project p','u.uid = p.uid')
+                                        -> group('u.uid')
 										->field('u.uid,u.nickname,u.head_img,a.table,a.hot,p.pric,a.order_num,a.city')
-										->where(['a.status'=> 1,'a.down' => 2,'p.project' => 1,'p.project_id' => $data['project_id'],'a.acc_type' => 3])					
+										->where(['a.down' => 2,'p.project' => 1,'p.project_id' => $data['project_id'],'a.acc_type' => 3])
 										->limit('0,15')
 										->select();
-						}	
-						
-						$data_arr = [];
-						$aa = [];
-						foreach ($acc_data as $k => $v){
-							if(in_array($v['uid'], $aa)){
-								continue;
-							}
-							$data_arr[$k] = $v;
-							$aa[] = $v['uid'];
 						}
 
 						//var_dump($data_arr);die;      //continue跳出本次循环
-						return json($data_arr);	
+						return json($acc_data);
 					}else{
 						//选择了性别
 						
@@ -769,24 +534,14 @@ class Acc extends Common
 									->alias('u')
 									->join('hn_accompany a','u.uid = a.user_id')
 									->join('hn_apply_project p','u.uid = p.uid')
+                                    -> group('u.uid')
 									->field('u.uid,u.nickname,u.head_img,a.table,a.hot,p.pric,a.order_num,a.city')
-									->where(['a.status'=> 1,'a.down' => 2,'p.project' => 1,'p.project_id' => $data['project_id'],'u.sex' => $data['sex'],'a.acc_type' => 3,'p.project_grade' => $data['porjectLv']])
+									->where(['a.down' => 2,'p.project' => 1,'p.project_id' => $data['project_id'],'u.sex' => $data['sex'],'a.acc_type' => 3,'p.project_grade' => $data['porjectLv']])
 									->limit('0,15')
 									->select();
-			
-						
-						$data_arr = [];
-						$aa = [];
-						foreach ($acc_data as $k => $v){
-							if(in_array($v['uid'], $aa)){
-								continue;
-							}
-							$data_arr[$k] = $v;
-							$aa[] = $v['uid'];
-						}
 
 						//var_dump($data_arr);die;      //continue跳出本次循环
-						return json($data_arr);	
+						return json($acc_data);
 					}
 				}
 			}

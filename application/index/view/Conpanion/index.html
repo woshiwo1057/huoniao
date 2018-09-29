@@ -4,7 +4,7 @@
 
 		if({$status['status']} == 0){
 			layui.use('layer', function() {
-				layer.open({type:0,content:'等待审核,审核加群：123456789',btn:false})
+				layer.open({type:0,content:'等待审核,审核加群：783816869',btn:false})
 			})
 			return false
 		}else if({$status['status']} == 1){
@@ -212,7 +212,27 @@
 			<img style="border:none;" src="__IMG__example.png" alt="" class="style-picture"></div>
 		<div class="miva-join-title">自我介绍</div>
 		<div class="miva-box miva-info-box"><textarea name="explain" class="txt-box" placeholder="可以写自己喜欢的游戏,喜欢的玩法和打法......"></textarea></div>
-		<!--<div class="miva-join-title">语音介绍</div><div class="miva-box miva-audio-box"><div class="audio-box-f"><div class="audio-box"><div class="audio-btn"><i class="layui-icon layui-icon-voice"></i><span>点击上传</span></div></div><audio src="" controls></audio></div><span class="tip">上传录音可供游客试听,请自行上传录音 格式为:MP3 大小:2MB<span>支持格式:MP3,ogg,mav,m4a</span></span></div>-->
+		
+
+		<div class="miva-join-title">语音介绍</div>
+		<div class="miva-box miva-audio-box">
+			<div class="audio-box-f">
+				<div class="audio-box">
+					<div class="audio-btn" >
+						<i class="layui-icon layui-icon-voice"></i>
+						<input  type="file"   style="opacity:0;width:80px;"   name="video" id="newMiva" >
+						<span  class="video">点击上传</span>
+					</div>
+				</div>
+
+			<!--<audio  id="audio" src="" controls ></audio>-->
+
+			</div>
+			<span class="tip">上传录音可供老板试听,请自行上传录音 格式为:MP3 大小:2MB
+				<span>支持格式:MP3,ogg,mav,m4a</span>
+			</span>
+		</div>
+		
 		<div class="check-box"><input id="check" type="checkbox"> <label for="check">我已阅读并同意<a href="{:url('Conpanion/agreement')}" target="__blnk"><<陪玩申请入驻协议>></a></label></div>
 		<button style="color:#FFF; position:relative; top: 10px ;right:0" disabled=true class="miva-btn xiaoshou submit">提交入驻申请</button>
 	</div>
@@ -463,6 +483,7 @@ var sex
 				console.log(type)
 				console.log(game_id)
 				//更换图片
+				/*
 				if(type == 2){
 					if(game_id == 2){
 						$('.style-picture').attr('src','__IMG__gedan.jpg')
@@ -473,49 +494,66 @@ var sex
 				}else{
 					$('.style-picture').attr('src','__IMG__example.png')
 				}
-
-				//更换文本内容
+*/
+				//更换文本内容与图片
 				if(type == 1){
 					if(game_id == 4){
 						//绝地求生
-						$('.text').html('请上传《绝地求生：大逃杀》个人数据截图，等待考核<br>排名要求：男生（1万名以内）；女生（游戏时长50+）<br>考核要求:服务器1万名以内无论男女都需要考核')
+						$('.text').html('审核要求：请上传您清晰的段位截图（包含游戏ID）<br>萌新：1800分以下<br>中级：1801至2400之间<br>大神：2400+')
+						$('.style-picture').attr('src','__IMG__pubg.jpg')
 					}else if(game_id == 8){
 						//刺激战场
-						$('.text').html('请上传《刺激战场》个人数据截图，等待考核<br>申请要求：游戏时长10小时以上<br>请上传《全军出击》个人数据截图，等待考核')
+						$('.text').html('审核要求：请上传您清晰的段位截图（包含游戏ID）<br>萌新：热血青铜、不屈白银、英勇黄金<br>中级：坚韧铂金、不朽星钻、荣耀皇冠<br>大神：超级王牌、无敌战神')
+						$('.style-picture').attr('src','__IMG__cjzc.jpg')
 					}else if(game_id == 11){
 						//英雄联盟
-						$('.text').html('请上传您的段位截图（需包含个人ID）<br>男段位要求：电一钻Ⅰ以上，其他区大师王者；<br>女段位要求：黄金以上')
+						$('.text').html('审核要求：请上传您清晰的段位截图（包含游戏ID）<br>荣耀黄金、华贵铂金、璀璨钻石、<br>超凡大师、最强王者')
+						$('.style-picture').attr('src','__IMG__lol.jpg')
 					}else if(game_id == 17){
 						//王者荣耀
-						$('.text').html('请上传您的段位截图（需包含个人ID）<br>男段位要求：王者/星耀Ⅰ以上，其他区大师王者；<br>女段位要求：钻石以上')
+						$('.text').html('审核要求：请上传您清晰的段位截图（包含游戏ID）<br>荣耀黄金、尊贵铂金、永恒钻石、<br>至尊星耀、最强王者')
+						$('.style-picture').attr('src','__IMG__wzry.jpg')
 					}else if(game_id == 18){
 						//全军出击
-						$('.text').html('请上传《全军出击》个人数据截图，等待考核<br>申请要求：游戏时长10小时以上')
+						$('.text').html('审核要求：请上传您清晰的段位截图（包含游戏ID）<br>萌新：坚韧青铜、冲锋白银<br>中级：凯旋黄金、灭世铂金<br>大神：永恒钻石、最强王者')
+						$('.style-picture').attr('src','__IMG__qjcj.jpg')
 					}else if(game_id == 19){
 						//荒野行动
-						$('.text').html('请上传《荒野行动》个人数据截图，等待考核<br>申请要求：游戏时长10小时以上')
+						$('.text').html('审核要求：请上传您清晰的段位截图（包含游戏ID）<br>萌新：顽强列兵、精英军士<br>中级：英勇少尉、坚毅中校<br>大神：荣耀少将、光辉上将')
+						$('.style-picture').attr('src','__IMG__hyxd.jpg')
 					}else if(game_id == 20){
 						//第五人格
-						$('.text').html('请上传您的段位截图（需包含个人ID）,并填写第五人格相关的描述')
-					}else{
-						$('.text').html('点击上传您的游戏段位(等级)截图,<br>并填写游戏相关说明补充<br>(包含游戏ID)')
+						$('.text').html('审核要求：请上传您清晰的段位截图（包含游戏ID）<br>萌新：一阶、二阶<br>中级：三阶、四阶<br>大神：五阶、六阶')
+						$('.style-picture').attr('src','__IMG__durg.jpg')
+					}else if(game_id == 23){
+						//穿越火线
+						$('.text').html('审核要求：请上传您清晰的段位截图（包含游戏ID）<br>萌新：新锐、精英、专家<br>中级：大师、宗师<br>大神：枪王、枪王之王')
+						$('.style-picture').attr('src','__IMG__cf.jpg')
+					}else if(game_id == 25){
+						//无限法则
+						$('.text').html('审核要求：请上传您清晰的段位截图（包含游戏ID）专业')
+						$('.style-picture').attr('src','__IMG__wxfz.jpg')
 					}
 				}else if(type == 2){
 					if(game_id == 1){
 						//哄睡觉
 						$('.text').html('服务内容包含叫醒、哄睡、聊天、游戏、视频等,<br>请上传真人正面清晰照作为该服务封面图，等待考核<br>请在平台进行声鉴后上传平台电竞音色卡')
+						$('.style-picture').attr('src','__IMG__shengjian.jpg')
 					}else if(game_id == 2){
 						//唱歌
 						$('.text').html('请上传真人正面清晰照作为该服务封面图，等待考核<br>请上传你的歌单')
+						$('.style-picture').attr('src','__IMG__gedan.jpg')
 					}else if(game_id == 3){
 						//聊天
-						$('.text').html('请上传您的【声鉴卡】一张，<br>如没有【声鉴卡】，<a href="https://csq.huoniaopeiwan.com/index/acc/index.html">请点击获取。获取声鉴卡</a>')
+						$('.text').html('请上传您的【声鉴卡】一张，<br>如没有【声鉴卡】，<a href="https://www.huoniaopeiwan.com/index/acc/index.html">请点击获取。获取声鉴卡</a>')
+						$('.style-picture').attr('src','__IMG__shengjian.jpg')
 					}else if(game_id == 5){
 						//声鉴师
 						$('.text').html('普通玩家/陪玩师  不具备申请声鉴师的能力，请与后台工作人员联系')
 					}else if(game_id == 6){
 						//叫醒
-						$('.text').html('请上传您的【声鉴卡】一张，<br>如没有【声鉴卡】，<a href="https://csq.huoniaopeiwan.com/index/acc/index.html">请点击获取。获取声鉴卡</a>')
+						$('.text').html('请上传您的【声鉴卡】一张，<br>如没有【声鉴卡】，<a href="https://www.huoniaopeiwan.com/index/acc/index.html">请点击获取。获取声鉴卡</a>')
+						$('.style-picture').attr('src','__IMG__shengjian.jpg')
 					}else{
 						$('.text').html('点击上传您的游戏段位(等级)截图,<br>并填写游戏相关说明补充<br>(包含游戏ID)')
 					}
@@ -590,9 +628,34 @@ if({$user_data['sex']} == 0){
 	});
 }
 
+
+//音频
+var video = '';
+var video_big;
+var upload_type;
+var video_type = 'audio/mpeg';
+var reader = new FileReader();
+$('#newMiva').on('change', function(){
+	upload_type = $(this).prop('files')[0]['type']
+	console.log(upload_type)
+	video_big = $(this).prop('files')[0]['size']
+	reader.readAsDataURL($(this).prop('files')[0]);
+	reader.onload = function(e) {
+		video = e.target.result
+
+		
+
+		$('.video').html('已上传')
+	}
+})
+
 		$('.submit').click(function() { 
+			
 				//	alert(num);   这一项有2个值  1：没有选择线下    3：选择了线下 所以需要判断填写的东西是否存在  
 
+			
+
+			
 			var nickname = $('[name="nickname"]').val()
 			if(nickname == '快去填写你的昵称吧'){
 				layui.use('layer', function() {
@@ -716,7 +779,24 @@ if({$user_data['sex']} == 0){
 				}) 
 				return false
 			}
+
+			if(video != ''){
+				if(video_big>2100){
+					layui.use('layer', function() {
+					layer.msg('文件上传过大，请重新上传')
+					}) 
+					return false
+				}
+
+				if(video_type != upload_type){
+					layui.use('layer', function() {
+						layer.msg('请上传mp3格式的音频')
+					}) 
+					return false
+				}
+			}
 			
+
 
 			var acc_type = num //   线上/线下
 
@@ -744,58 +824,82 @@ if({$user_data['sex']} == 0){
 			}
 
 
-			var mom = option & cityVal &  
-			$.post("{:url('Conpanion/apply')}", {
-				//前往用户表的数据
-				nickname:nickname,  //姓名
-				penguin:penguin,	//QQ号
-				sex:sex,	//性别
-				////////
-				
-				//前往审核表的数据
-				option:option,  //用户头像的base64
-				city:cityVal,
-				project:type,
-				img_data:img_data,  //认证图片
-				real_name:real_name,
-				birthday:birthday,
-				table:table,
-				address:address,
-				height:height,
-				weight:weight,
-				duty:duty,
-				hobby:hobby,
-				sexy:sexy,
-				project_id:project_id,
-				project_grade:project_grade,
-				explain:explain,
-				acc_type:acc_type,
-				zhengData:zhengData,  //身份证 base64
-				card_num:card_num
-			}, function(data){
-				if(data.code == 1){
-					//alert('提交成功,等待审核')
-					layui.use('layer', function() {
-					layer.open({type:0,content:data.msg,btn:false,title:'提交成功'})
+
+		layui.use(['layer'], function(){
+
+				var htmlEl = '<div><i style="font-size:30px; margin:auto; margin-left:15px" class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop"></i></div> <div style=" margin:auto">正在上传，请等待</div>'
+					layer.open({
+						type:1,
+						title: false,
+						closeBtn: false,
+						area: ['200px', '50px'],
+						content: htmlEl,
+						success: function() {
+
+							$.post("{:url('Conpanion/apply')}", {
+								//前往用户表的数据
+								nickname:nickname,  //姓名
+								penguin:penguin,	//QQ号
+								sex:sex,	//性别
+								////////
+								
+								//前往审核表的数据
+								option:option,  //用户头像的base64
+								city:cityVal,
+								project:type,
+								img_data:img_data,  //认证图片
+								real_name:real_name,
+								birthday:birthday,
+								table:table,
+								address:address,
+								height:height,
+								weight:weight,
+								duty:duty,
+								hobby:hobby,
+								sexy:sexy,
+								project_id:project_id,
+								project_grade:project_grade,
+								explain:explain,
+								acc_type:acc_type,
+								zhengData:zhengData,  //身份证 base64
+								card_num:card_num,
+								video:video 	//音频base64
+							}, function(data){
+								if(data.code == 1){
+									layer.closeAll()
+									//alert('提交成功,等待审核')
+									layui.use('layer', function() {
+									layer.open({type:0,content:data.msg,btn:false,title:'提交成功'})
+									})
+								}else if(data.code == 2){
+									layer.closeAll()
+									layui.use('layer', function() {
+									layer.msg(data.msg)
+									})
+								}else if(data.code == 3){
+									layer.closeAll()
+									layui.use('layer', function() {
+									layer.msg(data.msg)
+									})
+								}else if(data.code == 4){
+									layer.closeAll()
+									layui.use('layer', function() {
+									layer.msg(data.msg)
+									})
+								}else{
+									layer.closeAll()
+									layui.use('layer', function() {
+									layer.msg('未知错误')
+									})
+								}
+							}, 'json')
+
+						}
 					})
-				}else if(data.code == 2){
-					layui.use('layer', function() {
-					layer.msg(data.msg)
-					})
-				}else if(data.code == 3){
-					layui.use('layer', function() {
-					layer.msg(data.msg)
-					})
-				}else if(data.code == 4){
-					layui.use('layer', function() {
-					layer.msg(data.msg)
-					})
-				}else{
-					layui.use('layer', function() {
-					layer.msg('未知错误')
-					})
-				}
-			}, 'json')
+				})
+
+
+			
 			return false
 		})
 	</script>

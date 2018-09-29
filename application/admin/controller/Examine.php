@@ -33,7 +33,7 @@ class Examine extends Common
 						->alias('a')
 						->join('hn_user u','a.user_id = u.uid')
 						->join('hn_game g','a.project_id = g.id')
-						->field('a.id,a.user_id,a.head_img,u.nickname,u.sex,a.real_name,a.table,a.province,a.city,a.address,a.height,a.weight,a.duty,a.hobby,a.sexy,a.acc_type,a.project,a.project_id,g.name,a.data_url,a.explain,a.card_photo,a.card_num,a.project_grade,a.birthday')->where('a.id',$id)->find();
+						->field('a.id,a.user_id,a.head_img,u.nickname,u.sex,a.real_name,a.table,a.province,a.city,a.address,a.height,a.weight,a.duty,a.hobby,a.sexy,a.acc_type,a.project,a.project_id,g.name,a.data_url,a.explain,a.video_url,a.card_photo,a.card_num,a.project_grade,a.birthday')->where('a.id',$id)->find();
 		
 		$grade = Db::table('hn_game_grade')->field('type_name')->where('id',$judge['project_grade'])->find();
 		$examine_data['grade_name'] = $grade['type_name'];
@@ -44,7 +44,7 @@ class Examine extends Common
 						->alias('a')
 						->join('hn_user u','a.user_id = u.uid')
 						->join('hn_joy j','a.project_id = j.id')
-						->field('a.id,a.user_id,a.head_img,u.nickname,u.sex,a.real_name,a.table,a.province,a.city,a.address,a.height,a.weight,a.duty,a.hobby,a.sexy,a.acc_type,a.project,a.project_id,j.name,a.data_url,a.explain,a.card_photo,a.card_num,a.project_grade,a.birthday')
+						->field('a.id,a.user_id,a.head_img,u.nickname,u.sex,a.real_name,a.table,a.province,a.city,a.address,a.height,a.weight,a.duty,a.hobby,a.sexy,a.acc_type,a.project,a.project_id,j.name,a.data_url,a.explain,a.video_url,a.card_photo,a.card_num,a.project_grade,a.birthday')
 						->where('a.id',$id)
 						->find();
 
@@ -67,9 +67,9 @@ class Examine extends Common
 	{	
 		if(Request::instance()->isPost()){
 			$data = Request::instance()->param();
-
+		//var_dump($data);die;
 			//修改陪玩师申请表字段
-			if($data['acc_type']){
+			if($data['acc_type'] == 3){
 				
 				//带有实名通过审核
 				$res = Db::table('hn_apply_acc')->where('id', $data['id'])->update(['status' => 1 , 'real' => 3]); //通过审核 
@@ -113,6 +113,9 @@ class Examine extends Common
             $data['lng'] = $location['lng'];
         }
 
+        //处理音频
+        $wow['video_url'] = $data['video_url'];
+        unset($data['video_url']);
 
 		$rcs = Db::table('hn_accompany')->insert($data); //填入陪玩师表
 			//组装数据填入服务项目表
@@ -200,7 +203,7 @@ class Examine extends Common
 	public function inspect()
 	{	
 		$id = Request::instance()->param('id');
-		$apply_data = Db::table('hn_apply_project')->field('id,uid,project,project_id,project_name,project_grade_name,img_url,explain,time')->where('id',$id)->find();
+		$apply_data = Db::table('hn_apply_project')->field('id,uid,project,project_id,project_name,project_grade_name,img_url,explain,video_url,time')->where('id',$id)->find();
 		//var_dump($apply_data);die;
 		if(Request::instance()->isPost())
 		{
@@ -210,9 +213,12 @@ class Examine extends Common
 				//审核通过    改变状态   改变time   
 					//注意  重复的项目去更新  覆盖    
 				
-				$judge = Db::table('hn_apply_project')->field('id')->where(['project' => $data['project'], 'project_id' => $data['project_id'], 'uid' => $data['uid'],'status' => 1])->find();
+				$judge = Db::table('hn_apply_project')->field('id,img_url,video_url')->where(['project' => $data['project'], 'project_id' => $data['project_id'], 'uid' => $data['uid'],'status' => 1])->find();
 
 				if($judge){
+					//删除原来的音频与图片
+					$this->cos_delete($judge['video_url']);
+					$this->cos_delete($judge['img_url']);
 					//删除原来的服务项目
 					Db::table('hn_apply_project')->delete($judge['id']);
 					//改变申请项目的状态  

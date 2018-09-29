@@ -107,7 +107,6 @@ class Conpanion extends Common
 			
 			//判断是否有提交
 			$record = Db::table('hn_apply_acc')->field('id')->where('user_id',$data['user_id'])->find();
-
 			if($record){
 				return json(['code' => 4,'msg'=>'已有记录，请勿再次提交']);
 			}else{
@@ -161,18 +160,32 @@ class Conpanion extends Common
 				//3.时间戳
 				$data['time'] = time();
 				$img_data = $this->cos($file,$key);
+
+				//3.处理音频
+				
+				if($data['video'] != ''){
+					$file_video = $data['video'];
+					$key_video = $id.'/'.md5(microtime()).'.mp3';  //路径
+					$video_data = $this->cos($file_video,$key_video);
+
+					if($video_data['code'] == 0){
+
+						$data['video_url'] = $this->img.$key_video;
+					}
+				}
 				if($img_data['code'] == 0){
 					//拼装路径
 					$data['data_url'] = $this->img.$key;
 					//删除无用的数据
 					unset($data['img_data']);
 					unset($data['zhengData']);
+					unset($data['video']);
 
 					//填表
 					$res = Db::table('hn_apply_acc')->insert($data);
 
 					if($res){
-						return json(['code' => 1,'msg'=>'提交成功,等待审核。加审核群：123456789']);
+						return json(['code' => 1,'msg'=>'提交成功,等待审核。加审核群：783816869']);
 					}else{
 						return json(['code' => 2,'msg'=>'提交失败，错误码002']);
 					}
