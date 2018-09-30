@@ -25,12 +25,14 @@
           </div>
           <!-- 排序? -->
           <div class="pai">
-            <span>訂單信息</span>
-            <span>单价</span>
-            <span>时间</span>
+            <span  style="width:280px">订单信息</span>
+            <span  >单价</span>
+            <span>时长</span>
+            <span>老板QQ</span>
+            <span>老板手机号</span>
             <span>服务项目</span>
+            <!--<span>订单状态</span>-->
             <span>订单状态</span>
-            <span>操作</span>
           </div>
           <!-- end -->
           <!-- 如果没数据 -->
@@ -41,38 +43,40 @@
          
            {foreach name="order_data" item="v"}
               <div class="pai">
-                <span>{$v.number}</span>
+                <span style="width:280px">{$v.nickname}</span>
                 <span>{$v.price}</span>
                 <span>{$v.length_time}</span>
+                <span>{$v.qq}</span>
+                <span>{$v.phone}</span>
                 <span>{$v.service}</span>
 
                 {switch name="$v.status"}
                   {case value="0"}
+                    <!--<span>等待用户付款</span>-->
                     <span>等待用户付款</span>
-                    <span>无操作</span>
                   {/case}
                   
                   {case value="1"}
-                    <span>是否接单</span>
+                    <!--<span>是否接单</span>-->
                     <span  class="xiaoshou click" order_id="{$v.id}"  type="1" style=" color:red; ">接单</span>
                   {/case}
 
                   {case value="2"}
-                   <span>订单进行中</span>
-                    <span >无操作</span>
+                   <!--<span>订单进行中</span>-->
+                    <span >订单进行中</span>
                   {/case}
                   
                   {case value="3"}
+                    <!--<span>等待用户点击订单完成</span>-->
                     <span>等待用户点击订单完成</span>
-                    <span>无操作</span>
                   {/case}
                   {case value="4"}
-                    <span>订单以完成，待用户评级</span>
-                    <span>无操作</span>
+                    <!--<span>订单以完成，待用户评级</span>-->
+                    <span>订单已完成，待用户评级</span>
                   {/case}
                   {case value="5"}
+                    <!--<span>用户已评价</span>-->
                     <span>用户已评价</span>
-                    <span>无操作</span>
                   {/case}
                 {/switch}
 

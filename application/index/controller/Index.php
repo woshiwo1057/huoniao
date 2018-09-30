@@ -33,6 +33,7 @@ class Index  extends Common
                 $this->assign([ 'name' => $name ]);
             }
         }
+
     	//Session::delete('think');
     	//var_dump($_SESSION);die;
 
@@ -472,6 +473,10 @@ class Index  extends Common
         //获取到用户ID
         $user_id = $_SESSION['user']['user_info']['uid'];
 
+        if($gift_data['acc_id'] == $user_id){
+            return json(['code'=>2,'msg'=>'自己不能给自己送礼物呦']);
+        }
+
         //查询出该礼物的价格与图片路径和名字  判断用户的鸟蛋够不够    存表 完成
         $pice = Db::table('hn_gift')->field('pice,img_url,name')->where('id',$gift_data['gift_id'])->find();
         $pice['pice'] = $pice['pice']*$gift_data['num'];  //算出所需要的鸟蛋数    单价*数量
@@ -602,7 +607,7 @@ class Index  extends Common
             //查出所有名字循环输出
         $service_name = Db::table('hn_apply_project')->field('project_name,project_id,project')->where(['status' => 1, 'type' => 1,'uid' => $id,'project' =>1])->select();
 
-        $project_data = Db::table('hn_apply_project')->field('project,project_id,project_name,project_grade_name,pric,length_time')->where(['status' => 1, 'type' => 1,'uid' => $id])->find();
+        $project_data = Db::table('hn_apply_project')->field('project,project_id,project_name,project_grade_name,pric,length_time,video_url')->where(['status' => 1, 'type' => 1,'uid' => $id])->find();
         
         if($project_data['project'] == 1){
             //查游戏表
@@ -731,7 +736,7 @@ class Index  extends Common
 
         $file = $data['video'];
 
-        $key = '10042'.'/'.md5(microtime()).'.mp3';  //路径
+        $key = '10031'.'/'.'project'.'/'.md5(microtime()).'.mp3';  //路径
 
         $data = $this->cos($file,$key);
 

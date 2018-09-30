@@ -50,6 +50,13 @@
 				.up-input {
 					width: 24%
 				}
+
+				.text{
+					text-align:left;
+				}
+				.style-picture{
+					margin-top:45px;
+				}
 			</style>
 			<!-- *************************************************************************************** -->
 			<table class="miva-basic-table">
@@ -204,7 +211,7 @@
 		<div class="miva-box miva-data-box">
 			<label for="duanwei"><img style="border:none;" class="miva-up-data-pic" src="" alt="">
 				<div class="up-data-tip"><span  class="text">点击上传您的游戏段位(等级)截图,<br>并填写游戏相关说明补充<br>(包含游戏ID)</span></div><br>
-				<div class="miva-btn mia-up-btn">点击上传</div>
+				<div class="miva-btn mia-up-btn" style="display:none;">点击上传</div>
 			</label>
 			<input style="display:none" type="file" id="duanwei">
 
@@ -229,7 +236,7 @@
 
 			</div>
 			<span class="tip">上传录音可供老板试听,请自行上传录音 格式为:MP3 大小:2MB
-				<span>支持格式:MP3,ogg,mav,m4a</span>
+				<span>支持格式:MP3</span>
 			</span>
 		</div>
 		
@@ -524,20 +531,20 @@ var sex
 					}else if(game_id == 20){
 						//第五人格
 						$('.text').html('审核要求：请上传您清晰的段位截图（包含游戏ID）<br>萌新：一阶、二阶<br>中级：三阶、四阶<br>大神：五阶、六阶')
-						$('.style-picture').attr('src','__IMG__durg.jpg')
+						$('.style-picture').attr('src','__IMG__dwrg.jpg')
 					}else if(game_id == 23){
 						//穿越火线
 						$('.text').html('审核要求：请上传您清晰的段位截图（包含游戏ID）<br>萌新：新锐、精英、专家<br>中级：大师、宗师<br>大神：枪王、枪王之王')
 						$('.style-picture').attr('src','__IMG__cf.jpg')
 					}else if(game_id == 25){
 						//无限法则
-						$('.text').html('审核要求：请上传您清晰的段位截图（包含游戏ID）专业')
+						$('.text').html('审核要求：请上传您清晰的段位截图（包含游戏ID）<br>专业')
 						$('.style-picture').attr('src','__IMG__wxfz.jpg')
 					}
 				}else if(type == 2){
 					if(game_id == 1){
 						//哄睡觉
-						$('.text').html('服务内容包含叫醒、哄睡、聊天、游戏、视频等,<br>请上传真人正面清晰照作为该服务封面图，等待考核<br>请在平台进行声鉴后上传平台电竞音色卡')
+						$('.text').html('请上传平台审核的真人声鉴卡，等待审核，<br>如果没有声鉴卡请先从平台获取声鉴卡')
 						$('.style-picture').attr('src','__IMG__shengjian.jpg')
 					}else if(game_id == 2){
 						//唱歌
@@ -633,18 +640,18 @@ if({$user_data['sex']} == 0){
 var video = '';
 var video_big;
 var upload_type;
-var video_type = 'audio/mpeg';
+var video_type_one = 'audio/mpeg';
+var video_type_tow = 'audio/mp3';
+
 var reader = new FileReader();
 $('#newMiva').on('change', function(){
 	upload_type = $(this).prop('files')[0]['type']
-	console.log(upload_type)
+	//console.log(upload_type)
 	video_big = $(this).prop('files')[0]['size']
 	reader.readAsDataURL($(this).prop('files')[0]);
 	reader.onload = function(e) {
 		video = e.target.result
-
 		
-
 		$('.video').html('已上传')
 	}
 })
@@ -781,15 +788,17 @@ $('#newMiva').on('change', function(){
 			}
 
 			if(video != ''){
-				if(video_big>2100){
+				if(video_big>2000000){
 					layui.use('layer', function() {
-					layer.msg('文件上传过大，请重新上传')
+					layer.msg('音频文件上传过大，请重新上传')
 					}) 
 					return false
 				}
 
-				if(video_type != upload_type){
-					layui.use('layer', function() {
+				if(upload_type == 'audio/mpeg'||upload_type == 'audio/mp3'){
+					
+				}else{
+					layui.use('layer', function(){
 						layer.msg('请上传mp3格式的音频')
 					}) 
 					return false

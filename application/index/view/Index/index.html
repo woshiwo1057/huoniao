@@ -2,8 +2,31 @@
 		<!-- 引入头部 -->
 {include file="public/header"}
 {include file="public/sidebar"}
+
+<style media="screen">
+	#post, #post *{
+		transition: all 1s
+	}
+	body, header {
+		transition: all 1s;
+	}
+	.openTop {
+		position: absolute;
+		top: 100%;
+		border: 1px solid #daa51f;
+		border-top: 0;
+		line-height: .9;
+		padding: 0 30px;
+		border-radius: 0px 0 10px 10px;
+		background: #fab812;
+		font-size: 20px;
+		font-weight: bold;
+		left: 50%;
+		/* color: #fff */
+	}
+</style>
 <title>首页</title>
-	<body>
+	<body style="position:relative; top:0px">
 
 		<!-- binner -->
 		<div class="swiper-container miva-index-swiper">
@@ -93,7 +116,11 @@
 										<span>{$v.hot}</span>
 									</td>
 									<td class="miva-star-info-right">
+									{if condition="$v.pice == 8"}
+										<span class="star-price">￥{$v.pice}/局</span>
+									{else /}
 										<span class="star-price">￥{$v.pice}/小时</span>
+									{/if}
 									</td>
 								</tr>
 							</table>
@@ -1586,15 +1613,63 @@
 
 
 
+
 {if condition="isset($_SESSION['think']['wb_id'])"}
-<div id="post" style="display:none;text-align: center; position: fixed;width:100%;top: 0;z-index: 9999999999999;background: #FDD118;" class="">
+<div id="post" style="display:none;text-align: center; position: fixed;width:100%;top: -153px;z-index: 9999999999999;background: #FDD118;" class="">
   <div style="display: inline-block;position: relative;" class="">
     <img style="margin: auto;" src="__IMG__wangba.gif" alt="">
     <span style="background: #fdd118;color: #FC5665;position: absolute;top: 50%;font-size: 25px;font-weight: bold;letter-spacing: 5px;right: 725px;direction: ltr;">{$name}</span>
-  </div>
+</div>
+	<span class="openTop xiaoshou"><i class="layui-icon layui-icon-down"></i></span>
 </div>
 {/if}
+
+
 <script type="text/javascript">
+  $(function() {
+		var isOpen = false;
+
+	    {if condition="isset($_SESSION['think']['wb_id'])"}
+	    	isOpen = true;
+	    {/if}
+
+		function openTop() { // 打开
+			if (isOpen) {
+				$('#post').show()
+				$('#post').css('top', '0px')
+				$('header').css('top', '153px')
+				$('body').css('top', '153px')
+				isOpen = false
+				setTimeout(function() {
+					closeTop()
+				},4000)
+			}
+		}
+
+		function closeTop() { // 关闭
+				$('#post').css('top', '-153px')
+				$('header').css('top', 0)
+				$('body').css('top', 0)
+				isOpen = true
+		}
+
+    setTimeout(function() {
+      openTop()
+    }, 1000);
+
+		$('.openTop').on('click', function() {
+			if (isOpen) {
+				openTop()
+			}else {
+				closeTop()
+			}
+		})
+  })
+</script>
+
+
+<script type="text/javascript">
+/*
   $(function() {
 
     var isOpen = false;
@@ -1621,5 +1696,6 @@
     }, 1000);
 
   })
+*/
 </script>
 

@@ -168,7 +168,7 @@ class User extends Common
 			}
 			$file = Request::instance()->param('option');
 					
-			$key = date('Y-m-d').'/'.md5(microtime()).'.jpg'; //路径
+			$key = $id.'/'.md5(microtime()).'.jpg'; //路径
 
 			$data = $this->cos($file,$key);
 			//hn_head_examine
@@ -199,7 +199,7 @@ class User extends Common
 
 			$file = Request::instance()->param('option');
 					
-			$key = date('Y-m-d').'/'.md5(microtime()).'.jpg'; //路径
+			$key = $id.'/'.md5(microtime()).'.jpg'; //路径
 
 			$data = $this->cos($file,$key);
 
@@ -525,7 +525,7 @@ class User extends Common
 				}
 				//2.查询订单表  
 					//消费
-				$order_data = Db::table('hn_order')->field('time,price')->where('user_id',$id)->order('id desc')->limit('9')->select();
+				$order_data = Db::table('hn_order')->field('time,price')->where('user_id',$id)->where('status','>',0)->order('id desc')->limit('9')->select();
 
 				foreach ($order_data as $k => $v){
 					$order_data[$k]['type'] = '陪玩消费';
@@ -578,7 +578,7 @@ class User extends Common
 					
 					foreach ($gift_get as $k => $v){
 						$gift_get[$k]['type'] = '他人赠送礼物收入';
-						$gift_get[$k]['money'] = $v['egg_num']/10*$gift_exchange['gift_exchange'];
+						$gift_get[$k]['money'] = floor($v['egg_num']/10*$gift_exchange['gift_exchange']*100)/100;;
 						$gift_get[$k]['explan'] = '赚取金额';
 						$gift_get[$k]['time'] = $v['time'];
 					}
@@ -627,7 +627,7 @@ class User extends Common
 						
 						foreach ($gift_get as $k => $v){
 							$gift_get[$k]['type'] = '他人赠送礼物收入';
-							$gift_get[$k]['money'] = $v['egg_num']/10*$gift_exchange['gift_exchange'];
+							$gift_get[$k]['money'] = floor($v['egg_num']/10*$gift_exchange['gift_exchange']*100)/100;
 							$gift_get[$k]['explan'] = '赚取金额';
 							$gift_get[$k]['time'] = $v['time'];
 						}
@@ -646,7 +646,7 @@ class User extends Common
 			}else if($data['sonType'] == 3){
 				//资金支出
 				//2.查询订单表
-				$order_data = Db::table('hn_order')->field('time,price')->where('user_id',$id)->order('id desc')->limit('9')->select();
+				$order_data = Db::table('hn_order')->field('time,price')->where('user_id',$id)->where('status','>',0)->order('id desc')->limit('9')->select();
 
 				foreach ($order_data as $k => $v){
 					$order_data[$k]['type'] = '陪玩消费';
@@ -840,7 +840,10 @@ class User extends Common
 
 	//相册添加   Ajax
 	public function album_add()
-	{
+	{	
+		//获取用户ID
+		$id = $_SESSION['user']['user_info']['uid'];
+
 		$album['user_id'] = $_SESSION['user']['user_info']['uid'];
 		//若图片数大于等于8张则不给上传
 		$num = Db::table('hn_user_album')->where('user_id',$album['user_id'])->select();
@@ -849,7 +852,7 @@ class User extends Common
 
 			$file = Request::instance()->param('option');	
 
-			$key = date('Y-m-d').'/'.md5(microtime()).'.jpg'; //路径		
+			$key = $id.'/'.'album'.'/'.md5(microtime()).'.jpg'; //路径		
 
 			$url_data = $this->cos($file,$key); //上传图片至服务器  
 
@@ -970,8 +973,8 @@ class User extends Common
 		}else if($data['type'] == 2){		
 			//这里是取消订单 通过$data['order_id']来操作  删除该订单
 				//主键删除
-			$order_data = Db::table('hn_order')->field('user_id,price,status,')->where('id' , $data['order_id'])->find();
-			if($order_data['status'] != 2){
+			$order_data = Db::table('hn_order')->field('user_id,price,status')->where('id' , $data['order_id'])->find();
+			if($order_data['status'] != 1){
 			 	return json(['code' => 2,'msg' => 'SB']);
 			 }
 
@@ -1214,7 +1217,14 @@ class User extends Common
 		//获取到用户ID
 		$id = $_SESSION['user']['user_info']['uid'];
 		//查订单表 查出自己的接单
-		$order_data = Db::table('hn_order')->field('id,number,price,length_time,service,status')->where('acc_id',$id)->where('status' , '>' , '0')->limit(10)->order('id desc')->select();
+		$order_data = Db::table('hn_order')
+				->alias('o')
+				->join('hn_user u','o.user_id = u.uid')
+				->field('o.id,o.number,o.price,o.length_time,o.service,o.qq,o.phone,o.status,u.nickname')
+				->where('o.acc_id',$id)->where('o.status' , '>' , '0')
+				->limit(10)
+				->order('o.id desc')
+				->select();
 
 		$this->assign(['order_data' => $order_data]);
 		return $this->fetch('User/receipt');
@@ -1519,7 +1529,7 @@ class User extends Common
 
 				$data[0] = 8;//$v['pric'];
 
-				$apply_data[$k]['pric'] = $data;	
+				$apply_data[$k]['pice'] = $data;	
 		
 				
 			}else if($v['project'] == 2){
@@ -1531,21 +1541,23 @@ class User extends Common
 
 				$count = ($height_pric-$pric['pric'])/5;
 					
-				$data[0] = $v['pric'];
+				$data = [];
+				
+					
+					for($i=0; $i<=$count; ++$i){
 
-				for($i=1; $i <= $count; $i++){ 
-					if($count == 0){
-						$data[0] = $v['pric'];
+						$data[$i] = (5*$i)+$pric['pric'];
 					}
-					$data[$i] = (5*$i)+$pric['pric'];
+				
 
-				}
-		
-				$apply_data[$k]['pric'] = $data;
+				$data[0] = 8;//$v['pric'];
+
+				$apply_data[$k]['pice'] = $data;
 			
 			}
 
 		}
+		//var_dump($apply_data);die;
 
 
 		$this->assign(['apply_data' => $apply_data]);
@@ -1570,7 +1582,7 @@ class User extends Common
 			//var_dump($data);die;
 			$file = $data['img_url'];
 
-			$key = date('Y-m-d').'/'.md5(microtime()).'.jpg'; //路径
+			$key = $uid.'/'.'project'.'/'.md5(microtime()).'.jpg'; //路径
 			//$head_img = $this->img.$key; //将此路径存入表单
 			$status = $this->cos($file,$key);
 
@@ -1578,7 +1590,7 @@ class User extends Common
 			//3.处理音频	
 			if($data['video'] != ''){
 				$file_video = $data['video'];
-				$key_video = $uid.'/'.md5(microtime()).'.mp3';  //路径
+				$key_video = $uid.'/'.'project'.'/'.md5(microtime()).'.mp3';  //路径
 				$video_data = $this->cos($file_video,$key_video);
 
 				if($video_data['code'] == 0){

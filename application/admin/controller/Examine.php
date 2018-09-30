@@ -22,7 +22,7 @@ class Examine extends Common
 
 	//详情页
 	public function details()
-	{	
+	{
 		$id = Request::instance()->param('id');
 		$judge = Db::table('hn_apply_acc')->field('project,project_grade')->where('id',$id)->find();
 	
@@ -80,6 +80,22 @@ class Examine extends Common
 			//修改用户表字段
 			$ras = Db::table('hn_user')->where('uid', $data['user_id'])->update(['type' => 1]);	//成为陪玩师
 
+			
+			
+			if($data['project'] == 1){
+				$project_name = Db::table('hn_game')->field('name')->where('id',$data['project_id'])->find();
+				$pric = Db::table('hn_game_grade')->field('pric')->where('id' , $data['project_grade'])->find();
+				$data['pice'] = $pric['pric'];
+			}else if($data['project'] == 2){
+				$project_name = Db::table('hn_joy')->field('name')->where('id',$data['project_id'])->find();
+				$pric = Db::table('hn_joy_grade')->field('pric')->where('id' , $data['project_grade'])->find();
+				$data['pice'] = $pric['pric'];
+
+			}else{
+				$this->error('数据错误,请联系客服人员');
+			}
+
+
 			//删除不需要的数据 将数据填陪玩师表  填入陪玩师服务项目表
 			//var_dump($data);die;
 
@@ -88,22 +104,18 @@ class Examine extends Common
 			unset($data['data_url']);
 			$wow['project_grade'] = $data['project_grade'];
 			$wow['project_grade_name'] = $data['project_grade_name'];
+			$wow['pric'] = $data['pice'];
 			unset($data['project_grade']);
 			unset($data['project_grade_name']);
-			
-			if($data['project'] == 1){
-				$project_name = Db::table('hn_game')->field('name')->where('id',$data['project_id'])->find();
-			}else if($data['project'] == 2){
-				$project_name = Db::table('hn_joy')->field('name')->where('id',$data['project_id'])->find();
-			}else{
-				$this->error('数据错误,请联系客服人员');
-			}
-		//更新用户头像，与年龄
+
+
+			//更新用户头像，与年龄
 			$age = substr($data['birthday'],0,4);
 			$num = date('Y',time());
 			$age = $num - $age ;
 			unset($data['birthday']);
-		Db::table('hn_user')->where('uid', $data['user_id'])->update(['head_img' => $data['head_img'],'age' => $age]);
+			
+		//Db::table('hn_user')->where('uid', $data['user_id'])->update(['head_img' => $data['head_img'],'age' => $age]);
 		unset($data['head_img']);
 
 		$location = $this->address($data['city'].$data['address']);
@@ -122,7 +134,7 @@ class Examine extends Common
 			//$wow['project_name']  $wow['project_id']  $wow['time'] = time()    $wow['status'] = 1  $wow['explain'] = '第一次开通'
 			//$wow['project_name'] = $project['name']
 
-			
+		
 			$wow['uid'] = $data['user_id']; //用户ID(陪玩师)
 			$wow['project'] = $data['project']; //项目类型  1：游戏  2：娱乐
 			$wow['project_id'] = $data['project_id']; //服务内容（具体服务项目）

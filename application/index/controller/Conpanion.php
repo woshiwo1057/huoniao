@@ -63,6 +63,10 @@ class Conpanion extends Common
 			$data = Db::table('hn_game')->field('name,id')->select();
 		}else if($type == 2){
 			$data = Db::table('hn_joy')->field('name,id')->select();
+			unset($data[3]);
+			$data[3] = $data[4];
+			unset($data[4]);
+			//var_dump($data);die;
 		}
 
 		return json($data);
@@ -81,6 +85,7 @@ class Conpanion extends Common
 			$data = Db::table('hn_joy_grade')->field('id,type_name')->where('joy_id',$type['game_id'])->select();
 		}
 		
+
 		return json($data);
 	}
 
@@ -124,7 +129,7 @@ class Conpanion extends Common
 				if($data['acc_type'] == 3){
 			
 					//1.身份证照片处理$data['zhengData']  card_photo       2.$data['card_num']
-					$key_card =  date('Y-m-d').'/'.md5(microtime()).'.jpg'; //身份证图片路径
+					$key_card =  $id.'/'.'project'.'/'.md5(microtime()).'.jpg'; //身份证图片路径
 					$file_card = $data['zhengData'];
 
 					$this->cos($file_card,$key_card);//上传至cos
@@ -144,7 +149,7 @@ class Conpanion extends Common
 				if(isset($data['option'])){
 					//存在  意为上传了头像
 					$file_head = $data['option'];
-					$key_a = date('Y-m-d').'/'.md5(rand(0,999999999)).'.jpg';
+					$key_a = $id.'/'.md5(rand(0,999999999)).'.jpg';
 					$img_head_data = $this->cos($file_head,$key_a);
 
 					$data['head_img'] = $this->img.$key_a;
@@ -155,7 +160,7 @@ class Conpanion extends Common
 					$data['head_img'] = $head_img['head_img'];
 				}
 				//这是申请资料图片
-				$key = date('Y-m-d').'/'.md5(microtime()).'.jpg';  //路径
+				$key = $id.'/'.'project'.'/'.md5(microtime()).'.jpg';  //路径
 				$file = $data['img_data'];
 				//3.时间戳
 				$data['time'] = time();

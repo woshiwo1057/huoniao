@@ -68,7 +68,7 @@
             {foreach name="detailed_data" item="v"}
               <div class="pai">
                 <span>{$v.type}</span>
-                <span>{$v.money}</span>
+                <span>{:floor($v.money*100)/100}</span>
                 <span>{$v.explan}</span>
                 <span>{:date('Y-m-d H:i:s',$v.time)}</span>
               </div>

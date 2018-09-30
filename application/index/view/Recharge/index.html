@@ -60,13 +60,16 @@
 						<td valign=top>充值金额:</td>
 						<td>
 							<div class="miva-check-box">
-								<span class="check active">请选择充值额度</span>
-								<span class="check" data-val="5">50鸟蛋</span>
+								<!--<span class="check ">请选择充值额度</span>-->
+								<span class="check active" data-val="5">50鸟蛋</span>
 								<span class="check" data-val="10">100鸟蛋</span>
 								<span class="check" data-val="50">500鸟蛋</span>
 								<span class="check" data-val="100">1000鸟蛋</span>
-								<span class="check" data-val="150">1500鸟蛋</span>
-								<span class="check" data-val="200">2000鸟蛋</span>
+								<span class="check" data-val="500">5000鸟蛋</span>
+								<span class="check" data-val="1000">10000鸟蛋</span>
+								<span class="check" data-val="5000">50000鸟蛋</span>
+								<span class="check" data-val="10000">100000鸟蛋</span>
+							
 							</div>
 							<!-- 输入金额
 							<div class="miva-write">
@@ -77,7 +80,7 @@
 					</tr>
 					<tr>
 						<td>应付金额:</td>
-						<td class="should-pay">0.00元</td>
+						<td class="should-pay">5.00元</td>
 					</tr>
 					<tr>
 						<td valign=top>充值方式:</td>
@@ -93,7 +96,7 @@
 							</div>
 
 							<div class="miva-write-btn" recharge="2">立即支付</div> 
-							<img src=""  style="height:200px;width:200px;margin-left:400px;" alt="打开微信扫描二维码进行支付" class="zhifu">
+							<img src=""  style="height:200px;width:200px;margin-left:400px;" alt="" class="zhifu">
 							<div class="miva-tip">备注: 充值可用于消费,不能提现</div>
 						</td>
 					</tr>
@@ -103,7 +106,7 @@
 			</div>
 
 			<!--充值介绍-->
-			<div class="miva-recharg-info">
+			<div class="miva-recharg-info"  style="margin-top:-30px;">
 				<table>
 				<!--
 					<tr>
@@ -118,7 +121,7 @@
 						<td>3500元</td>
 					</tr>
 					-->
-					<tr>
+					<tr  style="height:50px; ">
 						<td>获得VIP等级</td>
 						<td><img src="__IMG__icon1-3.gif"/></td>
 						<td><img src="__IMG__icon1-4.gif"/></td>
@@ -130,16 +133,19 @@
 						<td><img src="__IMG__icon1-10.gif"/></td>
 						<td><img src="__IMG__icon1-10.gif"/></td>
 					</tr>
-					<tr class="miva-sum">
+
+					<tr class="miva-sum"  style="height:50px;">
 						<td>累计消费( 元 )</td>
 						{foreach name="recharge_data"  item="v"}
-						<td>&gt;{$v.money}</td>
+						<td>&nbsp;&nbsp;&gt;{$v.money}</td>
 						{/foreach}
 					</tr>
+					<!--
 					<tr>
 						<td>温馨提示</td>
-						<td colspan="8">充值会让您变得光彩夺目哦！٩꒰｡•◡•｡꒱۶<!--单次充值可获得临时等级15天,累计消费可获得永久等级--></td>
+						<td colspan="8">充值会让您变得光彩夺目哦！٩꒰｡•◡•｡꒱۶单次充值可获得临时等级15天,累计消费可获得永久等级</td>
 					</tr>
+					-->
 				</table>
 			</div>
 			<!--等级特权介绍-->
@@ -229,7 +235,7 @@
 			$(function(){
 			
 
-				var price = null;
+				var price = 5;
 				$('.miva-check-box > .check').on('click',function(){
 					var pice = $(this).attr('data-val')
 					if(Number.isInteger(pice/50)||5||10){					

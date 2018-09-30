@@ -11,7 +11,12 @@
             <td>陪玩师</td>
             <td>昵称</td>
             <td>服务技能</td>
+            {if condition="$acc_data.pric == 8"}
+            <td>单位 (元/局)</td>
+            {else /}
             <td>单位 (元/小时)</td>
+            {/if}
+            
             <td>购买数量</td>
             <td>总价</td>
           </tr>
@@ -19,7 +24,7 @@
             <td><img class="user-pic" src="{$acc_data.head_img}" alt=""></td>
             <td>{$acc_data.nickname}</td>
             <td>{$acc_data.project_name}</td>
-            <td>￥{$acc_data.pric}</td>
+            <td data-item=miva>￥{$acc_data.pric}</td>
             <td>
               <div class="box buy-time-box">
     						<span style="cursor:pointer">-</span>
@@ -29,6 +34,15 @@
             </td>
             <td  data-price=total style="color:red; width:104px ">￥{$acc_data.pric}</td>
           </tr>
+          <script>
+          $(function() {
+            var val = $('[data-item=miva]').html()
+            if (val.indexOf('8') > -1) {
+              $('.length_time').attr('disabled', 'true')
+              $('.buy-time-box span').remove()
+            };
+          })
+          </script>
           <tr>
             <td colspan="6">
               <textarea name="name" rows="8" cols="80" placeholder="备注说明,注意事项....."></textarea>

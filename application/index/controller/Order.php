@@ -28,6 +28,7 @@ class Order extends Common
 		//获取到服务数据
 	    $data = Request::instance()->param();
 	    //$data['id']陪玩师ID    $data['project']服务类型   $data['project_id']服务内容
+	    
 	    //查询服务项目表与用户表（陪玩师）
 	    $acc_data = Db::table('hn_apply_project')
 		     		->alias('p')
@@ -64,6 +65,9 @@ class Order extends Common
 		$user_id = $_SESSION['user']['user_info']['uid']; 
 		$data = Request::instance()->param();
 
+		if($data['acc_id'] == $user_id){
+			return json(['code'=>8,'msg'=>'自己不能给自己下订单呦']);
+		}
 
 		//容错处理
 		empty($data['explain'])?'':$data['explain'];
@@ -315,7 +319,10 @@ class Order extends Common
 		//获取到用户ID
 		$user_id = $_SESSION['user']['user_info']['uid']; 
 		$data = Request::instance()->param();
-		
+
+		if($data['acc_id'] == $user_id){
+			return json(['code'=>8,'msg'=>'自己不能给自己下订单呦']);
+		}
 		
 		//容错处理
 		empty($data['explain'])?'':$data['explain'];
@@ -544,7 +551,9 @@ class Order extends Common
 		$user_id = $_SESSION['user']['user_info']['uid']; 
 		$data = Request::instance()->param();
 		
-
+		if($data['acc_id'] == $user_id){
+			return json(['code'=>8,'msg'=>'自己不能给自己下订单呦']);
+		}
 		//容错处理
 		empty($data['explain'])?'':$data['explain'];
 		empty($data['wechat'])?'':$data['wechat'];

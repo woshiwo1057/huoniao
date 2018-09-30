@@ -17,217 +17,233 @@
 		cursor: pointer;
 	}
 </style>
-	<body>
-		<!-- 引入头部 -->
-		<div class="main">
-			<!-- 选择分类 -->
-			<div class="miva-acc-tab-box">
-				<table>
-					<tr>
-						<td class="miva-acc-title">游戏类型</td>
-						<td>
-							<!-- 一条 -->
-							{foreach name="game_data" item="v"}
-							<a>
-								<div class="miva-iocn-box" project="1"  project_id="{$v.id}" dawdawdawd>
-									{if condition="$v.game_logo_img == ''"}
-									<img src="__IMG__default.jpg" alt="1">
-								{else /}
-									<img src="{$v.game_logo_img}" alt="">
-								{/if}
-								</div>
-								<span>{$v.name}</span>
-							</a>
-							{/foreach}
-							
-							<!-- end -->
-
-						</td>
-					</tr>
-
-					<tr>
-						<td class="miva-acc-title">娱乐项目</td>
-						<td>
-							<!-- 一条 -->
-							{foreach name="joy_data" item="v"}
-							<a>
-								<div class="miva-iocn-box"  project="2"  project_id="{$v.id}">
-								{if condition="$v.joy_logo_img == ''"}
-									<img src="__IMG__default.jpg" alt="">
-								{else /}
-									<img src="{$v.joy_logo_img}" alt="">
-								{/if}
-								</div>
-								<span>{$v.name}</span>
-							</a>
-							{/foreach}
-							<!-- end -->
-
-						</td>
-					</tr>
-					<tr>
-						<td class="miva-acc-title">选择等级</td>
-						<td data-item="lv" class="graed">
-							<a porjectLv="0" class="miva-txt-box txt-active">
-								<div class="miva-txt" alt="1">不限</div>
-							</a>
-							
-						</td>
-					</tr>
-					<tr>
-						<td class="miva-acc-title">陪玩性别</td>
-						<td>
-							<a sex="0" class="miva-txt-box txt-active">
-								<div class="miva-txt">不限</div>
-							</a>
-							<a sex="1" class="miva-txt-box">
-								<div class="miva-txt">男神</div>
-							</a>
-							<a sex="2" class="miva-txt-box">
-								<div class="miva-txt">女神</div>
-							</a>
-						</td>
-					</tr>
-				</table>
-			</div>
-	
-			<!-- 筛选 -->
-			<style>
-			.screen-btn-active {
-				background: #f5b105;
-				color: #fff !important;
-			}
-			.btn-admin-act {
-				background: transparent!important; 
-				color: #f5b105 !important; 
-			}
-			</style>
-			<div class="miva-screen-box">
-				<div data-item="shaiBtn"  class="miva-screen-btn-admin xiaoshou" cheap="1">
-					<i class="layui-icon layui-icon-align-right"></i> 8元专区
-				</div>
-				<!--<div data-item="shaiBtn" class="miva-screen-btn xiaoshou" cheap="2">折扣专区</div>-->
-			
-			</div>
-
-			<!-- 陪玩列表 -->
-			<div class="">
-				<ul class="miva-screen-list miva-star-box">
+<body>
+<!-- 引入头部 -->
+<div class="main">
+	<!-- 选择分类 -->
+	<div class="miva-acc-tab-box">
+		<table>
+			<tr>
+				<td class="miva-acc-title">游戏类型</td>
+				<td>
 					<!-- 一条 -->
-					{foreach name="acc_data" item="v"}
-					<li>
-						<a href="{:url('Index/user',['id' => $v.uid])}" class="miva-star-items">
-							<div class="miva-star-pic">
-								{if condition="$v.head_img == ''"}
-									<img src="__IMG__default.jpg" />
-								{else /}
-									<img src="{$v.head_img}" />
-								{/if}
-							</div>
-							<table class="miva-star-info">
-								<tr>
-									<td>
-										
-										<span class="star-name">{$v.nickname}</span>
-									</td>
-									<td class="miva-star-info-right">
-								
-										<span class="tab tab-shen">特价无折扣</span>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<img src="__IMG__火.png" alt="图标">
-										<span>{$v.hot}</span>
-									</td>
-									<td class="miva-star-info-right">
-										<span class="star-price">￥{$v.pice}/小时</span>
-									</td>
-								</tr>
-							</table>
-						</a>
-					</li>
+					{foreach name="game_data" item="v"}
+					<a>
+						<div class="miva-iocn-box" project="1"  project_id="{$v.id}" dawdawdawd>
+							{if condition="$v.game_logo_img == ''"}
+							<img src="__IMG__default.jpg" alt="1">
+							{else /}
+							<img src="{$v.game_logo_img}" alt="">
+							{/if}
+						</div>
+						<span>{$v.name}</span>
+					</a>
 					{/foreach}
 
-					
-
 					<!-- end -->
-				</ul>
-			</div>
 
+				</td>
+			</tr>
+
+			<tr>
+				<td class="miva-acc-title">娱乐项目</td>
+				<td>
+					<!-- 一条 -->
+					{foreach name="joy_data" item="v"}
+					<a>
+						<div class="miva-iocn-box"  project="2"  project_id="{$v.id}">
+							{if condition="$v.joy_logo_img == ''"}
+							<img src="__IMG__default.jpg" alt="">
+							{else /}
+							<img src="{$v.joy_logo_img}" alt="">
+							{/if}
+						</div>
+						<span>{$v.name}</span>
+					</a>
+					{/foreach}
+					<!-- end -->
+
+				</td>
+			</tr>
+			<tr>
+				<td class="miva-acc-title">选择等级</td>
+				<td data-item="lv" class="graed">
+					<a porjectLv="0" class="miva-txt-box txt-active">
+						<div class="miva-txt" alt="1">不限</div>
+					</a>
+
+				</td>
+			</tr>
+			<tr>
+				<td class="miva-acc-title">陪玩性别</td>
+				<td>
+					<a sex="0" class="miva-txt-box txt-active">
+						<div class="miva-txt">不限</div>
+					</a>
+					<a sex="1" class="miva-txt-box">
+						<div class="miva-txt">男神</div>
+					</a>
+					<a sex="2" class="miva-txt-box">
+						<div class="miva-txt">女神</div>
+					</a>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- 筛选 -->
+	<style>
+		.screen-btn-active {
+			background: #f5b105;
+			color: #fff !important;
+		}
+		.btn-admin-act {
+			background: transparent!important;
+			color: #f5b105 !important;
+		}
+	</style>
+	<div class="miva-screen-box">
+		<div data-item="shaiBtn"  class="miva-screen-btn-admin xiaoshou" cheap="1">
+			<i class="layui-icon layui-icon-align-right"></i> 8元专区
 		</div>
+		<!--<div data-item="shaiBtn" class="miva-screen-btn xiaoshou" cheap="2">折扣专区</div>-->
 
-		<!-- 引入侧边栏 -->
-		<!-- 引入页脚 -->
-		{include file="public/footer"}
-	</body>
+	</div>
+
+	<!-- 陪玩列表 -->
+	<div class="">
+		<ul class="miva-screen-list miva-star-box">
+			<!-- 一条 -->
+			{foreach name="acc_data" item="v"}
+			<li>
+				<a href="{:url('Index/user',['id' => $v.uid])}" class="miva-star-items">
+					<div class="miva-star-pic">
+						{if condition="$v.head_img == ''"}
+						<img src="__IMG__default.jpg" />
+						{else /}
+						<img src="{$v.head_img}" />
+						{/if}
+					</div>
+					<table class="miva-star-info">
+						<tr>
+							<td>
+
+								<span class="star-name">{$v.nickname}</span>
+							</td>
+							<td class="miva-star-info-right">
+
+								<span class="tab tab-win">{$v.city}</span>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<img src="__IMG__火.png" alt="图标">
+								<span>{$v.hot}</span>
+							</td>
+							<td class="miva-star-info-right">
+								<span class="star-price">￥{$v.pric}/局</span>
+							</td>
+						</tr>
+					</table>
+				</a>
+			</li>
+			{/foreach}
+
+
+
+			<!-- end -->
+		</ul>
+	</div>
+
+</div>
+
+<!-- 引入侧边栏 -->
+<!-- 引入页脚 -->
+{include file="public/footer"}
+</body>
 
 </html>
 
 
 <script>
-		
-
-	$(function(){
-
-		var project = 1;
-		var projectId = 1;
-		var porjectLv = 0;
-		var sex = 0;
-		var type = 1;
 
 
+    $(function(){
 
-		$('[cheap]').on('click', function(){
-			type = $(this).attr('cheap');
-			$(this).addClass('screen-btn-active');
-			$('.miva-screen-btn-admin').addClass('btn-admin-act');
-		})
-		$('.miva-screen-box').on('click', '.miva-screen-btn-admin', function(){
-			$(this).removeClass('btn-admin-act');
-			$('.miva-screen-box').find('[cheap]').removeClass('screen-btn-active');
-		})
-		$('.miva-acc-tab-box').on('click', '.miva-iocn-box', function() {			
-			$('.miva-acc-tab-box').find('.miva-iocn-box').removeClass('icon-active')
-			$(this).addClass('icon-active');
-			projectId = $(this).attr('project_id');
-			project = $(this).attr('project');
+        var project = 0;
+        var projectId = 0;
+        var porjectLv = 0;
+        var sex = 0;
+        var type = 1;
 
-			//post请求  携带参数访问控制器    通过参数查询出数据并 return json($data)回来  
-			$.post("{:url('Acc/garde_ajax')}",{project:project,project_id:projectId},function(res){
-				//组装数据
-				var str = '<a porjectLv="0" class="miva-txt-box txt-active"><div class="miva-txt" alt="1">不限</div></a>';
-				//循环组装所有
-				for(a of res){
-					str += `<a porjectLv="${a.id}" class="miva-txt-box"><div class="miva-txt" alt="1">${a.type_name}</div></a>`;
-				}
-				//替换文本
-				$('[data-item="lv"]').html(str);
 
-			},'json');
 
-			
-		});
+        $('[cheap]').on('click', function(){
+            type = $(this).attr('cheap');
+            $(this).addClass('screen-btn-active');
+            $('.miva-screen-btn-admin').addClass('btn-admin-act');
+        })
+        $('.miva-screen-box').on('click', '.miva-screen-btn-admin', function(){
+            $(this).removeClass('btn-admin-act');
+            $('.miva-screen-box').find('[cheap]').removeClass('screen-btn-active');
+        })
+        $('.miva-acc-tab-box').on('click', '.miva-iocn-box,span', function() {
+            $('.miva-acc-tab-box').find('.miva-iocn-box').removeClass('icon-active')
+            $('.miva-acc-tab-box').find('.miva-iocn-box').css('color','');
+            $(this).addClass('icon-active');
+            $('.miva-acc-tab-box').find('span').css('color','');
+            if( !($(this).attr('project_id')) ) { // 如果他没有project_id 就拿他兄弟的 project_id  如果有 就拿他自己的 project_id
+                projectId = $(this).siblings().attr('project_id')
+                project = $(this).siblings().attr('project');
+                $(this).siblings().addClass('icon-active');
 
-					$('[data-item="shaiBtn"]').on("click",function(){
-						
-						$('.txt-active').trigger('click')
-					})
+                $(this).css('color','#f5b105');//#f5b105
+            }else {
 
-		$('.miva-acc-tab-box').on('click', '.miva-txt-box', function(){
-			$(this).addClass('txt-active').siblings().removeClass('txt-active');
-			if ($(this).attr('porjectLv')) porjectLv = $(this).attr('porjectLv');
-			if ($(this).attr('sex')) sex = $(this).attr('sex');
-		});
-	
-		$('.miva-acc-tab-box').on('click','a',function(){
+                $(this).siblings('span').css('color','#f5b105');
+                projectId = $(this).attr('project_id')
+                project = $(this).attr('project');
+            }
+            //projectId = $(this).attr('project_id');
+            //project = $(this).attr('project');
+            porjectLv = 0
+            //post请求  携带参数访问控制器    通过参数查询出数据并 return json($data)回来
+            $.post("{:url('Acc/garde_ajax')}",{project:project,project_id:projectId},function(res){
+                //组装数据
+                var str = '<a porjectLv="0" class="miva-txt-box txt-active"><div class="miva-txt" alt="1">不限</div></a>';
+                //循环组装所有
+                for(a of res){
+                    str += `<a porjectLv="${a.id}" class="miva-txt-box"><div class="miva-txt" alt="1">${a.type_name}</div></a>`;
+                }
 
-			//筛选   http://localhost/huoniao/public/index.php/index/index/user/id/${a.uid}   https://www.huoniaopeiwan.com/
-			$.post("{:url('Activity/screen')}",{project:project,project_id:projectId,sex:sex,type:type},function(res){
-console.log(res)
-				var str = ''
-					for(a of res){
-						str += `<li>
+                //替换文本
+                $('[data-item="lv"]').html(str);
+
+
+            },'json');
+
+
+        });
+
+        $('[data-item="shaiBtn"]').on("click",function(){
+
+            $('.txt-active').trigger('click')
+        })
+
+        $('.miva-acc-tab-box').on('click', '.miva-txt-box', function(){
+            $(this).addClass('txt-active').siblings().removeClass('txt-active');
+            if ($(this).attr('porjectLv')) porjectLv = $(this).attr('porjectLv');
+            if ($(this).attr('sex')) sex = $(this).attr('sex');
+        });
+
+        $('.miva-acc-tab-box').on('click','a',function(){
+
+            //筛选   http://localhost/huoniao/public/index.php/index/index/user/id/${a.uid}   https://www.huoniaopeiwan.com/
+            $.post("{:url('Activity/screen')}",{project:project,project_id:projectId,porjectLv:porjectLv,sex:sex,type:type},function(res){
+                console.log(res)
+                var str = ''
+                for(a of res){
+                    str += `<li>
 									<a href="https://www.huoniaopeiwan.com/index/index/user/id/${a.uid}" class="miva-star-items">
 										<div class="miva-star-pic">
 												<img src="${a.head_img || '__IMG__default.jpg'}" />
@@ -235,15 +251,15 @@ console.log(res)
 										<table class="miva-star-info">
 											<tr>
 												<td>
-													
+
 													<span class="star-name">${a.nickname}</span>
 												</td>
-											
+
 												<td class="miva-star-info-right">
 
-													<span class="tab tab-shen">${a.discount||'特价无'}折扣</span>
+													<span class="tab tab-shen">${a.city}</span>
 												</td>
-											
+
 											</tr>
 											<tr>
 												<td>
@@ -251,18 +267,18 @@ console.log(res)
 													<span>${a.hot}</span>
 												</td>
 												<td class="miva-star-info-right">
-													<span class="star-price">￥${a.pric}/小时</span>
+													<span class="star-price">￥${a.pric}/局</span>
 												</td>
 											</tr>
 										</table>
 									</a>
 								</li>`;
-					}
-$('.miva-screen-list').html(str)
-			},'json')
+                }
+                $('.miva-screen-list').html(str)
+            },'json')
 
-		});
+        });
 
-	})
-	
-	</script>
+    })
+
+</script>

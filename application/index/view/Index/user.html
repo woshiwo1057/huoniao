@@ -933,7 +933,7 @@
 						<img class="user-pic one" src="__IMGS__php.jpg" alt="">
 						{/if}   
 						<div class="info-box">
-							<div class="money"><span>￥{$service_data.pric}</span>/小時</div>
+							<div class="money"><span>￥{$service_data.pric}</span>/{if condition="$service_data.pric == 8"}局{else /}小时{/if}</div>
 							<div class="tip-box"><span>{$service_data.project_grade_name}</span></div>
 							<div class="max-time"><img src="" alt=""><span>接单时长:{$service_data.length_time/3600} h</span></div>
 							<div class="audio-box xiaoshou">
@@ -970,7 +970,7 @@
 										<img src="${data.project_img}" alt="">
 									
 										<div class="info-box">
-											<div class="money"><span>￥${data.pric}</span>/小時</div>
+											<div class="money"><span>￥${data.pric}</span>/小时</div>
 											<div class="tip-box"><span>${data.project_grade_name}</span></div>
 											<div class="max-time"><img src="" alt=""><span>接单时长:${data.length_time/3600} h</span></div>
 
@@ -986,15 +986,24 @@
                                         <a href="${wow}"><span class="submit-btn">立即下单</span></a>
                                         {else }
                                         <p class="submit-btn" style="background:#999999;">立即下单</p>
-                                        {/if}`
+                                        {/if}`  
+                                
 
                                 var explain = `<p>${data.explain}</p>`
 
 								$('.order-info').html(str)
 
+                                var pric = `${data.pric}`
+                                if(pric == 8){
+                                   
+                                    var overall =  '<div class="money"><span>￥8</span>/局</div>'
+                                    $('.money').html(overall)
+
+                                }
+
                                 $('.explain').html(explain)
 
-                                var isPlay = false; // 播放器开关
+                                var isPlay = false; // 播放器开关    overall
 
                             function getaudioTime() {
                                 setTimeout(function() { // 获取音频时间
