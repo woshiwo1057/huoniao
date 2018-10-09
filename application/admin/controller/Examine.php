@@ -115,7 +115,7 @@ class Examine extends Common
 			$age = $num - $age ;
 			unset($data['birthday']);
 			
-		//Db::table('hn_user')->where('uid', $data['user_id'])->update(['head_img' => $data['head_img'],'age' => $age]);
+		Db::table('hn_user')->where('uid', $data['user_id'])->update(['head_img' => $data['head_img'],'age' => $age]);
 		unset($data['head_img']);
 
 		$location = $this->address($data['city'].$data['address']);

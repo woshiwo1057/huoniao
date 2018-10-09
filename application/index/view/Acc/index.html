@@ -125,7 +125,7 @@
 								{if condition="$v.head_img == ''"}
 									<img src="__IMG__default.jpg" />
 								{else /}
-									<img src="{$v.head_img}" />
+									<img src="{$v.head_img.'!syph'}" />
 								{/if}
 							</div>
 							<table class="miva-star-info">
@@ -206,7 +206,7 @@
 						str += `<li>			
 									<a href="https://www.huoniaopeiwan.com/index/index/offline_user/id/${a.uid}" class="miva-star-items">
 										<div class="miva-star-pic">
-												<img src="${a.head_img || '__IMG__default.jpg'}" />
+												<img src="${a.head_img+'!syph' || '__IMG__default.jpg'}" />
 										</div>
 										<table class="miva-star-info">
 											<tr>
@@ -248,17 +248,22 @@
                                    // var overall =  '<span class="star-price">￥8/局</span>'
                                     //$('.miva-star-info-right').html(overall)
 
+                                }else if(project == 2&&projectId == 2){
+                                	danwei = '首'
+                                }else if(project == 2&&projectId == 5){
+                                	danwei = '次'
+                                }else if(project == 2&&projectId == 6){
+                                	danwei = '次'
                                 }
 						
 						str += `<li>			
 									<a href="https://www.huoniaopeiwan.com/index/index/user/id/${a.uid}" class="miva-star-items">
 										<div class="miva-star-pic">
-												<img src="${a.head_img || '__IMG__default.jpg'}" />
+												<img src="${a.head_img+'!syph' || '__IMG__default.jpg'}" />
 										</div>
 										<table class="miva-star-info">
 											<tr>
 												<td>
-													
 													<span class="star-name">${a.nickname}</span>
 												</td>
 												<td class="miva-star-info-right">
@@ -325,7 +330,7 @@
 						str += `<li>			
 									<a href="https://www.huoniaopeiwan.com/index/index/offline_user/id/${a.uid}" class="miva-star-items">
 										<div class="miva-star-pic">
-												<img src="${a.head_img || '__IMG__default.jpg'}" />
+												<img src="${a.head_img+'!syph' || '__IMG__default.jpg'}" />
 										</div>
 										<table class="miva-star-info">
 											<tr>
@@ -365,14 +370,17 @@
 						var danwei = '小时'
                                 if(pric == 8){
                                     danwei = '局'
-                                   // var overall =  '<span class="star-price">￥8/局</span>'
-                                    //$('.miva-star-info-right').html(overall)
-
+                                }else if(project == 2&&projectId == 2){
+                                	danwei = '首'
+                                }else if(project == 2&&projectId == 5){
+                                	danwei = '次'
+                                }else if(project == 2&&projectId == 6){
+                                	danwei = '次'
                                 }
 						str += `<li>			
 									<a href="https://www.huoniaopeiwan.com/index/index/user/id/${a.uid}" class="miva-star-items">
 										<div class="miva-star-pic">
-												<img src="${a.head_img || '__IMG__default.jpg'}" />
+												<img src="${a.head_img+'!syph' || '__IMG__default.jpg'}" />
 										</div>
 										<table class="miva-star-info">
 											<tr>
@@ -481,7 +489,7 @@ if(type == 4){
 						str += `<li>			
 									<a href="https://www.huoniaopeiwan.com/index/index/offline_user/id/${a.uid}" class="miva-star-items">
 										<div class="miva-star-pic">
-												<img src="${a.head_img || '__IMG__default.jpg'}" />
+												<img src="${a.head_img+'!syph' || '__IMG__default.jpg'}" />
 										</div>
 										<table class="miva-star-info">
 											<tr>
@@ -521,15 +529,18 @@ if(type == 4){
 						var danwei = '小时'
                                 if(pric == 8){
                                     danwei = '局'
-                                   // var overall =  '<span class="star-price">￥8/局</span>'
-                                    //$('.miva-star-info-right').html(overall)
-
+                                }else if(project == 2&&projectId == 2){
+                                	danwei = '首'
+                                }else if(project == 2&&projectId == 5){
+                                	danwei = '次'
+                                }else if(project == 2&&projectId == 6){
+                                	danwei = '次'
                                 }
 
 						str += `<li>
 									<a href="https://www.huoniaopeiwan.com/index/index/user/id/${a.uid}" class="miva-star-items">
 										<div class="miva-star-pic">
-												<img src="${a.head_img || '__IMG__default.jpg'}" />
+												<img src="${a.head_img+'!syph' || '__IMG__default.jpg'}" />
 										</div>
 										<table class="miva-star-info">
 											<tr>

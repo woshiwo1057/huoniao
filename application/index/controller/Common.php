@@ -27,7 +27,6 @@ class Common extends \think\Controller
 
 	static $acsClient = null;
     public $img = 'https://hn-001-1256760691.picbj.myqcloud.com/'; //腾讯云图片路径
-    public $audio = 'https://mov-1256760691.cos.ap-shanghai.myqcloud.com/';
     public $Intercept = 45; //cos路径截取长度
 	 
 
@@ -204,11 +203,11 @@ class Common extends \think\Controller
     public function pric($order_num,$pric){
         if($order_num>=500){
             return $pric+30;
-        }else if($order_num>=200){
+        }else if($order_num>=300){
            return $pric+25;
-        }else if($order_num>=100){
+        }else if($order_num>=200){
            return $pric+20;
-        }else if($order_num>=50){
+        }else if($order_num>=100){
             return $pric+15;
         }else if($order_num>=20){
             return $pric+10;

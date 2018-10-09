@@ -121,7 +121,7 @@
 						{if condition="$v.head_img == ''"}
 						<img src="__IMG__default.jpg" />
 						{else /}
-						<img src="{$v.head_img}" />
+						<img src="{$v.head_img.'!syph'}" />
 						{/if}
 					</div>
 					<table class="miva-star-info">
@@ -246,7 +246,7 @@
                     str += `<li>
 									<a href="https://www.huoniaopeiwan.com/index/index/user/id/${a.uid}" class="miva-star-items">
 										<div class="miva-star-pic">
-												<img src="${a.head_img || '__IMG__default.jpg'}" />
+												<img src="${a.head_img+'!syph' || '__IMG__default.jpg'}" />
 										</div>
 										<table class="miva-star-info">
 											<tr>

@@ -67,11 +67,6 @@ class User extends Common
 		{
 			$user_edit = Request::instance()->param();
 			//$user_edit['uid'] = $id;
-
-
-			
-
-
 		
 			if($user_edit['type'] == 1){
 				//组装数据 该去用户表的去用户表  该去陪玩师表的去陪玩师 
@@ -1503,7 +1498,7 @@ class User extends Common
 		//查询申请记录
 			//获取用户ID
 		$uid = $_SESSION['user']['user_info']['uid'];
-		$apply_data = Db::table('hn_apply_project')->field('id,project,project_id,project_grade,project_name,status,time,order_num,pric,type')->where('uid',$uid)->order('id desc')->limit(10)->select();
+		$apply_data = Db::table('hn_apply_project')->field('id,project,project_id,project_grade,project_name,status,time,order_num,pric,type')->where('uid',$uid)->order('id desc')->select();
 		
 		//组装价格
 		foreach($apply_data as $k => $v){

@@ -96,7 +96,7 @@
 								{if condition="$v.head_img == ''"}
 									<img src="__IMG__default.jpg" />
 								{else /}
-									<img src="{$v.head_img}" />
+									<img src="{$v.head_img.'!sytx'}" />
 								{/if}
 							</div>
 							<table class="miva-star-info">
@@ -147,7 +147,7 @@
 									{if condition="$v.head_img == ''"}
 										<img src="__IMG__default.jpg" />
 									{else /}
-										<img src="{$v.head_img}" alt="">
+										<img src="{$v.head_img.'!syxr'}" alt="">
 									{/if}
 
 									</div>
@@ -210,7 +210,7 @@
 											<img class="pic" src="__IMG__default.jpg" />
 											{else /}
 											<!--图片路径不为空的时候，应为用户头像路径-->
-											<img class="pic" src="{$hot_day_data[0]['head_img']}" alt="">
+											<img class="pic" src="{$hot_day_data[0]['head_img'].'!syph'}" alt="">
 											{/if}
 											
 										</div>
@@ -271,7 +271,7 @@
 										<img class="pic" src="__IMG__default.jpg" />
 										{else /}
 										<!--图片路径不为空的时候，应为用户头像路径-->
-										<img class="pic" src="{$hot_day_data[1]['head_img']}" alt="">
+										<img class="pic" src="{$hot_day_data[1]['head_img'].'!syph'}" alt="">
 										{/if}
 									</div>
 									</a>
@@ -326,7 +326,7 @@
 										<img class="pic" src="__IMG__default.jpg" />
 										{else /}
 										<!--图片路径不为空的时候，应为用户头像路径-->
-										<img class="pic" src="{$hot_day_data[2]['head_img']}" alt="">
+										<img class="pic" src="{$hot_day_data[2]['head_img'].'!syph'}" alt="">
 										{/if}
 									</div>
 									</a>
@@ -388,7 +388,7 @@
 										{if condition="$v.head_img==''"}
 										<img src="__IMG__default.jpg" alt="">
 										{else  /}
-										<img src="{$v.head_img}" alt="">
+										<img src="{$v.head_img.'!syph'}" alt="">
 										{/if}
 
 										<!-- 用户信息 -->
@@ -431,7 +431,7 @@
 										<img class="pic" src="__IMG__default.jpg" />
 										{else /}
 										<!--图片路径不为空的时候，应为用户头像路径-->
-										<img class="pic" src="{$hot_data[0]['head_img']}" alt="">
+										<img class="pic" src="{$hot_data[0]['head_img'].'!syph'}" alt="">
 										{/if}
 									</div>
 									</a>
@@ -491,7 +491,7 @@
 										<img class="pic" src="__IMG__default.jpg" />
 										{else /}
 										<!--图片路径不为空的时候，应为用户头像路径-->
-										<img class="pic" src="{$hot_data[1]['head_img']}" alt="">
+										<img class="pic" src="{$hot_data[1]['head_img'].'!syph'}" alt="">
 										{/if}
 									</div>
 									</a>
@@ -546,7 +546,7 @@
 										<img class="pic" src="__IMG__default.jpg" />
 										{else /}
 										<!--图片路径不为空的时候，应为用户头像路径-->
-										<img class="pic" src="{$hot_data[2]['head_img']}" alt="">
+										<img class="pic" src="{$hot_data[2]['head_img'].'!syph'}" alt="">
 										{/if}
 									</div>
 									</a>
@@ -607,7 +607,7 @@
 										{if condition="$v.head_img==''"}
 										<img src="__IMG__default.jpg" alt="">
 										{else  /}
-										<img src="{$v.head_img}" alt="">
+										<img src="{$v.head_img.'!syph'}" alt="">
 										{/if}
 
 										<!-- 用户信息 -->
@@ -675,7 +675,7 @@
 										<img class="pic" src="__IMG__default.jpg" />
 										{else /}
 										<!--图片路径不为空的时候，应为用户头像路径-->
-										<img class="pic" src="{$okami_day_data[0]['head_img']}" alt="">
+										<img class="pic" src="{$okami_day_data[0]['head_img'].'!syph'}" alt="">
 										{/if}
 									</div>
 									</a>
@@ -729,7 +729,7 @@
 										<img class="pic" src="__IMG__default.jpg" />
 										{else /}
 										<!--图片路径不为空的时候，应为用户头像路径-->
-										<img class="pic" src="{$okami_day_data[1]['head_img']}" alt="">
+										<img class="pic" src="{$okami_day_data[1]['head_img'].'!syph'}" alt="">
 										{/if}
 									</div>
 									</a>
@@ -783,7 +783,7 @@
 										<img class="pic" src="__IMG__default.jpg" />
 										{else /}
 										<!--图片路径不为空的时候，应为用户头像路径-->
-										<img class="pic" src="{$okami_day_data[2]['head_img']}" alt="">
+										<img class="pic" src="{$okami_day_data[2]['head_img'].'!syph'}" alt="">
 										{/if}
 									</div>
 									</a>
@@ -842,7 +842,7 @@
 											<img class="pic" src="__IMG__default.jpg" />
 											{else /}
 											<!--图片路径不为空的时候，应为用户头像路径-->
-											<img class="pic" src="{$v.head_img}" alt="">
+											<img class="pic" src="{$v.head_img.'!syph'}" alt="">
 											{/if}
 											<!-- 用户信息 -->
 											<div class="user-info">
@@ -887,7 +887,7 @@
 										<img class="pic" src="__IMG__default.jpg" />
 										{else /}
 										<!--图片路径不为空的时候，应为用户头像路径-->
-										<img class="pic" src="{$okami_data[0]['head_img']}" alt="">
+										<img class="pic" src="{$okami_data[0]['head_img'].'!syph'}" alt="">
 										{/if}
 									</div>
 									</a>
@@ -947,7 +947,7 @@
 										<img class="pic" src="__IMG__default.jpg" />
 										{else /}
 										<!--图片路径不为空的时候，应为用户头像路径-->
-										<img class="pic" src="{$okami_data[1]['head_img']}" alt="">
+										<img class="pic" src="{$okami_data[1]['head_img'].'!syph'}" alt="">
 										{/if}
 									</div>
 									</a>
@@ -1002,7 +1002,7 @@
 										<img class="pic" src="__IMG__default.jpg" />
 										{else /}
 										<!--图片路径不为空的时候，应为用户头像路径-->
-										<img class="pic" src="{$okami_data[2]['head_img']}" alt="">
+										<img class="pic" src="{$okami_data[2]['head_img'].'!syph'}" alt="">
 										{/if}
 									</div>
 									</a>
@@ -1063,7 +1063,7 @@
 										{if condition="$v.head_img==''"}
 										<img src="__IMG__default.jpg" alt="">
 										{else  /}
-										<img src="{$v.head_img}" alt="">
+										<img src="{$v.head_img.'!syph'}" alt="">
 										{/if}
 
 										<!-- 用户信息 -->
@@ -1125,7 +1125,7 @@
 											<img class="pic" src="__IMG__default.jpg" />
 											{else /}
 											<!--图片路径不为空的时候，应为用户头像路径-->
-											<img class="pic" src="{$mogul_day_data[0]['head_img']}" alt="">
+											<img class="pic" src="{$mogul_day_data[0]['head_img'].'!syph'}" alt="">
 											{/if}
 										</div>
 										<!--用户名字-->
@@ -1177,7 +1177,7 @@
 											<img class="pic" src="__IMG__default.jpg" />
 											{else /}
 											<!--图片路径不为空的时候，应为用户头像路径-->
-											<img class="pic" src="{$mogul_day_data[1]['head_img']}" alt="">
+											<img class="pic" src="{$mogul_day_data[1]['head_img'].'!syph'}" alt="">
 											{/if}
 										</div>
 										<!--用户名字-->
@@ -1229,7 +1229,7 @@
 											<img class="pic" src="__IMG__default.jpg" />
 											{else /}
 											<!--图片路径不为空的时候，应为用户头像路径-->
-											<img class="pic" src="{$mogul_day_data[2]['head_img']}" alt="">
+											<img class="pic" src="{$mogul_day_data[2]['head_img'].'!syph'}" alt="">
 											{/if}
 										</div>
 										<!--用户名字-->
@@ -1286,7 +1286,7 @@
 											<img class="pic" src="__IMG__default.jpg" />
 											{else /}
 											<!--图片路径不为空的时候，应为用户头像路径-->
-											<img class="pic" src="{$v.head_img}" alt="">
+											<img class="pic" src="{$v.head_img.'!syph'}" alt="">
 											{/if}
 										<!-- 用户信息 -->
 										<div class="user-info">
@@ -1330,7 +1330,7 @@
 											<img class="pic" src="__IMG__default.jpg" />
 											{else /}
 											<!--图片路径不为空的时候，应为用户头像路径-->
-											<img class="pic" src="{$mogul_data[0]['head_img']}" alt="">
+											<img class="pic" src="{$mogul_data[0]['head_img'].'!syph'}" alt="">
 											{/if}
 										</div>
 										<!--用户名字-->
@@ -1387,7 +1387,7 @@
 											<img class="pic" src="__IMG__default.jpg" />
 											{else /}
 											<!--图片路径不为空的时候，应为用户头像路径-->
-											<img class="pic" src="{$mogul_data[1]['head_img']}" alt="">
+											<img class="pic" src="{$mogul_data[1]['head_img'].'!syph'}" alt="">
 											{/if}
 										</div>
 										<!--用户名字-->
@@ -1440,7 +1440,7 @@
 											<img class="pic" src="__IMG__default.jpg" />
 											{else /}
 											<!--图片路径不为空的时候，应为用户头像路径-->
-											<img class="pic" src="{$mogul_data[2]['head_img']}" alt="">
+											<img class="pic" src="{$mogul_data[2]['head_img'].'!syph'}" alt="">
 											{/if}
 										</div>
 										<!--用户名字-->
@@ -1499,7 +1499,7 @@
 											{if condition="$v.head_img==''"}
 											<img src="__IMG__default.jpg" alt="">
 											{else  /}
-											<img src="{$v.head_img}" alt="">
+											<img src="{$v.head_img.'!syph'}" alt="">
 											{/if}
 
 											<!-- 用户信息 -->

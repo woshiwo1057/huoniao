@@ -117,16 +117,22 @@ class Identify extends Common
     }
 
     function yulan(){
+
         $request = request();//think助手函数
         $data_get = $request->param();//获取get与post数据
-
+ 
         $identify = \db('hn_identify');
         $data_arr = $data_get['data'];
+
         //print_r($data_arr['head_img']);
+        
         $img = $this->identify_card($data_arr);//鉴定卡生成
+         
         $file = $img;
+  
         $key = date('Y-m-d').'/'.md5(microtime()).'.jpg'; //路径
         $data = $this->coss($file,$key);
+            
         if($data['code']==0){
             $url = $this->img.$key;
             return ['code'=>1,'msg'=>'生成成功','url'=>$url];

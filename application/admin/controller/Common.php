@@ -474,7 +474,7 @@ class Common extends \think\Controller
         $image_data = ob_get_contents ();
         ob_end_clean ();
         $image_data_base64 = "data:image/png;base64,". base64_encode ($image_data);
-        return( $image_data_base64);exit;
+        return($image_data_base64);exit;
 
     }
 
