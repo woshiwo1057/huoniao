@@ -225,7 +225,10 @@ class Examine extends Common
 				//审核通过    改变状态   改变time   
 					//注意  重复的项目去更新  覆盖    
 				
-				$judge = Db::table('hn_apply_project')->field('id,img_url,video_url')->where(['project' => $data['project'], 'project_id' => $data['project_id'], 'uid' => $data['uid'],'status' => 1])->find();
+				$judge = Db::table('hn_apply_project')
+					->field('id,img_url,video_url')
+					->where(['project' => $data['project'], 'project_id' => $data['project_id'], 'uid' => $data['uid'],'status' => 1])
+					->find();
 
 				if($judge){
 					//删除原来的音频与图片

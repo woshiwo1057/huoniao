@@ -52,7 +52,7 @@ class Index  extends Common
                     ->join('hn_accompany a','u.uid = a.user_id','LEFT')
                     ->join('hn_apply_project p' , 'a.project_id = p.project_id' , 'LEFT')
                     ->group('u.uid')
-                    ->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num,p.project_name,u.sex,a.city')
+                    ->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num,p.project_name,u.sex,a.city,a.okami')
                     ->where('a.up',2)
                     ->order('a.okami desc')->limit('0,15')->select();
 
@@ -63,7 +63,10 @@ class Index  extends Common
     	//优质新人  先注册的排前面（15天内）
     	$new_data =	Db::table('hn_accompany')->alias('a')
                         ->join('hn_user u','u.uid = a.user_id')                  
-                        ->field('u.uid,u.nickname,u.head_img,u.age,u.sex,a.city')->where('a.new_people',1)->limit('15')->select();
+                        ->field('u.uid,u.nickname,u.head_img,u.age,u.sex,a.city')
+                        ->where('a.new_people',1)
+                        ->limit('15')
+                        ->select();
     	//->join('hn_apply_acc p','p.user_id = a.user_id')
         //$adhwuhwad = $this->wechat_query();
         //var_dump($new_data);die;
