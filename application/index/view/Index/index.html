@@ -4,27 +4,30 @@
 {include file="public/sidebar"}
 
 <style media="screen">
-	#post, #post *{
-		transition: all 1s
-	}
-	body, header {
-		transition: all 1s;
-	}
-	.openTop {
-		position: absolute;
-		top: 100%;
-		border: 1px solid #daa51f;
-		border-top: 0;
-		line-height: .9;
-		padding: 0 30px;
-		border-radius: 0px 0 10px 10px;
-		background: #fab812;
-		font-size: 20px;
-		font-weight: bold;
-		left: 50%;
-		/* color: #fff */
-	}
-</style>
+		#post, #post *{
+			transition: all 1s
+		}
+		body, header {
+			transition: all 1s;
+		}
+		.openTop {
+			position: absolute;
+			top: 100%;
+			border: 1px solid #daa51f;
+			border-top: 0;
+			line-height: .9;
+			padding: 0 30px;
+			border-radius: 0px 0 10px 10px;
+			background: #fab812;
+			font-size: 20px;
+			font-weight: bold;
+			left: 50%;
+			/* color: #fff */
+		}
+		.top-three .pic {
+			top: 14px !important;
+		}
+	</style>
 <title>首页</title>
 	<body style="position:relative; top:0px">
 
@@ -43,8 +46,10 @@
 			</div>
 				<div class="swiper-pagination"></div>
 		</div>
+
 		<!-- 页面主体 -->
 		<div class="main main-no-top">
+		<p style="color:#aaa">通知:部分功能正在开发中，不影响正常运行，敬请期待。谢谢。</p>
 			<!-- 服务项目:固定四条 -->
 			<div class="miva-floor-box ">
 				<div class="miva-title">
@@ -63,6 +68,7 @@
 						<img src="{$v.game_index_img}" />
 					{/if}
 						<div data-math='color{$k+1}' class="miva-service-mu"></div>
+
 						<div class="miva-service-txt">{$v.name}</div>
 					</div>
 				{/foreach}
@@ -181,669 +187,211 @@
 				<!--开始榜-->
 				<div class="miva-rank-box">
 					<!--一个榜-->
-					<div class="miva-rank-items" >
-						<!--排行榜标题-->
-						<div class="miva-rank-title">
-							<img src="__IMG__title_01-03.gif"/>
-							<div class="miva-rank-txt">
-								<img src="__IMG__hudie.gif"/>
-								<span>人气榜</span>
-							</div>
-							<!--tab-->
-							<div data-box=1 class="tab-rank">
-								<span class="active" data-rank="1">日榜</span>
-								<span  data-rank="2">总榜</span>
-							</div>
-						</div>
-						<div data-num=1>
-							<!--前三名-->
-						<div data-item="1" class="one">
-							<div class="top-three">
-							{if condition="isset($hot_day_data[0])"}
-								<div class="the-first">
-									<!--头像框?-->
-									<a href="{:url('Index/user' , ['id' => $hot_day_data[0]['uid']])}">
-										<div class="pic-box">
-											<img src="__IMG__crown_01.gif"/>
-											
-											{if condition="$hot_day_data[0]['head_img'] == ''"}
-											<img class="pic" src="__IMG__default.jpg" />
-											{else /}
-											<!--图片路径不为空的时候，应为用户头像路径-->
-											<img class="pic" src="{$hot_day_data[0]['head_img'].'!syph'}" alt="">
-											{/if}
-											
-										</div>
-									</a>
-									<!--用户名字-->
-									<div class="u-name">
-										{$hot_day_data[0]['nickname']}
-										{switch name="$hot_day_data[0]['level']"}
-										{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
-										{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
-										{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
-										{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
-										{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
-										{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
-										{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
-										{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-										{default /}<img src="__IMG__icon1-0.gif" alt="" />
-										{/switch}
-									<!--用户分数-->
-									<div class="score-box">
-
-										<img src="__IMG__renqi.png"/>
-
-
-										<span class="score-txt">{$hot_day_data[0]['hot_day']}</span>
-
-									</div>
-									</div>
-								</div>
-
-							{else /}
-								<div class="">
-									<!--头像框?-->
-									<div class="pic-box">
-										<img src="__IMG__crown.gif"/>
-										<img class="pic" src="__IMG__default.jpg"/>
-									</div>
-									<!--用户名字-->
-									<div class="u-name">
-										等你来呦
-									<!--用户分数-->
-									<div class="score-box">
-										<img src="__IMG__renqi.png"/>
-										<span class="score-txt">0</span>
-									</div>
-									</div>
-								</div>>
-
-							{/if}
-
-							{if condition="isset($hot_day_data[1])"}
-								<div class="">
-									<!--头像框?-->
-									<a href="{:url('Index/user' , ['id' => $hot_day_data[1]['uid']])}">
-									<div class="pic-box">
-										<img src="__IMG__crown.gif"/>
-										{if condition="$hot_day_data[1]['head_img'] == ''"}
-										<img class="pic" src="__IMG__default.jpg" />
-										{else /}
-										<!--图片路径不为空的时候，应为用户头像路径-->
-										<img class="pic" src="{$hot_day_data[1]['head_img'].'!syph'}" alt="">
-										{/if}
-									</div>
-									</a>
-									<!--用户名字-->
-									<div class="u-name">
-										{$hot_day_data[1]['nickname']}
-										{switch name="$hot_day_data[1]['level']"}
-										{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
-										{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
-										{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
-										{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
-										{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
-										{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
-										{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
-										{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-										{default /}<img src="__IMG__icon1-0.gif" alt="" />
-										{/switch}
-									<!--用户分数-->
-									<div class="score-box">
-										<img src="__IMG__renqi.png"/>
-										<span class="score-txt">{$hot_day_data[1]['hot_day']}</span>
-									</div>
-									</div>
-								</div>
-
-							{else /}
-								<div class="">
-									<!--头像框?-->
-									<div class="pic-box">
-										<img src="__IMG__crown.gif"/>
-										<img class="pic" src="__IMG__default.jpg"/>
-									</div>
-									<!--用户名字-->
-									<div class="u-name">
-										等你来呦
-									<!--用户分数-->
-									<div class="score-box">
-										<img src="__IMG__renqi.png"/>
-										<span class="score-txt">0</span>
-									</div>
-									</div>
-								</div>
-							{/if}
-
-							{if condition="isset($hot_day_data[2])"}
-								<div class="">
-									<!--头像框?-->
-									<a href="{:url('Index/user' , ['id' => $hot_day_data[2]['uid']])}">
-									<div class="pic-box">
-										<img src="__IMG__首页-恢复的_18.gif"/>
-										{if condition="$hot_day_data[2]['head_img'] == ''"}
-										<img class="pic" src="__IMG__default.jpg" />
-										{else /}
-										<!--图片路径不为空的时候，应为用户头像路径-->
-										<img class="pic" src="{$hot_day_data[2]['head_img'].'!syph'}" alt="">
-										{/if}
-									</div>
-									</a>
-									<!--用户名字-->
-									<div class="u-name">
-										{$hot_day_data[2]['nickname']}
-										{switch name="$hot_day_data[2]['level']"}
-										{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
-										{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
-										{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
-										{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
-										{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
-										{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
-										{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
-										{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-										{default /}<img src="__IMG__icon1-0.gif" alt="" />
-										{/switch}
-									<!--用户分数-->
-									<div class="score-box">
-										<img src="__IMG__renqi.png"/>
-										<span class="score-txt">{$hot_day_data[2]['hot_day']}</span>
-									</div>
-									</div>
-								</div>
-							{else /}
-								<div class="">
-									<!--头像框?-->
-									<div class="pic-box">
-										<img src="__IMG__首页-恢复的_18.gif"/>
-										<img class="pic" src="__IMG__default.jpg"/>
-									</div>
-									<!--用户名字-->
-									<div class="u-name">
-										等你来呦
-									<!--用户分数-->
-									<div class="score-box">
-										<img src="__IMG__renqi.png"/>
-										<span class="score-txt">0</span>
-									</div>
-									</div>
-								</div>
-								{/if}
-							</div>
-
-
-
-
-							<!-- 后N名 -->
-							<ul class="rank-last">
-								<!-- 一条 -->
-								{foreach name="hot_day_data" item="v" key="k"}
-									{if condition="$k>2"}
-									<a href="{:url('Index/user' , ['id' => $v['uid']])}">
-									<li>
-										<!-- 排名 -->
-										<span>{$k+1}</span>
-										<!-- 用户头像 -->
-
-										{if condition="$v.head_img==''"}
-										<img src="__IMG__default.jpg" alt="">
-										{else  /}
-										<img src="{$v.head_img.'!syph'}" alt="">
-										{/if}
-
-										<!-- 用户信息 -->
-										<div class="user-info">
-											<div class="u-name">{$v.nickname}</div>
-											
-											{switch name="$v.level"}
-											{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
-											{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
-											{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
-											{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
-											{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
-											{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
-											{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
-											{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-											{default /}<img src="__IMG__icon1-0.gif" alt="" />
-											{/switch}
-										</div>
-										<!-- 得分数值 -->
-										<div class="score-box">
-											魅力: <span>{$v.hot_day}</span>
-										</div>
-									</li>
-									</a>
-									{/if}
-								{/foreach}
-								<!-- end -->
-							</ul>
-						</div>
-
-						<div data-item="2" style="display:none">
-							<div class="top-three">
-							{if condition="isset($hot_data[0])"}
-								<div class="the-first">
-									<!--头像框?-->
-									<a href="{:url('Index/user' , ['id' => $hot_data[0]['uid']])}">
-									<div class="pic-box">
-										<img src="__IMG__crown_01.gif"/>
-										{if condition="$hot_data[0]['head_img'] == ''"}
-										<img class="pic" src="__IMG__default.jpg" />
-										{else /}
-										<!--图片路径不为空的时候，应为用户头像路径-->
-										<img class="pic" src="{$hot_data[0]['head_img'].'!syph'}" alt="">
-										{/if}
-									</div>
-									</a>
-									<!--用户名字-->
-									<div class="u-name">
-										{$hot_data[0]['nickname']}
-										{switch name="$hot_data[0]['level']"}
-										{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
-										{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
-										{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
-										{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
-										{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
-										{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
-										{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
-										{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-										{default /}<img src="__IMG__icon1-0.gif" alt="" />
-										{/switch}
-									<!--用户分数-->
-									<div class="score-box">
-
-										<img src="__IMG__renqi.png"/>
-
-
-										<span class="score-txt">{$hot_data[0]['hot']}</span>
-
-									</div>
-									</div>
-								</div>
-
-							{else /}
-								<div class="">
-									<!--头像框?-->
-									<div class="pic-box">
-										<img src="__IMG__crown.gif"/>
-										<img class="pic" src="__IMG__default.jpg"/>
-									</div>
-									<!--用户名字-->
-									<div class="u-name">
-										等你来呦
-									<!--用户分数-->
-									<div class="score-box">
-										<img src="__IMG__renqi.png"/>
-										<span class="score-txt">0</span>
-									</div>
-									</div>
-								</div>
-
-							{/if}
-
-							{if condition="isset($hot_data[1])"}
-								<div class="">
-									<!--头像框?-->
-									<a href="{:url('Index/user' , ['id' => $hot_data[1]['uid']])}">
-									<div class="pic-box">
-										<img src="__IMG__crown.gif"/>
-										{if condition="$hot_data[1]['head_img'] == ''"}
-										<img class="pic" src="__IMG__default.jpg" />
-										{else /}
-										<!--图片路径不为空的时候，应为用户头像路径-->
-										<img class="pic" src="{$hot_data[1]['head_img'].'!syph'}" alt="">
-										{/if}
-									</div>
-									</a>
-									<!--用户名字-->
-									<div class="u-name">
-										{$hot_data[1]['nickname']}
-										{switch name="$hot_data[1]['level']"}
-										{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
-										{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
-										{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
-										{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
-										{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
-										{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
-										{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
-										{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-										{default /}<img src="__IMG__icon1-0.gif" alt="" />
-										{/switch}
-									<!--用户分数-->
-									<div class="score-box">
-										<img src="__IMG__renqi.png"/>
-										<span class="score-txt">{$hot_data[1]['hot']}</span>
-									</div>
-									</div>
-								</div>
-
-							{else /}
-								<div class="">
-									<!--头像框?-->
-									<div class="pic-box">
-										<img src="__IMG__crown.gif"/>
-										<img class="pic" src="__IMG__default.jpg"/>
-									</div>
-									<!--用户名字-->
-									<div class="u-name">
-										等你来呦
-									<!--用户分数-->
-									<div class="score-box">
-										<img src="__IMG__renqi.png"/>
-										<span class="score-txt">0</span>
-									</div>
-									</div>
-								</div>
-							{/if}
-
-							{if condition="isset($hot_data[2])"}
-								<div class="">
-									<!--头像框?-->
-									<a href="{:url('Index/user' , ['id' => $hot_data[2]['uid']])}">
-									<div class="pic-box">
-										<img src="__IMG__首页-恢复的_18.gif"/>
-										{if condition="$hot_data[2]['head_img'] == ''"}
-										<img class="pic" src="__IMG__default.jpg" />
-										{else /}
-										<!--图片路径不为空的时候，应为用户头像路径-->
-										<img class="pic" src="{$hot_data[2]['head_img'].'!syph'}" alt="">
-										{/if}
-									</div>
-									</a>
-									<!--用户名字-->
-									<div class="u-name">
-										{$hot_data[2]['nickname']}
-										{switch name="$hot_data[2]['level']"}
-										{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
-										{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
-										{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
-										{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
-										{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
-										{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
-										{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
-										{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-										{default /}<img src="__IMG__icon1-0.gif" alt="" />
-										{/switch}
-									<!--用户分数-->
-									<div class="score-box">
-										<img src="__IMG__renqi.png"/>
-										<span class="score-txt">{$hot_data[2]['hot']}</span>
-									</div>
-									</div>
-								</div>
-							{else /}
-								<div class="">
-									<!--头像框?-->
-									<div class="pic-box">
-										<img src="__IMG__首页-恢复的_18.gif"/>
-										<img class="pic" src="__IMG__default.jpg"/>
-									</div>
-									<!--用户名字-->
-									<div class="u-name">
-										等你来呦
-									<!--用户分数-->
-									<div class="score-box">
-										<img src="__IMG__renqi.png"/>
-										<span class="score-txt">0</span>
-									</div>
-									</div>
-								</div>
-								{/if}
-							</div>
-
-
-
-
-							<!-- 后N名 -->
-							<ul class="rank-last">
-								<!-- 一条 -->
-								{foreach name="hot_data" item="v" key="k"}
-									{if condition="$k>2"}
-									<a href="{:url('Index/user' , ['id' => $v['uid']])}">
-									<li>
-										<!-- 排名 -->
-										<span>{$k+1}</span>
-										<!-- 用户头像 -->
-										{if condition="$v.head_img==''"}
-										<img src="__IMG__default.jpg" alt="">
-										{else  /}
-										<img src="{$v.head_img.'!syph'}" alt="">
-										{/if}
-
-										<!-- 用户信息 -->
-										<div class="user-info">
-											<div class="u-name">{$v.nickname}</div>
-											
-											{switch name="$v.level"}
-											{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
-											{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
-											{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
-											{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
-											{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
-											{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
-											{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
-											{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-											{default /}<img src="__IMG__icon1-0.gif" alt="" />
-											{/switch}
-										</div>
-										<!-- 得分数值 -->
-										<div class="score-box">
-											魅力: <span>{$v.hot}</span>
-										</div>
-									</li>
-									</a>
-									{/if}
-								{/foreach}
-								<!-- end -->
-							</ul>
-						</div>
-						</div>
-					</div>
-
-
-
-
-					<!--一个榜-->
 					<div class="miva-rank-items">
 						<!--排行榜标题-->
 						<div class="miva-rank-title">
-							<img src="__IMG__首页-恢复的_05.gif"/>
-							<div class="miva-rank-txt">
-								<img src="__IMG__太阳.gif"/>
-								<span>大神榜</span>
-							</div>
-
+							<img src="__IMG__title_01-03.gif" />
+							<div class="miva-rank-txt"><img src="__IMG__hudie.gif" /><span>人气榜</span></div>
 							<!--tab-->
-							<div data-box=2 class="tab-rank">
-								<span class="active" data-rank="1">日榜</span>
-								<span  data-rank="2">总榜</span>
-							</div>
+							<div class="tab-rank"><span class="active" data-total='1_1' data-rank="1">周榜</span><span data-total='1_2' data-rank="2">总榜</span></div>
 						</div>
 
-						
-						<div data-num=2 >
-							<div data-item="1" class="tow">
-							<!--前三名-->
-							<div class="top-three">
-								{if condition="isset($okami_day_data[0])"}
-								<div class="the-first">
-									<!--头像框?-->
-									<a href="{:url('Index/user' , ['id' => $okami_day_data[0]['uid']])}">
-									<div class="pic-box">
-										<img src="__IMG__crown_01.gif"/>
-										{if condition="$okami_day_data[0]['head_img'] == ''"}
-										<img class="pic" src="__IMG__default.jpg" />
-										{else /}
-										<!--图片路径不为空的时候，应为用户头像路径-->
-										<img class="pic" src="{$okami_day_data[0]['head_img'].'!syph'}" alt="">
+						<div data-num=1>
+								<!--前三名-->
+							<div  data-item="1_1" class="one"  style="">
+								<div class="top-three layui-fluid">
+									<div class="layui-row">
+									{if condition="isset($hot_day_data[0])"}
+										<div class="the-first layui-col-xs12">
+											<!--头像框?-->
+											<a href="{:url('Index/user' , ['id' => $hot_day_data[0]['uid']])}">
+
+												<div class="pic-box">
+													<img src="__IMG__crown_01.gif"  style="width:100%" />
+													
+													{if condition="$hot_day_data[0]['head_img'] == ''"}
+													<img class="pic" src="__IMG__default.jpg" />
+													{else /}
+													<!--图片路径不为空的时候，应为用户头像路径-->
+													<img class="pic" src="{$hot_day_data[0]['head_img'].'!syph'}" alt="">
+													{/if}
+													
+												</div>
+											</a>
+											<!--用户名字-->
+											<div class="u-name">
+												{$hot_day_data[0]['nickname']}
+												{switch name="$hot_day_data[0]['level']"}
+												{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+												{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+												{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+												{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+												{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+												{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+												{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+												{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+												{default /}<img src="__IMG__icon1-0.gif" alt="" />
+												{/switch}
+												<!--用户分数-->
+												
+												<div class="score-box">
+													<img src="__IMG__renqi.png"/>
+													<span class="score-txt">{$hot_day_data[0]['hot_day']}</span>
+												</div>
+											</div>
+										</div>
+
+									{else /}
+										<div class="">
+											<!--头像框?-->
+											<div class="pic-box">
+												<img src="__IMG__crown.gif"/>
+												<img class="pic" src="__IMG__default.jpg"/>
+											</div>
+											<!--用户名字-->
+											<div class="u-name">
+												等你来呦
+											<!--用户分数-->
+											<div class="score-box">
+												<img src="__IMG__renqi.png"/>
+												<span class="score-txt">0</span>
+											</div>
+											</div>
+										</div>>
+
+									{/if}
+
+									{if condition="isset($hot_day_data[1])"}
+										<div class="layui-col-xs6">
+											<!--头像框?-->
+											<a href="{:url('Index/user' , ['id' => $hot_day_data[1]['uid']])}">
+											<div class="pic-box">
+												<img src="__IMG__crown.gif"  />
+												{if condition="$hot_day_data[1]['head_img'] == ''"}
+												<img class="pic" src="__IMG__default.jpg" />
+												{else /}
+												<!--图片路径不为空的时候，应为用户头像路径-->
+												<img class="pic" src="{$hot_day_data[1]['head_img'].'!syph'}" alt="">
+												{/if}
+											</div>
+											</a>
+											<!--用户名字-->
+											<div class="u-name">
+												{$hot_day_data[1]['nickname']}
+												{switch name="$hot_day_data[1]['level']"}
+												{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+												{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+												{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+												{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+												{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+												{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+												{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+												{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+												{default /}<img src="__IMG__icon1-0.gif" alt="" />
+												{/switch}
+											<!--用户分数-->
+											<div class="score-box">
+												<img src="__IMG__renqi.png"/>
+												<span class="score-txt">{$hot_day_data[1]['hot_day']}</span>
+											</div>
+											</div>
+										</div>
+
+									{else /}
+										<div class="">
+											<!--头像框?-->
+											<div class="pic-box">
+												<img src="__IMG__crown.gif"/>
+												<img class="pic" src="__IMG__default.jpg"/>
+											</div>
+											<!--用户名字-->
+											<div class="u-name">
+												等你来呦
+											<!--用户分数-->
+											<div class="score-box">
+												<img src="__IMG__renqi.png"/>
+												<span class="score-txt">0</span>
+											</div>
+											</div>
+										</div>
+									{/if}
+
+									{if condition="isset($hot_day_data[2])"}
+										<div class="layui-col-xs6">
+											<!--头像框?-->
+											<a href="{:url('Index/user' , ['id' => $hot_day_data[2]['uid']])}">
+											<div class="pic-box">
+												<img src="__IMG__首页-恢复的_18.gif"/>
+												{if condition="$hot_day_data[2]['head_img'] == ''"}
+												<img class="pic" src="__IMG__default.jpg" />
+												{else /}
+												<!--图片路径不为空的时候，应为用户头像路径-->
+												<img class="pic" src="{$hot_day_data[2]['head_img'].'!syph'}" alt="">
+												{/if}
+											</div>
+											</a>
+											<!--用户名字-->
+											<div class="u-name">
+												{$hot_day_data[2]['nickname']}
+												{switch name="$hot_day_data[2]['level']"}
+												{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+												{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+												{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+												{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+												{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+												{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+												{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+												{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+												{default /}<img src="__IMG__icon1-0.gif" alt="" />
+												{/switch}
+											<!--用户分数-->
+											<div class="score-box">
+												<img src="__IMG__renqi.png"/>
+												<span class="score-txt">{$hot_day_data[2]['hot_day']}</span>
+											</div>
+											</div>
+										</div>
+									{else /}
+										<div class="">
+											<!--头像框?-->
+											<div class="pic-box">
+												<img src="__IMG__首页-恢复的_18.gif"/>
+												<img class="pic" src="__IMG__default.jpg"/>
+											</div>
+											<!--用户名字-->
+											<div class="u-name">
+												等你来呦
+											<!--用户分数-->
+											<div class="score-box">
+												<img src="__IMG__renqi.png"/>
+												<span class="score-txt">0</span>
+											</div>
+											</div>
+										</div>
 										{/if}
 									</div>
-									</a>
-									<!--用户名字-->
-									<div class="u-name">
-										{$okami_day_data[0]['nickname']}
-										{switch name="$okami_day_data[0]['level']"}
-										{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
-										{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
-										{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
-										{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
-										{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
-										{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
-										{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
-										{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-										{default /}<img src="__IMG__icon1-0.gif" alt="" />
-										{/switch}
-									<!--用户分数-->
-									<div class="score-box">
-										<img src="__IMG__lihai.png"/>
-										<span class="score-txt">{$okami_day_data[0]['okami_day']}</span>
-									</div>
-									</div>
 								</div>
-								{else /}
-									<div class="the-first">
-									<!--头像框?-->
-									<div class="pic-box">
-										<img src="__IMG__crown_01.gif"/>
-										<img class="pic" src="__IMG__default.jpg"/>
-									</div>
-									<!--用户名字-->
-									<div class="u-name">
-										等你来呦
-									<!--用户分数-->
-									<div class="score-box">
-										<img src="__IMG__lihai.png"/>
-										<span class="score-txt">0</span>
-									</div>
-									</div>
-								</div>
-								{/if}
 
-								{if condition="isset($okami_day_data[1])"}
-								<div class="">
-									<!--头像框?-->
-									<a href="{:url('Index/user' , ['id' => $okami_day_data[1]['uid']])}">
-									<div class="pic-box">
-										<img src="__IMG__crown.gif"/>
-										{if condition="$okami_day_data[1]['head_img'] == ''"}
-										<img class="pic" src="__IMG__default.jpg" />
-										{else /}
-										<!--图片路径不为空的时候，应为用户头像路径-->
-										<img class="pic" src="{$okami_day_data[1]['head_img'].'!syph'}" alt="">
-										{/if}
-									</div>
-									</a>
-									<!--用户名字-->
-									<div class="u-name">
-										{$okami_day_data[1]['nickname']}
-										{switch name="$okami_day_data[1]['level']"}
-										{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
-										{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
-										{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
-										{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
-										{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
-										{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
-										{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
-										{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-										{default /}<img src="__IMG__icon1-0.gif" alt="" />
-										{/switch}
-									<!--用户分数-->
-									<div class="score-box">
-										<img src="__IMG__lihai.png"/>
-										<span class="score-txt">{$okami_day_data[1]['okami_day']}</span>
-									</div>
-									</div>
-								</div>
-								{else /}
-								<div class="">
-									<!--头像框?-->
-									<div class="pic-box">
-										<img src="__IMG__crown.gif"/>
-										<img class="pic" src="__IMG__default.jpg"/>
-									</div>
-									<!--用户名字-->
-									<div class="u-name">
-										等你来呦
-									<!--用户分数-->
-									<div class="score-box">
-										<img src="__IMG__lihai.png"/>
-										<span class="score-txt">0</span>
-									</div>
-									</div>
-								</div>
-								{/if}
 
-								{if condition="isset($okami_day_data[2])"}
-								<div class="">
-									<!--头像框?-->
-									<a href="{:url('Index/user' , ['id' => $okami_day_data[2]['uid']])}">
-									<div class="pic-box">
-										<img src="__IMG__首页-恢复的_18.gif"/>
-										{if condition="$okami_day_data[2]['head_img'] == ''"}
-										<img class="pic" src="__IMG__default.jpg" />
-										{else /}
-										<!--图片路径不为空的时候，应为用户头像路径-->
-										<img class="pic" src="{$okami_day_data[2]['head_img'].'!syph'}" alt="">
-										{/if}
-									</div>
-									</a>
-									<!--用户名字-->
-									<div class="u-name">
-										{$okami_day_data[2]['nickname']}
-										{switch name="$okami_day_data[2]['level']"}
-										{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
-										{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
-										{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
-										{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
-										{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
-										{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
-										{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
-										{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-										{default /}<img src="__IMG__icon1-0.gif" alt="" />
-										{/switch}
-									<!--用户分数-->
-									<div class="score-box">
-										<img src="__IMG__lihai.png"/>
-										<span class="score-txt">{$okami_day_data[2]['okami_day']}</span>
-									</div>
-									</div>
-								</div>
-								{else /}
-								<div class="">
-									<!--头像框?-->
-									<div class="pic-box">
-										<img src="__IMG__首页-恢复的_18.gif"/>
-										<img class="pic" src="__IMG__default.jpg"/>
-									</div>
-									<!--用户名字-->
-									<div class="u-name">
-										等你来呦
-									<!--用户分数-->
-									<div class="score-box">
-										<img src="__IMG__lihai.png"/>
-										<span class="score-txt">0</span>
-									</div>
-									</div>
-								</div>
-								{/if}
 
-							</div>
-							<!-- 后N名 -->
-							<ul class="rank-last">
-								<!-- 一条 -->
-								{foreach name="okami_day_data" item="v" key="k"}
-									{if condition="$k>2"}
+
+								<!-- 后N名 -->
+								<ul class="rank-last">
+									<!-- 一条 -->
+									{foreach name="hot_day_data" item="v" key="k"}
+										{if condition="$k>2"}
 										<a href="{:url('Index/user' , ['id' => $v['uid']])}">
 										<li>
 											<!-- 排名 -->
 											<span>{$k+1}</span>
 											<!-- 用户头像 -->
-											{if condition="$v.head_img == ''"}
-											<img class="pic" src="__IMG__default.jpg" />
-											{else /}
-											<!--图片路径不为空的时候，应为用户头像路径-->
-											<img class="pic" src="{$v.head_img.'!syph'}" alt="">
+
+											{if condition="$v.head_img==''"}
+											<img src="__IMG__default.jpg" alt="">
+											{else  /}
+											<img src="{$v.head_img.'!syph'}" alt="">
 											{/if}
+
 											<!-- 用户信息 -->
 											<div class="user-info">
 												<div class="u-name">{$v.nickname}</div>
@@ -862,215 +410,288 @@
 											</div>
 											<!-- 得分数值 -->
 											<div class="score-box">
-												大神指数: <span>{$v.okami_day}</span>
+												魅力: <span>{$v.hot_day}</span>
 											</div>
 										</li>
 										</a>
-									{/if}
-								{/foreach}
-								<!-- end -->
-
-								<!-- =============== -->
-
-							</ul>
-						</div>
-						
-						<div data-item="2" style="display:none">
-							<div class="top-three">
-							{if condition="isset($okami_data[0])"}
-								<div class="the-first">
-									<!--头像框?-->
-									<a href="{:url('Index/user' , ['id' => $okami_data[0]['uid']])}">
-									<div class="pic-box">
-										<img src="__IMG__crown_01.gif"/>
-										{if condition="$okami_data[0]['head_img'] == ''"}
-										<img class="pic" src="__IMG__default.jpg" />
-										{else /}
-										<!--图片路径不为空的时候，应为用户头像路径-->
-										<img class="pic" src="{$okami_data[0]['head_img'].'!syph'}" alt="">
 										{/if}
-									</div>
-									</a>
-									<!--用户名字-->
-									<div class="u-name">
-										{$okami_data[0]['nickname']}
-										{switch name="$okami_data[0]['level']"}
-										{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
-										{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
-										{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
-										{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
-										{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
-										{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
-										{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
-										{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-										{default /}<img src="__IMG__icon1-0.gif" alt="" />
-										{/switch}
-									<!--用户分数-->
-									<div class="score-box">
-
-										<img src="__IMG__lihai.png"/>
-
-
-										<span class="score-txt">{$okami_data[0]['okami']}</span>
-
-									</div>
-									</div>
-								</div>
-
-							{else /}
-								<div class="">
-									<!--头像框?-->
-									<div class="pic-box">
-										<img src="__IMG__crown.gif"/>
-										<img class="pic" src="__IMG__default.jpg"/>
-									</div>
-									<!--用户名字-->
-									<div class="u-name">
-										等你来呦
-									<!--用户分数-->
-									<div class="score-box">
-										<img src="__IMG__lihai.png"/>
-										<span class="score-txt">0</span>
-									</div>
-									</div>
-								</div>
-
-							{/if}
-
-							{if condition="isset($okami_data[1])"}
-								<div class="">
-									<!--头像框?-->
-									<a href="{:url('Index/user' , ['id' => $okami_data[1]['uid']])}">
-									<div class="pic-box">
-										<img src="__IMG__crown.gif"/>
-										{if condition="$okami_data[1]['head_img'] == ''"}
-										<img class="pic" src="__IMG__default.jpg" />
-										{else /}
-										<!--图片路径不为空的时候，应为用户头像路径-->
-										<img class="pic" src="{$okami_data[1]['head_img'].'!syph'}" alt="">
-										{/if}
-									</div>
-									</a>
-									<!--用户名字-->
-									<div class="u-name">
-										{$okami_data[1]['nickname']}
-										{switch name="$okami_data[1]['level']"}
-										{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
-										{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
-										{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
-										{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
-										{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
-										{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
-										{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
-										{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-										{default /}<img src="__IMG__icon1-0.gif" alt="" />
-										{/switch}
-									<!--用户分数-->
-									<div class="score-box">
-										<img src="__IMG__lihai.png"/>
-										<span class="score-txt">{$okami_data[1]['okami']}</span>
-									</div>
-									</div>
-								</div>
-
-							{else /}
-								<div class="">
-									<!--头像框?-->
-									<div class="pic-box">
-										<img src="__IMG__crown.gif"/>
-										<img class="pic" src="__IMG__default.jpg"/>
-									</div>
-									<!--用户名字-->
-									<div class="u-name">
-										等你来呦
-									<!--用户分数-->
-									<div class="score-box">
-										<img src="__IMG__lihai.png"/>
-										<span class="score-txt">0</span>
-									</div>
-									</div>
-								</div>
-							{/if}
-
-							{if condition="isset($okami_data[2])"}
-								<div class="">
-									<!--头像框?-->
-									<a href="{:url('Index/user' , ['id' => $okami_data[2]['uid']])}">
-									<div class="pic-box">
-										<img src="__IMG__首页-恢复的_18.gif"/>
-										{if condition="$okami_data[2]['head_img'] == ''"}
-										<img class="pic" src="__IMG__default.jpg" />
-										{else /}
-										<!--图片路径不为空的时候，应为用户头像路径-->
-										<img class="pic" src="{$okami_data[2]['head_img'].'!syph'}" alt="">
-										{/if}
-									</div>
-									</a>
-									<!--用户名字-->
-									<div class="u-name">
-										{$okami_data[2]['nickname']}
-										{switch name="$okami_data[2]['level']"}
-										{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
-										{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
-										{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
-										{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
-										{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
-										{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
-										{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
-										{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-										{default /}<img src="__IMG__icon1-0.gif" alt="" />
-										{/switch}
-									<!--用户分数-->
-									<div class="score-box">
-										<img src="__IMG__lihai.png"/>
-										<span class="score-txt">{$okami_data[2]['okami']}</span>
-									</div>
-									</div>
-								</div>
-							{else /}
-								<div class="">
-									<!--头像框?-->
-									<div class="pic-box">
-										<img src="__IMG__首页-恢复的_18.gif"/>
-										<img class="pic" src="__IMG__default.jpg"/>
-									</div>
-									<!--用户名字-->
-									<div class="u-name">
-										等你来呦
-									<!--用户分数-->
-									<div class="score-box">
-										<img src="__IMG__lihai.png"/>
-										<span class="score-txt">0</span>
-									</div>
-									</div>
-								</div>
-								{/if}
+									{/foreach}
+									<!-- end -->
+								</ul>
 							</div>
 
+							<div data-item="1_2" style="display:none">
+								<div class="top-three layui-fluid">
+									<div class="layui-row">
+										{if condition="isset($hot_data[0])"}
+											<div class="the-first layui-col-xs12">
+											<!--头像框?-->
+											<a href="{:url('Index/user' , ['id' => $hot_data[0]['uid']])}">
+											<div class="pic-box">
+												<img src="__IMG__crown_01.gif" style="width:100%" />
+												{if condition="$hot_data[0]['head_img'] == ''"}
+													<img class="pic" src="__IMG__default.jpg" />
+												{else /}
+													<img class="pic" src="{$hot_data[0]['head_img'].'!syph'}" alt="">
+												{/if}
+											</div>
+											</a>
+											<!--用户名字-->
+											<div class="u-name">
+												{$hot_data[0]['nickname']}
+													{switch name="$hot_data[0]['level']"}
+													{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+													{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+													{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+													{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+													{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+													{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+													{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+													{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+													{default /}<img src="__IMG__icon1-0.gif" alt="" />
+													{/switch}
+												<!--用户分数-->
+												<div class="score-box">
+													<img src="__IMG__renqi.png"/>
 
 
+													<span class="score-txt">{$hot_data[0]['hot']}</span>
+												</div>
+											</div>
+										</div>
 
-							<!-- 后N名 -->
-							<ul class="rank-last">
-								<!-- 一条 -->
-								{foreach name="okami_data" item="v" key="k"}
-									{if condition="$k>2"}
-									<a href="{:url('Index/user' , ['id' => $v['uid']])}">
-									<li>
-										<!-- 排名 -->
-										<span>{$k+1}</span>
-										<!-- 用户头像 -->
-										{if condition="$v.head_img==''"}
-										<img src="__IMG__default.jpg" alt="">
-										{else  /}
-										<img src="{$v.head_img.'!syph'}" alt="">
+										{else /}
+											<div class="the-first layui-col-xs12">
+												<!--头像框?-->
+												<div class="pic-box">
+													<img src="__IMG__crown.gif"/>
+													<img class="pic" src="__IMG__default.jpg"/>
+												</div>
+												<!--用户名字-->
+												<div class="u-name">
+													等你来呦
+												<!--用户分数-->
+												<div class="score-box">
+													<img src="__IMG__renqi.png"/>
+													<span class="score-txt">0</span>
+												</div>
+												</div>
+											</div>
+
 										{/if}
 
-										<!-- 用户信息 -->
-										<div class="user-info">
-											<div class="u-name">{$v.nickname}</div>
-											
-											{switch name="$v.level"}
+										{if condition="isset($hot_data[1])"}
+											<div class="layui-col-xs6">
+												<!--头像框?-->
+												<a href="{:url('Index/user' , ['id' => $hot_data[1]['uid']])}">
+												<div class="pic-box">
+													<img src="__IMG__crown.gif"/>
+													{if condition="$hot_data[1]['head_img'] == ''"}
+													<img class="pic" src="__IMG__default.jpg" />
+													{else /}
+													<!--图片路径不为空的时候，应为用户头像路径-->
+													<img class="pic" src="{$hot_data[1]['head_img'].'!syph'}" alt="">
+													{/if}
+												</div>
+												</a>
+												<!--用户名字-->
+												<div class="u-name">
+													{$hot_data[1]['nickname']}
+													{switch name="$hot_data[1]['level']"}
+													{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+													{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+													{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+													{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+													{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+													{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+													{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+													{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+													{default /}<img src="__IMG__icon1-0.gif" alt="" />
+													{/switch}
+												<!--用户分数-->
+												<div class="score-box">
+													<img src="__IMG__renqi.png"/>
+													<span class="score-txt">{$hot_data[1]['hot']}</span>
+												</div>
+												</div>
+											</div>
+
+										{else /}
+											<div class="layui-col-xs6">
+												<!--头像框?-->
+												<div class="pic-box">
+													<img src="__IMG__crown.gif"/>
+													<img class="pic" src="__IMG__default.jpg"/>
+												</div>
+												<!--用户名字-->
+												<div class="u-name">
+													等你来呦
+												<!--用户分数-->
+												<div class="score-box">
+													<img src="__IMG__renqi.png"/>
+													<span class="score-txt">0</span>
+												</div>
+												</div>
+											</div>
+										{/if}
+
+										{if condition="isset($hot_data[2])"}
+											<div class="layui-col-xs6">
+												<!--头像框?-->
+												<a href="{:url('Index/user' , ['id' => $hot_data[2]['uid']])}">
+												<div class="pic-box">
+													<img src="__IMG__首页-恢复的_18.gif"/>
+													{if condition="$hot_data[2]['head_img'] == ''"}
+													<img class="pic" src="__IMG__default.jpg" />
+													{else /}
+													<!--图片路径不为空的时候，应为用户头像路径-->
+													<img class="pic" src="{$hot_data[2]['head_img'].'!syph'}" alt="">
+													{/if}
+												</div>
+												</a>
+												<!--用户名字-->
+												<div class="u-name">
+													{$hot_data[2]['nickname']}
+													{switch name="$hot_data[2]['level']"}
+													{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+													{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+													{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+													{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+													{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+													{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+													{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+													{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+													{default /}<img src="__IMG__icon1-0.gif" alt="" />
+													{/switch}
+												<!--用户分数-->
+												<div class="score-box">
+													<img src="__IMG__renqi.png"/>
+													<span class="score-txt">{$hot_data[2]['hot']}</span>
+												</div>
+												</div>
+											</div>
+										{else /}
+											<div class="layui-col-xs6">
+												<!--头像框?-->
+												<div class="pic-box">
+													<img src="__IMG__首页-恢复的_18.gif" />
+													<img class="pic" src="__IMG__default.jpg"/>
+												</div>
+												<!--用户名字-->
+												<div class="u-name">
+													等你来呦
+												<!--用户分数-->
+												<div class="score-box">
+													<img src="__IMG__renqi.png"/>
+													<span class="score-txt">0</span>
+												</div>
+												</div>
+											</div>
+										{/if}
+									</div>
+								</div>
+
+
+
+
+								<!-- 后N名 -->
+								<ul class="rank-last">
+									<!-- 一条 -->
+									{foreach name="hot_data" item="v" key="k"}
+										{if condition="$k>2"}
+										<a href="{:url('Index/user' , ['id' => $v['uid']])}">
+										<li>
+											<!-- 排名 -->
+											<span>{$k+1}</span>
+											<!-- 用户头像 -->
+											{if condition="$v.head_img==''"}
+											<img src="__IMG__default.jpg" alt="">
+											{else  /}
+											<img src="{$v.head_img.'!syph'}" alt="">
+											{/if}
+
+											<!-- 用户信息 -->
+											<div class="user-info">
+												<div class="u-name">{$v.nickname}</div>
+												
+												{switch name="$v.level"}
+												{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+												{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+												{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+												{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+												{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+												{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+												{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+												{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+												{default /}<img src="__IMG__icon1-0.gif" alt="" />
+												{/switch}
+											</div>
+											<!-- 得分数值 -->
+											<div class="score-box">
+												魅力: <span>{$v.hot}</span>
+											</div>
+										</li>
+										</a>
+										{/if}
+									{/foreach}
+									<!-- end -->
+								</ul>
+							</div>
+						</div>
+					</div>
+
+
+
+
+					<!--一个榜-->
+					<div class="miva-rank-items">
+						<!--排行榜标题-->
+						<div class="miva-rank-title">
+							<img src="__IMG__首页-恢复的_05.gif" />
+							<div class="miva-rank-txt"><img src="__IMG__太阳.gif" /><span>大神榜</span></div>
+							<!--tab-->
+							<div class="tab-rank"><span class="active" data-total='2_1' data-rank="1">周榜</span><span data-total='2_2' data-rank="2">总榜</span></div>
+						</div>
+
+						<!--
+						<div class="miva-rank-title">
+							<img src="__IMG__首页-恢复的_05.gif"/>
+							<div class="miva-rank-txt">
+								<img src="__IMG__太阳.gif"/>
+								<span>大神榜</span>
+							</div>
+
+							
+							<div data-box=2 class="tab-rank">
+								<span class="active" data-rank="1">日榜</span>
+								<span  data-rank="2">总榜</span>
+							</div>
+						</div>
+-->
+						
+						<div data-num=2 >
+							<!--前三名-->
+							<div data-item="2_1" class="tow">
+								<div class="top-three layui-fluid">
+									<div class="layui-row">
+									{if condition="isset($okami_day_data[0])"}
+									<div class="the-first layui-col-xs12">
+										<!--头像框?-->
+										<a href="{:url('Index/user' , ['id' => $okami_day_data[0]['uid']])}">
+										<div class="pic-box">
+											<img src="__IMG__crown_01.gif" style="width:100%" />
+											{if condition="$okami_day_data[0]['head_img'] == ''"}
+											<img class="pic" src="__IMG__default.jpg" />
+											{else /}
+											<!--图片路径不为空的时候，应为用户头像路径-->
+											<img class="pic" src="{$okami_day_data[0]['head_img'].'!syph'}" alt="">
+											{/if}
+										</div>
+										</a>
+										<!--用户名字-->
+										<div class="u-name">
+											{$okami_day_data[0]['nickname']}
+											{switch name="$okami_day_data[0]['level']"}
 											{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
 											{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
 											{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
@@ -1081,18 +702,409 @@
 											{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
 											{default /}<img src="__IMG__icon1-0.gif" alt="" />
 											{/switch}
-										</div>
-										<!-- 得分数值 -->
+										<!--用户分数-->
 										<div class="score-box">
-											大神指数: <span>{$v.okami}</span>
+											<img src="__IMG__lihai.png"/>
+											<span class="score-txt">{$okami_day_data[0]['okami_day']}</span>
 										</div>
-									</li>
-									</a>
+										</div>
+									</div>
+									{else /}
+									<div class="the-first layui-col-xs12">
+										<!--头像框?-->
+										<div class="pic-box">
+											<img src="__IMG__crown_01.gif"  style="width:100%" />
+											<img class="pic" src="__IMG__default.jpg"/>
+										</div>
+										<!--用户名字-->
+										<div class="u-name">
+											等你来呦
+										<!--用户分数-->
+										<div class="score-box">
+											<img src="__IMG__lihai.png"/>
+											<span class="score-txt">0</span>
+										</div>
+										</div>
+									</div>
 									{/if}
-								{/foreach}
-								<!-- end -->
-							</ul>
-						</div>
+
+									{if condition="isset($okami_day_data[1])"}
+									<div class="layui-col-xs6">
+										<!--头像框?-->
+										<a href="{:url('Index/user' , ['id' => $okami_day_data[1]['uid']])}">
+										<div class="pic-box">
+											<img src="__IMG__crown.gif"/>
+											{if condition="$okami_day_data[1]['head_img'] == ''"}
+											<img class="pic" src="__IMG__default.jpg" />
+											{else /}
+											<!--图片路径不为空的时候，应为用户头像路径-->
+											<img class="pic" src="{$okami_day_data[1]['head_img'].'!syph'}" alt="">
+											{/if}
+										</div>
+										</a>
+										<!--用户名字-->
+										<div class="u-name">
+											{$okami_day_data[1]['nickname']}
+											{switch name="$okami_day_data[1]['level']"}
+											{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+											{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+											{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+											{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+											{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+											{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+											{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+											{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+											{default /}<img src="__IMG__icon1-0.gif" alt="" />
+											{/switch}
+										<!--用户分数-->
+										<div class="score-box">
+											<img src="__IMG__lihai.png"/>
+											<span class="score-txt">{$okami_day_data[1]['okami_day']}</span>
+										</div>
+										</div>
+									</div>
+									{else /}
+									<div class="layui-col-xs6">
+										<!--头像框?-->
+										<div class="pic-box">
+											<img src="__IMG__crown.gif"/>
+											<img class="pic" src="__IMG__default.jpg"/>
+										</div>
+										<!--用户名字-->
+										<div class="u-name">
+											等你来呦
+										<!--用户分数-->
+										<div class="score-box">
+											<img src="__IMG__lihai.png"/>
+											<span class="score-txt">0</span>
+										</div>
+										</div>
+									</div>
+									{/if}
+
+									{if condition="isset($okami_day_data[2])"}
+									<div class="layui-col-xs6">
+										<!--头像框?-->
+										<a href="{:url('Index/user' , ['id' => $okami_day_data[2]['uid']])}">
+										<div class="pic-box">
+											<img src="__IMG__首页-恢复的_18.gif"/>
+											{if condition="$okami_day_data[2]['head_img'] == ''"}
+											<img class="pic" src="__IMG__default.jpg" />
+											{else /}
+											<!--图片路径不为空的时候，应为用户头像路径-->
+											<img class="pic" src="{$okami_day_data[2]['head_img'].'!syph'}" alt="">
+											{/if}
+										</div>
+										</a>
+										<!--用户名字-->
+										<div class="u-name">
+											{$okami_day_data[2]['nickname']}
+											{switch name="$okami_day_data[2]['level']"}
+											{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+											{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+											{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+											{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+											{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+											{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+											{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+											{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+											{default /}<img src="__IMG__icon1-0.gif" alt="" />
+											{/switch}
+										<!--用户分数-->
+										<div class="score-box">
+											<img src="__IMG__lihai.png"/>
+											<span class="score-txt">{$okami_day_data[2]['okami_day']}</span>
+										</div>
+										</div>
+									</div>
+									{else /}
+									<div class="layui-col-xs6">
+										<!--头像框?-->
+										<div class="pic-box">
+											<img src="__IMG__首页-恢复的_18.gif"/>
+											<img class="pic" src="__IMG__default.jpg"/>
+										</div>
+										<!--用户名字-->
+										<div class="u-name">
+											等你来呦
+										<!--用户分数-->
+										<div class="score-box">
+											<img src="__IMG__lihai.png"/>
+											<span class="score-txt">0</span>
+										</div>
+										</div>
+									</div>
+									{/if}
+									</div>
+								</div>
+								<!-- 后N名 -->
+								<ul class="rank-last">
+									<!-- 一条 -->
+									{foreach name="okami_day_data" item="v" key="k"}
+										{if condition="$k>2"}
+											<a href="{:url('Index/user' , ['id' => $v['uid']])}">
+											<li>
+												<!-- 排名 -->
+												<span>{$k+1}</span>
+												<!-- 用户头像 -->
+												{if condition="$v.head_img == ''"}
+												<img class="pic" src="__IMG__default.jpg" />
+												{else /}
+												<!--图片路径不为空的时候，应为用户头像路径-->
+												<img class="pic" src="{$v.head_img.'!syph'}" alt="">
+												{/if}
+												<!-- 用户信息 -->
+												<div class="user-info">
+													<div class="u-name">{$v.nickname}</div>
+													
+													{switch name="$v.level"}
+													{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+													{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+													{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+													{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+													{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+													{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+													{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+													{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+													{default /}<img src="__IMG__icon1-0.gif" alt="" />
+													{/switch}
+												</div>
+												<!-- 得分数值 -->
+												<div class="score-box">
+													大神指数: <span>{$v.okami_day}</span>
+												</div>
+											</li>
+											</a>
+										{/if}
+									{/foreach}
+									<!-- end -->
+
+									<!-- =============== -->
+
+								</ul>
+							</div>
+							
+							<div data-item="2_2" style="display:none">
+								<div class="top-three layui-fluid">
+									<div class="layui-row">
+									{if condition="isset($okami_data[0])"}
+										<div class="the-first layui-col-xs12">
+											<!--头像框?-->
+											<a href="{:url('Index/user' , ['id' => $okami_data[0]['uid']])}">
+											<div class="pic-box">
+												<img src="__IMG__crown_01.gif" style="width:100%"/>
+												{if condition="$okami_data[0]['head_img'] == ''"}
+												<img class="pic" src="__IMG__default.jpg" />
+												{else /}
+												<!--图片路径不为空的时候，应为用户头像路径-->
+												<img class="pic" src="{$okami_data[0]['head_img'].'!syph'}" alt="">
+												{/if}
+											</div>
+											</a>
+											<!--用户名字-->
+											<div class="u-name">
+												{$okami_data[0]['nickname']}
+												{switch name="$okami_data[0]['level']"}
+												{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+												{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+												{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+												{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+												{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+												{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+												{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+												{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+												{default /}<img src="__IMG__icon1-0.gif" alt="" />
+												{/switch}
+											<!--用户分数-->
+											<div class="score-box">
+
+												<img src="__IMG__lihai.png"/>
+
+
+												<span class="score-txt">{$okami_data[0]['okami']}</span>
+
+											</div>
+											</div>
+										</div>
+
+									{else /}
+										<div class="layui-col-xs12">
+											<!--头像框?-->
+											<div class="pic-box">
+												<img src="__IMG__crown.gif" style="width:100%" />
+												<img class="pic" src="__IMG__default.jpg"/>
+											</div>
+											<!--用户名字-->
+											<div class="u-name">
+												等你来呦
+											<!--用户分数-->
+											<div class="score-box">
+												<img src="__IMG__lihai.png"/>
+												<span class="score-txt">0</span>
+											</div>
+											</div>
+										</div>
+
+									{/if}
+
+									{if condition="isset($okami_data[1])"}
+										<div class="layui-col-xs6">
+											<!--头像框?-->
+											<a href="{:url('Index/user' , ['id' => $okami_data[1]['uid']])}">
+											<div class="pic-box">
+												<img src="__IMG__crown.gif"/>
+												{if condition="$okami_data[1]['head_img'] == ''"}
+												<img class="pic" src="__IMG__default.jpg" />
+												{else /}
+												<!--图片路径不为空的时候，应为用户头像路径-->
+												<img class="pic" src="{$okami_data[1]['head_img'].'!syph'}" alt="">
+												{/if}
+											</div>
+											</a>
+											<!--用户名字-->
+											<div class="u-name">
+												{$okami_data[1]['nickname']}
+												{switch name="$okami_data[1]['level']"}
+												{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+												{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+												{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+												{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+												{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+												{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+												{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+												{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+												{default /}<img src="__IMG__icon1-0.gif" alt="" />
+												{/switch}
+											<!--用户分数-->
+											<div class="score-box">
+												<img src="__IMG__lihai.png"/>
+												<span class="score-txt">{$okami_data[1]['okami']}</span>
+											</div>
+											</div>
+										</div>
+
+									{else /}
+										<div class="layui-col-xs6">
+											<!--头像框?-->
+											<div class="pic-box">
+												<img src="__IMG__crown.gif"/>
+												<img class="pic" src="__IMG__default.jpg"/>
+											</div>
+											<!--用户名字-->
+											<div class="u-name">
+												等你来呦
+											<!--用户分数-->
+											<div class="score-box">
+												<img src="__IMG__lihai.png"/>
+												<span class="score-txt">0</span>
+											</div>
+											</div>
+										</div>
+									{/if}
+
+									{if condition="isset($okami_data[2])"}
+										<div class="layui-col-xs6">
+											<!--头像框?-->
+											<a href="{:url('Index/user' , ['id' => $okami_data[2]['uid']])}">
+											<div class="pic-box">
+												<img src="__IMG__首页-恢复的_18.gif"/>
+												{if condition="$okami_data[2]['head_img'] == ''"}
+												<img class="pic" src="__IMG__default.jpg" />
+												{else /}
+												<!--图片路径不为空的时候，应为用户头像路径-->
+												<img class="pic" src="{$okami_data[2]['head_img'].'!syph'}" alt="">
+												{/if}
+											</div>
+											</a>
+											<!--用户名字-->
+											<div class="u-name">
+												{$okami_data[2]['nickname']}
+												{switch name="$okami_data[2]['level']"}
+												{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+												{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+												{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+												{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+												{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+												{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+												{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+												{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+												{default /}<img src="__IMG__icon1-0.gif" alt="" />
+												{/switch}
+											<!--用户分数-->
+											<div class="score-box">
+												<img src="__IMG__lihai.png"/>
+												<span class="score-txt">{$okami_data[2]['okami']}</span>
+											</div>
+											</div>
+										</div>
+									{else /}
+										<div class="layui-col-xs6">
+											<!--头像框?-->
+											<div class="pic-box">
+												<img src="__IMG__首页-恢复的_18.gif"/>
+												<img class="pic" src="__IMG__default.jpg"/>
+											</div>
+											<!--用户名字-->
+											<div class="u-name">
+												等你来呦
+											<!--用户分数-->
+											<div class="score-box">
+												<img src="__IMG__lihai.png"/>
+												<span class="score-txt">0</span>
+											</div>
+											</div>
+										</div>
+									{/if}
+									</div>
+								</div>
+
+
+
+
+								<!-- 后N名 -->
+								<ul class="rank-last">
+									<!-- 一条 -->
+									{foreach name="okami_data" item="v" key="k"}
+										{if condition="$k>2"}
+										<a href="{:url('Index/user' , ['id' => $v['uid']])}">
+										<li>
+											<!-- 排名 -->
+											<span>{$k+1}</span>
+											<!-- 用户头像 -->
+											{if condition="$v.head_img==''"}
+											<img src="__IMG__default.jpg" alt="">
+											{else  /}
+											<img src="{$v.head_img.'!syph'}" alt="">
+											{/if}
+
+											<!-- 用户信息 -->
+											<div class="user-info">
+												<div class="u-name">{$v.nickname}</div>
+												
+												{switch name="$v.level"}
+												{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+												{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+												{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+												{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+												{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+												{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+												{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+												{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+												{default /}<img src="__IMG__icon1-0.gif" alt="" />
+												{/switch}
+											</div>
+											<!-- 得分数值 -->
+											<div class="score-box">
+												大神指数: <span>{$v.okami}</span>
+											</div>
+										</li>
+										</a>
+										{/if}
+									{/foreach}
+									<!-- end -->
+								</ul>
+							</div>
+
 						</div>
 
 					</div>
@@ -1100,177 +1112,173 @@
 					<div class="miva-rank-items">
 						<!--排行榜标题-->
 						<div class="miva-rank-title">
-							<img src="__IMG__title.gif"/>
-							<div class="miva-rank-txt">
-								<img src="__IMG__yuanbao.gif"/>
-								<span>贡献榜</span>
-							</div>
-
+							<img src="__IMG__title.gif" />
+							<div class="miva-rank-txt"><img src="__IMG__yuanbao.gif" /><span>贡献榜</span></div>
 							<!--tab-->
-							<div data-box="3" class="tab-rank">
-								<span class="active" data-rank="1" >日榜</span>
-								<span  data-rank="2">总榜</span>
-							</div>
+							<div class="tab-rank"><span class="active" data-total='3_1' data-rank="1">周榜</span><span data-total='3_2' data-rank="2">总榜</span></div>
+						</div>
 
-							<div data-num="3" class="miva-act">
-								<!--前三名-->
-							<div data-item="1" class="three">
-								<div class="top-three">
-									{if condition="isset($mogul_day_data[0])"}
-									<div class="the-first">
-										<!--头像框?-->
-										<div class="pic-box">
-											<img src="__IMG__crown_01.gif"/>
-											{if condition="$mogul_day_data[0]['head_img'] == ''"}
-											<img class="pic" src="__IMG__default.jpg" />
-											{else /}
-											<!--图片路径不为空的时候，应为用户头像路径-->
-											<img class="pic" src="{$mogul_day_data[0]['head_img'].'!syph'}" alt="">
-											{/if}
-										</div>
-										<!--用户名字-->
-										<div class="u-name">
-											{$mogul_day_data[0]['nickname']}
-											{switch name="$mogul_day_data[0]['level']"}
-											{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
-											{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
-											{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
-											{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
-											{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
-											{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
-											{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
-											{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-										
-											{/switch}
-										<!--用户分数-->
-											<div class="score-box">
-												<img src="__IMG__qian.png"/>
-												<span class="score-txt">{$mogul_day_data[0]['mogul_day']}</span>
+						<div data-num="3" class="miva-act">
+							<!--前三名-->
+							<div data-item="3_1" class="three">
+								<div class="top-three layui-fluid">
+									<div class="layui-row">
+										{if condition="isset($mogul_day_data[0])"}
+										<div class="the-first layui-col-xs12">
+											<!--头像框?-->
+											<div class="pic-box">
+												<img src="__IMG__crown_01.gif" style="width:100%" />
+												{if condition="$mogul_day_data[0]['head_img'] == ''"}
+												<img class="pic" src="__IMG__default.jpg"/>
+												{else /}
+												<!--图片路径不为空的时候，应为用户头像路径-->
+												<img class="pic" src="{$mogul_day_data[0]['head_img'].'!syph'}" alt="">
+												{/if}
+											</div>
+											<!--用户名字-->
+											<div class="u-name">
+												{$mogul_day_data[0]['nickname']}
+												{switch name="$mogul_day_data[0]['level']"}
+												{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+												{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+												{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+												{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+												{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+												{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+												{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+												{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+											
+												{/switch}
+											<!--用户分数-->
+												<div class="score-box">
+													<img src="__IMG__qian.png"/>
+													<span class="score-txt">{$mogul_day_data[0]['mogul_day']}</span>
+												</div>
 											</div>
 										</div>
-									</div>
-									{else /}
-									<div class="the-first">
-										<!--头像框?-->
-										<div class="pic-box">
-											<img src="__IMG__crown_01.gif"/>
-											<img class="pic" src="__IMG__default.jpg"/>
-										</div>
-										<!--用户名字-->
-										<div class="u-name">
-											等你来呦
-										<!--用户分数-->
-										<div class="score-box">
-											<img src="__IMG__qian.png"/>
-											<span class="score-txt">0</span>
-										</div>
-										</div>
-									</div>
-									{/if}
-
-									{if condition="isset($mogul_day_data[1])"}
-									<div class="">
-										<!--头像框?-->
-										<div class="pic-box">
-											<img src="__IMG__crown.gif"/>
-											{if condition="$mogul_day_data[1]['head_img'] == ''"}
-											<img class="pic" src="__IMG__default.jpg" />
-											{else /}
-											<!--图片路径不为空的时候，应为用户头像路径-->
-											<img class="pic" src="{$mogul_day_data[1]['head_img'].'!syph'}" alt="">
-											{/if}
-										</div>
-										<!--用户名字-->
-										<div class="u-name">
-											{$mogul_day_data[1]['nickname']}
-											{switch name="$mogul_day_data[1]['level']"}
-											{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
-											{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
-											{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
-											{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
-											{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
-											{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
-											{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
-											{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-											{default /}<!--<img src="__IMG__火.png" alt="" />	-->
-											{/switch}
-										<!--用户分数-->
+										{else /}
+										<div class="the-first layui-col-xs12">
+											<!--头像框?-->
+											<div class="pic-box">
+												<img src="__IMG__crown_01.gif" style="width:100%" />
+												<img class="pic" src="__IMG__default.jpg"/>
+											</div>
+											<!--用户名字-->
+											<div class="u-name">
+												等你来呦
+											<!--用户分数-->
 											<div class="score-box">
 												<img src="__IMG__qian.png"/>
-												<span class="score-txt">{$mogul_day_data[1]['mogul_day']}</span>
+												<span class="score-txt">0</span>
+											</div>
 											</div>
 										</div>
-									</div>
-									{else /}
-									<div class="">
-										<!--头像框?-->
-										<div class="pic-box">
-											<img src="__IMG__crown.gif"/>
-											<img class="pic" src="__IMG__default.jpg"/>
-										</div>
-										<!--用户名字-->
-										<div class="u-name">
-											等你来呦
-										<!--用户分数-->
-										<div class="score-box">
-											<img src="__IMG__qian.png"/>
-											<span class="score-txt">0</span>
-										</div>
-										</div>
-									</div>
-									{/if}
+										{/if}
 
-									{if condition="isset($mogul_day_data[2])"}
-									<div class="">
-										<!--头像框?-->
-										<div class="pic-box">
-											<img src="__IMG__首页-恢复的_18.gif"/>
-											{if condition="$mogul_day_data[2]['head_img'] == ''"}
-											<img class="pic" src="__IMG__default.jpg" />
-											{else /}
-											<!--图片路径不为空的时候，应为用户头像路径-->
-											<img class="pic" src="{$mogul_day_data[2]['head_img'].'!syph'}" alt="">
-											{/if}
+										{if condition="isset($mogul_day_data[1])"}
+										<div class="layui-col-xs6">
+											<!--头像框?-->
+											<div class="pic-box">
+												<img src="__IMG__crown.gif"/>
+												{if condition="$mogul_day_data[1]['head_img'] == ''"}
+												<img class="pic" src="__IMG__default.jpg" />
+												{else /}
+												<!--图片路径不为空的时候，应为用户头像路径-->
+												<img class="pic" src="{$mogul_day_data[1]['head_img'].'!syph'}" alt="">
+												{/if}
+											</div>
+											<!--用户名字-->
+											<div class="u-name">
+												{$mogul_day_data[1]['nickname']}
+												{switch name="$mogul_day_data[1]['level']"}
+												{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+												{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+												{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+												{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+												{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+												{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+												{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+												{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+												{default /}<!--<img src="__IMG__火.png" alt="" />	-->
+												{/switch}
+											<!--用户分数-->
+												<div class="score-box">
+													<img src="__IMG__qian.png"/>
+													<span class="score-txt">{$mogul_day_data[1]['mogul_day']}</span>
+												</div>
+											</div>
 										</div>
-										<!--用户名字-->
-										<div class="u-name">
-											{$mogul_day_data[2]['nickname']}
-											{switch name="$mogul_day_data[2]['level']"}
-											{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
-											{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
-											{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
-											{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
-											{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
-											{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
-											{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
-											{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-											{default /}<!--<img src="__IMG__火.png" alt="" />	-->
-											{/switch}
-										<!--用户分数-->
-										<div class="score-box">
-											<img src="__IMG__qian.png"/>
-											<span class="score-txt">{$mogul_day_data[2]['mogul_day']}</span>
+										{else /}
+										<div class="layui-col-xs6">
+											<!--头像框?-->
+											<div class="pic-box">
+												<img src="__IMG__crown.gif"/>
+												<img class="pic" src="__IMG__default.jpg"/>
+											</div>
+											<!--用户名字-->
+											<div class="u-name">
+												等你来呦
+											<!--用户分数-->
+											<div class="score-box">
+												<img src="__IMG__qian.png"/>
+												<span class="score-txt">0</span>
+											</div>
+											</div>
 										</div>
+										{/if}
+
+										{if condition="isset($mogul_day_data[2])"}
+										<div class="layui-col-xs6">
+											<!--头像框?-->
+											<div class="pic-box">
+												<img src="__IMG__首页-恢复的_18.gif"/>
+												{if condition="$mogul_day_data[2]['head_img'] == ''"}
+												<img class="pic" src="__IMG__default.jpg" />
+												{else /}
+												<!--图片路径不为空的时候，应为用户头像路径-->
+												<img class="pic" src="{$mogul_day_data[2]['head_img'].'!syph'}" alt="">
+												{/if}
+											</div>
+											<!--用户名字-->
+											<div class="u-name">
+												{$mogul_day_data[2]['nickname']}
+												{switch name="$mogul_day_data[2]['level']"}
+												{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+												{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+												{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+												{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+												{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+												{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+												{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+												{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+												{default /}<!--<img src="__IMG__火.png" alt="" />	-->
+												{/switch}
+											<!--用户分数-->
+											<div class="score-box">
+												<img src="__IMG__qian.png"/>
+												<span class="score-txt">{$mogul_day_data[2]['mogul_day']}</span>
+											</div>
+											</div>
 										</div>
+										{else /}
+										<div class="layui-col-xs6">
+											<!--头像框?-->
+											<div class="pic-box">
+												<img src="__IMG__首页-恢复的_18.gif"/>
+												<img class="pic" src="__IMG__default.jpg"/>
+											</div>
+											<!--用户名字-->
+											<div class="u-name">
+												等你来哟
+											<!--用户分数-->
+											<div class="score-box">
+												<img src="__IMG__qian.png"/>
+												<span class="score-txt">0</span>
+											</div>
+											</div>
+										</div>
+										{/if}
 									</div>
-									{else /}
-									<div class="">
-										<!--头像框?-->
-										<div class="pic-box">
-											<img src="__IMG__首页-恢复的_18.gif"/>
-											<img class="pic" src="__IMG__default.jpg"/>
-										</div>
-										<!--用户名字-->
-										<div class="u-name">
-											等你来哟
-										<!--用户分数-->
-										<div class="score-box">
-											<img src="__IMG__qian.png"/>
-											<span class="score-txt">0</span>
-										</div>
-										</div>
-									</div>
-									{/if}
 								</div>
 	
 								<!-- 后N名 -->
@@ -1319,169 +1327,171 @@
 								</ul>
 							</div>
 							
-							<div data-item="2" style="display:none">
-								<div class="top-three">
-								{if condition="isset($mogul_data[0])"}
-									<div class="the-first">
-										<!--头像框?-->
-										<div class="pic-box">
-											<img src="__IMG__crown_01.gif"/>
-											{if condition="$mogul_data[0]['head_img'] == ''"}
-											<img class="pic" src="__IMG__default.jpg" />
-											{else /}
-											<!--图片路径不为空的时候，应为用户头像路径-->
-											<img class="pic" src="{$mogul_data[0]['head_img'].'!syph'}" alt="">
-											{/if}
-										</div>
-										<!--用户名字-->
-										<div class="u-name">
-											{$mogul_data[0]['nickname']}
-											{switch name="$mogul_data[0]['level']"}
-											{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
-											{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
-											{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
-											{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
-											{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
-											{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
-											{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
-											{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-										
-											{/switch}
-										<!--用户分数-->
-										<div class="score-box">
+							<div data-item="3_2" style="display:none">
+								<div class="top-three layui-fluid">
+									<div class="layui-row">
+										{if condition="isset($mogul_data[0])"}
+											<div class="the-first layui-col-xs12">
+												<!--头像框?-->
+												<div class="pic-box">
+													<img src="__IMG__crown_01.gif" style="width:100%" />
+													{if condition="$mogul_data[0]['head_img'] == ''"}
+													<img class="pic" src="__IMG__default.jpg" />
+													{else /}
+													<!--图片路径不为空的时候，应为用户头像路径-->
+													<img class="pic" src="{$mogul_data[0]['head_img'].'!syph'}" alt="">
+													{/if}
+												</div>
+												<!--用户名字-->
+												<div class="u-name">
+													{$mogul_data[0]['nickname']}
+													{switch name="$mogul_data[0]['level']"}
+													{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+													{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+													{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+													{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+													{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+													{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+													{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+													{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+												
+													{/switch}
+												<!--用户分数-->
+												<div class="score-box">
 
-											<img src="__IMG__qian.png"/>
+													<img src="__IMG__qian.png"/>
 
 
-											<span class="score-txt">{$mogul_data[0]['mogul']}</span>
+													<span class="score-txt">{$mogul_data[0]['mogul']}</span>
 
-										</div>
-										</div>
-									</div>
+												</div>
+												</div>
+											</div>
 
-								{else /}
-									<div class="">
-										<!--头像框?-->
-										<div class="pic-box">
-											<img src="__IMG__crown.gif"/>
-											<img class="pic" src="__IMG__default.jpg"/>
-										</div>
-										<!--用户名字-->
-										<div class="u-name">
-											等你来呦
-										<!--用户分数-->
-										<div class="score-box">
-											<img src="__IMG__qian.png"/>
-											<span class="score-txt">0</span>
-										</div>
-										</div>
-									</div>
-								{/if}
+										{else /}
+											<div class="layui-col-xs12">
+												<!--头像框?-->
+												<div class="pic-box">
+													<img src="__IMG__crown.gif"/>
+													<img class="pic" src="__IMG__default.jpg"/>
+												</div>
+												<!--用户名字-->
+												<div class="u-name">
+													等你来呦
+												<!--用户分数-->
+												<div class="score-box">
+													<img src="__IMG__qian.png"/>
+													<span class="score-txt">0</span>
+												</div>
+												</div>
+											</div>
+										{/if}
 
-								{if condition="isset($mogul_data[1])"}
-									<div class="">
-										<!--头像框?-->
-										<div class="pic-box">
-											<img src="__IMG__crown.gif"/>
-											{if condition="$mogul_data[1]['head_img'] == ''"}
-											<img class="pic" src="__IMG__default.jpg" />
-											{else /}
-											<!--图片路径不为空的时候，应为用户头像路径-->
-											<img class="pic" src="{$mogul_data[1]['head_img'].'!syph'}" alt="">
-											{/if}
-										</div>
-										<!--用户名字-->
-										<div class="u-name">
-											{$mogul_data[1]['nickname']}
-											{switch name="$mogul_data[1]['level']"}
-											{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
-											{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
-											{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
-											{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
-											{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
-											{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
-											{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
-											{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+										{if condition="isset($mogul_data[1])"}
+											<div class="layui-col-xs6">
+												<!--头像框?-->
+												<div class="pic-box">
+													<img src="__IMG__crown.gif"/>
+													{if condition="$mogul_data[1]['head_img'] == ''"}
+													<img class="pic" src="__IMG__default.jpg" />
+													{else /}
+													<!--图片路径不为空的时候，应为用户头像路径-->
+													<img class="pic" src="{$mogul_data[1]['head_img'].'!syph'}" alt="">
+													{/if}
+												</div>
+												<!--用户名字-->
+												<div class="u-name">
+													{$mogul_data[1]['nickname']}
+													{switch name="$mogul_data[1]['level']"}
+													{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+													{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+													{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+													{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+													{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+													{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+													{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+													{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+													
+													{/switch}
+												<!--用户分数-->
+												<div class="score-box">
+													<img src="__IMG__qian.png"/>
+													<span class="score-txt">{$mogul_data[1]['mogul']}</span>
+												</div>
+												</div>
+											</div>
+
+										{else /}
+											<div class="layui-col-xs6">
+												<!--头像框?-->
+												<div class="pic-box">
+													<img src="__IMG__crown.gif"/>
+													<img class="pic" src="__IMG__default.jpg"/>
+												</div>
+												<!--用户名字-->
+												<div class="u-name">
+													等你来呦
+												<!--用户分数-->
+												<div class="score-box">
+													<img src="__IMG__qian.png"/>
+													<span class="score-txt">0</span>
+												</div>
+												</div>
+											</div>
+										{/if}
+
+										{if condition="isset($mogul_data[2])"}
+											<div class="layui-col-xs6">
+												<!--头像框?-->
+												<div class="pic-box">
+													<img src="__IMG__首页-恢复的_18.gif"/>
+													{if condition="$mogul_data[2]['head_img'] == ''"}
+													<img class="pic" src="__IMG__default.jpg" />
+													{else /}
+													<!--图片路径不为空的时候，应为用户头像路径-->
+													<img class="pic" src="{$mogul_data[2]['head_img'].'!syph'}" alt="">
+													{/if}
+												</div>
+												<!--用户名字-->
+												<div class="u-name">
+													{$mogul_data[2]['nickname']}
+													{switch name="$mogul_data[2]['level']"}
+													{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+													{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+													{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+													{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+													{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+													{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+													{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+													{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
 											
-											{/switch}
-										<!--用户分数-->
-										<div class="score-box">
-											<img src="__IMG__qian.png"/>
-											<span class="score-txt">{$mogul_data[1]['mogul']}</span>
-										</div>
-										</div>
+													{/switch}
+												<!--用户分数-->
+												<div class="score-box">
+													<img src="__IMG__qian.png"/>
+													<span class="score-txt">{$mogul_data[2]['mogul']}</span>
+												</div>
+												</div>
+											</div>
+										{else /}
+											<div class="layui-col-xs6">
+												<!--头像框?-->
+												<div class="pic-box">
+													<img src="__IMG__首页-恢复的_18.gif"/>
+													<img class="pic" src="__IMG__default.jpg"/>
+												</div>
+												<!--用户名字-->
+												<div class="u-name">
+													等你来呦
+												<!--用户分数-->
+												<div class="score-box">
+													<img src="__IMG__qian.png"/>
+													<span class="score-txt">0</span>
+												</div>
+												</div>
+											</div>
+										{/if}
 									</div>
-
-								{else /}
-									<div class="">
-										<!--头像框?-->
-										<div class="pic-box">
-											<img src="__IMG__crown.gif"/>
-											<img class="pic" src="__IMG__default.jpg"/>
-										</div>
-										<!--用户名字-->
-										<div class="u-name">
-											等你来呦
-										<!--用户分数-->
-										<div class="score-box">
-											<img src="__IMG__qian.png"/>
-											<span class="score-txt">0</span>
-										</div>
-										</div>
-									</div>
-								{/if}
-
-								{if condition="isset($mogul_data[2])"}
-									<div class="">
-										<!--头像框?-->
-										<div class="pic-box">
-											<img src="__IMG__首页-恢复的_18.gif"/>
-											{if condition="$mogul_data[2]['head_img'] == ''"}
-											<img class="pic" src="__IMG__default.jpg" />
-											{else /}
-											<!--图片路径不为空的时候，应为用户头像路径-->
-											<img class="pic" src="{$mogul_data[2]['head_img'].'!syph'}" alt="">
-											{/if}
-										</div>
-										<!--用户名字-->
-										<div class="u-name">
-											{$mogul_data[2]['nickname']}
-											{switch name="$mogul_data[2]['level']"}
-											{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
-											{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
-											{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
-											{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
-											{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
-											{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
-											{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
-											{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
-									
-											{/switch}
-										<!--用户分数-->
-										<div class="score-box">
-											<img src="__IMG__qian.png"/>
-											<span class="score-txt">{$mogul_data[2]['mogul']}</span>
-										</div>
-										</div>
-									</div>
-								{else /}
-									<div class="">
-										<!--头像框?-->
-										<div class="pic-box">
-											<img src="__IMG__首页-恢复的_18.gif"/>
-											<img class="pic" src="__IMG__default.jpg"/>
-										</div>
-										<!--用户名字-->
-										<div class="u-name">
-											等你来呦
-										<!--用户分数-->
-										<div class="score-box">
-											<img src="__IMG__qian.png"/>
-											<span class="score-txt">0</span>
-										</div>
-										</div>
-									</div>
-									{/if}
 								</div>
 
 
@@ -1528,9 +1538,9 @@
 									<!-- end -->
 								</ul>
 							</div>
-							</div>
-
 						</div>
+
+						
 					</div>
 				</div>
 			</div>
@@ -1544,7 +1554,35 @@
 				$('.tab-rank').on('click','[data-rank]',function(){
 
 					$(this).addClass('active').siblings().removeClass('active')
-					$('[data-num='+$(this).parents('.tab-rank').attr('data-box')+']').find('[data-item='+$(this).attr('data-rank')+']').show().siblings().hide();
+
+					var now = $(this).attr('data-total')
+
+					switch(true)
+					{
+						case now == '1_1':
+							$('[data-item=1_1]').show().siblings().hide()
+							break;
+						case now == '1_2':
+							$('[data-item=1_2]').show().siblings().hide()
+							break;
+						case now == '2_1':
+							$('[data-item=2_1]').show().siblings().hide()
+							break;
+						case now == '2_2':
+							$('[data-item=2_2]').show().siblings().hide()
+							break;
+						case now == '3_1':
+							$('[data-item=3_1]').show().siblings().hide()
+							break;
+						case now == '3_2':
+							$('[data-item=3_2]').show().siblings().hide()
+							break;	
+					}
+						
+
+				
+
+					//$('[data-num='+$(this).parents('.tab-rank').attr('data-box')+']').find('[data-item='+$(this).attr('data-rank')+']').show().siblings().hide();
 
 				})
 				

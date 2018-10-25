@@ -24,9 +24,10 @@
 					<thead>
 						<tr class="text-c">
 							<!--<th width="40"><input name="" type="checkbox" value=""></th>-->
-							<th width="80">ID</th>
-							<th width="250">娱乐名字</th>
-							<th width="300">LOGO</th>																					
+							<th width="20">ID</th>
+							<th width="100">娱乐名字</th>
+							<th width="300">LOGO</th>	
+							<th width="300">首页显示图片</th>																				
 							<th width="100">操作</th>
 						</tr>
 					</thead>
@@ -51,7 +52,19 @@
 									<img width="100" class="picture-thumb" src="{$v.joy_logo_img}">
 								</a>
 							{/if}							
-							</td>														
+							</td>	
+
+							<td>
+							{if condition="empty($v.joy_index_img)"}
+								<a href="javascript:;">
+									<img width="100" class="picture-thumb" src="__IMGS__123456.jpg">
+								</a>
+							{else /}
+								<a href="javascript:;">
+									<img width="100" class="picture-thumb" src="{$v.joy_index_img}">
+								</a>
+							{/if}							
+							</td>													
 
 							<td class="td-manage">
 								<a style="text-decoration:none" class="cancel" href="{:url('Joy/grade',['id'=>$v.id])}" title="娱乐等级添加">

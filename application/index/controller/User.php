@@ -765,14 +765,19 @@ class User extends Common
 
 		if(Request::instance()->isPost()){
 			$data = Request::instance()->param();
-
+			$user_data = Db::table('hn_user')->field('account,cash')->where('uid',$id)->find();
 			//var_dump($data);die;
 			//判断验证码是否正确
 			if(!isset($_SESSION['think']['withdraw_code'])){
+
+				
 				return json(['code' => 4 , 'msg' => '自己填的验证码不算']);
 			}
 			if($data['code'] != $_SESSION['think']['withdraw_code']){
 				return json(['code' => 1 , 'msg' => '验证码错误']);
+			}
+			if($user_data['cash'] < $data['money']){
+				return json(['code' => 1 , 'msg' => '账户余额不足']);
 			}
 			//删除无用的数据  组装数据并填表  更新用户余额数据
 			unset($data['code']);
@@ -784,9 +789,11 @@ class User extends Common
 			$ras = Db::table('hn_user')->where('uid', $id)->setDec('cash', $data['money']);
 				//2.填表
 			$data['money'] = $data['money']-2;  //减去扣除的手续费是用户真正提取的余额钱数
-			$res = Db::table('hn_withdraw_cash')->insert($data);
 
-			if($res&&$ras){
+			
+
+			if($ras){
+				$res = Db::table('hn_withdraw_cash')->insert($data);
 				return json(['code' => 2 , 'msg' => '成功提交，请耐心等待审核']);
 			}else{
 				return json(['code' => 3 , 'msg' => '提交失败，请检查数据后重试']);
@@ -888,7 +895,7 @@ class User extends Common
 		$id = Request::instance()->param('id');
 		//根据ID查数据  进行分割字符串 组装路径
 		$key = Db::table('hn_user_album')->field('img_url')->where('id',$id)->find();
-		$key =  substr( $key['img_url'], $this->Intercept);
+		$key =  substr($key['img_url'], $this->Intercept);
 
 		//调用删除方法 删除图片
 		$data = $this->cos_delete($key);
@@ -1511,22 +1518,27 @@ class User extends Common
 				//查到当前陪玩师该项目最高的价格
 				$height_pric = $this->pric($v['order_num'],$pric['pric']);
 
-				$count = ($height_pric-$pric['pric'])/5;
+				$count = (($height_pric-$pric['pric'])/5);
+				if($count == 0){
+					$count = 1;
+				}
 					
 				$data = [];
 				
-					
-					for($i=0; $i<=$count; ++$i){
-
-						$data[$i] = (5*$i)+$pric['pric'];
-					}
-				
-
 				$data[0] = 8;//$v['pric'];
 
-				$apply_data[$k]['pice'] = $data;	
-		
+				for($i=0; $i<=$count; $i++){
+
+					$data[$i+1] = (5*$i)+$pric['pric'];
+				}
 				
+
+				
+
+//var_dump($data);die;
+
+				$apply_data[$k]['pice'] = $data;
+			
 			}else if($v['project'] == 2){
 				//查到项目初始的价格
 				$pric = Db::table('hn_joy_grade')->field('pric')->where('id',$v['project_grade'])->find();
@@ -1535,17 +1547,22 @@ class User extends Common
 				$height_pric = $this->pric($v['order_num'],$pric['pric']);
 
 				$count = ($height_pric-$pric['pric'])/5;
+				if($count == 0){
+					$count = 1;
+				}
 					
 				$data = [];
-				
-					
-					for($i=0; $i<=$count; ++$i){
-
-						$data[$i] = (5*$i)+$pric['pric'];
-					}
-				
 
 				$data[0] = 8;//$v['pric'];
+				
+					
+				for($i=0; $i<=$count; ++$i){
+
+					$data[$i+1] = (5*$i)+$pric['pric'];
+				}
+				
+
+				
 
 				$apply_data[$k]['pice'] = $data;
 			

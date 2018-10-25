@@ -23,7 +23,14 @@
 
 			<img style="width:200px" id="pic-one" src="{$joy_data.joy_logo_img}" alt="">
 			<input id="miva" type="file"  name="cover">
-	
+		</div>
+
+		<label class="form-label col-xs-4 col-sm-2"  style="margin-left:50px;"><span class="c-red">*</span>显示在首页的游戏图片</label>：
+		<div class="row cl"  style="margin-left:200px;">
+			<img style="width:200px" id="pic-tow" src="{$joy_data.joy_index_img}" alt="">
+			<input id="miva2" type="file"  name="image">
+		</div>
+
 		<div class="row cl">
 			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
 				<button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i>提交</button>
@@ -68,6 +75,17 @@
 
 		newfile.onload = function () {
 			$('#pic-one').attr('src',newfile.result);
+		}
+	})
+
+	$('#miva2').on('change',function(){
+		var file = document.querySelector('#miva2').files[0];
+
+		var newfile = new FileReader();
+		newfile.readAsDataURL(file,"UTF-8");
+
+		newfile.onload = function () {
+			$('#pic-tow').attr('src',newfile.result);
 		}
 	})
 /*

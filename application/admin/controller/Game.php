@@ -35,11 +35,9 @@ class Game extends Common
 
 			$file = request()->file('cover');
 
-//   http://uploadimg-1257183241.piccd.myqcloud.com/         2018-08-10/e16d7ef3693cf569417658b0a21fff12.jpg
-
 			if($file)
 			{	
-				$str = time();	
+				$str  = time();	
 				$str .= rand(1000,9999);
 
 				$key = date('Y-m-d').'/'.md5($str).'.jpg'; //路径
@@ -107,7 +105,9 @@ class Game extends Common
 				if($data['code'] == 0)
 				{
 					//成功时删除原来的图片 $game_data['game_logo_img']  组装新路径 
-					$this->cos_delete($game_data['game_logo_img']);
+					//用旧路径  删除cos上的图片
+					$img_url =  substr($game_data['game_logo_img'], $this->Intercept);
+					$this->cos_delete($img_url);
 					$data_updata['game_logo_img'] = $this->img.$key;
 
 				}
@@ -125,9 +125,9 @@ class Game extends Common
 				if($data['code'] == 0)
 				{
 					//成功时删除原来的图片 $game_data['game_index_img']  组装新路径 
-					$this->cos_delete($game_data['game_index_img']);
+					$img_url =  substr($game_data['game_index_img'], $this->Intercept);
+					$this->cos_delete($img_url);
 					$data_updata['game_index_img'] = $this->img.$key;
-
 				}
 			}
 

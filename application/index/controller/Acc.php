@@ -28,7 +28,7 @@ class Acc extends Common
 		if($game_id){
 			$acc_data = Db::table('hn_user')->alias('u')
                 ->join('hn_accompany a','u.uid = a.user_id')
-                -> group('u.uid')
+                ->group('u.uid')
                 ->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num,a.city')
                 ->where(['a.project_id' => $game_id , 'a.up' => 2])
                 ->limit('0,12')
@@ -36,7 +36,7 @@ class Acc extends Common
 		}else{
 			//查询一哈陪玩师列表  然后输出
             $game_id = 0;
-			$acc_data = Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num,a.city')->where([ 'a.up' => 2])->limit('0,12')->select();
+			$acc_data = Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->group('u.uid')->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num,a.city')->where([ 'a.up' => 2])->select();
 		}
 //var_dump($acc_data);die;
 		$this->assign([
@@ -131,11 +131,12 @@ class Acc extends Common
             $where['a.wb_list'] = ['like',"%$wb_id%"];
 
         }
+
         $acc_data = Db::table('hn_user')
             ->alias('u')
             ->join('hn_accompany a','u.uid = a.user_id')
             ->join('hn_apply_project p','u.uid = p.uid')
-            -> group('u.uid')
+            ->group('u.uid')
             ->field('u.uid,u.nickname,u.head_img,a.table,a.hot,p.pric,a.order_num,a.discount,a.city')
             ->where($where)
             ->order($order)

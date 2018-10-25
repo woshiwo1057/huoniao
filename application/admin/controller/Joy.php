@@ -14,7 +14,7 @@ class Joy extends Common
 	//娱乐项目列表
 	public function index()
 	{
-		$joy_data = Db::table('hn_joy')->field('id,name,joy_logo_img')->select();
+		$joy_data = Db::table('hn_joy')->field('id,name,joy_logo_img,joy_index_img')->select();
 
 		$this->assign(['joy_data' => $joy_data]);
 		return $this->fetch('Joy/index');
@@ -26,14 +26,36 @@ class Joy extends Common
 		if(Request::instance()->isPost())
 		{
 			$joy_data = Request::instance()->param();
+
 			$file = request()->file('cover');
-			if($file){
+
+			if($file)
+			{
 				$key = date('Y-m-d').'/'.md5(microtime()).'.jpg';
 
 				$url_data = $this->cos($file,$key);	
-				if($url_data['code'] == 0){
-					//成功
+				if($url_data['code'] == 0)
+				{
+					//成功时组装新路径
 					$joy_data['joy_logo_img'] = $this->img.$key; //将此路径存入表单
+
+				}
+			}
+
+			$files = request()->file('image');
+			if($files)
+			{	
+				$str = time();		
+				$str .= rand(1000,9999);
+				$key = date('Y-m-d').'/'.md5($str).'.jpg'; //路径
+
+				$data = $this->cos($files,$key);
+
+				if($data['code'] == 0)
+				{
+					//成功时组装新路径
+					$joy_data['joy_index_img'] = $this->img.$key;
+
 				}
 			}
 
@@ -47,6 +69,7 @@ class Joy extends Common
 				$this->error('新增失败');
 			}
 		}
+
 		return $this->fetch('Joy/add');
 	}
 
@@ -54,7 +77,7 @@ class Joy extends Common
 	public function edit()
 	{
 		$id = Request::instance()->param('id');
-		$joy_data = Db::table('hn_joy')->field('name,joy_logo_img')->where('id',$id)->find();
+		$joy_data = Db::table('hn_joy')->field('name,joy_logo_img,joy_index_img')->where('id',$id)->find();
 		//var_dump($joy_data);die;
 
 		if(Request::instance()->isPost())
@@ -75,6 +98,24 @@ class Joy extends Common
 					$img_url =  substr($joy_data['joy_logo_img'], $this->Intercept);
 					//调用删除方法 删除cos上的图片
 					$this->cos_delete($img_url);
+				}
+			}
+
+			$files = request()->file('image');
+			if($files)
+			{		
+				$str = time();		
+				$str .= rand(1000,9999);
+				$key = date('Y-m-d').'/'.md5($str).'.jpg'; //路径
+
+				$data = $this->cos($files,$key);
+
+				if($data['code'] == 0)
+				{
+					//成功时删除原来的图片 $game_data['game_index_img']  组装新路径 
+					$img_url =  substr($joy_data['joy_index_img'], $this->Intercept);
+					$this->cos_delete($img_url);
+					$data_updata['joy_index_img'] = $this->img.$key;
 				}
 			}
 			
@@ -98,12 +139,19 @@ class Joy extends Common
 	{
 		$id = Request::instance()->param('id');
 
-		$res = Db::table('hn_joy')->field('joy_logo_img')->where('id',$id)->find();
+		$res = Db::table('hn_joy')->field('joy_logo_img,joy_index_img')->where('id',$id)->find();
 
-		//cos图片删除
-		$img_url =  substr($res['joy_logo_img'], $this->Intercept);
-		//调用删除方法 删除cos上的图片
-		$this->cos_delete($img_url);
+		//删除图片
+		if($res['joy_logo_img']){
+			
+			$img_url =  substr($res['joy_logo_img'], $this->Intercept);
+			$this->cos_delete($img_url);
+		}
+
+		if($res['joy_index_img']){
+			$img_url =  substr($res['joy_index_img'], $this->Intercept);
+			$this->cos_delete($img_url);
+		}
 		
 		//图片路径为空则表示米有图片存在   不走程序
 		/*

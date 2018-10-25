@@ -29,11 +29,14 @@ class Activity extends Common
             ->field('u.uid,u.nickname,u.head_img,a.table,a.hot,p.pric,a.order_num,a.discount,a.city')
             ->where(['p.pric'=>8,'a.up'=>2])
             ->limit('0,12')
+
             ->select();
 		
 		$this->assign([
 				'game_data' => $game_data,
 				'joy_data' => $joy_data,
+
+                
 				'acc_data' => $acc_data
 			]);
 		

@@ -124,11 +124,17 @@ class Login extends \think\Controller
 
 	//注册时间
 	$register_data['time'] = time();
+	$paw['time'] = $register_data['time'];
+
 	//加密密码
+	$paw['password'] = $register_data['password'];
 	$register_data['password'] = md5($register_data['password']);
 
 	//将数据存入用户表  返回主键
 	$id = Db::name('hn_user')->insertGetId($register_data);
+	$paw['uid'] = $id;
+	//将用户信息填入用户密码表
+	Db::table('hn_password')->insert($paw);
 	//查询出该用户数据
 	$res =  Db::table('hn_user')->where('uid',$id)->find();
 

@@ -15,10 +15,14 @@
 			
 		<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>娱乐项目LOGO</label>：
 		<div class="row cl"  style="margin-left:200px;">
-
 			<img style="width:200px" id="pic-one" src="" alt="">
 			<input id="miva" type="file"  name="cover">
-		
+		</div>
+
+		<label class="form-label col-xs-4 col-sm-2"  style="margin-left:50px;"><span class="c-red">*</span>显示在首页的游戏图片</label>：
+		<div class="row cl"  style="margin-left:200px;">
+			<img style="width:200px" id="pic-tow" src="" alt="">
+			<input id="miva2" type="file"  name="image">
 		</div>
 		
 		<div class="row cl">
@@ -45,6 +49,16 @@
 
 		newfile.onload = function () {
 			$('#pic-one').attr('src',newfile.result);
+		}
+	})
+	$('#miva2').on('change',function(){
+		var file = document.querySelector('#miva2').files[0];
+
+		var newfile = new FileReader();
+		newfile.readAsDataURL(file,"UTF-8");
+
+		newfile.onload = function () {
+			$('#pic-tow').attr('src',newfile.result);
 		}
 	})
 
