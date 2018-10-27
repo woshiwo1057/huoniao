@@ -17,6 +17,16 @@
 		cursor: pointer;
 	}
 </style>
+	<style media="screen">
+			.miva-rank-box .miva-rank-items .rank-last li > img {
+				width: 50px;
+				height: 50px;
+			}
+			.miva-rank-box .miva-rank-items .miva-rank-title .miva-rank-txt {
+				top: 5px
+			}
+		</style>
+
 	<body>
 		<!-- 引入头部 -->
 		<div class="main">
@@ -121,6 +131,7 @@
 					{foreach name="acc_data" item="v"}
 					<li>
 						<a href="{:url('Index/user',['id' => $v.uid])}" class="miva-star-items">
+							<div class="miva-star-tip">接单中</div>
 							<div class="miva-star-pic">
 								{if condition="$v.head_img == ''"}
 									<img src="__IMG__default.jpg" />
@@ -128,41 +139,528 @@
 									<img src="{$v.head_img.'!syph'}" />
 								{/if}
 							</div>
-							<table class="miva-star-info">
-								<tr>
-									<td>
-										
-										<span class="star-name">{$v.nickname}</span>
-									</td>
-									<td class="miva-star-info-right">
-										<span class="tab tab-win">{$v.city}</span>
-										
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<img src="__IMG__火.png" alt="图标">
-										<span>{$v.hot}</span>
-									</td>
-									<td class="miva-star-info-right">
-									{if condition="$v.pice == 8"}
-										<span class="star-price">￥8局</span>
-									{else /}
-										<span class="star-price">￥{$v.pice}/小时</span>
-									{/if}
-									</td>
-								</tr>
-							</table>
+		
+							<div style=" padding: 5px 10px;" class="layui-fluid miva-star-info">
+							  <div class="layui-row">
+								<div class="layui-col-xs7 layui-col-sm7">
+							      	{$v.nickname}
+							    </div>
+							    <div class="layui-col-xs4 layui-col-sm4 layui-col-xs-offset1 layui-col-sm1 tab tab-win">
+							      {$v.city}
+							    </div>
+								<div class="layui-col-xs4 layui-col-sm4">
+									<img src="__IMG__火.png" alt="图标">
+									<span>{$v.hot}</span>
+								</div>
+					
+								<div class="layui-col-xs5 layui-col-sm5 layui-col-md-offset3 star-price">￥{$v.pice}/小时</div>
+							  </div>
+							</div>
 						</a>
 					</li>
 					{/foreach}
-
-					
-
 					<!-- end -->
 				</ul>
-			</div>
 
+				<!--这里写排行榜-->
+				<div class="miva-rank-box" style="width:300px;display:inline-block; vertical-align: top;">
+					<!--一个榜-->
+					<div style="width:100%;margin-left: 20px; margin-bottom: 30px;" class="miva-rank-items">
+						<!--排行榜标题-->
+						<div class="miva-rank-title"><img src="__IMG__title_01-03.gif" />
+							<div class="miva-rank-txt"><img src="__IMG__太阳.gif" /><span>大神榜</span></div>
+							<!--tab-->
+							<div class="tab-rank"><span class="active" data-total='1_1' data-rank="1">周榜</span><span data-total='1_2' data-rank="2">总榜</span></div>
+						</div>
+						<!--前三名-->
+						<div data-num=1  class="dashen">
+							<div  data-item="1_1" class="one"  style="">
+								<div class="top-three layui-fluid">
+									<div class="layui-row">
+										
+										{foreach name="okami_day_data"  item="v"  key="k"}
+											{if condition="2>=$k"}
+												<div class="{if condition='$k == 0'}the-first layui-col-xs12{else \ } layui-col-xs6{/if}">
+													<!--头像框?-->
+													<a href="{:url('Index/user' , ['id' => $v['uid']])}">
+														<div class="pic-box">
+															{switch name="$k"}
+															{case value="0" }<img src="__IMG__crown_01.gif" style="width:100%" />{/case}
+															{case value="1" }<img src="__IMG__crown.gif" />{/case}
+															{case value="2" }<img src="__IMG__首页-恢复的_18.gif" />{/case}
+															{/switch}
+															<img class="pic" src="{$v.head_img}" />
+														</div>
+													</a>
+													<!--用户名字-->
+													<div class="u-name">{$v.nickname}
+														{switch name="$v.level"}
+														{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+														{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+														{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+														{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+														{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+														{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+														{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+														{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+														{default /}<img src="__IMG__icon1-0.gif" alt="" />
+														{/switch}
+														<!--用户分数-->
+														<div class="score-box"><img src="__IMG__lihai.png"/><span class="score-txt">{$v.okami_day}</span></div>
+													</div>
+												</div>
+											{/if}
+										{/foreach}
+
+									</div>
+								</div>
+								<!-- 后N名 -->
+								<ul class="rank-last">
+									{foreach name="okami_day_data" item="v" key="k"}
+										{if condition="$k>=3"}
+											<!-- 一条 -->
+											<a href="{:url('Index/user' , ['id' => $v['uid']])}">
+												<li>
+													<!-- 排名 --><span>{$k+1}</span>
+													<!-- 用户头像 --><img src="{$v.head_img}" alt="">
+													<!-- 用户信息 -->
+													<div class="user-info">
+														<div class="u-name">{$v.nickname}</div>
+														{switch name="$v.level"}
+														{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+														{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+														{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+														{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+														{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+														{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+														{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+														{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+														{default /}<img src="__IMG__icon1-0.gif" alt="" />
+														{/switch}
+													</div>
+													<!-- 得分数值 -->
+													<div class="score-box">大神指数: <span>{$v.okami_day}</span></div>
+												</li>
+											</a>
+										{/if}
+									{/foreach}
+									<!-- end -->
+									
+									<!-- =============== -->
+								</ul>
+							</div>
+
+							<div  data-item="1_2" class="one"  style="display:none">
+								<div class="top-three layui-fluid">
+									<div class="layui-row">
+										
+										{foreach name="okami_data"  item="v"  key="k"}
+											{if condition="2>=$k"}
+												<div class="{if condition='$k == 0'}the-first layui-col-xs12{else \ } layui-col-xs6{/if}">
+													<!--头像框?-->
+													<a href="{:url('Index/user' , ['id' => $v['uid']])}">
+														<div class="pic-box">
+															{switch name="$k"}
+															{case value="0" }<img src="__IMG__crown_01.gif" style="width:100%" />{/case}
+															{case value="1" }<img src="__IMG__crown.gif" />{/case}
+															{case value="2" }<img src="__IMG__首页-恢复的_18.gif" />{/case}
+															{/switch}
+															<img class="pic" src="{$v.head_img}" />
+														</div>
+													</a>
+													<!--用户名字-->
+													<div class="u-name">{$v.nickname}
+														{switch name="$v.level"}
+														{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+														{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+														{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+														{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+														{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+														{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+														{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+														{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+														{default /}<img src="__IMG__icon1-0.gif" alt="" />
+														{/switch}
+														<!--用户分数-->
+														<div class="score-box"><img src="__IMG__lihai.png"/><span class="score-txt">{$v.okami}</span></div>
+													</div>
+												</div>
+											{/if}
+										{/foreach}
+
+									</div>
+								</div>
+								<!-- 后N名 -->
+								<ul class="rank-last">
+									{foreach name="okami_data" item="v" key="k"}
+										{if condition="$k>=3"}
+											<!-- 一条 -->
+											<a href="{:url('Index/user' , ['id' => $v['uid']])}">
+												<li>
+													<!-- 排名 --><span>{$k+1}</span>
+													<!-- 用户头像 --><img src="{$v.head_img}" alt="">
+													<!-- 用户信息 -->
+													<div class="user-info">
+														<div class="u-name">{$v.nickname}</div>
+														{switch name="$v.level"}
+														{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+														{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+														{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+														{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+														{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+														{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+														{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+														{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+														{default /}<img src="__IMG__icon1-0.gif" alt="" />
+														{/switch}
+													</div>
+													<!-- 得分数值 -->
+													<div class="score-box">大神指数: <span>{$v.okami}</span></div>
+												</li>
+											</a>
+										{/if}
+									{/foreach}
+									<!-- end -->
+									
+									<!-- =============== -->
+								</ul>
+							</div>
+						</div>
+					</div>
+					<!--一个榜结束-->
+	
+					<!--一个榜-->
+					<div style="width:100%;margin-left: 20px; margin-bottom: 30px;" class="miva-rank-items">
+						<!--排行榜标题-->
+						<div class="miva-rank-title"><img src="__IMG__首页-恢复的_05.gif" />
+							<div class="miva-rank-txt"><img src="__IMG__hudie.gif" /><span>人气榜</span></div>
+							<!--tab-->
+							<div class="tab-rank"><span class="active" data-total='2_1' data-rank="1">周榜</span><span data-total='2_2' data-rank="2">总榜</span></div>
+						</div>
+						<!--前三名-->
+						<div data-num=1>
+							<div  data-item="2_1" class="tow"  style="">
+								<div class="top-three layui-fluid">
+									<div class="layui-row">
+										
+										{foreach name="hot_day_data"  item="v"  key="k"}
+											{if condition="2>=$k"}
+												<div class="{if condition='$k == 0'}the-first layui-col-xs12{else \ } layui-col-xs6{/if}">
+													<!--头像框?-->
+													<a href="{:url('Index/user' , ['id' => $v['uid']])}">
+														<div class="pic-box">
+															{switch name="$k"}
+															{case value="0" }<img src="__IMG__crown_01.gif" style="width:100%" />{/case}
+															{case value="1" }<img src="__IMG__crown.gif" />{/case}
+															{case value="2" }<img src="__IMG__首页-恢复的_18.gif" />{/case}
+															{/switch}
+															<img class="pic" src="{$v.head_img}" />
+														</div>
+													</a>
+													<!--用户名字-->
+													<div class="u-name">{$v.nickname}
+														{switch name="$v.level"}
+														{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+														{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+														{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+														{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+														{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+														{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+														{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+														{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+														{default /}<img src="__IMG__icon1-0.gif" alt="" />
+														{/switch}
+														<!--用户分数-->
+														<div class="score-box"><img src="__IMG__renqi.png"/><span class="score-txt">{$v.hot_day}</span></div>
+													</div>
+												</div>
+											{/if}
+										{/foreach}
+
+									</div>
+								</div>
+								<!-- 后N名 -->
+								<ul class="rank-last">
+									{foreach name="hot_day_data" item="v" key="k"}
+										{if condition="$k>=3"}
+											<!-- 一条 -->
+											<a href="{:url('Index/user' , ['id' => $v['uid']])}">
+												<li>
+													<!-- 排名 --><span>{$k+1}</span>
+													<!-- 用户头像 --><img src="{$v.head_img}" alt="">
+													<!-- 用户信息 -->
+													<div class="user-info">
+														<div class="u-name">{$v.nickname}</div>
+														{switch name="$v.level"}
+														{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+														{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+														{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+														{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+														{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+														{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+														{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+														{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+														{default /}<img src="__IMG__icon1-0.gif" alt="" />
+														{/switch}
+													</div>
+													<!-- 得分数值 -->
+													<div class="score-box">人气指数: <span>{$v.hot_day}</span></div>
+												</li>
+											</a>
+										{/if}
+									{/foreach}
+									<!-- end -->
+									
+									<!-- =============== -->
+								</ul>
+							</div>
+
+							<div  data-item="2_2" class="tow"  style="display:none">
+								<div class="top-three layui-fluid">
+									<div class="layui-row">
+										
+										{foreach name="hot_data"  item="v"  key="k"}
+											{if condition="2>=$k"}
+												<div class="{if condition='$k == 0'}the-first layui-col-xs12{else \ } layui-col-xs6{/if}">
+													<!--头像框?-->
+													<a href="{:url('Index/user' , ['id' => $v['uid']])}">
+														<div class="pic-box">
+															{switch name="$k"}
+															{case value="0" }<img src="__IMG__crown_01.gif" style="width:100%" />{/case}
+															{case value="1" }<img src="__IMG__crown.gif" />{/case}
+															{case value="2" }<img src="__IMG__首页-恢复的_18.gif" />{/case}
+															{/switch}
+															<img class="pic" src="{$v.head_img}" />
+														</div>
+													</a>
+													<!--用户名字-->
+													<div class="u-name">{$v.nickname}
+														{switch name="$v.level"}
+														{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+														{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+														{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+														{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+														{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+														{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+														{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+														{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+														{default /}<img src="__IMG__icon1-0.gif" alt="" />
+														{/switch}
+														<!--用户分数-->
+														<div class="score-box"><img src="__IMG__renqi.png"/><span class="score-txt">{$v.hot}</span></div>
+													</div>
+												</div>
+											{/if}
+										{/foreach}
+
+									</div>
+								</div>
+								<!-- 后N名 -->
+								<ul class="rank-last">
+									{foreach name="hot_data" item="v" key="k"}
+										{if condition="$k>=3"}
+											<!-- 一条 -->
+											<a href="{:url('Index/user' , ['id' => $v['uid']])}">
+												<li>
+													<!-- 排名 --><span>{$k+1}</span>
+													<!-- 用户头像 --><img src="{$v.head_img}" alt="">
+													<!-- 用户信息 -->
+													<div class="user-info">
+														<div class="u-name">{$v.nickname}</div>
+														{switch name="$v.level"}
+														{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+														{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+														{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+														{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+														{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+														{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+														{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+														{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+														{default /}<img src="__IMG__icon1-0.gif" alt="" />
+														{/switch}
+													</div>
+													<!-- 得分数值 -->
+													<div class="score-box">大神指数: <span>{$v.hot}</span></div>
+												</li>
+											</a>
+										{/if}
+									{/foreach}
+									<!-- end -->
+									
+									<!-- =============== -->
+								</ul>
+							</div>
+						</div>
+					</div>
+					<!--一个榜结束-->
+
+					<!--一个榜-->
+					<div style="width:100%;margin-left: 20px; margin-bottom: 30px;" class="miva-rank-items">
+						<!--排行榜标题-->
+						<div class="miva-rank-title"><img src="__IMG__title.gif" />
+							<div class="miva-rank-txt"><img src="__IMG__yuanbao.gif" /><span>贡献榜</span></div>
+							<!--tab-->
+							<div class="tab-rank"><span class="active" data-total='3_1' data-rank="1">周榜</span><span data-total='3_2' data-rank="2">总榜</span></div>
+						</div>
+						<!--前三名-->
+						<div data-num=1>
+							<div  data-item="3_1" class="three"  style="">
+								<div class="top-three layui-fluid">
+									<div class="layui-row">
+										
+										{foreach name="mogul_day_data"  item="v"  key="k"}
+											{if condition="2>=$k"}
+												<div class="{if condition='$k == 0'}the-first layui-col-xs12{else \ } layui-col-xs6{/if}">
+													<!--头像框?-->
+													<a href="{:url('Index/user' , ['id' => $v['uid']])}">
+														<div class="pic-box">
+															{switch name="$k"}
+															{case value="0" }<img src="__IMG__crown_01.gif" style="width:100%" />{/case}
+															{case value="1" }<img src="__IMG__crown.gif" />{/case}
+															{case value="2" }<img src="__IMG__首页-恢复的_18.gif" />{/case}
+															{/switch}
+															<img class="pic" src="{$v.head_img}" />
+														</div>
+													</a>
+													<!--用户名字-->
+													<div class="u-name">{$v.nickname}
+														{switch name="$v.level"}
+														{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+														{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+														{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+														{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+														{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+														{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+														{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+														{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+														{default /}<img src="__IMG__icon1-0.gif" alt="" />
+														{/switch}
+														<!--用户分数-->
+														<div class="score-box"><img src="__IMG__qian.png"/><span class="score-txt">{$v.mogul_day}</span></div>
+													</div>
+												</div>
+											{/if}
+										{/foreach}
+
+									</div>
+								</div>
+								<!-- 后N名 -->
+								<ul class="rank-last">
+									{foreach name="mogul_day_data" item="v" key="k"}
+										{if condition="$k>=3"}
+											<!-- 一条 -->
+											<a href="{:url('Index/user' , ['id' => $v['uid']])}">
+												<li>
+													<!-- 排名 --><span>{$k+1}</span>
+													<!-- 用户头像 --><img src="{$v.head_img}" alt="">
+													<!-- 用户信息 -->
+													<div class="user-info">
+														<div class="u-name">{$v.nickname}</div>
+														{switch name="$v.level"}
+														{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+														{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+														{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+														{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+														{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+														{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+														{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+														{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+														{default /}<img src="__IMG__icon1-0.gif" alt="" />
+														{/switch}
+													</div>
+													<!-- 得分数值 -->
+													<div class="score-box">人气指数: <span>{$v.mogul_day}</span></div>
+												</li>
+											</a>
+										{/if}
+									{/foreach}
+									<!-- end -->
+									
+									<!-- =============== -->
+								</ul>
+							</div>
+
+							<div  data-item="3_2" class="three"  style="display:none">
+								<div class="top-three layui-fluid">
+									<div class="layui-row">
+										
+										{foreach name="mogul_data"  item="v"  key="k"}
+											{if condition="2>=$k"}
+												<div class="{if condition='$k == 0'}the-first layui-col-xs12{else \ } layui-col-xs6{/if}">
+													<!--头像框?-->
+													<a href="{:url('Index/user' , ['id' => $v['uid']])}">
+														<div class="pic-box">
+															{switch name="$k"}
+															{case value="0" }<img src="__IMG__crown_01.gif" style="width:100%" />{/case}
+															{case value="1" }<img src="__IMG__crown.gif" />{/case}
+															{case value="2" }<img src="__IMG__首页-恢复的_18.gif" />{/case}
+															{/switch}
+															<img class="pic" src="{$v.head_img}" />
+														</div>
+													</a>
+													<!--用户名字-->
+													<div class="u-name">{$v.nickname}
+														{switch name="$v.level"}
+														{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+														{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+														{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+														{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+														{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+														{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+														{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+														{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+														{default /}<img src="__IMG__icon1-0.gif" alt="" />
+														{/switch}
+														<!--用户分数-->
+														<div class="score-box"><img src="__IMG__qian.png"/><span class="score-txt">{$v.mogul}</span></div>
+													</div>
+												</div>
+											{/if}
+										{/foreach}
+
+									</div>
+								</div>
+								<!-- 后N名 -->
+								<ul class="rank-last">
+									{foreach name="mogul_data" item="v" key="k"}
+										{if condition="$k>=3"}
+											<!-- 一条 -->
+											<a href="{:url('Index/user' , ['id' => $v['uid']])}">
+												<li>
+													<!-- 排名 --><span>{$k+1}</span>
+													<!-- 用户头像 --><img src="{$v.head_img}" alt="">
+													<!-- 用户信息 -->
+													<div class="user-info">
+														<div class="u-name">{$v.nickname}</div>
+														{switch name="$v.level"}
+														{case value="1"}<img src="__IMG__biao1.gif" alt="" />{/case}
+														{case value="2"}<img src="__IMG__icon1-4.gif" alt="" />{/case}
+														{case value="3"}<img src="__IMG__icon1-5.gif" alt="" />{/case}
+														{case value="4"}<img src="__IMG__icon-6.gif" alt="" />{/case}
+														{case value="5"}<img src="__IMG__icon1-7.gif" alt="" />{/case}
+														{case value="6"}<img src="__IMG__icon1-8_01.gif" alt="" />{/case}
+														{case value="7"}<img src="__IMG__icon1-9.gif" alt="" />{/case}
+														{case value="8"}<img src="__IMG__icon1-10.gif" alt="" />{/case}
+														{default /}<img src="__IMG__icon1-0.gif" alt="" />
+														{/switch}
+													</div>
+													<!-- 得分数值 -->
+													<div class="score-box">大神指数: <span>{$v.mogul}</span></div>
+												</li>
+											</a>
+										{/if}
+									{/foreach}
+									<!-- end -->
+									
+									<!-- =============== -->
+								</ul>
+							</div>
+						</div>
+					</div>
+					<!--一个榜结束-->
+				</div>
+
+			</div>
 		</div>
 
 		<!-- 引入侧边栏 -->
@@ -171,6 +669,41 @@
 	</body>
 
 </html>
+	<script type="text/javascript">
+	//排行榜切换JS
+		$(function(){
+
+				$('.tab-rank').on('click','[data-rank]',function(){
+
+					$(this).addClass('active').siblings().removeClass('active')
+
+					var now = $(this).attr('data-total')
+
+					switch(true)
+					{
+						case now == '1_1':
+							$('[data-item=1_1]').show().siblings().hide()
+							break;
+						case now == '1_2':
+							$('[data-item=1_2]').show().siblings().hide()
+							break;
+						case now == '2_1':
+							$('[data-item=2_1]').show().siblings().hide()
+							break;
+						case now == '2_2':
+							$('[data-item=2_2]').show().siblings().hide()
+							break;
+						case now == '3_1':
+							$('[data-item=3_1]').show().siblings().hide()
+							break;
+						case now == '3_2':
+							$('[data-item=3_2]').show().siblings().hide()
+							break;	
+					}
+				})
+				
+			})
+	</script>
 
 
 <script>
@@ -178,18 +711,19 @@
 
 	$(function(){
 
-		var project = 0;
-		var projectId = '{$game_id}';
-		var porjectLv = 0;
-		var sex = 0;
-		var type = 1;
+		var project = 0;				//陪玩类型（游戏/娱乐）
+		var projectId = '{$game_id}'; 	//陪玩类型项目ID
+		var porjectLv = 0;  			//陪玩类型项目等级
+		var sex = 0;					//性别
+		var type = 1;					//综合筛选
 		
 		$('[cheap]').on('click', function(){
+
 			type = $(this).attr('cheap');
 			
 			$(this).addClass('screen-btn-active').siblings().removeClass('screen-btn-active');
 			$('.miva-screen-btn-admin').addClass('btn-admin-act');
-		
+			//综合刷选Ajax
 			$.post("{:url('Acc/screen')}",{project:project,project_id:projectId,sex:sex,type:type,porjectLv:porjectLv},function(res){ // 用作筛选的ajax
 				//https://www.huoniaopeiwan.com/index/index/offline_user/id/${a.uid}
 				//http://localhost/huoniao/public/index.php/index/index/offline_user/id/${a.uid}
@@ -205,29 +739,26 @@
 						//e = eval('(' +data + ')');
 						str += `<li>			
 									<a href="https://www.huoniaopeiwan.com/index/index/offline_user/id/${a.uid}" class="miva-star-items">
+										<div class="miva-star-tip">接单中</div>
 										<div class="miva-star-pic">
 												<img src="${a.head_img+'!syph' || '__IMG__default.jpg'}" />
 										</div>
-										<table class="miva-star-info">
-											<tr>
-												<td>		
-													<span class="star-name">${a.nickname}</span>
-												</td>
-												<td class="miva-star-info-right">
-													<span class="tab tab-win">${a.city}</span>
-													
-												</td>
-											</tr>
-											<tr>
-												<td>
+										<div style=" padding: 5px 10px;" class="layui-fluid miva-star-info">
+											<div class="layui-row">
+												<div class="layui-col-xs7 layui-col-sm7">		
+													${a.nickname}
+												</div>
+												<div class="layui-col-xs4 layui-col-sm4 layui-col-xs-offset1 layui-col-sm1 tab tab-win">
+													${a.city}									
+												</div>
+												<div class="layui-col-xs4 layui-col-sm4">
 													<img src="__IMG__火.png" alt="图标">
 													<span>${a.hot}</span>
-												</td>
-												<td class="miva-star-info-right">
-													<span class="star-price">￥199/小时</span>
-												</td>
-											</tr>
-										</table>
+												</div>
+												
+												<div class="layui-col-xs5 layui-col-sm5 layui-col-md-offset3 star-price">￥199/小时</div>
+											</div>
+										</div>
 									</a>
 								</li>`;
 
@@ -257,32 +788,27 @@
                                 }
 						
 						str += `<li>			
-									<a href="https://www.huoniaopeiwan.com/index/index/user/id/${a.uid}" class="miva-star-items">
+									<a href="https://www.huoniaopeiwan.com/index/index/offline_user/id/${a.uid}" class="miva-star-items">
+										<div class="miva-star-tip">接单中</div>
 										<div class="miva-star-pic">
 												<img src="${a.head_img+'!syph' || '__IMG__default.jpg'}" />
 										</div>
-										<table class="miva-star-info">
-											<tr>
-												<td>
-													<span class="star-name">${a.nickname}</span>
-												</td>
-												<td class="miva-star-info-right">
-													<span class="tab tab-win">${a.city}</span>
-													
-												</td>
-											</tr>
-											<tr>
-												<td>
+										<div style=" padding: 5px 10px;" class="layui-fluid miva-star-info">
+											<div class="layui-row">
+												<div class="layui-col-xs7 layui-col-sm7">		
+													${a.nickname}
+												</div>
+												<div class="layui-col-xs4 layui-col-sm4 layui-col-xs-offset1 layui-col-sm1 tab tab-win">
+													${a.city}									
+												</div>
+												<div class="layui-col-xs4 layui-col-sm4">
 													<img src="__IMG__火.png" alt="图标">
 													<span>${a.hot}</span>
-												</td>
-												<td class="miva-star-info-right">
-													
-													<span class="star-price">￥${a.pric}/${danwei}</span>
-													
-												</td>
-											</tr>
-										</table>
+												</div>
+												
+												<div class="layui-col-xs5 layui-col-sm5 layui-col-md-offset3 star-price">￥${a.pric}/${danwei}</div>
+											</div>
+										</div>
 									</a>
 								</li>`;
 
@@ -295,27 +821,16 @@
 			}
 
 
-
-
-/*
-				if(type == 4){
-				var url = '//www.baidu.com';
-				$('.miva-star-items').attr('href',url)
-				$('.star-price').html('￥199/小时')
-				}
-*/
-
-
-
 			},'json')
 		})
 
 		$('.miva-screen-box').on('click', '.miva-screen-btn-admin', function() {
+		
 			$(this).removeClass('btn-admin-act');
 			$('.miva-screen-box').find('[cheap]').removeClass('screen-btn-active');
 
 			
-			
+			//综合排序筛选（）
 			$.post("{:url('Acc/screen')}",{project:project,project_id:projectId,sex:sex,type:type,porjectLv:porjectLv},function(res){ // 又是筛选的ajax...  还绑定在了同一个元素上
 				var aa = new Array();
 				$.each(res,function(k,v){
@@ -329,30 +844,26 @@
 						
 						str += `<li>			
 									<a href="https://www.huoniaopeiwan.com/index/index/offline_user/id/${a.uid}" class="miva-star-items">
+										<div class="miva-star-tip">接单中</div>
 										<div class="miva-star-pic">
 												<img src="${a.head_img+'!syph' || '__IMG__default.jpg'}" />
 										</div>
-										<table class="miva-star-info">
-											<tr>
-												<td>
-													
-													<span class="star-name">${a.nickname}</span>
-												</td>
-												<td class="miva-star-info-right">
-													<span class="tab tab-win">${a.city}</span>
-													
-												</td>
-											</tr>
-											<tr>
-												<td>
+										<div style=" padding: 5px 10px;" class="layui-fluid miva-star-info">
+											<div class="layui-row">
+												<div class="layui-col-xs7 layui-col-sm7">		
+													${a.nickname}
+												</div>
+												<div class="layui-col-xs4 layui-col-sm4 layui-col-xs-offset1 layui-col-sm1 tab tab-win">
+													${a.city}									
+												</div>
+												<div class="layui-col-xs4 layui-col-sm4">
 													<img src="__IMG__火.png" alt="图标">
 													<span>${a.hot}</span>
-												</td>
-												<td class="miva-star-info-right">
-													<span class="star-price">199/小时</span>
-												</td>
-											</tr>
-										</table>
+												</div>
+												
+												<div class="layui-col-xs5 layui-col-sm5 layui-col-md-offset3 star-price">￥199/小时</div>
+											</div>
+										</div>
 									</a>
 								</li>`;
 
@@ -378,42 +889,33 @@
                                 	danwei = '次'
                                 }
 						str += `<li>			
-									<a href="https://www.huoniaopeiwan.com/index/index/user/id/${a.uid}" class="miva-star-items">
+									<a href="https://www.huoniaopeiwan.com/index/index/offline_user/id/${a.uid}" class="miva-star-items">
+										<div class="miva-star-tip">接单中</div>
 										<div class="miva-star-pic">
 												<img src="${a.head_img+'!syph' || '__IMG__default.jpg'}" />
 										</div>
-										<table class="miva-star-info">
-											<tr>
-												<td>
-													
-													<span class="star-name">${a.nickname}</span>
-												</td>
-												<td class="miva-star-info-right">
-													<span class="tab tab-win">${a.city}</span>
-												
-												</td>
-											</tr>
-											<tr>
-												<td>
+										<div style=" padding: 5px 10px;" class="layui-fluid miva-star-info">
+											<div class="layui-row">
+												<div class="layui-col-xs7 layui-col-sm7">		
+													${a.nickname}
+												</div>
+												<div class="layui-col-xs4 layui-col-sm4 layui-col-xs-offset1 layui-col-sm1 tab tab-win">
+													${a.city}									
+												</div>
+												<div class="layui-col-xs4 layui-col-sm4">
 													<img src="__IMG__火.png" alt="图标">
 													<span>${a.hot}</span>
-												</td>
-												<td class="miva-star-info-right">
-													<span class="star-price">￥${a.pric}/${danwei}</span>
-												</td>
-											</tr>
-										</table>
+												</div>
+												
+												<div class="layui-col-xs5 layui-col-sm5 layui-col-md-offset3 star-price">￥${a.pric}/${danwei}</div>
+											</div>
+										</div>
 									</a>
 								</li>`;
 					}
 					$('.miva-screen-list').html(str)
 				}
-					/*
-if(type == 4){
-				var url = '//www.baidu.com';
-				$('.miva-star-items').attr('href',url)
-				$('.star-price').html('￥199/小时')
-			}*/
+
 			},'json')
 		})
 
@@ -468,14 +970,12 @@ if(type == 4){
 		});
 	
 		$('.miva-acc-tab-box').on('click','a',function(){
+
+			
 			// console.log('项目类型'+project)
 			// console.log('游戏'+projectId)
 			// console.log('等级'+porjectLv)
 			// console.log('性别'+sex)		
-
-// $.post("{:url('Acc/screen')}",{project:project,project_id:projectId,sex:sex}, 'json').then(function(res){
-// 	console.log(res)
-// })
 			
 			$.post("{:url('Acc/screen')}",{project:project,project_id:projectId,sex:sex,type:type,porjectLv:porjectLv},function(res){ //第三个筛选 ajax
 				var aa = new Array();
@@ -488,30 +988,26 @@ if(type == 4){
 						
 						str += `<li>			
 									<a href="https://www.huoniaopeiwan.com/index/index/offline_user/id/${a.uid}" class="miva-star-items">
+										<div class="miva-star-tip">接单中</div>
 										<div class="miva-star-pic">
 												<img src="${a.head_img+'!syph' || '__IMG__default.jpg'}" />
 										</div>
-										<table class="miva-star-info">
-											<tr>
-												<td>
-													
-													<span class="star-name">${a.nickname}</span>
-												</td>
-												<td class="miva-star-info-right">
-													<span class="tab tab-win">${a.city}</span>
-													
-												</td>
-											</tr>
-											<tr>
-												<td>
+										<div style=" padding: 5px 10px;" class="layui-fluid miva-star-info">
+											<div class="layui-row">
+												<div class="layui-col-xs7 layui-col-sm7">		
+													${a.nickname}
+												</div>
+												<div class="layui-col-xs4 layui-col-sm4 layui-col-xs-offset1 layui-col-sm1 tab tab-win">
+													${a.city}									
+												</div>
+												<div class="layui-col-xs4 layui-col-sm4">
 													<img src="__IMG__火.png" alt="图标">
 													<span>${a.hot}</span>
-												</td>
-												<td class="miva-star-info-right">
-													<span class="star-price">￥199/小时</span>
-												</td>
-											</tr>
-										</table>
+												</div>
+												
+												<div class="layui-col-xs5 layui-col-sm5 layui-col-md-offset3 star-price">￥199/小时</div>
+											</div>
+										</div>
 									</a>
 								</li>`;
 
@@ -538,31 +1034,27 @@ if(type == 4){
                                 }
 
 						str += `<li>
-									<a href="https://www.huoniaopeiwan.com/index/index/user/id/${a.uid}" class="miva-star-items">
+									<a href="https://www.huoniaopeiwan.com/index/index/offline_user/id/${a.uid}" class="miva-star-items">
+										<div class="miva-star-tip">接单中</div>
 										<div class="miva-star-pic">
 												<img src="${a.head_img+'!syph' || '__IMG__default.jpg'}" />
 										</div>
-										<table class="miva-star-info">
-											<tr>
-												<td>
-													
-													<span class="star-name">${a.nickname}</span>
-												</td>
-												<td class="miva-star-info-right">
-													<span class="tab tab-win">${a.city}</span>
-												
-												</td>
-											</tr>
-											<tr>
-												<td>
+										<div style=" padding: 5px 10px;" class="layui-fluid miva-star-info">
+											<div class="layui-row">
+												<div class="layui-col-xs7 layui-col-sm7">		
+													${a.nickname}
+												</div>
+												<div class="layui-col-xs4 layui-col-sm4 layui-col-xs-offset1 layui-col-sm1 tab tab-win">
+													${a.city}									
+												</div>
+												<div class="layui-col-xs4 layui-col-sm4">
 													<img src="__IMG__火.png" alt="图标">
 													<span>${a.hot}</span>
-												</td>
-												<td class="miva-star-info-right">
-													<span class="star-price">￥${a.pric}/${danwei}</span>
-												</td>
-											</tr>
-										</table>
+												</div>
+												
+												<div class="layui-col-xs5 layui-col-sm5 layui-col-md-offset3 star-price">￥${a.pric}/${danwei}</div>
+											</div>
+										</div>
 									</a>
 								</li>`;
 					}
@@ -577,8 +1069,190 @@ if(type == 4){
 			*/
 			},'json')
 
+		//排行榜Ajax
+			console.log(project)
+			console.log(projectId)
+			var level = [
+							'icon1-0.gif',
+							'biao1.gif',
+							'icon1-4.gif',
+							'icon1-5.gif',
+							'icon-6.gif',
+							'icon1-7.gif',
+							'icon1-8_01.gif',
+							'icon1-9.gif',
+							'icon1-10.gif'
+							
+					]
+
+			//周榜
+			$.post("{:url('Acc/ranking_list_week')}",{project:project,project_id:projectId},function(res){
+
+				var str = ''; 
+				console.log(res)
+				///////////////////////////////////
+				str += `<div class="top-three layui-fluid">
+							<div class="layui-row">
+
+								<div class="the-first layui-col-xs12">
+									<!--头像框?-->
+									<a href="https://www.huoniaopeiwan.com/index/index/user/id/${res[0].uid}">
+										<div class="pic-box">
+											<img src="__IMG__crown_01.gif" style="width:100%" />
+											<img class="pic" src="${res[0].head_img}" />
+										</div>
+									</a>
+									<!--用户名字-->
+									<div class="u-name">${res[0].nickname.length > 6 ? res[0].nickname.slice(0,6) : res[0].nickname}<img src="__IMG__${level[res[0].level]}" alt="" />
+										<!--用户分数-->
+										<div class="score-box"><img src="__IMG__lihai.png" /><span class="score-txt">${res[0].down_order_week}</span></div>
+									</div>
+								</div>
+
+								<div class="layui-col-xs6">
+									<!--头像框?-->
+									<a href="https://www.huoniaopeiwan.com/index/index/user/id/${res[1].uid}">
+										<div class="pic-box">
+											<img src="__IMG__crown.gif" />
+											<img class="pic" src="${res[1].head_img}" />
+										</div>
+									</a>
+									<!--用户名字-->
+									<div class="u-name">${res[1].nickname.length > 6 ? res[1].nickname.slice(0,6) : res[1].nickname}<img src="__IMG__${level[res[1].level]}" alt="" />
+										<!--用户分数-->
+										<div class="score-box"><img src="__IMG__lihai.png" /><span class="score-txt">${res[1].down_order_week}</span></div>
+									</div>
+								</div>
+
+								<div class="layui-col-xs6">
+									<!--头像框?-->
+									<a href="https://www.huoniaopeiwan.com/index/index/user/id/${res[2].uid}">
+										<div class="pic-box">
+											<img src="__IMG__首页-恢复的_18.gif" />
+											<img class="pic" src="${res[2].head_img}" />
+										</div>
+									</a>
+									<!--用户名字-->
+									<div class="u-name">${res[2].nickname.length > 6 ? res[2].nickname.slice(0,6) : res[2].nickname}<img src="__IMG__${level[res[2].level]}" alt="" />
+										<!--用户分数-->
+										<div class="score-box"><img src="__IMG__lihai.png" /><span class="score-txt">${res[2].down_order_week}</span></div>
+									</div>
+								</div>
+
+						</div>
+					</div>`;
+
+
+				str += '<ul class="rank-last">'
+				$.each(res,function(k,v){
+    				if(k>2){
+						str +=	`
+								<a href="https://www.huoniaopeiwan.com/index/index/user/id/${v.uid}">
+									<li>
+										<!-- 排名 --><span>${k+1}</span>
+										<!-- 用户头像 --><img src="${v.head_img}" alt="">
+										<!-- 用户信息 -->
+										<div class="user-info">
+											<div class="u-name">${v.nickname}</div><img src="__IMG__biao1.gif" alt=""></div>
+										<!-- 得分数值 -->
+										<div class="score-box">大神指数: <span>${v.down_order_week}</span></div>
+									</li>
+								</a>
+								`
+					}
+							
+				});
+				str += '</ul>'
+			
+				
+				$('[data-item="1_1"]').html(str)
+			},'json')
+
+			//总榜
+			$.post("{:url('Acc/ranking_list')}",{project:project,project_id:projectId},function(res){
+
+				var str = ''; 
+				console.log(res)
+				///////////////////////////////////
+				str += `<div class="top-three layui-fluid">
+							<div class="layui-row">
+
+								<div class="the-first layui-col-xs12">
+									<!--头像框?-->
+									<a href="https://www.huoniaopeiwan.com/index/index/user/id/${res[0].uid}">
+										<div class="pic-box">
+											<img src="__IMG__crown_01.gif" style="width:100%" />
+											<img class="pic" src="${res[0].head_img}" />
+										</div>
+									</a>
+									<!--用户名字-->
+									<div class="u-name">${res[0].nickname.length > 6 ? res[0].nickname.slice(0,6) : res[0].nickname}<img src="__IMG__${level[res[0].level]}" alt="" />
+										<!--用户分数-->
+										<div class="score-box"><img src="__IMG__lihai.png" /><span class="score-txt">${res[0].down_order}</span></div>
+									</div>
+								</div>
+
+								<div class="layui-col-xs6">
+									<!--头像框?-->
+									<a href="https://www.huoniaopeiwan.com/index/index/user/id/${res[1].uid}">
+										<div class="pic-box">
+											<img src="__IMG__crown.gif" />
+											<img class="pic" src="${res[1].head_img}" />
+										</div>
+									</a>
+									<!--用户名字-->
+									<div class="u-name">${res[1].nickname.length > 6 ? res[1].nickname.slice(0,6) : res[1].nickname}<img src="__IMG__${level[res[1].level]}" alt="" />
+										<!--用户分数-->
+										<div class="score-box"><img src="__IMG__lihai.png" /><span class="score-txt">${res[1].down_order}</span></div>
+									</div>
+								</div>
+
+								<div class="layui-col-xs6">
+									<!--头像框?-->
+									<a href="https://www.huoniaopeiwan.com/index/index/user/id/${res[2].uid}">
+										<div class="pic-box">
+											<img src="__IMG__首页-恢复的_18.gif" />
+											<img class="pic" src="${res[2].head_img}" />
+										</div>
+									</a>
+									<!--用户名字-->
+									<div class="u-name">${res[2].nickname.length > 6 ? res[2].nickname.slice(0,6) : res[2].nickname}<img src="__IMG__${level[res[2].level]}" alt="" />
+										<!--用户分数-->
+										<div class="score-box"><img src="__IMG__lihai.png" /><span class="score-txt">${res[2].down_order}</span></div>
+									</div>
+								</div>
+
+						</div>
+					</div>`;
+
+
+				str += '<ul class="rank-last">'
+				$.each(res,function(k,v){
+    				if(k>2){
+						str +=	`
+								<a href="https://www.huoniaopeiwan.com/index/index/user/id/${v.uid}">
+									<li>
+										<!-- 排名 --><span>${k+1}</span>
+										<!-- 用户头像 --><img src="${v.head_img}" alt="">
+										<!-- 用户信息 -->
+										<div class="user-info">
+											<div class="u-name">${v.nickname}</div><img src="__IMG__biao1.gif" alt=""></div>
+										<!-- 得分数值 -->
+										<div class="score-box">大神指数: <span>${v.down_order}</span></div>
+									</li>
+								</a>
+								`
+					}
+							
+				});
+				str += '</ul>'
+			
+				
+				$('[data-item="1_2"]').html(str)
+			},'json')
+
 		});
 
 	})
 	
-	</script>
+</script>

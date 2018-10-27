@@ -70,7 +70,7 @@
 
 				<td class="up-pic" rowspan="4">
 
-						<img style="border-radius:50%;box-shadow: 0 0 3px #aaa; margin:25px" src="{$user_data.head_img}" alt=""  id="user-pic-img">
+						<img style="border-radius:50%;box-shadow: 0 0 3px #aaa; margin:25px" src="{//$user_data.head_img}" alt=""  id="user-pic-img">
 						<label for="user-pic">
 							<div class="up-pic-btn" style="margin-left:45px">可选择上传头像</div>
 							<input type="file" id="user-pic" style="display:none" >
@@ -658,10 +658,15 @@ $('#newMiva').on('change', function(){
 
 		$('.submit').click(function() { 
 			
-				//	alert(num);   这一项有2个值  1：没有选择线下    3：选择了线下 所以需要判断填写的东西是否存在  
-
+			//	alert(num);   这一项有2个值  1：没有选择线下    3：选择了线下 所以需要判断填写的东西是否存在
 			
-
+			var head_img = $('#user-pic-img').attr('src');
+			if(head_img == ''){
+				layui.use('layer', function(){
+					layer.msg('请上传您的头像')
+				})
+				return false
+			}
 			
 			var nickname = $('[name="nickname"]').val()
 			if(nickname == '快去填写你的昵称吧'){

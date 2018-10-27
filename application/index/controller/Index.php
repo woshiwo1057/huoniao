@@ -77,7 +77,7 @@ class Index  extends Common
 //*********************
     	//首页排行榜
     		//1.陪玩师人气榜
-    			//①日榜
+    			//①周榜
     			$hot_day_data = Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->field('u.uid,u.nickname,u.head_img,u.level,a.hot_day')->limit(10)->select();
     			if($hot_day_data != NULL){
                     $type = 'hot_day';
@@ -85,36 +85,35 @@ class Index  extends Common
                 }
 
     			//②总榜
-                
     			$hot_data = Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->field('u.uid,u.nickname,u.head_img,u.level,a.hot')->limit(10)->select();
     			if($hot_data != NULL){
                     $type = 'hot';
                     $hot_data = $this->ranking($hot_data,$type);
                 }
                 
-    		//2.陪玩师大神榜
-    			//①日榜
+    		//2.陪玩师大神榜（线上）
+    			//①周榜
     			$okami_day_data = Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->field('u.uid,u.nickname,u.head_img,u.level,a.okami_day')->limit(10)->select();
     			if($okami_day_data != NULL){
                     $type = 'okami_day';
                     $okami_day_data = $this->ranking($okami_day_data,$type);
                 }
+
     			//②总榜	
-                
     			$okami_data = Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->field('u.uid,u.nickname,u.head_img,u.level,a.okami')->limit(10)->select();
     			if($okami_data != NULL){
                     $type = 'okami';
                     $okami_data = $this->ranking($okami_data,$type);
                 }
-                //var_dump($okami_data[0]['okami']);die;
               
     		//3.用户贡献榜
-    			//①日榜
+    			//①周榜
     			$mogul_day_data = Db::table('hn_user')->field('uid,nickname,head_img,mogul_day,level')->limit(10)->select();
     			if($mogul_day_data != NULL){
                     $type = 'mogul_day';
                     $mogul_day_data = $this->ranking($mogul_day_data,$type);
                 }
+                
     			//②总榜
     			$mogul_data = Db::table('hn_user')->field('uid,nickname,head_img,mogul,level')->limit(10)->select();
     			if($mogul_data != NULL){
@@ -320,7 +319,7 @@ class Index  extends Common
             $song_data[$k]['acc_name'] = $name['nickname'];
         }
 
-        //var_dump($song_data);die;
+       
         $this->assign([
             //陪玩师数据
             'user_data' => $user_data,
