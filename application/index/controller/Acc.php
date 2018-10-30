@@ -36,16 +36,16 @@ class Acc extends Common
 		}else{
 			//查询一哈陪玩师列表  然后输出
             $game_id = 0;
-<<<<<<< HEAD
+
 			$acc_data = Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->group('u.uid')->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num,a.city')->where([ 'a.up' => 2])->select();
-=======
+
 			$acc_data = Db::table('hn_user')->alias('u')
 				->join('hn_accompany a','u.uid = a.user_id')
 				->group('u.uid')
 				->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num,a.city')
 				->where([ 'a.up' => 2])
 				->select();
->>>>>>> e6d82c5c4715e333432bea65027091f910e4870e
+
 		}
 
 		//线上排行榜
