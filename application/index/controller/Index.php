@@ -54,7 +54,7 @@ class Index  extends Common
                     ->group('u.uid')
                     ->field('u.uid,u.nickname,u.head_img,a.table,a.hot,a.pice,a.order_num,p.project_name,u.sex,a.city')
                     ->where('a.up',2)
-                    ->order('a.okami desc')->limit('0,15')->select();
+                    ->order('a.okami desc')->limit('0,18')->select();
 
 
         //$acc_data = $this->out_repeat($acc_data,'nickname');

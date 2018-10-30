@@ -152,8 +152,11 @@
 									<img src="__IMG__火.png" alt="图标">
 									<span>{$v.hot}</span>
 								</div>
-					
+								{if condition="$v.pice == 8"}
+								<div class="layui-col-xs5 layui-col-sm5 layui-col-md-offset3 star-price">￥{$v.pice}/局</div>
+								{else /}
 								<div class="layui-col-xs5 layui-col-sm5 layui-col-md-offset3 star-price">￥{$v.pice}/小时</div>
+								{/if}
 							  </div>
 							</div>
 						</a>

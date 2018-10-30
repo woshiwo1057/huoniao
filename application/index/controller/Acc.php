@@ -204,7 +204,7 @@ class Acc extends Common
         return json($acc_data);
     }
 
-    //排行榜Ajax
+    //排行榜Ajax   周榜
     public function ranking_list_week()
     {
 
