@@ -135,7 +135,7 @@ class Common extends \think\Controller
      * $rec_id：接收者id
      *
      * */
-    function message_add($title,$text,$send_id,$rec_id){
+    public function message_add($title,$text,$send_id,$rec_id){
         $message = \db('hn_message');//个人消息表
         $message_text = \db('hn_message_text');
         $text_id = $this->text_add($title,$text);
