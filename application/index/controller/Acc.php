@@ -66,16 +66,16 @@ class Acc extends Common
                 
     		//2.陪玩师大神榜（线上）
     			//①周榜
-    			$okami_day_data = Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->field('u.uid,u.nickname,u.head_img,u.level,a.okami_day')->limit(6)->select();
+    			$okami_day_data = Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->field('u.uid,u.nickname,u.head_img,u.level,a.up_order_week')->limit(6)->select();
     			if($okami_day_data != NULL){
-                    $type = 'okami_day';
+                    $type = 'up_order_week';
                     $okami_day_data = $this->ranking($okami_day_data,$type);
                 }
 
     			//②总榜	
-    			$okami_data = Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->field('u.uid,u.nickname,u.head_img,u.level,a.okami')->limit(6)->select();
+    			$okami_data = Db::table('hn_user')->alias('u')->join('hn_accompany a','u.uid = a.user_id')->field('u.uid,u.nickname,u.head_img,u.level,a.up_order')->limit(6)->select();
     			if($okami_data != NULL){
-                    $type = 'okami';
+                    $type = 'up_order';
                     $okami_data = $this->ranking($okami_data,$type);
                 }
               
@@ -229,16 +229,16 @@ class Acc extends Common
     					->select();
     					*/
 
-    	//down_order_week  周线上单数
-    	//down_order 总单数  
+    	//up_order_week  周线上单数
+    	//up_order 总单数  
     	//$where = '';
     	$wow = Db::table('hn_apply_project')
 				->alias('p')
 				->join('hn_user u' , 'p.uid = u.uid')
 				->join('hn_accompany a' , 'p.uid = a.user_id')
-				->field('u.uid,u.nickname,u.head_img,u.level,p.down_order_week')
+				->field('u.uid,u.nickname,u.head_img,u.level,p.up_order_week')
 				->where(['p.project' => $data['project'] , 'p.project_id' => $data['project_id']])
-				->order('down_order_week desc')
+				->order('up_order_week desc')
 				->limit(6)
 				->select();
 
@@ -294,9 +294,9 @@ class Acc extends Common
 				->alias('p')
 				->join('hn_user u' , 'p.uid = u.uid')
 				->join('hn_accompany a' , 'p.uid = a.user_id')
-				->field('u.uid,u.nickname,u.head_img,u.level,p.down_order')
+				->field('u.uid,u.nickname,u.head_img,u.level,p.up_order')
 				->where(['p.project' => $data['project'] , 'p.project_id' => $data['project_id']])
-				->order('down_order desc')
+				->order('up_order desc')
 				->limit(6)
 				->select();
 

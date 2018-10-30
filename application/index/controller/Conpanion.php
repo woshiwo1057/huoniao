@@ -108,7 +108,7 @@ class Conpanion extends Common
 			
 			$data = Request::instance()->param();
 
-			$data['user_id'] = $_SESSION['user']['user_info']['uid'];
+			$data['user_id'] = $id;
 			
 			//判断是否有提交
 			$record = Db::table('hn_apply_acc')->field('id')->where('user_id',$data['user_id'])->find();

@@ -65,10 +65,7 @@ class Index  extends Common
                         ->join('hn_user u','u.uid = a.user_id')                  
                         ->field('u.uid,u.nickname,u.head_img,u.age,u.sex,a.city')
                         ->where('a.new_people',1)
-<<<<<<< HEAD
                         ->order('a.id desc')
-=======
->>>>>>> e6d82c5c4715e333432bea65027091f910e4870e
                         ->limit('15')
                         ->select();
     	//->join('hn_apply_acc p','p.user_id = a.user_id')

@@ -209,7 +209,7 @@
 														{default /}<img src="__IMG__icon1-0.gif" alt="" />
 														{/switch}
 														<!--用户分数-->
-														<div class="score-box"><img src="__IMG__lihai.png"/><span class="score-txt">{$v.okami_day}</span></div>
+														<div class="score-box"><img src="__IMG__lihai.png"/><span class="score-txt">{$v.down_order_week}</span></div>
 													</div>
 												</div>
 											{/if}
@@ -242,7 +242,7 @@
 														{/switch}
 													</div>
 													<!-- 得分数值 -->
-													<div class="score-box">大神指数: <span>{$v.okami_day}</span></div>
+													<div class="score-box">大神指数: <span>{$v.down_order_week}</span></div>
 												</li>
 											</a>
 										{/if}
@@ -285,7 +285,7 @@
 														{default /}<img src="__IMG__icon1-0.gif" alt="" />
 														{/switch}
 														<!--用户分数-->
-														<div class="score-box"><img src="__IMG__lihai.png"/><span class="score-txt">{$v.okami}</span></div>
+														<div class="score-box"><img src="__IMG__lihai.png"/><span class="score-txt">{$v.down_order}</span></div>
 													</div>
 												</div>
 											{/if}
@@ -318,7 +318,7 @@
 														{/switch}
 													</div>
 													<!-- 得分数值 -->
-													<div class="score-box">大神指数: <span>{$v.okami}</span></div>
+													<div class="score-box">大神指数: <span>{$v.down_order}</span></div>
 												</li>
 											</a>
 										{/if}
@@ -727,7 +727,7 @@
 			$(this).addClass('screen-btn-active').siblings().removeClass('screen-btn-active');
 			$('.miva-screen-btn-admin').addClass('btn-admin-act');
 			//综合刷选Ajax
-			$.post("{:url('Acc/screen')}",{project:project,project_id:projectId,sex:sex,type:type,porjectLv:porjectLv},function(res){ // 用作筛选的ajax
+			$.post("{:url('Downline/screen')}",{project:project,project_id:projectId,sex:sex,type:type,porjectLv:porjectLv},function(res){ // 用作筛选的ajax
 				//https://www.huoniaopeiwan.com/index/index/offline_user/id/${a.uid}
 				//http://localhost/huoniao/public/index.php/index/index/offline_user/id/${a.uid}
 				//https://www.huoniaopeiwan.com/index/index/offline_user/id/${a.uid}
@@ -834,7 +834,7 @@
 
 			
 			//综合排序筛选（）
-			$.post("{:url('Acc/screen')}",{project:project,project_id:projectId,sex:sex,type:type,porjectLv:porjectLv},function(res){ // 又是筛选的ajax...  还绑定在了同一个元素上
+			$.post("{:url('Downline/screen')}",{project:project,project_id:projectId,sex:sex,type:type,porjectLv:porjectLv},function(res){ // 又是筛选的ajax...  还绑定在了同一个元素上
 				var aa = new Array();
 				$.each(res,function(k,v){
     				aa.push(v);
@@ -980,7 +980,7 @@
 			// console.log('等级'+porjectLv)
 			// console.log('性别'+sex)		
 			
-			$.post("{:url('Acc/screen')}",{project:project,project_id:projectId,sex:sex,type:type,porjectLv:porjectLv},function(res){ //第三个筛选 ajax
+			$.post("{:url('Downline/screen')}",{project:project,project_id:projectId,sex:sex,type:type,porjectLv:porjectLv},function(res){ //第三个筛选 ajax
 				var aa = new Array();
 				$.each(res,function(k,v){
     				aa.push(v);
@@ -1089,7 +1089,7 @@ if(type == 4){
 					]
 
 			//周榜
-			$.post("{:url('Acc/ranking_list_week')}",{project:project,project_id:projectId},function(res){
+			$.post("{:url('Downline/ranking_list_week')}",{project:project,project_id:projectId},function(res){
 
 				var str = ''; 
 				console.log(res)
@@ -1172,7 +1172,7 @@ if(type == 4){
 			},'json')
 
 			//总榜
-			$.post("{:url('Acc/ranking_list')}",{project:project,project_id:projectId},function(res){
+			$.post("{:url('Downline/ranking_list')}",{project:project,project_id:projectId},function(res){
 
 				var str = ''; 
 				console.log(res)
