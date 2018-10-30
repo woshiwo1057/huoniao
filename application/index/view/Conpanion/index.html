@@ -96,8 +96,8 @@
 							{/case}
 							{default /}
 							<span  style="color:red">只有一次选择性别的机会，请慎重</span>
-							<span class="radio"  sex="1">男</span>
-							<span class="radio" sex="2">女</span>
+							<span class="radio"  sex="1" data-item-sex>男</span>
+							<span class="radio" sex="2" data-item-sex>女</span>
 						{/switch}
 					</td>
 				</tr>
@@ -629,7 +629,7 @@ $('.check-box').on('change','input', function() {
  sex = {$user_data['sex']};
 		
 if({$user_data['sex']} == 0){
-	$('.radio').on('click', function(){
+	$('[data-item-sex]').on('click', function(){
 		$(this).addClass('active-radio').siblings().removeClass('active-radio');
 		sex = $(this).attr('sex');
 	});
@@ -657,7 +657,6 @@ $('#newMiva').on('change', function(){
 })
 
 		$('.submit').click(function() { 
-			
 			//	alert(num);   这一项有2个值  1：没有选择线下    3：选择了线下 所以需要判断填写的东西是否存在
 			
 			var head_img = $('#user-pic-img').attr('src');
